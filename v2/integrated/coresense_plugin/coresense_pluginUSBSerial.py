@@ -358,15 +358,22 @@ class usbSerial ( threading.Thread ):
                                         else:
                                             _packetCRC =  _packetCRC >> 0x01
                                 print ''
+
                                 if _packetCRC <> 0x00:
                                     #bad packet or we probably have not locked to the header, consume and retry locking to header
                                     #ideally we should be able to throw the whole packet out, but purging just a byte for avoiding corner cases.
                                     del self.data[0]
+
+
                                 else:
+
+                                    #we know it is a valid packet as the CRC was correct.s
                                     print '-------------'
                                     print time.asctime(), _msg_seq_num, _postscriptLoc
                                     #extract the data bytes alone, exclude preamble, prot version, len, crc and postScript
                                     extractedData = self.data[_preambleLoc+3:_postscriptLoc-1]
+                                    fullPaket = self.data[_preambleLoc:_postscriptLoc+1]
+                                    print fullPaket
                                     consume_ptr = 0x00
                                     self.CoreSenseConf = 0
 
