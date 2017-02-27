@@ -63,15 +63,28 @@ void setup()
 
     #ifdef ALPHASENSE_INCLUDE    
     SPI.begin(); // data from the ****************************************************** alpha sensor
-    delay(15000);
+    delay(5000);
+    alphasense_off();
+    delay(5000);
+    alphasense_read_fan_laser_power();
+    delay(5000);
     alphasense_on();    // power on laser and fan: Laser and fan must be on to get correct data
     delay(10000);
-
+    alphasense_read_fan_laser_power();
     alphasense_firmware();
     alphasense_config();
     delay(1000);
 
     flag_alpha = true;
+    
+    #ifdef ALPHA_DEBUG
+    alphasense_info_string();
+    delay(1000);
+    alphasense_serial();
+    SerialUSB.println("OPC Setup Completed");
+    #endif
+    
+    
     #endif
 
     #ifdef VERSION_INCLUDE
@@ -83,8 +96,13 @@ void setup()
 
 void loop()
 {
-    count = 0;
-
+    
+//     alphasense_histo();
+//     delay(10000);
+       delay(5000);
+    
+//     count = 0;
+// 
     #ifdef AIRSENSE_INCLUDE
     airsense_initial();
     #endif
@@ -92,15 +110,23 @@ void loop()
     #ifdef LIGHTSENSE_INCLUDE    
     lightsense_initial();
     #endif
-
-    while(count < 10)
-    {    
-        #ifdef CHEMSENSE_INCLUDE        
-        flag_CHEM_WHILE = true;
-        chemsense_acquire();
-        #endif
-    }
-
+// 
+//     #ifdef CHEMSENSE_INCLUDE 
+//     while(count < 10)
+//     {    
+//                
+//         flag_CHEM_WHILE = true;
+//         chemsense_acquire();
+//         
+//     }
+//     #endif
+//     
+//     
+//     #ifndef CHEMSENSE_INCLUDE
+//         delay(10000);
+//     #endif
+//     
+//     
     #ifdef AIRSENSE_INCLUDE    
     airsense_acquire();
     #endif
@@ -109,54 +135,56 @@ void loop()
     lightsense_acquire();
     #endif
 
-    while (count < 24)       // every 24 sec
-    {
-        #ifdef ALPHASENSE_INCLUDE        
-        alphasense_histo();
-        delay(100);
-        alphasense_serial();
-        delay(100);
-        
-        if (count == 23)        //every 23 sec
-        {
-            count_conf++;
-            if (count_conf == 26)       // every 598 secs, about 10 min
-            {
-                alphasense_config();
-                delay(100);
-                alphasense_firmware();
-                delay(100);
-                
-                flag_alpha = true;
-                count_conf = 0;
-            }
-        }
-        #endif
-        
-        delay(1);
-    }
+//     while (count < 24)       // every 24 sec
+//     {
+//         #ifdef ALPHASENSE_INCLUDE 
+//         
+//         alphasense_histo();
+//         delay(5000);
+// //         alphasense_serial();
+//         delay(5000);
+//         
+//         if (count == 23)        //every 23 sec
+//         {
+//             count_conf++;
+//             if (count_conf == 26)       // every 598 secs, about 10 min
+//             {
+//                 alphasense_config();
+//                 delay(100);
+//                 alphasense_firmware();
+//                 delay(100);
+//                 
+//                 flag_alpha = true;
+//                 count_conf = 0;
+//             }
+//         }
+//         #endif
+//         
+//         delay(1);
+//     }
         
     assemble_packet_whole();        //******** packetize air/light/chem
     for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
         SerialUSB.write(packet_whole[i]);
     
-    #ifdef ALPHASENSE_INCLUDE    
-    alpha_packet_whole();           //******** packetize histo/firmware/config(part)
-    for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
-        SerialUSB.write(packet_whole[i]);
+//     #ifdef ALPHASENSE_INCLUDE    
+//     alpha_packet_whole();           //******** packetize histo/firmware/config(part)
+//     for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
+//         SerialUSB.write(packet_whole[i]);
+//     
+//     if (flag_alpha == true)
+//     {
+//         alpha_packet_config();       //******** packetize config(part)
+//         
+//         for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
+//             SerialUSB.write(packet_whole[i]);
+//     }
+//     
+//     flag_alpha = false;
+//     #endif
     
-    if (flag_alpha == true)
-    {
-        alpha_packet_config();       //******** packetize config(part)
-        
-        for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
-            SerialUSB.write(packet_whole[i]);
-    }
-    
-    flag_alpha = false;
-    #endif
-    
-    count = 0;
+//     count = 0;
+    delay(23000);
 }
 
 #ifdef I2C_INTERFACE

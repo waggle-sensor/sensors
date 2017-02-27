@@ -143,7 +143,7 @@ void sensor_buff_initialization()
 
 	// initialize SECOND BYTE of the arrays
 	alpha_histogram[1] = (0 << 7) | LENGTH_ALPHA_HISTOGRAM;
-	alpha_serial[1] = (0 << 7) | LENGTH_ALPAH_SERIAL;
+	alpha_serial[1] = (0 << 7) | LENGTH_ALPHA_SERIAL;
 	alpha_firmware[1] = (0 << 7) | LENGTH_ALPHA_FIRMWARE;
 
 	alpha_config_a[1] = (0 << 7) | LENGTH_ALPHA_CONFIG_A;
