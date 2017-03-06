@@ -22,28 +22,102 @@ void lightsense_initial (void)
 
 #ifdef APDS9006020_include
     mcp3428_2.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-    APDS_uint16 = mcp3428_2.readADC();
+    
+    temp_long = 0;
+    
+       for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+        {
+        temp_long = temp_long + mcp3428_2.readADC();
+        delay(100); // The sensor has a response time of 70mS, so we need to sample slower than that. 
+        }
+        
+        APDS_uint16 = temp_long >> 3; 
+    
+    #ifdef PRINT_ASCII_SENSORS
+    SerialUSB.print("APDS9006020: ");
+    SerialUSB.println(APDS_uint16);
+    #endif
+    
 #endif
 
 #ifdef TSL260RD_include
     mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
-    TSL260_uint16 = mcp3428_1.readADC();
+    temp_long = 0;
+    
+    for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+    {
+    temp_long = temp_long + mcp3428_1.readADC(); 
+    delay(100); // The sensor has a response time of 70mS, so we need to sample slower than that. 
+    }
+    
+    TSL260_uint16 = temp_long >> 3; 
+    
+    
+    #ifdef PRINT_ASCII_SENSORS
+    SerialUSB.print("TSL260RD: ");
+    SerialUSB.println(TSL260_uint16);
+    #endif
+    
+    
 #endif
 
 #ifdef TSL250RD_2_include
     mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
-    TSL250_2_uint16 = mcp3428_1.readADC();
+    
+    temp_long = 0;
+    
+    for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+    {
+    temp_long = temp_long + mcp3428_1.readADC(); 
+    delay(100); // The sensor has a response time of 70mS, so we need to sample slower than that. 
+    }
+    TSL250_2_uint16 = temp_long >> 3; 
+    
+    #ifdef PRINT_ASCII_SENSORS
+    SerialUSB.print("TSL250RD: ");
+    SerialUSB.println(TSL250_2_uint16);
+    #endif
 #endif
 
 
 #ifdef MLX75305_include
     mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-    MLX753_uint16 = mcp3428_1.readADC();
+    
+        temp_long = 0;
+    
+    for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+    {
+    temp_long = temp_long + mcp3428_1.readADC(); 
+    delay(100); // The sensor has a response time of 70mS, so we need to sample slower than that. 
+    }
+    
+    MLX753_uint16 = temp_long >> 3; 
+    
+    #ifdef PRINT_ASCII_SENSORS
+    SerialUSB.print("MLX75305: ");
+    SerialUSB.println(MLX753_uint16);
+    #endif
+    
 #endif
 
 #ifdef ML8511_include
     mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
-    ML8511_uint16 = mcp3428_1.readADC();
+    
+    temp_long = 0;
+    
+    for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+    {
+    temp_long = temp_long + mcp3428_1.readADC(); 
+    delay(100); // The sensor has a response time of 70mS, so we need to sample slower than that. 
+    }
+    
+    ML8511_uint16 = temp_long >> 3; 
+    
+    #ifdef PRINT_ASCII_SENSORS
+    SerialUSB.print("ML8511: ");
+    SerialUSB.println(ML8511_uint16);
+    #endif
+    
 #endif
 
 

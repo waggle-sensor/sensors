@@ -22,6 +22,7 @@
 extern TwoWire Wire1;
 #endif
 
+unsigned long temp_long = 0;
 
 void setup()
 {
@@ -104,9 +105,9 @@ void loop()
 //     airsense_initial();
 //     #endif
 // 
-//     #ifdef LIGHTSENSE_INCLUDE    
-//     lightsense_initial();
-//     #endif
+    #ifdef LIGHTSENSE_INCLUDE    
+    lightsense_initial();
+    #endif
 
 //     #ifdef CHEMSENSE_INCLUDE 
 //     while(count < 10)
@@ -127,10 +128,10 @@ void loop()
     #ifdef AIRSENSE_INCLUDE    
     airsense_acquire();
     #endif
-
+/*
     #ifdef LIGHTSENSE_INCLUDE    
     lightsense_acquire();
-    #endif
+    #endif*/
 
 //     while (count < 24)       // every 24 sec
 //     {
@@ -183,6 +184,7 @@ void loop()
     
 //     count = 0;
 //     delay(23000);
+    SerialUSB.println(" ");
 }
 
 #ifdef I2C_INTERFACE
