@@ -43,8 +43,8 @@
 
 // Sensor boards to include
 #define VERSION_INCLUDE 0x01
-// #define AIRSENSE_INCLUDE 0x01
-#define LIGHTSENSE_INCLUDE 0x01
+#define AIRSENSE_INCLUDE 0x01
+// #define LIGHTSENSE_INCLUDE 0x01
 // #define CHEMSENSE_INCLUDE 0x01
 // #define ALPHASENSE_INCLUDE 0x01
 
@@ -77,9 +77,9 @@
         #define TMP112_include 0x01
         #define HTU21D_include 0x01
         #define BMP180_include 0x01
-//         #define MMA8452Q_include 0x01
+// //         #define MMA8452Q_include 0x01
         #define TSYS01_include 0x01
-        
+//         
     #endif
     
     #ifdef ANALOG_SENSORS
@@ -92,7 +92,7 @@
 
         #define HIH4030_include 0x01
         #define PR103J2_include 0x01
-//         #define TSL250RD_1_include 0x01
+        #define TSL250RD_1_include 0x01
 //         #define SPV1840LR5HB_include 0x01
 
     #endif

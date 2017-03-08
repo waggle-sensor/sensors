@@ -80,7 +80,7 @@ void airsense_initial (void)
             SPV_AMPV_AVG = ((SPV_AMPV_AVG * i) + SPV_AMPV[i]) / (i+1);
         }
 
-        SerialUSB.println(" ");
+//         SerialUSB.println(" ");
     #endif
 #endif
 }
@@ -99,8 +99,9 @@ void airsense_acquire (void)
         TMP112_read();           //************ From TMP112.ino
         
         #ifdef PRINT_ASCII_SENSORS
-        SerialUSB.print("TMP112 Temperature: ");
-        SerialUSB.println(Temp_float[0]);
+        SerialUSB.print("M_TMP112_Temperature: ");
+        SerialUSB.print(Temp_float[0]);
+        SerialUSB.println(" C");
         #endif
 
         TMP112_float = (Temp_float[0] + TMP112_float) / 2;
@@ -127,10 +128,12 @@ void airsense_acquire (void)
         Temp_float[0] = myHumidity.readTemperature();
                  
         #ifdef PRINT_ASCII_SENSORS
-        SerialUSB.print("HTU21D Temp: ");
-        SerialUSB.println(Temp_float[0]);
-        SerialUSB.print("HTU21D Humidity: ");
-        SerialUSB.println(Temp_float[1]);
+        SerialUSB.print("M_HTU21D_Temp: ");
+        SerialUSB.print(Temp_float[0]);
+        SerialUSB.println(" C");
+        SerialUSB.print("M_HTU21D_Humidity: ");
+        SerialUSB.print(Temp_float[1]);
+        SerialUSB.println(" %RH");
         #endif
         
 
@@ -178,10 +181,12 @@ void airsense_acquire (void)
             bmp.getTemperature(&Temp_float[0]);
             
             #ifdef PRINT_ASCII_SENSORS
-            SerialUSB.print("BMP180 Pressure: ");
-            SerialUSB.println(Temp_long);
-            SerialUSB.print("BMP180 Temperature: ");
-            SerialUSB.println(Temp_float[0]);            
+            SerialUSB.print("M_BMP180_Pressure: ");
+            SerialUSB.print(Temp_long);
+            SerialUSB.println(" pa");
+            SerialUSB.print("M_BMP180_Temperature: ");
+            SerialUSB.print(Temp_float[0]);            
+            SerialUSB.println(" C");
             #endif
 
             if (Temp_long == 16777215 || BMP180_long > 110000)   // pressure, if pressure is 16777215, then I2C is diconnected
@@ -285,8 +290,9 @@ void airsense_acquire (void)
         TSYS01_read();
         
         #ifdef PRINT_ASCII_SENSORS
-        SerialUSB.print("TSYS01 Temp: ");
-        SerialUSB.println(Temp_float[0]);
+        SerialUSB.print("M_TSYS01_Temp: ");
+        SerialUSB.print(Temp_float[0]);
+        SerialUSB.println(" C");
         #endif
 
         TSYS_float = (Temp_float[0] + TSYS_float) / 2;
@@ -319,9 +325,6 @@ void airsense_acquire (void)
     #ifdef PR103J2_include
 
         PR103J2[1] = (1 << 7) | LENGTH_FORMAT1;
-        
-        SerialUSB.println(" ");
-        
         analogRead(A2D_PRJ103J2);
         PR_uint16 = 0x00;
         
@@ -338,9 +341,8 @@ void airsense_acquire (void)
         
          
         #ifdef PRINT_ASCII_SENSORS
-        SerialUSB.print("PR103J2 Temp: ");
-        Temp_float[1] = (( 47.0 * ( 4096 - PR_uint16) ) / PR_uint16);
-        SerialUSB.println(Temp_float[1]);
+        SerialUSB.print("M_PR103J2_Temp: ");
+        SerialUSB.println(PR_uint16);
         #endif
 
         format1(PR_uint16);
@@ -370,7 +372,7 @@ void airsense_acquire (void)
         HIH4030_uint16 = HIH4030_uint16 >> 3;
         
         #ifdef PRINT_ASCII_SENSORS
-        SerialUSB.print("HIH4030: ");
+        SerialUSB.print("M_HIH4030: ");
         SerialUSB.println(HIH4030_uint16);
         #endif
         
@@ -390,9 +392,26 @@ void airsense_acquire (void)
 
         TSL250RD_1[1] = (1 << 7) | LENGTH_FORMAT1;
 
-        Temp_uint16 = analogRead(A2D_TSL250RD_1);
+        analogRead(A2D_TSL250RD_1);
+        
+        TSL250_1_uint16 = 0x00;
+        
+        delay(100);
 
-        TSL250_1_uint16 = (Temp_uint16 + TSL250_1_uint16) / 2;
+        for (int loop_var1 = 0; loop_var1 < 8; loop_var1++)
+        {
+            TSL250_1_uint16 = TSL250_1_uint16 + analogRead(A2D_TSL250RD_1);
+            delay(150); 
+        }
+        
+        
+        TSL250_1_uint16 = TSL250_1_uint16 >> 3;
+
+        #ifdef PRINT_ASCII_SENSORS
+        SerialUSB.print("M_TSL251: ");
+        SerialUSB.println(TSL250_1_uint16);
+        #endif
+        
 
         format1(TSL250_1_uint16);
         TSL250RD_1[2] = formatted_data_buffer[0];

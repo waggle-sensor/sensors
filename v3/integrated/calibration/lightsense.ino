@@ -34,7 +34,7 @@ void lightsense_initial (void)
         APDS_uint16 = temp_long >> 3; 
     
     #ifdef PRINT_ASCII_SENSORS
-    SerialUSB.print("APDS9006020: ");
+    SerialUSB.print("L_APDS9006020: ");
     SerialUSB.println(APDS_uint16);
     #endif
     
@@ -54,7 +54,7 @@ void lightsense_initial (void)
     
     
     #ifdef PRINT_ASCII_SENSORS
-    SerialUSB.print("TSL260RD: ");
+    SerialUSB.print("L_TSL261RD: ");
     SerialUSB.println(TSL260_uint16);
     #endif
     
@@ -74,7 +74,7 @@ void lightsense_initial (void)
     TSL250_2_uint16 = temp_long >> 3; 
     
     #ifdef PRINT_ASCII_SENSORS
-    SerialUSB.print("TSL250RD: ");
+    SerialUSB.print("L_TSL251RD: ");
     SerialUSB.println(TSL250_2_uint16);
     #endif
 #endif
@@ -94,7 +94,7 @@ void lightsense_initial (void)
     MLX753_uint16 = temp_long >> 3; 
     
     #ifdef PRINT_ASCII_SENSORS
-    SerialUSB.print("MLX75305: ");
+    SerialUSB.print("L_MLX75305: ");
     SerialUSB.println(MLX753_uint16);
     #endif
     
@@ -114,7 +114,7 @@ void lightsense_initial (void)
     ML8511_uint16 = temp_long >> 3; 
     
     #ifdef PRINT_ASCII_SENSORS
-    SerialUSB.print("ML8511: ");
+    SerialUSB.print("L_ML8511: ");
     SerialUSB.println(ML8511_uint16);
     #endif
     
