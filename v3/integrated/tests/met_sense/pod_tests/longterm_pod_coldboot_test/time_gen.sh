@@ -3,7 +3,7 @@
 cat cleaned_file.txt | grep "M_HTU21D_Temp:" | cut -d " " -f 1  > times.txt
 howmany=$(cat times.txt | wc -l)
 what=$(head -1 times.txt)
-rm time_origin.txt
+
 for (( c=1; c<=$howmany; c++ ))
 do  
     echo $what >> time_origin.txt

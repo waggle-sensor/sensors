@@ -24,8 +24,6 @@ done < "temp_file.del"
 
 tail_pos=$(($end_slice - tail_pos))
 
-# echo "$1"
-# echo $head_pos
-# echo $tail_pos
 rm temp_file.del
 cat $1 | head -n -$tail_pos  | tail -n +$head_pos  >  cleaned_file.txt
+
