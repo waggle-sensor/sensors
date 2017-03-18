@@ -2,7 +2,7 @@
 
 ## Airsense
 
-<img src="./images/metsense.jpg" width=500 />
+<img src="./sensors/images/metsense.jpg" width=500 />
 
 * Size: 55x145x15mm
 * Interface: USB-Serial, I2C	
@@ -23,7 +23,7 @@
 
 ## Lightsense
 
-<img src="./images/lightsense.jpg" width=500 />
+<img src="./sensors/images/lightsense.jpg" width=500 />
 
 * Size: 40x57x15mm
 * Interface: I2C 	
@@ -44,7 +44,7 @@
 
 ## Chemsense
 
-<img src="./images/chemsense.jpg" width=500 />
+<img src="./sensors/images/chemsense.jpg" width=500 />
 
 * Size: 65x130x15mm
 * Interface: USB-Serial, UART 	
@@ -67,7 +67,7 @@
 
 ## OPC-N2
 
-<img src="./images/opcn2.jpg" width=500 />
+<img src="./sensors/images/opcn2.jpg" width=500 />
 
 * Size: 65x75x60mm 	
 * Interface: USB Storage, SPI
