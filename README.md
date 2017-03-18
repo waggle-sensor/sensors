@@ -2,7 +2,7 @@
 
 ## Airsense, HW Ver: 3.1
 
-<img src="./sensors/images/metsense.jpg" width=500 />
+<img src="./sensors/images/metsense.jpg" width=350 />
 
 * Size: 55x145x15mm
 * Interface: USB-Serial, I2C	
@@ -44,7 +44,7 @@
 
 ## Chemsense HW Ver: Passamaquoddy Bay
 
-<img src="./sensors/images/chemsense.jpg" width=500 />
+<img src="./sensors/images/chemsense.jpg" width=360 />
 
 * Size: 65x130x15mm
 * Interface: USB-Serial, UART 	
@@ -67,7 +67,7 @@
 
 ## Alphasense OPC-N2 (Regular-range (16 bins in 0-10 μm) and High-range/Pollen (16 bins in 0-40 μm)
 
-<img src="./sensors/images/opcn2.jpg" width=500 />
+<img src="./sensors/images/opcn2.jpg" width=300 />
 
 * Size: 65x75x60mm 	
 * Interface: USB Storage, SPI
