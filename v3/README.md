@@ -1,6 +1,6 @@
-# Waggle Sensors
+# Common Waggle Sensors:
 
-## Airsense
+## Airsense, HW Ver: 3.1
 
 <img src="./sensors/images/metsense.jpg" width=500 />
 
@@ -21,7 +21,7 @@
 | SPV1840LR5H-B | Instantaneous Sound Sample | Acoustic Overload Point <br> to 121 dB SPL | -38 dBV/Pa | [Datasheet](./airsense/spv1840lr5h-b.pdf) |
 | TSYS01 | Temperature | -40°C to +125 °C | 0.5 °C | [Datasheet](./airsense/tsys01.pdf) |
 
-## Lightsense
+## Lightsense, HW Ver: 3.1
 
 <img src="./sensors/images/lightsense.jpg" width=500 />
 
@@ -42,7 +42,7 @@
 | TMP421 | Temperature | –55 to +127 °C | ±1.5 °C | [Datasheet](./lightsense/tmp421.pdf) |
 | MLX90614 | Temperature | -40 to +85 C | ±0.5 °C | [Datasheet](./lightsense/mlx90614.pdf) |
 
-## Chemsense
+## Chemsense HW Ver: Passamaquoddy Bay
 
 <img src="./sensors/images/chemsense.jpg" width=500 />
 
@@ -65,7 +65,7 @@
 | Total Reducing Gases | Reducing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/) |
 | Total Oxidizing Gases | Oxidizing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/) |
 
-## OPC-N2
+## Alphasense OPC-N2 (Regular-range (16 bins in 0-10 μm) and High-range/Pollen (16 bins in 0-40 μm)
 
 <img src="./sensors/images/opcn2.jpg" width=500 />
 
