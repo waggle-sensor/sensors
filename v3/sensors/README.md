@@ -1,10 +1,8 @@
-<img src="./SensorTable_files/SensorTable_htm_dbb4dd19ca8f2c5c.png" width=500 />
-
 # Waggle Sensors
 
 ## Airsense
 
-<img src="./SensorTable_files/SensorTable_htm_6665a28b3edceb8f.png" width=500 />
+<img src="./images/metsense.jpg" width=500 />
 
 * Size: 55x145x15mm
 * Interface: USB-Serial, I2C	
@@ -25,7 +23,7 @@
 
 ## Lightsense
 
-<img src="./SensorTable_files/SensorTable_htm_2a5e3330e7bb0891.png" width=500 />
+<img src="./images/lightsense.jpg" width=500 />
 
 * Size: 40x57x15mm
 * Interface: I2C 	
@@ -46,7 +44,7 @@
 
 ## Chemsense
 
-<img src="./SensorTable_files/SensorTable_htm_74b9e9c053e66ad9.png" width=500 />
+<img src="./images/chemsense.jpg" width=500 />
 
 * Size: 65x130x15mm
 * Interface: USB-Serial, UART 	
@@ -69,7 +67,7 @@
 
 ## OPC-N2
 
-<img src="./SensorTable_files/SensorTable_htm_53dff78b647db13c.jpg" width=500 />
+<img src="./images/opcn2.jpg" width=500 />
 
 * Size: 65x75x60mm 	
 * Interface: USB Storage, SPI
