@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <OneWire.h>
 
 // NOTE May want to model system as simple state machine to recall
 // what we're supposed to be doing at any given time.
@@ -85,6 +86,8 @@ void setup() {
     inputlen = 0;
 }
 
+OneWire ds(48);
+
 void processinput() {
     Scanner scanner(inputbuf, 256);
 
@@ -101,7 +104,7 @@ void processinput() {
 
     if (matches(scanner.argv[0], "v")) {
         SerialUSB.println(version);
-        return;
+        goto ok;
     }
 
     if (matches(scanner.argv[0], "pm")) {
@@ -123,7 +126,7 @@ void processinput() {
         }
 
         pinMode(pin, mode);
-        return;
+        goto ok;
     }
 
     if (matches(scanner.argv[0], "pw")) {
@@ -135,8 +138,45 @@ void processinput() {
         int pin = atoi(scanner.argv[1]);
         int value = atoi(scanner.argv[2]);
         digitalWrite(pin, value);
-        return;
+        goto ok;
     }
+
+    if (matches(scanner.argv[0], "id")) {
+        ds.reset();
+        ds.write(0x33);
+        byte mac[8];
+
+        for (int i = 0; i < 8; i++) {
+            mac[i] = ds.read();
+        }
+
+        if (OneWire::crc8(mac, 8) != 0) {
+            SerialUSB.println("error: failed crc");
+            return;
+        }
+
+        for (int i = 0; i < 8; i++) {
+            SerialUSB.print((mac[i] >> 4) & 0x0F, HEX);
+            SerialUSB.print((mac[i] >> 0) & 0x0F, HEX);
+        }
+
+        SerialUSB.println();
+
+        goto ok;
+    }
+
+    SerialUSB.println("error: unknown command");
+    return;
+
+ok:
+    SerialUSB.print("ok:");
+
+    for (int i = 0; i < scanner.argc; i++) {
+        SerialUSB.print(" ");
+        SerialUSB.print(scanner.argv[i]);
+    }
+
+    SerialUSB.println();
 }
 
 // in general, we should be able to sleep / power off unless we need to do
@@ -149,23 +189,30 @@ void loop() {
     // TODO figure out how to make sleep mode work
     // pmc_enable_sleepmode(1);
 
-    while (SerialUSB.available()) {
-        char b = SerialUSB.read();
+    SerialUSB.print("> ");
 
-        inputbuf[inputlen++] = b;
+    inputbuf[0] = '\0';
+    inputlen = 0;
 
-        // throw out buffer if we have an overflow
-        if (inputlen == 256) {
-            inputlen = 0;
+    while (true) {
+        while (!SerialUSB.available()) {
         }
 
-        // ensure buffer is null terminated
-        inputbuf[inputlen] = '\0';
+        if (inputlen >= 256) {
+            SerialUSB.println("error: buffer overflow");
+            return;
+        }
 
-        if (b == '\r' or b == '\n') {
-            SerialUSB.write("\r\n");
+        char b = SerialUSB.read();
+
+        if (isprint(b)) {
+            inputbuf[inputlen++] = b;
+            inputbuf[inputlen] = '\0';
+        }
+
+        if (b == '\r' || b == '\n') {
+            SerialUSB.println();
             processinput();
-            inputlen = 0;
             break;
         } else {
             SerialUSB.write(b);
