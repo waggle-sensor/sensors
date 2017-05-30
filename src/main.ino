@@ -1,5 +1,7 @@
 #include <Arduino.h>
+#include <Wire.h>
 #include <OneWire.h>
+#include "scanner.h"
 
 // NOTE May want to model system as simple state machine to recall
 // what we're supposed to be doing at any given time.
@@ -8,55 +10,6 @@ const char *version = "coresense 4.0.0";
 
 char inputbuf[256];
 int inputlen;
-
-class Scanner {
-public:
-
-    Scanner(char *b, int size);
-    void Split();
-    const char *Err() const;
-
-    int argc;
-    char *argv[8];
-    char *buffer;
-    int buffersize;
-    const char *err;
-};
-
-Scanner::Scanner(char *b, int size) {
-    buffer = b;
-    buffersize = size;
-    err = NULL;
-}
-
-const char *Scanner::Err() const {
-    return err;
-}
-
-void Scanner::Split() {
-    char *s = buffer;
-
-    argc = 0;
-    err = NULL;
-
-    while (*s != '\0') {
-        while (isspace(*s)) {
-            *s++ = '\0';
-        }
-
-        if (isgraph(*s)) {
-            if (argc == 8) {
-                err = "error: too many args";
-                return;
-            }
-
-            argv[argc++] = s;
-            while (isgraph(*s)) {
-                s++;
-            }
-        }
-    }
-}
 
 bool startswith(const char *s, const char *p) {
     while (*p != '\0') {
@@ -80,37 +33,24 @@ void setup() {
 
     while (!SerialUSB) {
     }
-
-    SerialUSB.println("system ready");
-
-    inputlen = 0;
 }
 
 OneWire ds(48);
 
-void processinput() {
-    Scanner scanner(inputbuf, 256);
-
-    scanner.Split();
-
-    if (scanner.Err() != NULL) {
-        SerialUSB.println(scanner.Err());
-        return;
-    }
-
+const char *dispatchcommand(Scanner &scanner) {
     if (scanner.argc == 0) {
-        return;
+        return NULL;
     }
 
-    if (matches(scanner.argv[0], "v")) {
+    if (matches(scanner.argv[0], "ver")) {
+        if (scanner.argc != 1) {
+            return "usage: ver";
+        }
+
         SerialUSB.println(version);
-        goto ok;
-    }
-
-    if (matches(scanner.argv[0], "pm")) {
+    } else if (matches(scanner.argv[0], "pm")) {
         if (scanner.argc != 3) {
-            SerialUSB.println("error: invalid usage");
-            return;
+            return "usage: pm pin mode";
         }
 
         int pin = atoi(scanner.argv[1]);
@@ -121,27 +61,23 @@ void processinput() {
         } else if (matches(scanner.argv[2], "output")) {
             mode = OUTPUT;
         } else {
-            SerialUSB.println("error: invalid pin mode");
-            return;
+            return "error: invalid pin mode";
         }
 
         pinMode(pin, mode);
-        goto ok;
-    }
-
-    if (matches(scanner.argv[0], "pw")) {
+    } else if (matches(scanner.argv[0], "pw")) {
         if (scanner.argc != 3) {
-            SerialUSB.println("error: invalid usage");
-            return;
+            return "usage: pw pin value";
         }
 
         int pin = atoi(scanner.argv[1]);
         int value = atoi(scanner.argv[2]);
         digitalWrite(pin, value);
-        goto ok;
-    }
+    } else if (matches(scanner.argv[0], "id")) {
+        if (scanner.argc != 1) {
+            return "usage: id";
+        }
 
-    if (matches(scanner.argv[0], "id")) {
         ds.reset();
         ds.write(0x33);
         byte mac[8];
@@ -151,8 +87,7 @@ void processinput() {
         }
 
         if (OneWire::crc8(mac, 8) != 0) {
-            SerialUSB.println("error: failed crc");
-            return;
+            return "error: failed crc";
         }
 
         for (int i = 0; i < 8; i++) {
@@ -161,14 +96,48 @@ void processinput() {
         }
 
         SerialUSB.println();
+    } else if (matches(scanner.argv[0], "i2c-begin")) {
+        if (scanner.argc != 2) {
+            return "error: invalid usage";
+        }
 
-        goto ok;
+        int addr = atoi(scanner.argv[1]);
+        Wire.beginTransmission(addr);
+    } else if (matches(scanner.argv[0], "i2c-end")) {
+        Wire.endTransmission();
+    } else if (matches(scanner.argv[0], "i2c-req")) {
+        if (scanner.argc != 3) {
+            return "usage: i2c-req addr n";
+        }
+    } else if (matches(scanner.argv[0], "i2c-read")) {
+        if (scanner.argc != 2) {
+            return "usage: i2c-read n";
+        }
+    } else {
+        return "error: invalid command";
     }
 
-    SerialUSB.println("error: unknown command");
-    return;
+    return NULL;
+}
 
-ok:
+const char *processinput() {
+    const char *err;
+
+    Scanner scanner(inputbuf, 256);
+
+    scanner.Split();
+
+    if (scanner.Err() != NULL) {
+        return scanner.Err();
+    }
+
+    err = dispatchcommand(scanner);
+
+    if (err != NULL) {
+        return err;
+    }
+
+    // ack message
     SerialUSB.print("ok:");
 
     for (int i = 0; i < scanner.argc; i++) {
@@ -177,6 +146,8 @@ ok:
     }
 
     SerialUSB.println();
+
+    return NULL;
 }
 
 // in general, we should be able to sleep / power off unless we need to do
@@ -194,13 +165,13 @@ void loop() {
     inputbuf[0] = '\0';
     inputlen = 0;
 
-    while (true) {
-        while (!SerialUSB.available()) {
-        }
-
+    while (1) {
         if (inputlen >= 256) {
             SerialUSB.println("error: buffer overflow");
-            return;
+            break;
+        }
+
+        while (SerialUSB.available() == 0) {
         }
 
         char b = SerialUSB.read();
