@@ -3,56 +3,10 @@
 #include <OneWire.h>
 #include "scanner.h"
 
-// NOTE May want to model system as simple state machine to recall
-// what we're supposed to be doing at any given time.
-
 const char *version = "coresense 4.0.0";
 
 char inputbuf[256];
 int inputlen;
-
-bool startswith(const char *s, const char *p) {
-    while (*p != '\0') {
-        if (*s != *p) {
-            return false;
-        }
-
-        s++;
-        p++;
-    }
-
-    return true;
-}
-
-const byte BBEGIN = 0xFC;
-const byte BEND = 0xFE;
-const byte BESCAPE = 0xCC;
-
-bool ControlByte(byte b) {
-    return b == BBEGIN || b == BEND || b == BESCAPE;
-}
-
-void SendFrame(byte *b, int n) {
-    byte crc = 0;
-
-    SerialUSB.write(BBEGIN);
-
-    for (int i = 0; i < n; i++) {
-        if (ControlByte(b[i])) {
-            SerialUSB.write(BESCAPE);
-            SerialUSB.write(b[i] ^ 0x20);
-        } else {
-            SerialUSB.write(b[i]);
-        }
-    }
-
-    SerialUSB.write(crc);
-    SerialUSB.write(BEND);
-}
-
-bool matches(const char *s1, const char *s2) {
-    return strcmp(s1, s2) == 0;
-}
 
 void setup() {
     SerialUSB.begin(9600);
