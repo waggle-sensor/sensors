@@ -1,4 +1,5 @@
 #include "stringutils.h"
+#include <Arduino.h>
 
 bool startswith(const char *s, const char *p) {
     while (*p != '\0') {

@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <OneWire.h>
 #include "scanner.h"
+#include "stringutils.h"
 
 const char *version = "coresense 4.0.0";
 
