@@ -65,7 +65,6 @@ void setup() {
 
 OneWire ds(48);
 
-
 const char *commandVersion(int argc, const char **argv) {
     SerialUSB.println(version);
     return NULL;
@@ -148,10 +147,12 @@ const char *commandI2CRead(int argc, const char **argv) {
     return "not implemented";
 }
 
-struct {
+struct Command {
     const char *name;
     const char *(*func)(int argc, const char **argv);
-} commands[] = {
+};
+
+Command commands[] = {
     {"ver", commandVersion},
     {"id", commandID},
     {"pin-mode", commandPinMode},
@@ -162,7 +163,7 @@ struct {
     {"i2c-read", commandI2CRead},
 };
 
-const int numcommands = sizeof(commands) / sizeof(commands[0]);
+const int numcommands = sizeof(commands) / sizeof(Command);
 
 const char *dispatchcommand(Scanner &scanner) {
     if (scanner.argc == 0) {
@@ -178,7 +179,7 @@ const char *dispatchcommand(Scanner &scanner) {
     return "invalid command";
 }
 
-const char *processinput() {
+void processinput() {
     const char *err;
 
     Scanner scanner(inputbuf, 256);
@@ -186,13 +187,17 @@ const char *processinput() {
     scanner.Split();
 
     if (scanner.Err() != NULL) {
-        return scanner.Err();
+        SerialUSB.print("error: ");
+        SerialUSB.println(scanner.Err());
+        return;
     }
 
     err = dispatchcommand(scanner);
 
     if (err != NULL) {
-        return err;
+        SerialUSB.print("error: ");
+        SerialUSB.println(err);
+        return;
     }
 
     // ack message
@@ -204,8 +209,6 @@ const char *processinput() {
     }
 
     SerialUSB.println();
-
-    return NULL;
 }
 
 // in general, we should be able to sleep / power off unless we need to do
@@ -215,10 +218,6 @@ const char *processinput() {
 // second delay to read data out. this allows us to have a built in timeout
 // system.
 void loop() {
-    // byte frame[] = {1, 2, 3, 4, 5};
-    // SendFrame(frame, 5);
-    // delay(2500);
-
     SerialUSB.print("> ");
 
     inputbuf[0] = '\0';
