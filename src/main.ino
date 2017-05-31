@@ -24,6 +24,32 @@ bool startswith(const char *s, const char *p) {
     return true;
 }
 
+const byte BBEGIN = 0xFC;
+const byte BEND = 0xFE;
+const byte BESCAPE = 0xCC;
+
+bool ControlByte(byte b) {
+    return b == BBEGIN || b == BEND || b == BESCAPE;
+}
+
+void SendFrame(byte *b, int n) {
+    byte crc = 0;
+
+    SerialUSB.write(BBEGIN);
+
+    for (int i = 0; i < n; i++) {
+        if (ControlByte(b[i])) {
+            SerialUSB.write(BESCAPE);
+            SerialUSB.write(b[i] ^ 0x20);
+        } else {
+            SerialUSB.write(b[i]);
+        }
+    }
+
+    SerialUSB.write(crc);
+    SerialUSB.write(BEND);
+}
+
 bool matches(const char *s1, const char *s2) {
     return strcmp(s1, s2) == 0;
 }
@@ -33,91 +59,123 @@ void setup() {
 
     while (!SerialUSB) {
     }
+
+    Wire.begin();
 }
 
 OneWire ds(48);
+
+
+const char *commandVersion(int argc, const char **argv) {
+    SerialUSB.println(version);
+    return NULL;
+}
+
+const char *commandID(int argc, const char **argv) {
+    byte mac[8];
+
+    ds.reset();
+    ds.write(0x33);
+
+    for (int i = 0; i < 8; i++) {
+        mac[i] = ds.read();
+    }
+
+    if (OneWire::crc8(mac, 8) != 0) {
+        return "failed crc";
+    }
+
+    for (int i = 0; i < 8; i++) {
+        SerialUSB.print((mac[i] >> 4) & 0x0F, HEX);
+        SerialUSB.print((mac[i] >> 0) & 0x0F, HEX);
+    }
+
+    SerialUSB.println();
+    return NULL;
+}
+
+const char *commandPinMode(int argc, const char **argv) {
+    if (argc != 3) {
+        return "invalid args";
+    }
+
+    int pin = atoi(argv[1]);
+    int mode;
+
+    if (matches(argv[2], "input")) {
+        mode = INPUT;
+    } else if (matches(argv[2], "output")) {
+        mode = OUTPUT;
+    } else {
+        return "invalid pin mode";
+    }
+
+    pinMode(pin, mode);
+    return NULL;
+}
+
+const char *commandPinWrite(int argc, const char **argv) {
+    if (argc != 3) {
+        return "invalid args";
+    }
+
+    int pin = atoi(argv[1]);
+    int value = atoi(argv[2]);
+    digitalWrite(pin, value);
+    return NULL;
+}
+
+const char *commandI2CBegin(int argc, const char **argv) {
+    if (argc != 2) {
+        return "invalid args";
+    }
+
+    int addr = atoi(argv[1]);
+    Wire.beginTransmission(addr);
+    return NULL;
+}
+
+const char *commandI2CEnd(int argc, const char **argv) {
+    Wire.endTransmission();
+    return NULL;
+}
+
+const char *commandI2CReq(int argc, const char **argv) {
+    return "not implemented";
+}
+
+const char *commandI2CRead(int argc, const char **argv) {
+    return "not implemented";
+}
+
+struct {
+    const char *name;
+    const char *(*func)(int argc, const char **argv);
+} commands[] = {
+    {"ver", commandVersion},
+    {"id", commandID},
+    {"pin-mode", commandPinMode},
+    {"pin-write", commandPinWrite},
+    {"i2c-begin", commandI2CBegin},
+    {"i2c-end", commandI2CEnd},
+    {"i2c-req", commandI2CReq},
+    {"i2c-read", commandI2CRead},
+};
+
+const int numcommands = sizeof(commands) / sizeof(commands[0]);
 
 const char *dispatchcommand(Scanner &scanner) {
     if (scanner.argc == 0) {
         return NULL;
     }
 
-    if (matches(scanner.argv[0], "ver")) {
-        if (scanner.argc != 1) {
-            return "usage: ver";
+    for (int i = 0; i < numcommands; i++) {
+        if (matches(scanner.argv[0], commands[i].name)) {
+            return commands[i].func(scanner.argc, (const char **)scanner.argv);
         }
-
-        SerialUSB.println(version);
-    } else if (matches(scanner.argv[0], "pm")) {
-        if (scanner.argc != 3) {
-            return "usage: pm pin mode";
-        }
-
-        int pin = atoi(scanner.argv[1]);
-        int mode;
-
-        if (matches(scanner.argv[2], "input")) {
-            mode = INPUT;
-        } else if (matches(scanner.argv[2], "output")) {
-            mode = OUTPUT;
-        } else {
-            return "error: invalid pin mode";
-        }
-
-        pinMode(pin, mode);
-    } else if (matches(scanner.argv[0], "pw")) {
-        if (scanner.argc != 3) {
-            return "usage: pw pin value";
-        }
-
-        int pin = atoi(scanner.argv[1]);
-        int value = atoi(scanner.argv[2]);
-        digitalWrite(pin, value);
-    } else if (matches(scanner.argv[0], "id")) {
-        if (scanner.argc != 1) {
-            return "usage: id";
-        }
-
-        ds.reset();
-        ds.write(0x33);
-        byte mac[8];
-
-        for (int i = 0; i < 8; i++) {
-            mac[i] = ds.read();
-        }
-
-        if (OneWire::crc8(mac, 8) != 0) {
-            return "error: failed crc";
-        }
-
-        for (int i = 0; i < 8; i++) {
-            SerialUSB.print((mac[i] >> 4) & 0x0F, HEX);
-            SerialUSB.print((mac[i] >> 0) & 0x0F, HEX);
-        }
-
-        SerialUSB.println();
-    } else if (matches(scanner.argv[0], "i2c-begin")) {
-        if (scanner.argc != 2) {
-            return "error: invalid usage";
-        }
-
-        int addr = atoi(scanner.argv[1]);
-        Wire.beginTransmission(addr);
-    } else if (matches(scanner.argv[0], "i2c-end")) {
-        Wire.endTransmission();
-    } else if (matches(scanner.argv[0], "i2c-req")) {
-        if (scanner.argc != 3) {
-            return "usage: i2c-req addr n";
-        }
-    } else if (matches(scanner.argv[0], "i2c-read")) {
-        if (scanner.argc != 2) {
-            return "usage: i2c-read n";
-        }
-    } else {
-        return "error: invalid command";
     }
 
-    return NULL;
+    return "invalid command";
 }
 
 const char *processinput() {
@@ -157,8 +215,9 @@ const char *processinput() {
 // second delay to read data out. this allows us to have a built in timeout
 // system.
 void loop() {
-    // TODO figure out how to make sleep mode work
-    // pmc_enable_sleepmode(1);
+    // byte frame[] = {1, 2, 3, 4, 5};
+    // SendFrame(frame, 5);
+    // delay(2500);
 
     SerialUSB.print("> ");
 
