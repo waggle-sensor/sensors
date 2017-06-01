@@ -9,6 +9,9 @@ char inputbuf[256];
 int inputlen;
 OneWire ds(48);
 
+const char *ERROR_INVALID_ARGS = "invalid args";
+const char *ERROR_NOT_IMPLEMENTED = "not implemented";
+
 const char *commandVersion(int argc, const char **argv) {
     SerialUSB.println(version);
     return NULL;
@@ -39,7 +42,7 @@ const char *commandID(int argc, const char **argv) {
 
 const char *commandPinMode(int argc, const char **argv) {
     if (argc != 3) {
-        return "invalid args";
+        return ERROR_INVALID_ARGS;
     }
 
     int pin = atoi(argv[1]);
@@ -59,7 +62,7 @@ const char *commandPinMode(int argc, const char **argv) {
 
 const char *commandPinWrite(int argc, const char **argv) {
     if (argc != 3) {
-        return "invalid args";
+        return ERROR_INVALID_ARGS;
     }
 
     int pin = atoi(argv[1]);
@@ -70,7 +73,7 @@ const char *commandPinWrite(int argc, const char **argv) {
 
 const char *commandI2CBegin(int argc, const char **argv) {
     if (argc != 2) {
-        return "invalid args";
+        return ERROR_INVALID_ARGS;
     }
 
     int addr = atoi(argv[1]);
@@ -84,11 +87,11 @@ const char *commandI2CEnd(int argc, const char **argv) {
 }
 
 const char *commandI2CReq(int argc, const char **argv) {
-    return "not implemented";
+    return ERROR_NOT_IMPLEMENTED;
 }
 
 const char *commandI2CRead(int argc, const char **argv) {
-    return "not implemented";
+    return ERROR_NOT_IMPLEMENTED;
 }
 
 struct Command {
