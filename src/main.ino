@@ -5,19 +5,8 @@
 #include "stringutils.h"
 
 const char *version = "coresense 4.0.0";
-
 char inputbuf[256];
 int inputlen;
-
-void setup() {
-    SerialUSB.begin(9600);
-
-    while (!SerialUSB) {
-    }
-
-    Wire.begin();
-}
-
 OneWire ds(48);
 
 const char *commandVersion(int argc, const char **argv) {
@@ -166,12 +155,15 @@ void processinput() {
     SerialUSB.println();
 }
 
-// in general, we should be able to sleep / power off unless we need to do
-// any processing.
-//
-// one of the items that can be added is using a timer interrupt with a few
-// second delay to read data out. this allows us to have a built in timeout
-// system.
+void setup() {
+    SerialUSB.begin(9600);
+
+    while (!SerialUSB) {
+    }
+
+    Wire.begin();
+}
+
 void loop() {
     SerialUSB.print("> ");
 
