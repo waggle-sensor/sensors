@@ -18,6 +18,7 @@ const char *Framer::Err() const {
     return err;
 }
 
+// TODO Add corresponding WriteByte call which can check overflow and timeouts
 void Framer::WriteFrame(byte *b, int n) {
     byte crc = 0;
 
@@ -93,7 +94,21 @@ int Framer::ReadBody(byte *data, int max) {
         }
     }
 
-    return size;
+    if (size == 0) {
+        err = "missing crc";
+        return 0;
+    }
+
+    byte crc = data[size-1];
+
+    // TODO complete full crc
+    if (crc != 0) {
+        err = "invalid crc";
+        return 0;
+    }
+
+    // excludes final crc byte
+    return size - 1;
 }
 
 byte Framer::ReadByte() {
