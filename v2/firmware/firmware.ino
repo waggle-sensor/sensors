@@ -72,7 +72,7 @@ void setup()
     #endif
 
     #ifdef CHEMSENSE_INCLUDE
-    Serial3.begin(19200);
+    Serial3.begin(115200);
     #endif
 
     //     Setup the I2C buffer

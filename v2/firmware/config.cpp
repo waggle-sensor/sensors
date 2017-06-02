@@ -83,6 +83,7 @@
 
 #define ID_THREE_ACCEL_AND_VIB  0x26
 #define ID_THREE_GYRO_AND_ORIENTATION   0x27
+#define ID_HDC1010  0x35
 
 // #define ID_ETHANOL  0x16
 

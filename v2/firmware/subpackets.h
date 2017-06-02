@@ -62,6 +62,8 @@ byte CO_LMP_temp[LENGTH_FORMAT2 + 2];
 
 byte three_accel_and_vib[(LENGTH_FORMAT2 * 3) + LENGTH_FORMAT4 + 2];
 byte three_gyro_and_orientation[(LENGTH_FORMAT2 * 3) + LENGTH_FORMAT4 + 2];
+
+byte HDC1010[LENGTH_FORMAT2 + LENGTH_FORMAT1 + 2]; // ambient temp and RH
 #endif
 
 // Whole packet
