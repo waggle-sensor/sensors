@@ -1,6 +1,7 @@
 #include "sender.h"
 #include <Arduino.h>
 
+const unsigned long TIMEOUT = 5000L;
 const byte BBEGIN = 0xFE;
 const byte BEND = 0xFC;
 const byte BESCAPE = 0xFD;
@@ -55,11 +56,11 @@ int Framer::ReadFrame(byte *data, int max) {
     int size = 0;
 
     // wait for frame start
-    while (1) {
+    while (true) {
         byte b = ReadByte();
 
         if (err != NULL) {
-            return;
+            return 0;
         }
 
         if (b == BBEGIN) {
@@ -68,16 +69,16 @@ int Framer::ReadFrame(byte *data, int max) {
     }
 
     // wait for data / end bytes.
-    while (1) {
+    while (true) {
         if (size > max) {
             err = "frame too big";
-            break;
+            return 0;
         }
 
         byte b = ReadByte();
 
         if (err != NULL) {
-            break;
+            return 0;
         }
 
         if (b == BEND) {
@@ -98,7 +99,7 @@ byte Framer::ReadByte() {
     unsigned long start = millis();
 
     while (SerialUSB.available() == 0) {
-        if (millis() - start > 5000) {
+        if (millis() - start > TIMEOUT) {
             err = "read timeout";
             return 0;
         }
