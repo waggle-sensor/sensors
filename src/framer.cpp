@@ -37,20 +37,37 @@ void Framer::WriteFrame(byte *b, int n) {
 }
 
 int Framer::ReadFrame(byte *data, int max) {
-    int size = 0;
+    ReadUntilStart();
 
-    // wait for frame start
+    if (err != NULL) {
+        return 0;
+    }
+
+    int size = ReadBody(data, max);
+
+    if (err != NULL) {
+        return 0;
+    }
+
+    return size;
+}
+
+void Framer::ReadUntilStart() {
     while (true) {
         byte b = ReadByte();
 
         if (err != NULL) {
-            return 0;
+            return;
         }
 
         if (b == BBEGIN) {
             break;
         }
     }
+}
+
+int Framer::ReadBody(byte *data, int max) {
+    int size = 0;
 
     // wait for data / end bytes.
     while (true) {

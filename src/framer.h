@@ -12,6 +12,8 @@ private:
 
     byte ReadByte();
     byte ReadEscapedByte();
+    void ReadUntilStart();
+    int ReadBody(byte *data, int max);
 
     const char *err;
 };
