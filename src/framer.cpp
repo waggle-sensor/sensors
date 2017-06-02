@@ -1,7 +1,7 @@
-#include "sender.h"
-#include <Arduino.h>
+#include "framer.h"
 
 const unsigned long TIMEOUT = 5000L;
+const byte ESCAPE_MASK = 0x20;
 const byte BBEGIN = 0xFE;
 const byte BEND = 0xFC;
 const byte BESCAPE = 0xFD;
@@ -10,24 +10,8 @@ bool ControlByte(byte b) {
     return (b == BBEGIN) || (b == BEND) || (b == BESCAPE);
 }
 
-class Framer {
-public:
-
-    Framer();
-    const char *Err() const;
-    void WriteFrame(byte *b, int n);
-    int ReadFrame(byte *b, int max);
-
-private:
-
-    byte ReadByte();
-    byte ReadEscapedByte();
-
-    const char *err;
-};
-
 Framer::Framer() {
-    err = 0;
+    err = NULL;
 }
 
 const char *Framer::Err() const {
@@ -42,7 +26,7 @@ void Framer::WriteFrame(byte *b, int n) {
     for (int i = 0; i < n; i++) {
         if (ControlByte(b[i])) {
             SerialUSB.write(BESCAPE);
-            SerialUSB.write(b[i] ^ 0x20);
+            SerialUSB.write(b[i] ^ ESCAPE_MASK);
         } else {
             SerialUSB.write(b[i]);
         }
@@ -121,5 +105,5 @@ byte Framer::ReadEscapedByte() {
         return 0;
     }
 
-    return b ^ 0x20;
+    return b ^ ESCAPE_MASK;
 }
