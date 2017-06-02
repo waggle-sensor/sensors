@@ -94,6 +94,10 @@ const char *commandI2CRead(int argc, const char **argv) {
     return ERROR_NOT_IMPLEMENTED;
 }
 
+const char *commandI2CWrite(int argc, const char **argv) {
+    return ERROR_NOT_IMPLEMENTED;
+}
+
 struct Command {
     const char *name;
     const char *(*func)(int argc, const char **argv);
@@ -108,6 +112,7 @@ Command commands[] = {
     {"i2c-end", commandI2CEnd},
     {"i2c-req", commandI2CReq},
     {"i2c-read", commandI2CRead},
+    {"i2c-write", commandI2CWrite},
 };
 
 const int numcommands = sizeof(commands) / sizeof(Command);
