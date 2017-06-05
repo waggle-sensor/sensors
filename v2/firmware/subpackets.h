@@ -2,7 +2,7 @@
 byte formatted_data_buffer[MAX_FMT_SIZE];
 
 // Airsense board
-byte MAC_ID[LENGTH_FORMAT3 + 2] = {ID_MAC, 134,3,1,8,1,0,7}; // MAC address
+byte MAC_ID[LENGTH_FORMAT3 + 2] = {ID_MAC,134,3,1,8,1,1,1}; // MAC address
 
 #ifdef AIRSENSE_INCLUDE
 byte TMP112[LENGTH_FORMAT6 + 2]; // ambient temp
