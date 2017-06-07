@@ -1,7 +1,7 @@
 #include "scanner.h"
 #include "fmt.h"
 
-void Scanner::Init() {
+Scanner::Scanner() {
     lookahead = -1;
     tokpos = -1;
 }

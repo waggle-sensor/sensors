@@ -5,7 +5,7 @@
 class Scanner {
 public:
 
-    void Init();
+    Scanner();
     char Next();
     char Peek();
     char Scan();

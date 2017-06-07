@@ -15,7 +15,6 @@ void setup() {
     while (!SerialUSB) {
     }
 
-    scanner.Init();
     // Wire.begin();
 
     Printf("debug: setup complete");
