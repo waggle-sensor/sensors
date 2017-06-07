@@ -3,6 +3,16 @@
 // #include <OneWire.h>
 #include "scanner.h"
 #include "stringutils.h"
+#include <cstdarg>
+
+void Printf(const char *fmt, ...) {
+    char s[256];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(s, 80, fmt, args);
+    SerialUSB.println(s);
+    va_end(args);
+}
 
 // OneWire ds(48);
 
@@ -14,19 +24,19 @@ void setup() {
     while (!SerialUSB) {
     }
 
-    SerialUSB.println("debug: setup");
-
-    scanner.Init(SerialUSB);
+    scanner.Init();
     // Wire.begin();
+
+    Printf("debug: setup complete");
 }
 
 void commandID() {
     if (scanner.Scan() != '\n') {
-        SerialUSB.println("err: invalid args");
+        Printf("err: invalid args");
         return;
     }
 
-    SerialUSB.println("ok: 0.0.1");
+    Printf("ok: 0.0.1");
 
     //     byte mac[8];
     //
@@ -49,24 +59,22 @@ void commandID() {
 
 void commandVersion() {
     if (scanner.Scan() != '\n') {
-        SerialUSB.println("err: invalid args");
+        Printf("err: invalid args");
         return;
     }
 
-    SerialUSB.println("ok: abc123");
+    Printf("ok: abc123");
 }
 
 void command2Write() {
     int count = 0;
 
     while (scanner.Scan() != '\n') {
-        SerialUSB.print("debug: write ");
-        SerialUSB.println(scanner.TokenText());
+        Printf("debug: write %s", scanner.TokenText())
         count++;
     }
 
-    SerialUSB.print("ok: ");
-    SerialUSB.println(count);
+    Printf("ok: %d", count);
 }
 
 void command2Read() {
@@ -85,19 +93,19 @@ void command2Read() {
     //
     //     goto ok;
     // }
-    SerialUSB.println("err: not implemented");
+    Printf("err: not implemented");
 }
 
 bool execCommand() {
     // consume leading newline tokens
     while (scanner.Scan() == '\n') {
+        Printf("debug: consume newline");
         // if (scanner.Err()) {
         //     scanner.Reset();
         // }
     }
 
-    SerialUSB.print("debug: command ");
-    SerialUSB.println(scanner.TokenText());
+    Printf("debug: command <%s>", scanner.TokenText());
 
     if (matches(scanner.TokenText(), "ver")) {
         commandID();
@@ -127,8 +135,15 @@ bool execCommand() {
 }
 
 void loop() {
-    if (!execCommand()) {
-        SerialUSB.print("err: invalid command ");
-        SerialUSB.println(scanner.TokenText());
+    Printf("debug: start loop");
+
+    Printf("debug: start execCommand");
+    bool ok = execCommand();
+    Printf("debug: end execCommand");
+
+    if (!ok) {
+        Printf("err: invalid command [%s]", scanner.TokenText());
     }
+
+    Printf("debug: end loop");
 }

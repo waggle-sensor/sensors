@@ -5,7 +5,7 @@
 class Scanner {
 public:
 
-    void Init(Stream &s);
+    void Init();
     char Next();
     char Peek();
     char Scan();
@@ -13,8 +13,7 @@ public:
 
 private:
 
-    Stream *reader;
     char lookahead;
-    char tok[256];
+    char tok[64];
     int tokpos;
 };

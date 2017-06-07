@@ -1,17 +1,21 @@
 #include "scanner.h"
 
-void Scanner::Init(Stream &s) {
-    reader = &s;
+void Scanner::Init() {
     lookahead = -1;
     tokpos = -1;
 }
 
 char Scanner::Next() {
-    while (reader->available() == 0) {
+    while (!SerialUSB.available()) {
         delay(10);
     }
 
-    lookahead = reader->read();
+    lookahead = SerialUSB.read();
+
+    SerialUSB.print("debug: next = <");
+    SerialUSB.print((int)lookahead);
+    SerialUSB.println(">");
+
     return lookahead;
 }
 
@@ -28,8 +32,8 @@ char Scanner::Scan() {
 
     tokpos = -1;
 
-    while (isspace(c)) {
-        if (c == '\n' || c == '\r') {
+    while (isspace(c) || c == '\0') {
+        if (c == '\n' || c == '\r' || c == '\0') {
             lookahead = -1;
             return '\n';
         }
