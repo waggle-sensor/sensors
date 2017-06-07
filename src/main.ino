@@ -1,86 +1,10 @@
 #include <Arduino.h>
 // #include <Wire.h>
 // #include <OneWire.h>
+#include "scanner.h"
 #include "stringutils.h"
 
 // OneWire ds(48);
-
-// TODO Add support for detecting type of data coming in.
-class Scanner {
-public:
-
-    void Init(Stream &s);
-    char Next();
-    char Peek();
-    char Scan();
-    const char *TokenText() const;
-
-private:
-
-    Stream *reader;
-    char lookahead;
-    char tok[256];
-    int tokpos;
-};
-
-void Scanner::Init(Stream &s) {
-    reader = &s;
-    lookahead = -1;
-    tokpos = -1;
-}
-
-char Scanner::Next() {
-    while (reader->available() == 0) {
-        delay(10);
-    }
-
-    lookahead = reader->read();
-    return lookahead;
-}
-
-char Scanner::Peek() {
-    if (lookahead == -1) {
-        Next();
-    }
-
-    return lookahead;
-}
-
-char Scanner::Scan() {
-    char c = Peek();
-
-    tokpos = -1;
-
-    while (isspace(c)) {
-        if (c == '\n' || c == '\r') {
-            lookahead = -1;
-            return '\n';
-        }
-
-        c = Next();
-    }
-
-    if (isgraph(c)) {
-        tokpos = 0;
-
-        while (isgraph(c)) {
-            tok[tokpos++] = c;
-            c = Next();
-        }
-
-        tok[tokpos] = '\0';
-    }
-
-    return 0;
-}
-
-const char *Scanner::TokenText() const {
-    if (tokpos < 0) {
-        return "";
-    } else {
-        return tok;
-    }
-}
 
 Scanner scanner;
 
