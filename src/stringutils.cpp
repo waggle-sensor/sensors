@@ -33,3 +33,11 @@ char toupper(char c) {
 
     return c;
 }
+
+int parseInt(const char *s) {
+    return -1;
+}
+
+int parseHex(const char *s) {
+    return -1;
+}
