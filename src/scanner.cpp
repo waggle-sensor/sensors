@@ -6,6 +6,7 @@ void Scanner::Init() {
     tokpos = -1;
 }
 
+// TODO Decide if we should filter nonprintable characters out.
 char Scanner::Next() {
     lookahead = -1;
 
