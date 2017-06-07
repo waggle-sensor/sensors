@@ -13,7 +13,7 @@ public:
 
 private:
 
-    char lookahead;
+    int lookahead;
     char tok[64];
     int tokpos;
 };

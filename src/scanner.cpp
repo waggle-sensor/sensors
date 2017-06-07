@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "fmt.h"
 
 void Scanner::Init() {
     lookahead = -1;
@@ -6,21 +7,18 @@ void Scanner::Init() {
 }
 
 char Scanner::Next() {
-    while (!SerialUSB.available()) {
+    lookahead = -1;
+
+    while (lookahead < 0) {
         delay(10);
+        lookahead = SerialUSB.read();
     }
-
-    lookahead = SerialUSB.read();
-
-    SerialUSB.print("debug: next = <");
-    SerialUSB.print((int)lookahead);
-    SerialUSB.println(">");
 
     return lookahead;
 }
 
 char Scanner::Peek() {
-    if (lookahead == -1) {
+    if (lookahead < 0) {
         Next();
     }
 
@@ -28,7 +26,7 @@ char Scanner::Peek() {
 }
 
 char Scanner::Scan() {
-    char c = Peek();
+    int c = Peek();
 
     tokpos = -1;
 

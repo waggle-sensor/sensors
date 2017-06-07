@@ -3,16 +3,7 @@
 // #include <OneWire.h>
 #include "scanner.h"
 #include "stringutils.h"
-#include <cstdarg>
-
-void Printf(const char *fmt, ...) {
-    char s[256];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(s, 80, fmt, args);
-    SerialUSB.println(s);
-    va_end(args);
-}
+#include "fmt.h"
 
 // OneWire ds(48);
 
@@ -70,7 +61,7 @@ void command2Write() {
     int count = 0;
 
     while (scanner.Scan() != '\n') {
-        Printf("debug: write %s", scanner.TokenText())
+        Printf("debug: write %s", scanner.TokenText());
         count++;
     }
 
@@ -99,7 +90,6 @@ void command2Read() {
 bool execCommand() {
     // consume leading newline tokens
     while (scanner.Scan() == '\n') {
-        Printf("debug: consume newline");
         // if (scanner.Err()) {
         //     scanner.Reset();
         // }
@@ -135,15 +125,9 @@ bool execCommand() {
 }
 
 void loop() {
-    Printf("debug: start loop");
-
-    Printf("debug: start execCommand");
     bool ok = execCommand();
-    Printf("debug: end execCommand");
 
     if (!ok) {
-        Printf("err: invalid command [%s]", scanner.TokenText());
+        Printf("err: invalid command <%s>", scanner.TokenText());
     }
-
-    Printf("debug: end loop");
 }
