@@ -16,6 +16,7 @@ void setup() {
 
     SerialUSB.println("debug: setup");
 
+    scanner.Init(SerialUSB);
     // Wire.begin();
 }
 
@@ -126,8 +127,6 @@ bool execCommand() {
 }
 
 void loop() {
-    scanner.Init(SerialUSB);
-
     if (!execCommand()) {
         SerialUSB.print("err: invalid command ");
         SerialUSB.println(scanner.TokenText());
