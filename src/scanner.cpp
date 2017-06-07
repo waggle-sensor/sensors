@@ -1,37 +1,60 @@
 #include "scanner.h"
-#include <Arduino.h>
 
-Scanner::Scanner(char *b, int size) {
-    buffer = b;
-    buffersize = size;
-    err = NULL;
+void Scanner::Init(Stream &s) {
+    reader = &s;
+    lookahead = -1;
+    tokpos = -1;
 }
 
-const char *Scanner::Err() const {
-    return err;
+char Scanner::Next() {
+    while (reader->available() == 0) {
+        delay(10);
+    }
+
+    lookahead = reader->read();
+    return lookahead;
 }
 
-void Scanner::Split() {
-    char *s = buffer;
+char Scanner::Peek() {
+    if (lookahead == -1) {
+        Next();
+    }
 
-    argc = 0;
-    err = NULL;
+    return lookahead;
+}
 
-    while (*s != '\0') {
-        while (isspace(*s)) {
-            *s++ = '\0';
+char Scanner::Scan() {
+    char c = Peek();
+
+    tokpos = -1;
+
+    while (isspace(c)) {
+        if (c == '\n' || c == '\r') {
+            lookahead = -1;
+            return '\n';
         }
 
-        if (isgraph(*s)) {
-            if (argc == 8) {
-                err = "error: too many args";
-                return;
-            }
+        c = Next();
+    }
 
-            argv[argc++] = s;
-            while (isgraph(*s)) {
-                s++;
-            }
+    if (isgraph(c)) {
+        tokpos = 0;
+
+        while (isgraph(c)) {
+            tok[tokpos++] = c;
+            c = Next();
         }
+
+        tok[tokpos] = '\0';
+    }
+
+    return 0;
+}
+
+const char *Scanner::TokenText() const {
+    if (tokpos < 0) {
+        return "";
+    } else {
+        return tok;
     }
 }

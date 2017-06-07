@@ -1,13 +1,20 @@
+#include <Arduino.h>
+
+// TODO Scanner should have error handling and propogation.
+
 class Scanner {
 public:
 
-    Scanner(char *b, int size);
-    void Split();
-    const char *Err() const;
+    void Init(Stream &s);
+    char Next();
+    char Peek();
+    char Scan();
+    const char *TokenText() const;
 
-    int argc;
-    char *argv[8];
-    char *buffer;
-    int buffersize;
-    const char *err;
+private:
+
+    Stream *reader;
+    char lookahead;
+    char tok[256];
+    int tokpos;
 };

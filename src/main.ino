@@ -1,186 +1,88 @@
 #include <Arduino.h>
-#include <Wire.h>
-#include <OneWire.h>
-#include "scanner.h"
+// #include <Wire.h>
+// #include <OneWire.h>
 #include "stringutils.h"
-#include "hex.h"
 
-const char *version = "4.0.0";
+// OneWire ds(48);
 
-char inputbuf[1024];
-int inputlen;
+// TODO Add support for detecting type of data coming in.
+class Scanner {
+public:
 
-char hexbuf[1024];
+    void Init(Stream &s);
+    char Next();
+    char Peek();
+    char Scan();
+    const char *TokenText() const;
 
-OneWire ds(48);
+private:
 
-void commandVersion(int argc, const char **argv) {
-    SerialUSB.print("OK ");
-    SerialUSB.println(version);
+    Stream *reader;
+    char lookahead;
+    char tok[256];
+    int tokpos;
+};
+
+void Scanner::Init(Stream &s) {
+    reader = &s;
+    lookahead = -1;
+    tokpos = -1;
 }
 
-void commandID(int argc, const char **argv) {
-    byte mac[8];
-
-    ds.reset();
-    ds.write(0x33);
-
-    for (int i = 0; i < 8; i++) {
-        mac[i] = ds.read();
+char Scanner::Next() {
+    while (reader->available() == 0) {
+        delay(10);
     }
 
-    if (OneWire::crc8(mac, 8) != 0) {
-        SerialUSB.println("ERR failed crc");
-        return;
-    }
-
-    EncodeHex(mac, hexbuf, 8);
-    SerialUSB.print("OK ");
-    SerialUSB.println(hexbuf);
+    lookahead = reader->read();
+    return lookahead;
 }
 
-void commandPinMode(int argc, const char **argv) {
-    if (argc != 3) {
-        SerialUSB.println("ERR invalid args");
-        return;
+char Scanner::Peek() {
+    if (lookahead == -1) {
+        Next();
     }
 
-    int pin = atoi(argv[1]);
-    int mode;
+    return lookahead;
+}
 
-    if (matches(argv[2], "input")) {
-        mode = INPUT;
-    } else if (matches(argv[2], "output")) {
-        mode = OUTPUT;
+char Scanner::Scan() {
+    char c = Peek();
+
+    tokpos = -1;
+
+    while (isspace(c)) {
+        if (c == '\n' || c == '\r') {
+            lookahead = -1;
+            return '\n';
+        }
+
+        c = Next();
+    }
+
+    if (isgraph(c)) {
+        tokpos = 0;
+
+        while (isgraph(c)) {
+            tok[tokpos++] = c;
+            c = Next();
+        }
+
+        tok[tokpos] = '\0';
+    }
+
+    return 0;
+}
+
+const char *Scanner::TokenText() const {
+    if (tokpos < 0) {
+        return "";
     } else {
-        SerialUSB.println("ERR invalid mode");
-        return;
+        return tok;
     }
-
-    pinMode(pin, mode);
-    SerialUSB.println("OK");
 }
 
-void commandPinWrite(int argc, const char **argv) {
-    if (argc != 3) {
-        SerialUSB.println("ERR invalid args");
-        return;
-    }
-
-    int pin = atoi(argv[1]);
-    int value = atoi(argv[2]);
-    digitalWrite(pin, value);
-    SerialUSB.println("OK");
-}
-
-void commandI2CBegin(int argc, const char **argv) {
-    if (argc != 2) {
-        SerialUSB.println("ERR invalid args");
-        return;
-    }
-
-    int addr = atoi(argv[1]);
-    Wire.beginTransmission(addr);
-    SerialUSB.println("OK");
-}
-
-void commandI2CEnd(int argc, const char **argv) {
-    Wire.endTransmission();
-    SerialUSB.println("OK");
-}
-
-void commandI2CReq(int argc, const char **argv) {
-    if (argc != 3) {
-        SerialUSB.println("ERR invalid args");
-        return;
-    }
-
-    int addr = atoi(argv[1]);
-    int count = atoi(argv[2]);
-
-    Wire.requestFrom(addr, count);
-    SerialUSB.println("OK");
-}
-
-void commandI2CRead(int argc, const char **argv) {
-    byte data[64];
-
-    if (argc != 2) {
-        SerialUSB.println("ERR invalid args");
-        return;
-    }
-
-    int count = atoi(argv[1]);
-
-    unsigned long startTime = millis();
-
-    for (int i = 0; i < count; i++) {
-        while (Wire.available() == 0) {
-            if (millis() - startTime > 5000) {
-                SerialUSB.println("ERR bus timeout");
-                return;
-            }
-        }
-
-        data[i] = Wire.read();
-    }
-
-    EncodeHex(data, hexbuf, count);
-    SerialUSB.print("OK ");
-    SerialUSB.println(hexbuf);
-}
-
-void commandI2CWrite(int argc, const char **argv) {
-    SerialUSB.println("ERR not implemented");
-}
-
-struct Command {
-    const char *name;
-    void (*func)(int argc, const char **argv);
-};
-
-Command commands[] = {
-    {"VER", commandVersion},
-    {"ID", commandID},
-    {"PM", commandPinMode},
-    {"PWR", commandPinWrite},
-    {"2BEG", commandI2CBegin},
-    {"2END", commandI2CEnd},
-    {"2REQ", commandI2CReq},
-    {"2RD", commandI2CRead},
-    {"2WR", commandI2CWrite},
-};
-
-const int numcommands = sizeof(commands) / sizeof(Command);
-
-void dispatchcommand(Scanner &scanner) {
-    if (scanner.argc == 0) {
-        return;
-    }
-
-    for (int i = 0; i < numcommands; i++) {
-        if (matches(scanner.argv[0], commands[i].name)) {
-            commands[i].func(scanner.argc, (const char **)scanner.argv);
-            return;
-        }
-    }
-
-    SerialUSB.println("ERR invalid command");
-}
-
-void processinput() {
-    Scanner scanner(inputbuf, 1024);
-
-    scanner.Split();
-
-    if (scanner.Err() != NULL) {
-        SerialUSB.print("ERR ");
-        SerialUSB.println(scanner.Err());
-        return;
-    }
-
-    dispatchcommand(scanner);
-}
+Scanner scanner;
 
 void setup() {
     SerialUSB.begin(9600);
@@ -188,32 +90,122 @@ void setup() {
     while (!SerialUSB) {
     }
 
-    Wire.begin();
+    SerialUSB.println("debug: setup");
+
+    // Wire.begin();
+}
+
+void commandID() {
+    if (scanner.Scan() != '\n') {
+        SerialUSB.println("err: invalid args");
+        return;
+    }
+
+    SerialUSB.println("ok: 0.0.1");
+
+    //     byte mac[8];
+    //
+    //     ds.reset();
+    //     ds.write(0x33);
+    //
+    //     for (int i = 0; i < 8; i++) {
+    //         mac[i] = ds.read();
+    //     }
+    //
+    //     if (OneWire::crc8(mac, 8) != 0) {
+    //         SerialUSB.println("ERR failed crc");
+    //         return;
+    //     }
+    //
+    //     EncodeHex(mac, hexbuf, 8);
+    //     SerialUSB.print("OK ");
+    //     SerialUSB.println(hexbuf);
+}
+
+void commandVersion() {
+    if (scanner.Scan() != '\n') {
+        SerialUSB.println("err: invalid args");
+        return;
+    }
+
+    SerialUSB.println("ok: abc123");
+}
+
+void command2Write() {
+    int count = 0;
+
+    while (scanner.Scan() != '\n') {
+        SerialUSB.print("debug: write ");
+        SerialUSB.println(scanner.TokenText());
+        count++;
+    }
+
+    SerialUSB.print("ok: ");
+    SerialUSB.println(count);
+}
+
+void command2Read() {
+    // if (strcmp(scanner.TokenText(), "2read") == 0) {
+    //     if (scanner.Scan() == '\n') {
+    //         std::cout << "debug: reading " << scanner.TokenText() << " bytes" << std::endl;
+    //     }
+    //
+    //     std::cout << "ok:";
+    //
+    //     for (int i = 0; i < atoi(scanner.TokenText()); i++) {
+    //         std::cout << " aa";
+    //     }
+    //
+    //     std::cout << std::endl;
+    //
+    //     goto ok;
+    // }
+    SerialUSB.println("err: not implemented");
+}
+
+bool execCommand() {
+    // consume leading newline tokens
+    while (scanner.Scan() == '\n') {
+        // if (scanner.Err()) {
+        //     scanner.Reset();
+        // }
+    }
+
+    SerialUSB.print("debug: command ");
+    SerialUSB.println(scanner.TokenText());
+
+    if (matches(scanner.TokenText(), "ver")) {
+        commandID();
+        return true;
+    }
+
+    if (matches(scanner.TokenText(), "id")) {
+        commandVersion();
+        return true;
+    }
+
+    if (matches(scanner.TokenText(), "2write")) {
+        command2Write();
+        return true;
+    }
+
+    if (matches(scanner.TokenText(), "2read")) {
+        command2Read();
+        return true;
+    }
+
+    // consume trailing tokens
+    while (scanner.Scan() != '\n') {
+    }
+
+    return false;
 }
 
 void loop() {
-    inputbuf[0] = '\0';
-    inputlen = 0;
+    scanner.Init(SerialUSB);
 
-    while (1) {
-        if (inputlen >= 1024) {
-            SerialUSB.println("ERR buffer overflow");
-            break;
-        }
-
-        while (SerialUSB.available() == 0) {
-        }
-
-        char b = SerialUSB.read();
-
-        if (isprint(b)) {
-            inputbuf[inputlen++] = b;
-            inputbuf[inputlen] = '\0';
-        }
-
-        if (b == '\r' || b == '\n') {
-            processinput();
-            break;
-        }
+    if (!execCommand()) {
+        SerialUSB.print("err: invalid command ");
+        SerialUSB.println(scanner.TokenText());
     }
 }

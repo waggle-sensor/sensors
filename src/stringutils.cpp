@@ -17,3 +17,19 @@ bool startswith(const char *s, const char *p) {
 bool matches(const char *s1, const char *s2) {
     return strcmp(s1, s2) == 0;
 }
+
+char tolower(char c) {
+    if ('A' <= c && c <= 'Z') {
+        return c - 'A' + 'a';
+    }
+
+    return c;
+}
+
+char toupper(char c) {
+    if ('a' <= c && c <= 'z') {
+        return c - 'a' + 'A';
+    }
+
+    return c;
+}
