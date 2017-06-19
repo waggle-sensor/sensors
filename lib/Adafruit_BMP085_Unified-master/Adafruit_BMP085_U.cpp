@@ -329,7 +329,8 @@ void Adafruit_BMP085_Unified::getPressure(float *pressure)
 /**************************************************************************/
 void Adafruit_BMP085_Unified::getTemperature(float *temp)
 {
-  int32_t UT, X1, X2, B5;     // following ds convention
+  // int32_t UT, X1, X2, B5;     // following ds convention
+  int32_t UT, B5;
   float t;
 
   readRawTemperature(&UT);

@@ -26,7 +26,7 @@
 #include <Wire.h>
 #include "HTU21D.h"
 
-HTU21D::HTU21D()
+CHTU21D::CHTU21D()
 {
   //Set initial values for private vars
 }
@@ -34,7 +34,7 @@ HTU21D::HTU21D()
 //Begin
 /*******************************************************************************************/
 //Start I2C communication
-void HTU21D::begin(void)
+void CHTU21D::begin(void)
 {
   return;
 }
@@ -44,7 +44,7 @@ void HTU21D::begin(void)
 //Calc humidity and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float HTU21D::readHumidity(void)
+float CHTU21D::readHumidity(void)
 {
 	//Request a humidity reading
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -104,7 +104,7 @@ float HTU21D::readHumidity(void)
 //Calc temperature and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float HTU21D::readTemperature(void)
+float CHTU21D::readTemperature(void)
 {
 	//Request the temperature
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -161,7 +161,7 @@ float HTU21D::readTemperature(void)
 // 1/1 = 11bit RH, 11bit Temp
 //Power on default is 0/0
 
-void HTU21D::setResolution(byte resolution)
+void CHTU21D::setResolution(byte resolution)
 {
   byte userRegister = read_user_register(); //Go get the current register state
   userRegister &= B01111110; //Turn off the resolution bits
@@ -176,7 +176,7 @@ void HTU21D::setResolution(byte resolution)
 }
 
 //Read the user register
-byte HTU21D::read_user_register(void)
+byte CHTU21D::read_user_register(void)
 {
   byte userRegister;
 
@@ -200,7 +200,7 @@ byte HTU21D::read_user_register(void)
 //POLYNOMIAL = 0x0131 = x^8 + x^5 + x^4 + 1 : http://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks
 #define SHIFTED_DIVISOR 0x988000 //This is the 0x0131 polynomial shifted to farthest left of three bytes
 
-byte HTU21D::check_crc(uint16_t message_from_sensor, uint8_t check_value_from_sensor)
+byte CHTU21D::check_crc(uint16_t message_from_sensor, uint8_t check_value_from_sensor)
 {
   //Test cases from datasheet:
   //message = 0xDC, checkvalue is 0x79

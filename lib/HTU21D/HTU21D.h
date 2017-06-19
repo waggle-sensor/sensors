@@ -28,10 +28,10 @@
 #define READ_USER_REG  0xE7
 #define SOFT_RESET  0xFE
 
-class HTU21D {
+class CHTU21D {
 
 public:
-  HTU21D();
+  CHTU21D();
 
   //Public Functions
   void begin();

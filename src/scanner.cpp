@@ -31,8 +31,8 @@ char Scanner::Scan() {
 
     tokpos = -1;
 
-    while (isspace(c) || c == '\0') {
-        if (c == '\n' || c == '\r' || c == '\0') {
+    while (isspace(c) || c == '\0' || c == '\b') {
+        if (c == '\n' || c == '\r' || c == '\0' || c == '\b') {
             lookahead = -1;
             return '\n';
         }
