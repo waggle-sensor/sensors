@@ -24,11 +24,13 @@ public:
 	void TSYS01INIT();
 	void TSYS_Get_Coeff();
 	float TSYS_ScaleTemp_C(uint16_t rawAdc);
-	void TSYS01_read(float *val);
+	void TSYS01_read(char *val);
 
 private:	
 	float retVal = 0.0;
 	float Temp_float = 0.0;
 	uint16_t TSYS_coefficents[5];
 	byte Temp_byte[3];
+
+	int temp_cal = 0;
 };

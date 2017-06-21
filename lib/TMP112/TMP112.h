@@ -10,12 +10,9 @@ class CTMP112
 {
 	private:
 		int Temp_byte[2];
-		float TMP112_float;
-		int Temp_uint16;
-		float Temp_float;
 
 	public:
 		void TMP112_CONFIG();
-		float TMP112_read();
+		void TMP112_read(char* val);
 };
 

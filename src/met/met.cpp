@@ -1,7 +1,8 @@
 #include "met.h"
 
-void CMet::MetGet(byte ID, int* NumVal, float* val, char** unit) 
+void CMet::MetGet(byte ID, int* NumVal, char* val) 
 {
+	// initialize libraries
 	if (conf == false)
 	{
 		bmpp.begin();
@@ -12,104 +13,87 @@ void CMet::MetGet(byte ID, int* NumVal, float* val, char** unit)
 		pinMode(PIN_RAW_MIC,INPUT);
 		conf = true;
 	}
-
-	// float_data[0] = .0;
-	// float_data[1] = .0&;
-	// long_data = 0;
-
-	// SerialUSB.println("metsense board");
 	
-	// if (ID == 0x00)
-	// 	MAC(NumVal, val, unit);
-	// else if (ID == 0x01)
+	// Call a function in accordance of sensor ID
 	if (ID == 0x01)
-		TMP112(NumVal, val, unit);
+		TMP112(NumVal, val);
 	else if (ID == 0x02)
-		HTU21D(NumVal, val, unit);
+		HTU21D(NumVal, val);
 	else if (ID == 0x03)
-		BMP180(NumVal, val, unit);
+		BMP180(NumVal, val);
 	else if (ID == 0x04)
-		PR103J2(NumVal, val, unit);
+		PR103J2(NumVal, val);
 	else if (ID == 0x05)
-		TSL250(NumVal, val, unit);
+		TSL250(NumVal, val);
 	else if (ID == 0x06)
-		MMA8452Q(NumVal, val, unit);
+		MMA8452Q(NumVal, val);
 	else if (ID == 0x07)
-		SPV1840(NumVal, val, unit);
+		SPV1840(NumVal, val);
 	else if (ID == 0x08)
-		TSYS01(NumVal, val, unit);
+		TSYS01(NumVal, val);
 	else
 		NumVal = 0;
 }
 
-// void CMet::MAC(int* NumVal, float* val, char** unit)
-// {
-// 	*NumVal = 1;
-// 	unit[0] = "No unit";
-// 	val[0] = 3087011;
-// }
-
-void CMet::TMP112(int* NumVal, float* val, char** unit) 
-{
-	*NumVal = 1;
-	unit[0] = "C";
-	val[0] = tmpp.TMP112_read();
-}
-
-void CMet::HTU21D(int* NumVal, float* val, char** unit) 
+void CMet::TMP112(int* NumVal, char* val) 
 {
 	*NumVal = 2;
-	unit[0] = "C";
-	unit[1] = "RH";
-	val[0] = htuu.readTemperature();
-	val[1] = htuu.readHumidity();
+	tmpp.TMP112_read(val);
 }
 
-void CMet::BMP180(int* NumVal, float* val, char** unit) 
+void CMet::HTU21D(int* NumVal, char* val) 
 {
-	*NumVal = 2;
-	unit[0] = "C";
-	unit[1] = "Pa";
+	*NumVal = 4;
+	htuu.readTemperature(val);
+	htuu.readHumidity(val);
+}
+
+void CMet::BMP180(int* NumVal, char* val) 
+{
+	*NumVal = 8;
 
 	bmpp.getEvent(&event);
 	if (event.pressure)
 	{
-		bmpp.getTemperature(&val[0]);
-		val[1] = long(event.pressure);
+		bmpp.getTemperature(val);
+		long temp_press = long(event.pressure);
+		// bmpp.getPressure(val);
+	
+		val[4] = temp_press >> 24;
+		val[5] = temp_press >> 16;
+		val[6] = temp_press >> 8;
+		val[7] = temp_press & 0xff;		
 	}
 }
 
-void CMet::PR103J2(int* NumVal, float* val, char** unit) 
+void CMet::PR103J2(int* NumVal, char* val) 
 {
-	*NumVal = 1;
-	unit[0] = "Raw";
-	val[0] = analogRead(A2D_PRJ103J2);
+	*NumVal = 2;
+	temp = analogRead(A2D_PRJ103J2);
+
+	val[0] = temp >> 8;
+	val[1] = temp & 0xff;	
 }
 
-void CMet::TSL250(int* NumVal, float* val, char** unit)
+void CMet::TSL250(int* NumVal, char* val)
 {
-	*NumVal = 1;
-	unit[0] = "Raw";
-	val[0] = analogRead(A2D_TSL250RD_1);
-	// SrlPrint(int_data, " VL Raw");
+	*NumVal = 2;
+	temp = analogRead(A2D_TSL250RD_1);
+
+	val[0] = temp >> 8;
+	val[1] = temp & 0xff;	
 }
 
-void CMet::MMA8452Q(int* NumVal, float* val, char** unit)
+void CMet::MMA8452Q(int* NumVal, char* val)
 {
-	*NumVal = 4;
-	unit[0] = "gx";
-	unit[1] = "gy";
-	unit[2] = "gz";
-	unit[3] = "avg g";
-
+	*NumVal = 6;
 	mmaq.MMA8452_read(val); 
 }
 
-void CMet::SPV1840(int* NumVal, float* val, char** unit)
+void CMet::SPV1840(int* NumVal, char* val)
 {
-	*NumVal = 1;
-	unit[0] = "sound Raw";
-	val[0] = 0;
+	*NumVal = 2;
+	temp = 0;
 
 	for(int i = 0; i < 100; i++)
 	{
@@ -120,12 +104,14 @@ void CMet::SPV1840(int* NumVal, float* val, char** unit)
 	}
 
 	for(int i = 0; i < 100; i++)
-		val[0] = ((val[0] * i) + SPV_AMPV[i]) / (i+1);
+		temp = ((temp * i) + SPV_AMPV[i]) / (i+1);
+
+	val[0] = temp >> 8;
+	val[1] = temp & 0xff;
 }
 
-void CMet::TSYS01(int* NumVal, float* val, char** unit)
+void CMet::TSYS01(int* NumVal, char* val)
 {
-	*NumVal = 1;
-	unit[0] = "C";
+	*NumVal = 4;
 	tsys.TSYS01_read(&val[0]);
 }

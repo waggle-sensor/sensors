@@ -46,7 +46,7 @@ float CTSYS01::TSYS_ScaleTemp_C(uint16_t rawAdc)
 }
 
 
-void CTSYS01::TSYS01_read(float *val)
+void CTSYS01::TSYS01_read(char *val)
 {
     Wire.beginTransmission(TSYS01Address);
     Wire.write(TSYS01StartReg); //Start measurement process
@@ -70,8 +70,14 @@ void CTSYS01::TSYS01_read(float *val)
     if (able == false)
     {
         for (int i = 0; i < 3; i++)
-            Temp_byte[i] = 255;
+            Temp_byte[i] = 0xff;
     }
 
-    *val = TSYS_ScaleTemp_C((((unsigned long)Temp_byte[0] << 8) | ((unsigned long)Temp_byte[1]))); //convert and cast to Temp with scaling equation
+    Temp_float = TSYS_ScaleTemp_C((((unsigned long)Temp_byte[0] << 8) | ((unsigned long)Temp_byte[1]))); //convert and cast to Temp with scaling equation
+    temp_cal = Temp_float * 100;
+
+    val[0] = temp_cal >> 24;
+    val[1] = temp_cal >> 16;
+    val[2] = temp_cal >> 8;
+    val[3] = temp_cal & 0xff;
 }

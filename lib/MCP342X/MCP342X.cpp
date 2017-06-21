@@ -33,7 +33,7 @@ void MCP342X::selectChannel(byte channel, byte gain)
 	Wire.endTransmission();
 }
 
-unsigned int MCP342X::readADC()
+unsigned int MCP342X::readADC(char* val)
 {
     delay(80);
     unsigned int t;
@@ -42,5 +42,8 @@ unsigned int MCP342X::readADC()
   	byte l = Wire.read();
   	byte r = Wire.read();
     t = (h << 8) |  l;
+
+    val[0] = h;
+    val[1] = l;
     return t;
 }

@@ -9,16 +9,16 @@
 class CLight
 {
 public:
-	void LightGet(byte id, int *NumVal, float *val, char** unit);
+	void LightGet(byte id, int *NumVal, char *val);
 
-	void HMC5883L(int* NumVal, float* val, char** unit);
-	void HIH6130(int* NumVal, float* val, char** unit);
-	void APDS9006(int* NumVal, float* val, char** unit);
-	void TSL260RD(int* NumVal, float* val, char** unit);
-	void TSL250RD(int* NumVal, float* val, char** unit);
-	void MLX75305(int* NumVal, float* val, char** unit);
-	void ML8511(int* NumVal, float* val, char** unit);
-	void TMP421(int* NumVal, float* val, char** unit);
+	void HMC5883L(int* NumVal, char* val);
+	void HIH6130(int* NumVal, char* val);
+	void APDS9006(int* NumVal, char* val);
+	void TSL260RD(int* NumVal, char* val);
+	void TSL250RD(int* NumVal, char* val);
+	void MLX75305(int* NumVal, char* val);
+	void ML8511(int* NumVal, char* val);
+	void TMP421(int* NumVal, char* val);
 
 private:
 	HMC5883_Sensor chmc5883 = HMC5883_Sensor(&Wire);

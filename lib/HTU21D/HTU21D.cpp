@@ -44,7 +44,7 @@ void CHTU21D::begin(void)
 //Calc humidity and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float CHTU21D::readHumidity(void)
+void CHTU21D::readHumidity(char* val)
 {
 	//Request a humidity reading
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -63,12 +63,20 @@ float CHTU21D::readHumidity(void)
 	{
 		counter++;
 		delay(1);
-		if(counter > 100) return 998; //Error out
+		if(counter > 100)
+		{
+			val[2] = 0xff;
+			val[3] = 0xff;
+			// return(999); //Error out
+		}
 	}
 
-	byte msb, lsb, checksum;
-	msb = Wire.read();
-	lsb = Wire.read();
+	// byte msb, lsb, checksum;
+	unsigned char checksum;
+	// msb = Wire.read();
+	// lsb = Wire.read();
+	val[2] = Wire.read();
+	val[3] = Wire.read();
 	checksum = Wire.read();
 
 	/* //Used for testing
@@ -77,25 +85,34 @@ float CHTU21D::readHumidity(void)
 	lsb = 0x85;
 	checksum = 0x6B;*/
 
-	unsigned int rawHumidity = ((unsigned int) msb << 8) | (unsigned int) lsb;
+	
+	unsigned int rawHumidity = ((unsigned int) val[2] << 8) | (unsigned int) val[3];
 
-	if(check_crc(rawHumidity, checksum) != 0) return(999); //Error out
 
-	//sensorStatus = rawHumidity & 0x0003; //Grab only the right two bits
-	rawHumidity &= 0xFFFC; //Zero out the status bits but keep them in place
+	if(check_crc(rawHumidity, checksum) != 0)
+	{
+		val[2] = 0xff;
+		val[3] = 0xff;
+		// return(999); //Error out
+	}
 
-	//Given the raw humidity data, calculate the actual relative humidity
-	float tempRH = rawHumidity / (float)65536; //2^16 = 65536
-	float rh = -6 + (125 * tempRH); //From page 14
+	// unsigned int rawHumidity = ((unsigned int) msb << 8) | (unsigned int) lsb;
 
-	//return(rh);
+	// //sensorStatus = rawHumidity & 0x0003; //Grab only the right two bits
+	// rawHumidity &= 0xFFFC; //Zero out the status bits but keep them in place
 
-	//** TEST_SH
-	//raw_humid= (((s32)tmpdata[0])<<8)+(tmpdata[1]&0xF0);
-	float humid=(((rawHumidity*12500)>>16)-600)/(float)100;     // humidity in hundreths of percent
-	//sht25_readState=sht25_FINISHED;
+	// //Given the raw humidity data, calculate the actual relative humidity
+	// float tempRH = rawHumidity / (float)65536; //2^16 = 65536
+	// float rh = -6 + (125 * tempRH); //From page 14
 
-	return(humid);
+	// //return(rh);
+
+	// //** TEST_SH
+	// //raw_humid= (((s32)tmpdata[0])<<8)+(tmpdata[1]&0xF0);
+	// float humid=(((rawHumidity*12500)>>16)-600)/(float)100;     // humidity in hundreths of percent
+	// //sht25_readState=sht25_FINISHED;
+
+	// return(humid);
 	//** TEST_SH
 }
 
@@ -104,7 +121,7 @@ float CHTU21D::readHumidity(void)
 //Calc temperature and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float CHTU21D::readTemperature(void)
+void CHTU21D::readTemperature(char* val)
 {
 	//Request the temperature
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -123,12 +140,20 @@ float CHTU21D::readTemperature(void)
 	{
 		counter++;
 		delay(1);
-		if(counter > 100) return 998; //Error out
+		if(counter > 100)
+		{
+			val[0] = 0xff;
+			val[1] = 0xff;
+			// return(999); //Error out
+		}
 	}
 
-	unsigned char msb, lsb, checksum;
-	msb = Wire.read();
-	lsb = Wire.read();
+	// unsigned char msb, lsb, checksum;
+	unsigned char checksum;
+	// msb = Wire.read();
+	// lsb = Wire.read();
+	val[0] = Wire.read();
+	val[1] = Wire.read();
 	checksum = Wire.read();
 
 	/* //Used for testing
@@ -137,18 +162,25 @@ float CHTU21D::readTemperature(void)
 	lsb = 0x3A;
 	checksum = 0x7C; */
 
-	unsigned int rawTemperature = ((unsigned int) msb << 8) | (unsigned int) lsb;
+	unsigned int rawTemperature = ((unsigned int) val[0] << 8) | (unsigned int) val[1];
+	
+	if(check_crc(rawTemperature, checksum) != 0)
+	{
+		val[0] = 0xff;
+		val[1] = 0xff;
+		// return(999); //Error out
+	}
 
-	if(check_crc(rawTemperature, checksum) != 0) return(999); //Error out
+	// unsigned int rawTemperature = ((unsigned int) msb << 8) | (unsigned int) lsb;
 
-	//sensorStatus = rawTemperature & 0x0003; //Grab only the right two bits
-	rawTemperature &= 0xFFFC; //Zero out the status bits but keep them in place
+	// //sensorStatus = rawTemperature & 0x0003; //Grab only the right two bits
+	// rawTemperature &= 0xFFFC; //Zero out the status bits but keep them in place
 
-	//Given the raw temperature data, calculate the actual temperature
-	float tempTemperature = rawTemperature / (float)65536; //2^16 = 65536
-	float realTemperature = (float)(175.72 * tempTemperature - 46.85); //From page 14
+	// //Given the raw temperature data, calculate the actual temperature
+	// float tempTemperature = rawTemperature / (float)65536; //2^16 = 65536
+	// float realTemperature = (float)(175.72 * tempTemperature - 46.85); //From page 14
 
-	return(realTemperature);
+	// return(realTemperature);
 }
 
 //Set sensor resolution

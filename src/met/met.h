@@ -22,18 +22,17 @@
 class CMet
 {
 public:
-	void MetGet(byte id, int *NumVal, float *val, char** unit);
+	void MetGet(byte id, int *NumVal, char *val);
 
-	// void MAC(int *NumVal, float *val, char** unit);
-	void TMP112(int* NumVal, float* val, char** unit);
-	void HTU21D(int* NumVal, float* val, char** unit);
-	void BMP180(int* NumVal, float* val, char** unit);
-	void PR103J2(int* NumVal, float* val, char** unit);
-	void TSL250(int* NumVal, float* val, char** unit);
+	void TMP112(int* NumVal, char* val);
+	void HTU21D(int* NumVal, char* val);
+	void BMP180(int* NumVal, char* val);
+	void PR103J2(int* NumVal, char* val);
+	void TSL250(int* NumVal, char* val);
 
-	void MMA8452Q(int* NumVal, float* val, char** unit);
-	void SPV1840(int* NumVal, float* val, char** unit);
-	void TSYS01(int* NumVal, float* val, char** unit);
+	void MMA8452Q(int* NumVal, char* val);
+	void SPV1840(int* NumVal, char* val);
+	void TSYS01(int* NumVal, char* val);
 
 private:
         
@@ -45,15 +44,7 @@ private:
 	CMMAQ mmaq = CMMAQ();
 	CTSYS01 tsys = CTSYS01(); 
 
-	//MAC
-	// const long mac = 318711;
-
-    // float float_data[4];
-    // long long_data;
-    // int int_data;
-
+    int temp;
 	long SPV_AMPV[100];
-	// double SPV_AMPV_AVG = 0;
-
     bool conf = false;
 };

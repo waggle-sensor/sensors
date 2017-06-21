@@ -10,40 +10,26 @@ void setup() {
     delay(10);
     
     // Chemsense
-    Serial3.begin(CHEMSENSE_DATARATE); // data from the Chemsense board arrives here.
+    Serial3.begin(CHEMSENSE_DATARATE);
+    // To wait until chem sends data again
+    // if chem does not send data for 2 secs
+    Serial3.setTimeout(4000);
     pinMode(PIN_CHEMSENSE_POW, OUTPUT);
+    // LOW means power on
     digitalWrite(PIN_CHEMSENSE_POW, LOW);
    
     Printf("debug: setup complete");
 }
 
 void commandID() {
+    // If user wants only Mac of boards,
+    // then just return two MAC addrs
     if (scanner.Scan() != '\n') {
         Printf("err: invalid args");
         return;
     }
-
-    readMAC();
-
-    Printf("ok: 0.0.1");
-
-    //     byte mac[8];
-    //
-    //     ds.reset();
-    //     ds.write(0x33);
-    //
-    //     for (int i = 0; i < 8; i++) {
-    //         mac[i] = ds.read();
-    //     }
-    //
-    //     if (OneWire::crc8(mac, 8) != 0) {
-    //         SerialUSB.println("ERR failed crc");
-    //         return;
-    //     }
-    //
-    //     EncodeHex(mac, hexbuf, 8);
-    //     SerialUSB.print("OK ");
-    //     SerialUSB.println(hexbuf);
+    byte sensor_ID = 0x00;
+    readMAC(sensor_ID);
 }
 
 void commandVersion() {
@@ -52,7 +38,7 @@ void commandVersion() {
         return;
     }
 
-    Printf("ok: abc123");
+    Printf("ok: Ver 4.0.1");
 }
 
 void command2Write() {
@@ -86,18 +72,20 @@ void command2Read() {
 }
 
 void command2Request() {
+    // Let's grap some data
     while (scanner.Scan() != '\n') {
+    	// check input command
+    	// according to the input command,
+    	// we will grap data from Met/Light/or Chem board
         byte sensor_ID = sensor.sensorID(scanner.TokenText());
-        // Printf("debug: request %s, id: %x", scanner.TokenText(), sensor_ID);
-
+        
+        // Call functions according to the sensor_ID
         if (sensor_ID < 0x10)
             readMet(sensor_ID);
         else if (sensor_ID < 0x20)
             readLight(sensor_ID);
         else if (sensor_ID < 0x40)
             readChem(sensor_ID);
-        else if (sensor_ID < 0xB0)
-            readCat(sensor_ID);
         else
         {
             Printf("debug: request <%s> %s", scanner.TokenText(),  "no match");
@@ -108,97 +96,100 @@ void command2Request() {
     Printf("ok: %s", "end request");
 }
 
-void readMAC()
+void readMAC(byte sensor_ID)
 {
-    Printf("Met mac %ld No unit", MetLightMAC);
-    chem.ChemGet(chem_reading);
-    SerialUSB.print("Chem ");
-    SerialUSB.println(chem_reading);
-    Printf("Chem %s", chem_reading);
+    // Print Met Mac addr,
+    // Met Mac is const value, write down the number in "main.h"
+    Printf("data %x %ld", 0x00, MetLightMAC);
+    readChem(sensor_ID);
+
+
+	// Printf("Met mac %ld No unit", MetLightMAC);
+	// chem.ChemGet(dataReading);
+ //    // Because this FW try to do nothing,
+ //    // it just graps a line of data from chem and sends
+	// SerialUSB.print("Chem ");
+	// SerialUSB.println(dataReading);
+ //    // Printf function have buffer limit as 80, 
+ //    // which cannot carries all chem data in one printf buff!!
+	// // Printf("Chem %s", dataReading);
+}
+
+void printData(byte ID, int* NumVal, char* dataReading)
+{
+    // Print data, for all data from three boards 
+    // Met, light, and chem
+	SerialUSB.print("data ");
+	SerialUSB.print(ID);
+	SerialUSB.print(' ');
+	for (int i = 0; i < *NumVal; i++)
+	{
+		SerialUSB.print(dataReading[i], HEX);
+		SerialUSB.print(' ');
+	}
+	SerialUSB.println("");
 }
 
 void readMet(byte sensor_ID)
 {
-    Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Met");
-    
-    if (sensor_ID == 0x00)
-        readMAC();
-    else if (sensor_ID == 0x0F)
-    {
-        readMAC();
+    // Call exact function for each of sensors, and fill/grap/bring data
+	// Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Met");
 
-        for (sensor_ID = 0x01; sensor_ID < MetSenNum; sensor_ID++)
-        {
-            cmet.MetGet(sensor_ID, &NumVal, float_data, unit);
-            sensor.sensorName(sensor_ID, &sensorNM);
+    // If user wants only Mac addrs
+    // the command for this is "2request mac"
+	if (sensor_ID == 0x00)
+		readMAC(sensor_ID);
 
-            for (int i = 0; i < NumVal; i++)
-                Printf("Met %s %.2f %s", sensorNM, float_data[i], unit[i]);
-        }
-    }
-    else
-    {
-        cmet.MetGet(sensor_ID, &NumVal, float_data, unit);
-        for (int i = 0; i < NumVal; i++)
-            Printf("Met %s %.2f %s", scanner.TokenText(), float_data[i], unit[i]);
-    }
+    // If user wants all the sensor data
+    // the command for this is "2request met"
+	else if (sensor_ID == 0x0F)
+	{
+		for (sensor_ID = 0x01; sensor_ID < MetSenNum; sensor_ID++)
+		{
+			cmet.MetGet(sensor_ID, &NumVal, dataReading);
+			printData(sensor_ID, &NumVal, dataReading);
+		}
+	}
+
+    // If user wants data from one sensor
+    // the command for this is "2request <sensor name>"
+	else
+	{
+		cmet.MetGet(sensor_ID, &NumVal, dataReading);
+		printData(sensor_ID, &NumVal, dataReading);
+	}
 }
 
 void readLight(byte sensor_ID)
 {
-    Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Light");
+    // Call exact function for each of sensors, and fill/grap/bring data
+    // Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Light");
 
+    // If user wants all the sensor data
+    // the command for this is "2request light"
     if (sensor_ID == 0x1F)
     {
         for (sensor_ID = 0x10; sensor_ID < (0x10 + LightSenNum); sensor_ID++)
         {
-            clight.LightGet(sensor_ID, &NumVal, float_data, unit);
-            sensor.sensorName(sensor_ID, &sensorNM);
-
-            for (int i = 0; i < NumVal; i++)
-                Printf("Light %s %.2f %s", sensorNM, float_data[i], unit[i]);
+            clight.LightGet(sensor_ID, &NumVal, dataReading);
+            printData(sensor_ID, &NumVal, dataReading);
         }
     }
+
+    // If user wants data from one sensor
+    // the command for this is "2request <sensor name>"
     else
     {
-        clight.LightGet(sensor_ID, &NumVal, float_data, unit);
-        for (int i = 0; i < NumVal; i++)
-            Printf("Light %s %.2f %s", scanner.TokenText(), float_data[i], unit[i]);
+        clight.LightGet(sensor_ID, &NumVal, dataReading);
+        printData(sensor_ID, &NumVal, dataReading);
     }
 }
 
 void readChem(byte sensor_ID)
 {
-    chem.ChemGet(chem_reading);
-    Printf("Chem %s", chem_reading);
-}
-
-void readCat(byte sensor_ID)
-{
-    Printf("debug: request <%s>, id: %x", scanner.TokenText(), sensor_ID);
-
-    if (sensor_ID == 0xA0) //temp
-    {
-        for (int i = 0; i < TempSense; i++)
-        {
-            if (tArray[i] < 0x10)
-                readMet(tArray[i]);
-            else if (tArray[i] < 0x20)
-                readLight(tArray[i]);
-        }
-    }
-    else if (sensor_ID == 0xA1)
-    {
-        for (int i = 0; i < HumidSense; i++)
-        {
-            if (hArray[i] < 0x10)
-                readMet(hArray[i]);
-            else if (hArray[i] < 0x20)
-                readLight(hArray[i]);
-        }
-    }
-
-
+    // Call exact function for each of sensors, and fill/grap/bring data
+    chem.ChemGet(&NumVal, dataReading);
+    printData(sensor_ID, &NumVal, dataReading);
 }
 
 bool execCommand() {
@@ -231,6 +222,7 @@ bool execCommand() {
         return true;
     }
 
+    // Let's get data,
     if (matches(scanner.TokenText(), "2request")) {
         command2Request();
         return true;

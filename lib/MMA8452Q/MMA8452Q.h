@@ -13,7 +13,7 @@ class CMMAQ
 {
 public:
 
-	void MMA8452_read(float *val);
+	void MMA8452_read(char *val);
 	void readAccelData(int *destination);
 	void MMA8452_CONFIG();
 	void MMA8452Standby();

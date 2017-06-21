@@ -35,8 +35,8 @@ public:
 
   //Public Functions
   void begin();
-  float readHumidity(void);
-  float readTemperature(void);
+  void readHumidity(char* val);
+  void readTemperature(char* val);
   void setResolution(byte resBits);
 
   //Public Variables

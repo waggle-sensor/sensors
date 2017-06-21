@@ -3,7 +3,7 @@
 
 #include "stringutils.h"
 
-#define NofSensor 26
+#define NofSensor 21
 
 class CSensor
 {
@@ -20,8 +20,7 @@ private:
 									 "hmc5883l", "hih6130", "apds9006", "tsl260rd",
 									 "tsl250rd", "mlx75305", "ml8511", "tmp421",
 									 "light",
-									 "chem1", "chem2", "chem3",
-									 "temp", "humid", "pres"};
+									 "chem"};
 
 
 	const byte bArray[NofSensor] = {0x00, 0x01, 0x02, 0x03, 
@@ -30,6 +29,5 @@ private:
 									0x10, 0x11, 0x12, 0x13,
 									0x14, 0x15, 0x16, 0x17,
 									0x1F,
-									0x20, 0x21, 0x22,
-									0xA0, 0xA1, 0xA2};
+									0x20};
 };

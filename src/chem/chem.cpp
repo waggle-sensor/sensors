@@ -1,24 +1,22 @@
 #include "chem.h"
 
+void Cchem::ChemGet(int* NumVal, char* reading)
+{
+	while (Serial3.available() > 0)
+		input_byte = Serial3.read();
+	
+
+	len = Serial3.readBytesUntil('\n', reading, 256);
+	reading[len] = '\0';
+	*NumVal = len;
+}
+
 void Cchem::ChemGet(char* reading)
 {
-	i = 0;
-	input_byte = 'a';
-	// input_byte = Serial3.read();
+	while (Serial3.available() > 0)
+		input_byte = Serial3.read();
+	
 
-	if (Serial3.available() > 0)
-	{
-		while (input_byte != '\n')
-		//while (input_byte != ' ')
-		{
-			input_byte = Serial3.read();
-			reading[i++] = input_byte;
-		}
-
-		// while (input_byte != '\n')
-		// 	input_byte = Serial3.read();
-	}
-
-	input_byte = ' ';
-	reading[i] = '\0';
+	len = Serial3.readBytesUntil('\n', reading, 256);
+	reading[len] = '\0';
 }

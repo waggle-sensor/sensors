@@ -5,7 +5,7 @@
 class Chih6130
 {
 public:
-    void HIH_fetch_humidity_temperature(float* val);
+    void HIH_fetch_humidity_temperature(char* val);
 
 private:
     byte Temp_byte[4];

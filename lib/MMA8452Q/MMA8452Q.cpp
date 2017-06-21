@@ -1,14 +1,23 @@
 #include "MMA8452Q.h"
 
 
-void CMMAQ::MMA8452_read(float *val)
+void CMMAQ::MMA8452_read(char *val)
 {
     readAccelData(Temp_int);
 
-    for (int i = 0 ; i < 3 ; i++)
-        val[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
+    val[0] = Temp_int[0] >> 8;
+    val[1] = Temp_int[0] & 0xff;
 
-    val[3] = sqrt(pow(val[0], 2) + pow(val[1], 2) + pow(val[2], 2));
+    val[2] = Temp_int[1] >> 8;
+    val[3] = Temp_int[1] & 0xff;
+
+    val[4] = Temp_int[2] >> 8;
+    val[5] = Temp_int[2] & 0xff;
+
+    // for (int i = 0 ; i < 3 ; i++)
+    //     val[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
+
+    // val[3] = sqrt(pow(val[0], 2) + pow(val[1], 2) + pow(val[2], 2));
 }
 
 void CMMAQ::readAccelData(int *destination)
