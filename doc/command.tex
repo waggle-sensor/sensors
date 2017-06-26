@@ -1,0 +1,89 @@
+\newpage
+\section{Commands}
+
+This firmware sends sensor data in accordance of received command sent from plug-in/FW controller/or any equivalant command senders on a node controller. When the firmware receives a command line, which means when the firmware graps a newline character, it starts to perform requests. Some of the commands need to be composed of multiple commands, for example one 1st command and muliple 2nd commands. However the commands need to be in one line. Detail of commands requesting data from coresnese boards are explained in this section (see table \ref{tab:command}).
+
+\begin{center}
+% \begin{longtable}{|l|c|>{\centering}p{0.3\textwidth}|c|}
+\begin{longtable}{|l|c|c|}
+\caption{Commands for communication with firmware} \label{tab:command} \\
+
+\hline \rowcolor{black!8}
+   \multicolumn{1}{|c|}{\textbf{1st command}}
+ & \multicolumn{1}{c|}{\textbf{2nd command}} 
+ & \multicolumn{1}{c|}{\textbf{Values}} \\ \hline
+ % & \multicolumn{1}{c|}{\textbf{Formats}} \\ \hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename \thetable{} -- continued from previous page}} \\
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{1st command}} 
+& \multicolumn{1}{c|}{\textbf{2nd command}} 
+& \multicolumn{1}{c|}{\textbf{Values}} \\ \hline
+% & \multicolumn{1}{c|}{\textbf{Formats}} \\ \hline 
+\endhead
+
+\rowcolor{black!8} \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+    ver & & \\ \hline
+    id & & \\ \hline
+    2write & & \\ \hline
+    2read & & \\ \hline
+    \multirow{5}{*}{2request} & <sensor name> & grap the sensor from metsense or lightsense board \\ \cline{2-3}
+    & met & grap Mac address from metsense and chemsense board \\ \cline{2-3}
+    & light & grap data from all sensors in a metsense board \\ \cline{2-3}
+    & chem & grap data from all sensors in a lightsense board \\ \cline{2-3}
+    & mac & grap one line of data transmitted from a chemsense board \\ \cline{2-3}
+\end{longtable}
+\end{center}
+
+For the <sensor name>, see table \ref{tab:sensor}. When user places a sensor name as a second command, the user will obtain data only for the sensor.
+
+\begin{center}
+\begin{longtable}{|l|c|c|}
+\caption{Sensor name} \label{tab:sensor} \\
+
+\hline \rowcolor{black!8}
+   \multicolumn{1}{|c|}{\textbf{sensor name}}
+ & \multicolumn{1}{c|}{\textbf{sensor ID}} 
+ & \multicolumn{1}{c|}{\textbf{Values}} \\ \hline
+ % & \multicolumn{1}{c|}{\textbf{Formats}} \\ \hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename \thetable{} -- continued from previous page}} \\
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Sensor name}} 
+& \multicolumn{1}{c|}{\textbf{sensor ID}} 
+& \multicolumn{1}{c|}{\textbf{Values}} \\ \hline
+% & \multicolumn{1}{c|}{\textbf{Formats}} \\ \hline 
+\endhead
+
+\rowcolor{black!8} \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\rowcolor{black!2} \multicolumn{3}{|c|}{Metsense board} \\ \hline
+    tmp112 & 0x01 & \\ \hline
+    htu21d & 0x02 & \\ \hline
+    bmp180 & 0x03 & \\ \hline
+    pr103j2 & 0x04 & \\ \hline
+    tsl250 & 0x05 & \\ \hline
+    mma8452q & 0x06 & \\ \hline
+    spv1840 & 0x07 & \\ \hline
+    tsys01 & 0x08 & \\ \hline
+\rowcolor{black!2} \multicolumn{3}{|c|}{Lightsense board} \\ \hline
+    hmc5883l & 0x10 & \\ \hline
+    hih6130 & 0x11 & \\ \hline
+    apds9006 & 0x12 & \\ \hline
+    tsl260rd & 0x13 & \\ \hline
+    tsl250rd & 0x14 & \\ \hline
+    mlx75305 & 0x15 & \\ \hline
+    ml8511 & 0x16 & \\ \hline
+    tmp421 & 0x17 & \\ \hline
+    \end{longtable}
+\end{center}

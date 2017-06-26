@@ -18,9 +18,10 @@ def macDecode(line):
 
 		# Grap Chemsense Mac address only
 		temp = new_line.strip().split(' ')
-		temp = temp[0].split('=')
-		Chem_Mac = temp[1]
-		Mac_dict['ChemMac'] = Chem_Mac
+		if len(temp) > 2:
+			temp = temp[0].split('=')
+			Chem_Mac = temp[1]
+			Mac_dict['ChemMac'] = Chem_Mac
 		# print(Chem_Mac)
 		return Mac_dict
 
