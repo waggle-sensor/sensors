@@ -2,6 +2,13 @@
 
 Sample commands to get sensor data from coresense boards.
 
+## Talker
+This python scripts are a mothod to communicate with coresense boards. Basically, the coresense boards send binary data, and talker trasnform the data into humand readable form.
+
+talker.py is the main script, and other python scripts work as libraries to convert raw data into human understandable value.
+
+From line 49, the script start to convert the data using other functions.
+
 ### To start talker.py
 ```
 python3 talker.py <port name>
