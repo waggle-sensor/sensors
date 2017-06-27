@@ -27,23 +27,23 @@ with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
                     print('timeout')
                     break
 
-                match = re.match('(ok:|err:|Met|Light|Chem|data|end) (.*)', line)
+                match = re.match('(ok:|err:|data) (.*)', line)
 
                 if match is None:
                     continue
 
                 status, text = match.groups()
 
-                print(status)
-                # if status == 'end' or status == 'ok:' or status == 'err:':
-                    # print(repr(text))
-                    # print(text)
-                    # break
-
-                if status != 'data':
+                # print(status)
+                if status == 'ok:' or status == 'err:':
+                    # print("hello hell")
+                    print (text)
                     break
+                # else:
+                #     print ("Please print anything")
 
                 print(text)
+                # print(type(text))
                 # print(match.group())
 
                 # # test shpark change hex string to hex integer

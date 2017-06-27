@@ -12,7 +12,7 @@ void setup() {
     // SPI begin
     SPI.begin();
     delay(10);
-    
+
     // Chemsense
     Serial3.begin(CHEMSENSE_DATARATE);
     // To wait until chem sends data again
@@ -42,14 +42,19 @@ void commandVersion() {
 }
 
 void command2Write() {
+
+	// memset(dataReading, '\0', sizeof(dataReading));
+
 	scanner.Scan();
 
 	// If user wants to change Mac address of Met/Lightsense boards,
     if (matches(scanner.TokenText(), "mac"))
     {
-    	scanner.Scan();		
+    	scanner.Scan();
+    	InitReading();
 		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-		SensorBoardsMac = atol(dataReading);
+		// SensorBoardsMac = atol(dataReading);
+		SensorBoardsMac = strtol(dataReading, NULL, 10);
 
 		cmet.WriteMac(SensorBoardsMac);
     }
@@ -62,32 +67,46 @@ void command2Write() {
 		// SerialUSB.println(dataReading);
     	while (scanner.Scan() != '\n')
     	{
+    		InitReading();
     		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-    		SerialUSB.print("data ");
-    		SerialUSB.println(dataReading);
+			InputComm = strtol(dataReading, NULL, 16);
+    		// SerialUSB.print("data ");
+    		// SerialUSB.println(InputComm);
     	}
     }
-    
-	Printf("end");
+
+	Printf("ok: %s", "end write");
 }
 
 void command2Read() {
-    // if (strcmp(scanner.TokenText(), "2read") == 0) {
-    //     if (scanner.Scan() == '\n') {
-    //         std::cout << "debug: reading " << scanner.TokenText() << " bytes" << std::endl;
-    //     }
-    //
-    //     std::cout << "ok:";
-    //
-    //     for (int i = 0; i < atoi(scanner.TokenText()); i++) {
-    //         std::cout << " aa";
-    //     }
-    //
-    //     std::cout << std::endl;
-    //
-    //     goto ok;
-    // }
-    Printf("err: not implemented");
+	scanner.Scan();
+
+    if (matches(scanner.TokenText(), "alpha"))
+    {
+    	cspi.startTrans();
+  //   	scanner.Scan();
+  //   	strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
+		// SerialUSB.print("data ");
+		// SerialUSB.println(dataReading);
+    	while (scanner.Scan() != '\n')
+    	{
+    		InitReading();
+    		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
+			InputComm = strtol(dataReading, NULL, 16);
+    		cspi.readSPI(InputComm, dataReading);
+
+    		Printf("data %x", dataReading[0]);
+		    // Printf("data %x", dataReading[0]);
+    		// SerialUSB.print("data ");
+    		// SerialUSB.println(InputComm);
+    	}
+    	cspi.endTrans();
+    }
+    else 
+    	Printf("err: %s", "no match");
+
+
+	Printf("ok: %s", "end read");
 }
 
 void command2Request() {
@@ -107,7 +126,7 @@ void command2Request() {
             readChem(sensor_ID);
         else
         {
-            Printf("debug: request <%s> %s", scanner.TokenText(),  "no match");
+            Printf("data: %s", "no match");
             // return;
         }
     }
@@ -146,6 +165,7 @@ void readMet(byte sensor_ID)
 
     // If user wants only Mac addrs
     // the command for this is "2request mac"
+
 	if (sensor_ID == 0x00)
 		readMAC(sensor_ID);
 
@@ -201,6 +221,11 @@ void readChem(byte sensor_ID)
     printData(sensor_ID, &NumVal, dataReading);
 }
 
+void InitReading()
+{
+	memset(dataReading, '\0', sizeof(dataReading));
+}
+
 bool execCommand() {
     // consume leading newline tokens
     while (scanner.Scan() == '\n') {
@@ -208,6 +233,8 @@ bool execCommand() {
         //     scanner.Reset();
         // }
     }
+
+    // memset(dataReading, '\0', sizeof(dataReading));
 
     Printf("debug: command <%s>", scanner.TokenText());
 
@@ -235,6 +262,18 @@ bool execCommand() {
     else if (matches(scanner.TokenText(), "2request")) {
         command2Request();
         return true;
+    }
+
+    else if (matches(scanner.TokenText(), "data")) {
+		SerialUSB.print("data ");
+		for (int i = 0; i < 256; i++)
+		{
+			SerialUSB.print(dataReading[i], HEX);
+			SerialUSB.print(' ');
+		}
+		SerialUSB.println("");
+		Printf("ok: %s", "end data");
+		return true;
     }
 
     // consume trailing tokens

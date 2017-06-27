@@ -1,5 +1,5 @@
-#include <Arduino.h>
-#include <stdio.h>
+// #include <Arduino.h>
+// #include <stdio.h>
 
 #include "../../lib/HMC5883L_waggle/HMC5883L_waggle.h"
 #include "../../lib/HIH6130/HIH6130.h"

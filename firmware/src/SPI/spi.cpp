@@ -1,12 +1,34 @@
 #include "spi.h"
 
+void Cspi::setting()
+{
+	set1 = SPISettings(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
+}
 
-// //** alphasensor
-// #ifdef ALPHASENSE_INCLUDE
-// byte SPI_read_byte = 0;
-// SPISettings set1(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
-// //** alphasensor which will be moved to down there and initialization (Jun 30)
-// uint8_t val1, val2;
+void Cspi::startTrans()
+{
+	// SPI.beginTransaction(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
+	setting();
+	SPI.beginTransaction(set1);
+	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
+	delay(100);	
+}
+
+void Cspi::endTrans()
+{
+	digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
+	SPI.endTransaction();
+}
+
+void Cspi::readSPI(char comm, char* val)
+{
+	val[0] = SPI.transfer(comm);
+	delay(100);
+
+	// SerialUSB.print("data ");
+	// SerialUSB.println(val[0]);
+}
+
 
 // #ifdef ALPHASENSE_INCLUDE    
 //     SPI.begin();

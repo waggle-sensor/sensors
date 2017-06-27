@@ -1,5 +1,5 @@
-#include <Arduino.h>
-#include <stdio.h>
+// #include <Arduino.h>
+// #include <stdio.h>
 
 #include "../../lib/TMP112/TMP112.h"
 #include "../../lib/HTU21D/HTU21D.h"

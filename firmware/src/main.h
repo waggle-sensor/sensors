@@ -25,9 +25,11 @@
 long SensorBoardsMac;
 int NumVal = 0;
 char dataReading[PRINTF_BUF];
+char InputComm;
 
 Scanner scanner;
 CSensor sensor;
 CMet cmet;
 CLight clight;
 Cchem chem;
+Cspi cspi;
