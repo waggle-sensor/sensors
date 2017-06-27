@@ -66,7 +66,7 @@ For now (6/27/2017) you can change mac address for metsense/lightsense board:
 ```
 2write mac <mac address>
 ```
-For example,
+The mac address should be a long type number. For example,
 ```
 2write mac 2078091
 ```
