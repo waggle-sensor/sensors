@@ -3,6 +3,7 @@
 class Cchem
 {
 public:
+	void setting();
 	void ChemGet(int* NumVal, char* reading);
 	void ChemGet(char* reading);
 

@@ -2,16 +2,28 @@
 
 void Cspi::setting()
 {
-	set1 = SPISettings(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
+	// SPI begin
+    SPI.begin();
+    delay(10);
+
+    // Set a GPIO pin for alpha sensor slave select pin
+    pinMode(PIN_ALPHASENSE_SLAVE, OUTPUT);
+
+    set = SPISettings(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
+}
+
+void Cspi::writeMaxSpeed(long val)
+{
+	SPI_MAX_speed = val;
 }
 
 void Cspi::startTrans()
 {
 	// SPI.beginTransaction(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
-	setting();
-	SPI.beginTransaction(set1);
+	SPI.beginTransaction(set);
+	delay(100);
 	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
-	delay(100);	
+	
 }
 
 void Cspi::endTrans()
@@ -23,10 +35,7 @@ void Cspi::endTrans()
 void Cspi::readSPI(char comm, char* val)
 {
 	val[0] = SPI.transfer(comm);
-	delay(100);
-
-	// SerialUSB.print("data ");
-	// SerialUSB.println(val[0]);
+	delay(10);
 }
 
 

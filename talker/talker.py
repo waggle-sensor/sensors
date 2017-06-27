@@ -44,7 +44,7 @@ with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
 
                 print(text)
                 # print(type(text))
-                # print(match.group())
+                # # print(match.group())
 
                 # # test shpark change hex string to hex integer
                 # text_spl = text.strip().split(" ")
