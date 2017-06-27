@@ -7,7 +7,7 @@ This python scripts are a mothod to communicate with coresense boards. Basically
 
 talker.py is the main script, and other python scripts work as libraries to convert raw data into human understandable value.
 
-From line 49, the script start to convert the data using other functions.
+From line 49 in talker.py (on 6/27/2017), the script starts to convert the data using other functions.
 
 ### To start talker.py
 ```
