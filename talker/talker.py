@@ -6,6 +6,13 @@ import re
 from met import *
 from light import *
 from chem import *
+from cmd import *
+
+metsense = Metsense()
+lightsense = Lightsense()
+chemsense = Chemsense()
+commands = Commands()
+
 
 # linehex = 64
 # val = []
@@ -17,6 +24,12 @@ with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
         try:
             cmd = input('$ ')
             # cmd = '2request met light chem chem chem mac'
+
+            comm = commands.GetCmd(cmd)
+            print(comm)
+            dol = ' '.join(comm).encode()
+            print(dol)
+
             ser.write(cmd.encode())
             ser.write(b'\n')
 
@@ -53,13 +66,13 @@ with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
 
                 # # Call function according to the sensor ID
                 # if sensorID == 0x00:
-                #     return_val = macDecode(text)
+                #     return_val = chemsense.macDecode(text)
                 # elif sensorID < 0x10:
-                #     return_val = metDecode(sensorID, text)
+                #     return_val = metsense.metDecode(sensorID, text)
                 # elif sensorID < 0x20:
-                #     return_val = lightDecode(sensorID, text)
+                #     return_val = lightsense.lightDecode(sensorID, text)
                 # elif sensorID < 0x40:
-                #     return_val = ChemDecode(text)
+                #     return_val = chemsense.ChemDecode(text)
                 # else:
                 #     continue
 

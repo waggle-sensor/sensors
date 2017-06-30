@@ -16,9 +16,6 @@
 
 #define PRINTF_BUF 256
 
-#define PIN_CHEMSENSE_POW 47
-#define CHEMSENSE_DATARATE 115200
-
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 

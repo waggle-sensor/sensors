@@ -19,15 +19,19 @@ void setup() {
 	Printf("debug: setup complete");
 	}
 
-	void commandID() {
-	if (scanner.Scan() != '\n') {
+void commandID() 
+{
+	if (scanner.Scan() != '\n') 
+	{
 		Printf("err: invalid args");
 		return;
 	}
-	}
+}
 
-	void commandVersion() {
-	if (scanner.Scan() != '\n') {
+void commandVersion() 
+{
+	if (scanner.Scan() != '\n') 
+	{
 		Printf("err: invalid args");
 		return;
 	}
@@ -35,8 +39,8 @@ void setup() {
 	Printf("ok: Ver 4.0.1");
 }
 
-void command2Write() {
-
+void command2Write() 
+{
 	scanner.Scan();
 
 	// If user wants to change Mac address of Met/Lightsense boards,
@@ -64,7 +68,8 @@ void command2Write() {
 	Printf("ok: %s", "end write");
 }
 
-void command2Read() {
+void command2Read() 
+{
 	scanner.Scan();
 
 	if (matches(scanner.TokenText(), "alpha"))
@@ -88,7 +93,8 @@ void command2Read() {
 	Printf("ok: %s", "end read");
 }
 
-	void command2Request() {
+void command2Request() 
+{
 	// Let's grap some data
 	while (scanner.Scan() != '\n') 
 	{
@@ -109,15 +115,6 @@ void command2Read() {
 	}
 
 	Printf("ok: %s", "end request");
-}
-
-void readMAC(byte sensor_ID)
-{
-	// Print Met Mac addr,
-	// Met Mac is const value, write down the number in "main.h"
-	cmet.ReadMac(&SensorBoardsMac);
-	Printf("data %x %ld", 0x00, SensorBoardsMac);
-	readChem(sensor_ID);
 }
 
 void printData(byte ID, int* NumVal, char* dataReading)
@@ -144,7 +141,12 @@ void readMet(byte sensor_ID)
 	// the command for this is "2request mac"
 
 	if (sensor_ID == 0x00)
-		readMAC(sensor_ID);
+	{
+		// Mac addresses for Met and Chem
+		cmet.ReadMac(&SensorBoardsMac);
+		Printf("data %x %ld", 0x00, SensorBoardsMac);
+		readChem(sensor_ID);
+	}
 
 	// If user wants all the sensor data
 	// the command for this is "2request met"
