@@ -27,8 +27,8 @@ with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
 
             comm = commands.GetCmd(cmd)
             print(comm)
-            dol = ' '.join(comm).encode()
-            print(dol)
+            # dol = ' '.join(comm).encode()
+            # print(dol)
 
             ser.write(cmd.encode())
             ser.write(b'\n')
