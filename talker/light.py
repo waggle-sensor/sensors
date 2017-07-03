@@ -6,28 +6,28 @@ class Lightsense():
 		# Call function according to the sensor ID
 		light_dict = {}
 		if ID == 0x10:
-			light_dict['HMC5883'] = HMC5883(line)
+			light_dict['HMC5883'] = self.HMC5883(line)
 			return light_dict
 		elif ID == 0x11:
-			light_dict['HIH6130'] = HIH6130(line)
+			light_dict['HIH6130'] = self.HIH6130(line)
 			return light_dict
 		elif ID == 0x12:
-			light_dict['APDS9006'] = APDS9006(line)
+			light_dict['APDS9006'] = self.APDS9006(line)
 			return light_dict
 		elif ID == 0x13:
-			light_dict['TSL260RD'] = TSL260RD(line)
+			light_dict['TSL260RD'] = self.TSL260RD(line)
 			return light_dict
 		elif ID == 0x14:
-			light_dict['TSL250RD'] = TSL250RD(line)
+			light_dict['TSL250RD'] = self.TSL250RD(line)
 			return light_dict
 		elif ID == 0x15:
-			light_dict['MLX75305'] = MLX75305(line)
+			light_dict['MLX75305'] = self.MLX75305(line)
 			return light_dict
 		elif ID == 0x16:
-			light_dict['ML8511'] = ML8511(line)
+			light_dict['ML8511'] = self.ML8511(line)
 			return light_dict
 		elif ID == 0x17:
-			light_dict['TMP421'] = TMP421(line)
+			light_dict['TMP421'] = self.TMP421(line)
 			return light_dict
 
 		else:
@@ -80,22 +80,25 @@ class Lightsense():
 		val2 = int(text_spl[2], 16)
 
 		val = (val1 << 8) | val2
-		return val
+		if val == 65535:
+			return
+		else:
+			return val
 
 	def APDS9006(self, line):
-		return LightSensors(line)
+		return self.LightSensors(line)
 
 	def TSL260RD(self, line):
-		return LightSensors(line)
+		return self.LightSensors(line)
 
 	def TSL250RD(self, line):
-		return LightSensors(line)
+		return self.LightSensors(line)
 
 	def MLX75305(self, line):
-		return LightSensors(line)
+		return self.LightSensors(line)
 
 	def ML8511(self, line):
-		return LightSensors(line)
+		return self.LightSensors(line)
 
 	def TMP421(self, line):
 		text_spl = line.strip().split(' ')
@@ -122,4 +125,10 @@ class Lightsense():
 
 		# Add the MSB to the fraction
 		val_temp += val1
-		return val_temp
+		val_temp = round(val_temp, 2)
+		
+		if val_temp > 200:
+		# When I2C is not available, return "none"
+			return
+		else:
+			return val_temp

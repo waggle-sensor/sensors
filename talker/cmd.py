@@ -3,45 +3,67 @@
 class Commands:
 
 	def GetCmd(self, line):
-		# assemble command
-		line_cmd = line.strip().split(' ')
-		cmd = line_cmd[0]
+		return_command = []
 
-		if line_cmd[0] == '2read':
-			for i in range(1, len(line_cmd)):
-				if line_cmd[i] == 'met' or line_cmd[i] == 'light' or line_cmd[i] == 'chem':
-					return self.AssembleCmd(line_cmd[i])
-				# elif line_cmd[i] == 'light':
-				# 	return self.AssembleCmd(line_cmd[i])
-				# elif line_cmd[i] == 'chem':
-				# 	return self.AssembleCmd(line_cmd[i])
-				# elif line_cmd[i] == 'alpha':
-				# 	cmd = cmd + self.AlphaComm(i, line)
-				# 	return cmd
+		cmd, args = line.strip().split(' ', 1)
+		return_command.append(cmd)
+
+		# print (return_command)
+
+		value_count = 0
+		if cmd == '2read':
+
+			for arg in args.strip().split(' '):
+
+				if value_count > 0:
+					return_command.append(str(hex(int(arg))))
+					value_count -= 1
+					continue
+
+				if 'met' in arg:
+					return_command.extend(["tmp112", "htu21d", "bmp180", "pr103j2", "tsl250", "mma8452q", "spv1840", "tsys01"])
+					key = 'core'
+				elif 'light' in arg:
+					return_command.extend(["hmc5883l", "hih6130", "apds9006", "tsl260rd", "tsl250rd", "mlx75305", "ml8511", "tmp421"])
+					key = 'core'
+				elif 'chem' in arg:
+					return_command.extend(["chem"])
+					key = 'core'
+				elif 'fan_power' in arg:
+					return_command.extend(["0x42", "0x00"])
+					value_count = 1
+					key = 'fan_power'
+				elif 'laser_power' in arg:
+					return_command.extend(["0x42", "0x00"])
+					value_count = 1
+					key = 'laser_power'
+				elif 'power_off' in arg:
+					return_command.extend(["0x03", "0x01"])
+					key = 'power_off'
+				elif 'power_on' in arg:
+					return_command.extend(["0x03", "0x00"])
+					key = 'power_on'
+				elif 'serial' in arg:
+					return_command.extend(["0x10"])
+					return_command.extend(["0"] * 16)
+					key = 'serial'
+				elif 'version' in arg:
+					return_command.extend(["0x3F"])
+					return_command.extend(["0"] * 60)
+					key = 'version'
+				elif 'config' in arg:
+					return_command.extend(["0x3C"])
+					return_command.extend(["0"] * 256)
+					key = 'config'
+				elif 'histogram' in arg:
+					return_command.extend(["0x30"])
+					return_command.extend(["0"] * 62)
+					key = 'histogram'
+
 				else:
-					return line
+					return_command.append(arg)
 		else:
-			return line
-		# else:
-		# 	continue
+			return key, line.encode()
 
-
-	# def MetCmd(self):
-	# 	return ["2read", "tmp112", "htu21d", "bmp180", "pr103j2", "tsl250", "mma8452q", "spv1840", "tsys01"]
-
-	# def LightCmd(self):
-	# 	return ["2read", "hmc5883l", "hih6130", "apds9006", "tsl260rd", "tsl250rd", "mlx75305", "ml8511", "tmp421"]
-
-	# def ChemCmd(self):
-	# 	return ["2read", "chem"]
-
-	def AssembleCmd(self, key):
-		if key == 'met':
-			comm = ["2read", "tmp112", "htu21d", "bmp180", "pr103j2", "tsl250", "mma8452q", "spv1840", "tsys01"]
-		elif key == 'light':
-			comm = ["2read", "hmc5883l", "hih6130", "apds9006", "tsl260rd", "tsl250rd", "mlx75305", "ml8511", "tmp421"]
-		elif key == 'chem':
-			comm = ["2read", "chem"]		
-
-		dol = ' '.join(comm).encode()
-		return dol
+		return key, ' '.join(return_command).encode()
+		

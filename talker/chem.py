@@ -11,9 +11,9 @@ class Chemsense():
 			Mac_dict['MetMac'] = Met_Mac
 			# print(type(Met_Mac))
 			return Mac_dict
-		else:
+		elif len(text_spl) > 2:
 			# else if it is a line from Chemsense board,
-			new_line = ChemLine(line)
+			new_line = self.chemLine(line)
 
 			# Grap Chemsense Mac address only
 			temp = new_line.strip().split(' ')
@@ -23,8 +23,11 @@ class Chemsense():
 				Mac_dict['ChemMac'] = Chem_Mac
 			# print(Chem_Mac)
 			return Mac_dict
+		else:
+			Mac_dict['ChemMac'] = None
+			return Mac_dict
 
-	def ChemLine(self, line):
+	def chemLine(self, line):
 		# For the chemsense data,
 		# Grap line and change to human readable char
 		text_spl = line.strip().split(' ')
@@ -36,11 +39,17 @@ class Chemsense():
 
 		return data
 
-	def ChemDecode(self, line):
-		new_line = ChemLine(line)
+	def chemDecode(self, line):
+		new_line = self.chemLine(line)
 
 		chem_dict = {}
 		temp = new_line.strip().split(' ')
+
+		if len(temp) < 2:
+			chem_dict['CHEM'] = None
+			return chem_dict
+
+
 		for i in range(1, len(temp)):
 			a_data = temp[i].split('=')
 

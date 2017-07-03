@@ -9,11 +9,11 @@
 class Cspi
 {
 public:
-	void setting();
+	void AlphaSetting();
 	void writeMaxSpeed(long val);
-	void startTrans();
-	void endTrans();
-	void readSPI(char comm, char* val);
+	void AlstartTrans();
+	void AlendTrans();
+	char readSPI(char comm);
 
 private:
 	long SPI_MAX_speed = 500000;

@@ -59,25 +59,36 @@ void CHTU21D::readHumidity(char* val)
 
 	//Wait for data to become available
 	int counter = 0;
+	bool able = true;
 	while(Wire.available() < 3)
 	{
 		counter++;
 		delay(1);
 		if(counter > 100)
-		{
-			val[2] = 0xff;
-			val[3] = 0xff;
-			// return(999); //Error out
-		}
+			able = false;
+		// {
+		// 	val[2] = 0xff;
+		// 	val[3] = 0xff;
+		// 	// return(999); //Error out
+		// }
 	}
 
 	// byte msb, lsb, checksum;
 	unsigned char checksum;
 	// msb = Wire.read();
 	// lsb = Wire.read();
-	val[2] = Wire.read();
-	val[3] = Wire.read();
-	checksum = Wire.read();
+	if (able == true)
+	{
+		val[2] = Wire.read();
+		val[3] = Wire.read();
+		checksum = Wire.read();
+	}
+	else
+	{
+		val[2] = 0xff;
+		val[3] = 0xff;
+		checksum = Wire.read();		
+	}
 
 	/* //Used for testing
 	byte msb, lsb, checksum;

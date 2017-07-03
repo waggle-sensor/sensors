@@ -38,12 +38,27 @@ unsigned int MCP342X::readADC(char* val)
     delay(80);
     unsigned int t;
   	Wire.requestFrom(I2C_ADDRESS, (byte) 3);
-	byte h = Wire.read();
-  	byte l = Wire.read();
-  	byte r = Wire.read();
-    t = (h << 8) |  l;
+	
+	byte h;
+  	byte l;
+
+  	if (Wire.available() <= 0)
+  	{
+		h = 0xff;
+	  	l = 0xff;
+  	}
+  	else
+  	{
+		h = Wire.read();
+	  	l = Wire.read();
+  	}
+
+	// byte h = Wire.read();
+ //  	byte l = Wire.read();
+  	// byte r = Wire.read();
+    // t = (h << 8) |  l;
 
     val[0] = h;
     val[1] = l;
-    return t;
+    // return t;
 }

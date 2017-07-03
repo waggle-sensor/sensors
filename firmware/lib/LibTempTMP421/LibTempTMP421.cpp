@@ -55,8 +55,8 @@
  **********************************************************/
 float LibTempTMP421::GetTemperature(char* val) {
     uint8_t in[2];
-    float frac = 0.0;
-    uint8_t bit;
+    // float frac = 0.0;
+    // uint8_t bit;
 
     setPtrLoc(0x00);                //high-byte
     in[0] = getRegisterValue();
@@ -88,13 +88,13 @@ float LibTempTMP421::GetTemperature(char* val) {
     // frac += in[0];
 
 	/* frac is unsigned, make it signed to allow for negative temps */
-	if (frac > 128.0)
-  {
-		frac -= 256;
-    val[0] = 0xff;
-    val[1] = 0xff;
-  }
-  return frac;
+	// if (frac > 128.0)
+ //  {
+	// 	frac -= 256;
+ //    val[0] = 0xff;
+ //    val[1] = 0xff;
+ //  }
+ //  return frac;
 }
 
 /**********************************************************
@@ -107,7 +107,7 @@ uint8_t LibTempTMP421::getRegisterValue(void) {
 
     Wire.requestFrom(TMP421_ADDRESS, 1);
     while(Wire.available() <= 0) {
-      ; //wait
+      return 0xff; //wait
     }
 
     return Wire.read();

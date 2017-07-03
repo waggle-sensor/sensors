@@ -1,6 +1,6 @@
 #include "spi.h"
 
-void Cspi::setting()
+void Cspi::AlphaSetting()
 {
 	// SPI begin
     SPI.begin();
@@ -17,7 +17,7 @@ void Cspi::writeMaxSpeed(long val)
 	SPI_MAX_speed = val;
 }
 
-void Cspi::startTrans()
+void Cspi::AlstartTrans()
 {
 	// SPI.beginTransaction(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
 	SPI.beginTransaction(set);
@@ -26,16 +26,15 @@ void Cspi::startTrans()
 	
 }
 
-void Cspi::endTrans()
+void Cspi::AlendTrans()
 {
 	digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
 	SPI.endTransaction();
 }
 
-void Cspi::readSPI(char comm, char* val)
+char Cspi::readSPI(char comm)
 {
-	val[0] = SPI.transfer(comm);
-	delay(10);
+	return SPI.transfer(comm);
 }
 
 

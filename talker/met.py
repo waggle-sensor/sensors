@@ -6,29 +6,29 @@ class Metsense():
 	def metDecode(self, ID, line):
 		# Call function according to the sensor ID
 		met_dict = {}
-		if ID == int(0x01):
-			met_dict['TMP112'] = TMP112(line)
+		if ID == 0x01:
+			met_dict['TMP112'] = self.TMP112(line)
 			return met_dict
-		elif ID == int(0x02):
-			met_dict['HTU21D'] = HTU21D(line)
+		elif ID == 0x02:
+			met_dict['HTU21D'] = self.HTU21D(line)
 			return met_dict
-		elif ID == int(0x03):
-			met_dict['BMP180'] = BMP180(line)
+		elif ID == 0x03:
+			met_dict['BMP180'] = self.BMP180(line)
 			return met_dict
-		elif ID == int(0x04):
-			met_dict['PR103J2'] = PR103J2(line)
+		elif ID == 0x04:
+			met_dict['PR103J2'] = self.PR103J2(line)
 			return met_dict
-		elif ID == int(0x05):
-			met_dict['TSL250'] = TSL250(line)
+		elif ID == 0x05:
+			met_dict['TSL250'] = self.TSL250(line)
 			return met_dict
-		elif ID == int(0x06):
-			met_dict['MMA8452'] = MMA8452(line)
+		elif ID == 0x06:
+			met_dict['MMA8452'] = self.MMA8452(line)
 			return met_dict
-		elif ID == int(0x07):
-			met_dict['SPV1840'] = SPV1840(line)
+		elif ID == 0x07:
+			met_dict['SPV1840'] = self.SPV1840(line)
 			return met_dict
-		elif ID == int(0x08):
-			met_dict['TSYS01'] = TSYS01(line)
+		elif ID == 0x08:
+			met_dict['TSYS01'] = self.TSYS01(line)
 			return met_dict
 
 		else:
@@ -55,8 +55,12 @@ class Metsense():
 			int_val = int_val | (val2 >> 3)
 			float_val = (int_val & 0x0FFF)*-0.0625
 
-		return round(float_val, 2)
-		# print (float_val)
+		if float_val < -250:
+		# When I2C is not available, return "none"
+			return;
+		else:
+			return round(float_val, 2)
+		
 
 	def HTU21D(self, line):
 		text_spl = line.strip().split(' ')
@@ -80,7 +84,11 @@ class Metsense():
 		rh = -6 + (125.0 * tempRH)
 		humid = (((rawHumidity * 12500) >> 16) - 600) / 100.0;
 
-		return realTemperature, humid
+		if realTemperature > 120 and humid > 110:
+		# When I2C is not available, return "none"
+			return;
+		else:
+			return realTemperature, humid
 
 	def BMP180(self, line):
 		text_spl = line.strip().split(' ')
@@ -114,7 +122,8 @@ class Metsense():
 
 		raw_temp = val1 | val2
 		# Temperature calculation, call a function to calculate
-		temp_val = round(getRT(raw_temp), 2)
+		temp_val = getRT(raw_temp) * 100
+		temp_val = math.floor(temp_val) / 100
 		return temp_val
 
 	def TSL250(self, line):
@@ -170,5 +179,10 @@ class Metsense():
 		temp_val = val1 | val2 | val3 | val4
 		# From 100th of temperature to temperature
 		temp_val = temp_val / 100.0
-		return temp_val
+		
+		if temp_val > 210:
+		# When I2C is not available, return "none"
+			return;
+		else:
+			return temp_val
 		

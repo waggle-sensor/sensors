@@ -1,7 +1,8 @@
 #include "main.h"
 
-void setup() {
-	SerialUSB.begin(9600);
+void setup() 
+{
+	SerialUSB.begin(115200);
 
 	while (!SerialUSB) {
 	}
@@ -11,13 +12,11 @@ void setup() {
 	delay(10);
 
 	// SPI begin, alpha sensor configs
-	cspi.setting();
+	cspi.AlphaSetting();
 
 	// Serial3 begin, Chemsense configs
 	chem.setting();
-
-	Printf("debug: setup complete");
-	}
+}
 
 void commandID() 
 {
@@ -70,61 +69,40 @@ void command2Write()
 
 void command2Read() 
 {
+	// Let's grap some data
+
+	// check input command
+	// according to the input command,
+	// we will grap data from Met/Light/or Chem board
 	scanner.Scan();
+	byte sensor_ID = sensor.sensorID(scanner.TokenText());
 
-	if (matches(scanner.TokenText(), "alpha"))
-	{
-		cspi.startTrans();
-		while (scanner.Scan() != '\n')
-		{
-			strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-			InputComm = strtol(dataReading, NULL, 16);
-			
-			cspi.readSPI(InputComm, dataReading);
-			
-			Printf("data %x ", dataReading[0]);
-		}
-		cspi.endTrans();
-	}
-	else 
-		Printf("err: %s", "no match");
-
+	// Call functions according to the sensor_ID
+	if (sensor_ID < 0x40)
+		readCore(sensor_ID);
+	else if (sensor_ID == 0x40)
+		readAlpha(sensor_ID);
+	// if (sensor_ID < 0x10)
+	// 	readMet(sensor_ID);
+	// else if (sensor_ID < 0x20)
+	// 	readLight(sensor_ID);
+	// else if (sensor_ID < 0x40)
+	// 	readChem(sensor_ID);
+	else
+		Printf("err: %x %s", sensor_ID, "no match");
+	// Printf("data: %x %x", sensor_ID, 0xff);
 
 	Printf("ok: %s", "end read");
 }
 
-void command2Request() 
-{
-	// Let's grap some data
-	while (scanner.Scan() != '\n') 
-	{
-		// check input command
-		// according to the input command,
-		// we will grap data from Met/Light/or Chem board
-	byte sensor_ID = sensor.sensorID(scanner.TokenText());
-
-	// Call functions according to the sensor_ID
-	if (sensor_ID < 0x10)
-		readMet(sensor_ID);
-	else if (sensor_ID < 0x20)
-		readLight(sensor_ID);
-	else if (sensor_ID < 0x40)
-		readChem(sensor_ID);
-	else
-		Printf("data: %s", "no match");
-	}
-
-	Printf("ok: %s", "end request");
-}
-
-void printData(byte ID, int* NumVal, char* dataReading)
+void printData(byte ID, int NumVal, char* dataReading)
 {
 	// Print data, for all data from three boards 
 	// Met, light, and chem
 	SerialUSB.print("data ");
 	SerialUSB.print(ID);
 	SerialUSB.print(' ');
-	for (int i = 0; i < *NumVal; i++)
+	for (int i = 0; i < NumVal; i++)
 	{
 		SerialUSB.print(dataReading[i], HEX);
 		SerialUSB.print(' ');
@@ -132,72 +110,55 @@ void printData(byte ID, int* NumVal, char* dataReading)
 	SerialUSB.println("");
 }
 
-void readMet(byte sensor_ID)
+void readCore(byte sensor_ID)
 {
-	// Call exact function for each of sensors, and fill/grap/bring data
-	// Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Met");
-
-	// If user wants only Mac addrs
-	// the command for this is "2request mac"
-
-	if (sensor_ID == 0x00)
+	while (scanner.Scan() != '\n') 
 	{
+		byte sensor_ID = sensor.sensorID(scanner.TokenText());
 		// Mac addresses for Met and Chem
-		cmet.ReadMac(&SensorBoardsMac);
-		Printf("data %x %ld", 0x00, SensorBoardsMac);
-		readChem(sensor_ID);
-	}
-
-	// If user wants all the sensor data
-	// the command for this is "2request met"
-	else if (sensor_ID == 0x0F)
-	{
-		for (sensor_ID = 0x01; sensor_ID < MetSenNum; sensor_ID++)
+		if (sensor_ID == 0x00)
 		{
-			cmet.MetGet(sensor_ID, &NumVal, dataReading);
-			printData(sensor_ID, &NumVal, dataReading);
+			cmet.ReadMac(&SensorBoardsMac);
+			Printf("data %x %ld", 0x00, SensorBoardsMac);
+			chem.ChemGet(&NumVal, dataReading);
 		}
-	}
-
-	// If user wants data from one sensor
-	// the command for this is "2request <sensor name>"
-	else
-	{
-		cmet.MetGet(sensor_ID, &NumVal, dataReading);
-		printData(sensor_ID, &NumVal, dataReading);
-	}
-}
-
-void readLight(byte sensor_ID)
-{
-	// Call exact function for each of sensors, and fill/grap/bring data
-	// Printf("debug: request <%s>, id: %x, group: %s", scanner.TokenText(), sensor_ID, "Light");
-
-	// If user wants all the sensor data
-	// the command for this is "2request light"
-	if (sensor_ID == 0x1F)
-	{
-		for (sensor_ID = 0x10; sensor_ID < (0x10 + LightSenNum); sensor_ID++)
-		{
+		// Met data
+		else if (sensor_ID < 0x10)
+			cmet.MetGet(sensor_ID, &NumVal, dataReading);	
+		// Light data
+		else if (sensor_ID < 0x20)
 			clight.LightGet(sensor_ID, &NumVal, dataReading);
-			printData(sensor_ID, &NumVal, dataReading);
-		}
-	}
+		// Chem data	
+		else if (sensor_ID < 0x40)
+			chem.ChemGet(&NumVal, dataReading);
 
-	// If user wants data from one sensor
-	// the command for this is "2request <sensor name>"
-	else
-	{
-		clight.LightGet(sensor_ID, &NumVal, dataReading);
-		printData(sensor_ID, &NumVal, dataReading);
+		printData(sensor_ID, NumVal, dataReading);
 	}
 }
 
-void readChem(byte sensor_ID)
+void readAlpha(byte sensor_ID)
 {
-	// Call exact function for each of sensors, and fill/grap/bring data
-	chem.ChemGet(&NumVal, dataReading);
-	printData(sensor_ID, &NumVal, dataReading);
+	NumVal = 0;
+	char buffer[256];
+	while (scanner.Scan() != '\n') 
+	{
+		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
+		buffer[NumVal++] = strtol(dataReading, NULL, 16);
+	}
+
+	if (buffer[0] == 0x42)
+		buffer[NumVal - 1] = (int)buffer[NumVal - 1];
+
+	cspi.AlstartTrans();
+	for (int i = 0; i < NumVal; i++)
+	{
+		buffer[i] = cspi.readSPI(buffer[i]);
+		if (i == 0)
+			delay(10);
+	}
+	cspi.AlendTrans();
+	
+	printData(sensor_ID, NumVal, buffer);
 }
 
 bool execCommand() {
@@ -208,9 +169,7 @@ bool execCommand() {
 		// }
 	}
 
-	// memset(dataReading, '\0', sizeof(dataReading));
-
-	Printf("debug: command <%s>", scanner.TokenText());
+	// Printf("debug: command <%s>", scanner.TokenText());
 
 	if (matches(scanner.TokenText(), "ver")) {
 		commandID();
@@ -232,11 +191,11 @@ bool execCommand() {
 		return true;
 	}
 
-	// Let's get data,
-	else if (matches(scanner.TokenText(), "2request")) {
-		command2Request();
-		return true;
-	}
+	// // Let's get data,
+	// else if (matches(scanner.TokenText(), "2request")) {
+	// 	command2Request();
+	// 	return true;
+	// }
 
 	else if (matches(scanner.TokenText(), "data")) {
 		SerialUSB.print("data ");

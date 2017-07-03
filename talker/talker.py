@@ -2,87 +2,114 @@
 from serial import Serial
 import sys
 import re
+import time
 
 from met import *
 from light import *
 from chem import *
+from alpha import *
 from cmd import *
 
 metsense = Metsense()
 lightsense = Lightsense()
 chemsense = Chemsense()
+alphasensor = Alphasensor()
 commands = Commands()
 
+t = 0
+first = True
 
 # linehex = 64
 # val = []
 # for i in range(linehex):
 #     val.append(0x00)
 
-with Serial(sys.argv[1], baudrate=9600, timeout=5) as ser:
-    while True:
-        try:
-            cmd = input('$ ')
-            # cmd = '2request met light chem chem chem mac'
+with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
+	while True:
+		try:
+			# cmd = input('$ ')
 
-            comm = commands.GetCmd(cmd)
-            print(comm)
-            # dol = ' '.join(comm).encode()
-            # print(dol)
+			if t == 0:
+				time.sleep(60)
 
-            ser.write(cmd.encode())
-            ser.write(b'\n')
+			if first == False:
+				test_cmd = ['2read met light', '2read alpha histogram', '2read alpha config']
+				cmd = test_cmd[t]
+				
+				if t == 0:
+					t = 1
+				elif t == 1:
+					t = 2
+				else:
+					t = 0
 
-            while True:
-                line = ser.readline().decode()
+			elif first == True:
+				first = False
+				cmd = '2read alpha power_on'
 
-                if len(line) == 0:
-                    print('timeout')
-                    break
+			# cmd = '2request met light chem chem chem mac'
 
-                match = re.match('(ok:|err:|data) (.*)', line)
+			item, comm = commands.GetCmd(cmd)
+			# print(comm)
+			# dol = ' '.join(comm).encode()
+			# print(dol)
 
-                if match is None:
-                    continue
+			ser.write(comm)
+			ser.write(b'\n')
 
-                status, text = match.groups()
+			while True:
+				line = ser.readline().decode()
+				# print(line)
 
-                # print(status)
-                if status == 'ok:' or status == 'err:':
-                    # print("hello hell")
-                    print (text)
-                    break
-                # else:
-                #     print ("Please print anything")
+				if len(line) == 0:
+					print('timeout')
+					break
 
-                print(text)
-                # print(type(text))
-                # # print(match.group())
+				match = re.match('(ok:|err:|data) (.*)', line)
 
-                # # test shpark change hex string to hex integer
-                # text_spl = text.strip().split(" ")
-                # # Grab sensor ID
-                # sensorID = int(text_spl[0])
+				if match is None:
+					continue
 
-                # # Call function according to the sensor ID
-                # if sensorID == 0x00:
-                #     return_val = chemsense.macDecode(text)
-                # elif sensorID < 0x10:
-                #     return_val = metsense.metDecode(sensorID, text)
-                # elif sensorID < 0x20:
-                #     return_val = lightsense.lightDecode(sensorID, text)
-                # elif sensorID < 0x40:
-                #     return_val = chemsense.ChemDecode(text)
-                # else:
-                #     continue
+				status, text = match.groups()
+
+				# print(status)
+				if status == 'ok:' or status == 'err:':
+					# print("hello hell")
+					# print (text)
+					break
+				# else:
+				#     print ("Please print anything")
+
+				# print(text)
+				# print(type(text))
+				# # print(match.group())
+
+				# test shpark change hex string to hex integer
+				text_spl = text.strip().split(" ")
+				# Grab sensor ID
+				sensorID = int(text_spl[0])
+
+				# Call function according to the sensor ID
+				if sensorID == 0x00:
+					return_val = chemsense.macDecode(text)
+				elif sensorID < 0x10:
+					return_val = metsense.metDecode(sensorID, text)
+				elif sensorID < 0x20:
+					return_val = lightsense.lightDecode(sensorID, text)
+				elif sensorID < 0x40:
+					return_val = chemsense.chemDecode(text)
+				elif sensorID == 0x40:
+					return_val = alphasensor.alphaDecode(item, text_spl[1:])
+				else:
+					continue
 
 
-                # if isinstance(return_val, tuple):
-                #     for val in return_val:
-                #         print(val)
-                # else:
-                #     print (return_val)
+				if isinstance(return_val, tuple):
+					for val in return_val:
+						print(val)
+				else:
+					print (return_val)
 
 
-        except KeyboardInterrupt:
-            break
+		except KeyboardInterrupt:
+			break
