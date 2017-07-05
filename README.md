@@ -142,9 +142,9 @@ or
 ```
 or 
 ```
-2read power_on
-2read config
-2read histogram
+2read alpha power_on
+2read alpha config
+2read alpha histogram
 ```
 
 To get all sensor values from a metsense board, lightsense board or chemsense boards, use "met", "light", or "chem" respectively.
