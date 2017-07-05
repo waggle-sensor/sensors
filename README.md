@@ -112,7 +112,7 @@ Secondary commands are following:
   alpha           <need third command for alpha>
 ```
 
-To collect data from alpha, you need to send third command, which are:
+To collect data from alpha sensor, you need to send third command, which are:
 ```
   <thrid>               <data type>
   power_on              power on the alpha sensor
