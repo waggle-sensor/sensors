@@ -27,25 +27,25 @@ first = True
 with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 	while True:
 		try:
-			# cmd = input('$ ')
+			cmd = input('$ ')
 
-			if t == 0:
-				time.sleep(60)
+			# if t == 0:
+			# 	time.sleep(60)
 
-			if first == False:
-				test_cmd = ['2read met light', '2read alpha histogram', '2read alpha config']
-				cmd = test_cmd[t]
+			# if first == False:
+			# 	test_cmd = ['2read met light', '2read alpha histogram', '2read alpha config']
+			# 	cmd = test_cmd[t]
 				
-				if t == 0:
-					t = 1
-				elif t == 1:
-					t = 2
-				else:
-					t = 0
+			# 	if t == 0:
+			# 		t = 1
+			# 	elif t == 1:
+			# 		t = 2
+			# 	else:
+			# 		t = 0
 
-			elif first == True:
-				first = False
-				cmd = '2read alpha power_on'
+			# elif first == True:
+			# 	first = False
+			# 	cmd = '2read alpha power_on'
 
 			# cmd = '2request met light chem chem chem mac'
 
