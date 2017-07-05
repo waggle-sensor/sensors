@@ -83,7 +83,7 @@ Detailed examples will be given below.
 
 ### To request data from coresense boards, use command <2read>:
 
-To read data from sensor borads, you need to send secondary command along with the primary command "2read".
+To read data from sensor borads, you need to send secondary command(s) along with the primary command "2read".
 Secondary commands are following:
 ```
 <secondary>       <data type>
@@ -112,7 +112,7 @@ Secondary commands are following:
   alpha           <need third command for alpha>
 ```
 
-To collect data from alpha sensor, you need to send third command, which are:
+To collect data from an alpha sensor, you need to send a third command, which are:
 ```
   <thrid>               <data type>
   power_on              power on the alpha sensor
@@ -147,7 +147,7 @@ or
 2read histogram
 ```
 
-To get all sensor value from a metsense board, lightsense board or chemsense boards, use "met", "light", or "chem" respectively.
+To get all sensor values from a metsense board, lightsense board or chemsense boards, use "met", "light", or "chem" respectively.
 Only to get mac addresses, use "mac".
 You can request data from coresense boards, which are Metsense/Lightsense/Chemsense boards and mac addresses together, for example:
 ```
