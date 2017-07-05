@@ -62,8 +62,10 @@ class Commands:
 
 				else:
 					return_command.append(arg)
+					key = 'core'
+					
 		else:
-			return key, line.encode()
+			return 'core', line.encode()
 
 		return key, ' '.join(return_command).encode()
 		

@@ -51,20 +51,13 @@ void command2Write()
 
 		cmet.WriteMac(SensorBoardsMac);
 	}
-
-	else if (matches(scanner.TokenText(), "alpha"))
+	else
 	{
-		scanner.Scan();
-		if (scanner.Scan() != '\n')
-		{
-			strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-			InputComm = strtol(dataReading, NULL, 16);
-			// SerialUSB.print("data ");
-			// SerialUSB.println(InputComm);
+		Printf("err: %s", "no match");
+		// consume trailing tokens
+		while (scanner.Scan() != '\n') {
 		}
 	}
-
-	Printf("ok: %s", "end write");
 }
 
 void command2Read() 
@@ -82,37 +75,18 @@ void command2Read()
 		readCore(sensor_ID);
 	else if (sensor_ID == 0x40)
 		readAlpha(sensor_ID);
-	// if (sensor_ID < 0x10)
-	// 	readMet(sensor_ID);
-	// else if (sensor_ID < 0x20)
-	// 	readLight(sensor_ID);
-	// else if (sensor_ID < 0x40)
-	// 	readChem(sensor_ID);
 	else
-		Printf("err: %x %s", sensor_ID, "no match");
-	// Printf("data: %x %x", sensor_ID, 0xff);
-
-	Printf("ok: %s", "end read");
-}
-
-void printData(byte ID, int NumVal, char* dataReading)
-{
-	// Print data, for all data from three boards 
-	// Met, light, and chem
-	SerialUSB.print("data ");
-	SerialUSB.print(ID);
-	SerialUSB.print(' ');
-	for (int i = 0; i < NumVal; i++)
 	{
-		SerialUSB.print(dataReading[i], HEX);
-		SerialUSB.print(' ');
+		Printf("err: %x %s", sensor_ID, "no match");
+			// consume trailing tokens
+		while (scanner.Scan() != '\n') {
+		}
 	}
-	SerialUSB.println("");
 }
 
 void readCore(byte sensor_ID)
 {
-	while (scanner.Scan() != '\n') 
+	do
 	{
 		byte sensor_ID = sensor.sensorID(scanner.TokenText());
 		// Mac addresses for Met and Chem
@@ -133,7 +107,7 @@ void readCore(byte sensor_ID)
 			chem.ChemGet(&NumVal, dataReading);
 
 		printData(sensor_ID, NumVal, dataReading);
-	}
+	} while (scanner.Scan() != '\n');
 }
 
 void readAlpha(byte sensor_ID)
@@ -161,6 +135,21 @@ void readAlpha(byte sensor_ID)
 	printData(sensor_ID, NumVal, buffer);
 }
 
+void printData(byte ID, int NumVal, char* dataReading)
+{
+	// Print data, for all data from three boards 
+	// Met, light, and chem
+	SerialUSB.print("data ");
+	SerialUSB.print(ID, HEX);
+	SerialUSB.print(' ');
+	for (int i = 0; i < NumVal; i++)
+	{
+		SerialUSB.print(dataReading[i], HEX);
+		SerialUSB.print(' ');
+	}
+	SerialUSB.println("");
+}
+
 bool execCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
@@ -186,16 +175,11 @@ bool execCommand() {
 		return true;
 	}
 
+	// Let's get data,
 	else if (matches(scanner.TokenText(), "2read")) {
 		command2Read();
 		return true;
 	}
-
-	// // Let's get data,
-	// else if (matches(scanner.TokenText(), "2request")) {
-	// 	command2Request();
-	// 	return true;
-	// }
 
 	else if (matches(scanner.TokenText(), "data")) {
 		SerialUSB.print("data ");
@@ -209,17 +193,26 @@ bool execCommand() {
 		return true;
 	}
 
-	// consume trailing tokens
-	while (scanner.Scan() != '\n') {
-	}
+	else
+		return false;
 
-	return false;
+	// consume trailing tokens
+	// while (scanner.Scan() != '\n') {
+	// }
+
+	// return false;
 }
 
 void loop() {
 	bool ok = execCommand();
 
-	if (!ok) {
-		Printf("err: invalid command");
+	if (ok)
+		Printf("ok: next command");
+	else
+	{
+		Printf("ok: invalid command");
+			// consume trailing tokens
+		while (scanner.Scan() != '\n') {
+		}
 	}
 }

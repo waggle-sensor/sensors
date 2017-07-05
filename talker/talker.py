@@ -3,6 +3,7 @@ from serial import Serial
 import sys
 import re
 import time
+import datetime
 
 from met import *
 from light import *
@@ -28,6 +29,9 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 	while True:
 		try:
 			cmd = input('$ ')
+
+			if cmd == 'exit':
+				break
 
 			# if t == 0:
 			# 	time.sleep(60)
@@ -56,6 +60,7 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 
 			ser.write(comm)
 			ser.write(b'\n')
+			print (str(datetime.datetime.now()).strip().split('.')[0])
 
 			while True:
 				line = ser.readline().decode()
@@ -73,7 +78,8 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 				status, text = match.groups()
 
 				# print(status)
-				if status == 'ok:' or status == 'err:':
+				# if status == 'ok:' or status == 'err:':
+				if status == 'ok:':
 					# print("hello hell")
 					# print (text)
 					break
@@ -87,21 +93,27 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 				# test shpark change hex string to hex integer
 				text_spl = text.strip().split(" ")
 				# Grab sensor ID
-				sensorID = int(text_spl[0])
+				sensorID = int(text_spl[0], 16)
+				# print(text_spl[0], sensorID)
 
 				# Call function according to the sensor ID
 				if sensorID == 0x00:
 					return_val = chemsense.macDecode(text)
+
 				elif sensorID < 0x10:
 					return_val = metsense.metDecode(sensorID, text)
+
 				elif sensorID < 0x20:
 					return_val = lightsense.lightDecode(sensorID, text)
+
 				elif sensorID < 0x40:
 					return_val = chemsense.chemDecode(text)
+
 				elif sensorID == 0x40:
-					return_val = alphasensor.alphaDecode(item, text_spl[1:])
+					return_val = alphasensor.alphaDecode(item, text_spl)
 				else:
-					continue
+					print (text)
+					break
 
 
 				if isinstance(return_val, tuple):

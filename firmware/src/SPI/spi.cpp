@@ -12,11 +12,6 @@ void Cspi::AlphaSetting()
     set = SPISettings(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
 }
 
-void Cspi::writeMaxSpeed(long val)
-{
-	SPI_MAX_speed = val;
-}
-
 void Cspi::AlstartTrans()
 {
 	// SPI.beginTransaction(SPI_MAX_speed, MSBFIRST, SPI_MODE1);

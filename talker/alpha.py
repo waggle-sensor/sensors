@@ -26,8 +26,14 @@ class Alphasensor:
 
 		elif cmd == 'serial':
 			print (data)
+			return
 		elif cmd == 'version':
 			print (data)
+			return
+		elif len(data) < 3:
+			return
+		elif data[1] == 0xf3 and data[2] == 0x03:
+			return "power on/off"
 		else:
 			print(data)
 			# raise RuntimeError('not ready')
@@ -75,8 +81,8 @@ class Alphasensor:
 		}
 
 		if temperature > 200:
-		    values['pressure'] = pressure
+			values['pressure'] = pressure
 		else:
-		    values['temperature'] = temperature
+			values['temperature'] = temperature
 
 		return values

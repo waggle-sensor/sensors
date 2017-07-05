@@ -4,12 +4,10 @@ byte CSensor::sensorID(const char *key) {
 	for (int i = 0; i < NofSensor; i++)
 	{
 		condition = matches(key, sArray[i]);
-		if (condition){
-			// SerialUSB.println(condition);
-			// SerialUSB.println(BArray[i]);
+		if (condition)
 			return bArray[i];
-		}
 	}
+	
     return 0xff;
 }
 

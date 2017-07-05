@@ -4,19 +4,18 @@
 #define PIN_ALPHASENSE_SLAVE 40
 
 
-// #define SPI_MAX_speed 500000
+#define SPI_MAX_speed 500000
 
 class Cspi
 {
 public:
 	void AlphaSetting();
-	void writeMaxSpeed(long val);
 	void AlstartTrans();
 	void AlendTrans();
 	char readSPI(char comm);
 
 private:
-	long SPI_MAX_speed = 500000;
+	// long SPI_MAX_speed = 500000;
 	// long SPI_MAX_speed = 11;
 	SPISettings set;
 
