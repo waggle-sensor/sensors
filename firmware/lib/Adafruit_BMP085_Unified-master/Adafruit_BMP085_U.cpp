@@ -327,10 +327,9 @@ void Adafruit_BMP085_Unified::getPressure(float *pressure)
     @brief  Reads the temperatures in degrees Celsius
 */
 /**************************************************************************/
-void Adafruit_BMP085_Unified::getTemperature(char *temp)
+void Adafruit_BMP085_Unified::getTemperature(float *temp)
 {
-  // int32_t UT, X1, X2, B5;     // following ds convention
-  int32_t UT, B5;
+  int32_t UT, X1, X2, B5;     // following ds convention
   float t;
 
   readRawTemperature(&UT);
@@ -348,12 +347,7 @@ void Adafruit_BMP085_Unified::getTemperature(char *temp)
   t = (B5+8) >> 4;
   t /= 10;
 
-  temp[0] = B5 >> 24;
-  temp[1] = B5 >> 16;
-  temp[2] = B5 >> 8;
-  temp[3] = B5 & 0xff;
-
-  // *temp = t;
+  *temp = t;
 }
 
 /**************************************************************************/

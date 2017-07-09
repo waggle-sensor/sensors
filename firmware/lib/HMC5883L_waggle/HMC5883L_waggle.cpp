@@ -116,7 +116,7 @@ void HMC5883_Sensor::read()
 
   // Wait around until enough data is available
   while (_wire->available() < 6);
-
+  
   // Note high before low (different than accel)
   #if ARDUINO >= 100
     uint8_t xhi = _wire->read();

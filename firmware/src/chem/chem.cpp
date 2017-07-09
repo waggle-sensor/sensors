@@ -1,6 +1,6 @@
 #include "chem.h"
 
-void Cchem::setting()
+void Chemsense::setting()
 {
 	// Begin Serial3
     Serial3.begin(CHEMSENSE_DATARATE);
@@ -14,7 +14,7 @@ void Cchem::setting()
     digitalWrite(PIN_CHEMSENSE_POW, LOW);	
 }
 
-void Cchem::ChemGet(int* NumVal, char* reading)
+void Chemsense::readChem(int* NumVal, char* reading)
 {
 	while (Serial3.available() > 0)
 		input_byte = Serial3.read();

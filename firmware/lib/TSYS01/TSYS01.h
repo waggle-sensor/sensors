@@ -17,20 +17,17 @@ typedef enum TSYS_KPoly_E //structure to hold calibration values from temperatur
 }
 TSYS_KPoly_T;
 
-class CTSYS01
+class TSYS01
 {
 public:
 	void TSYS01_CONFIG();
 	void TSYS01INIT();
 	void TSYS_Get_Coeff();
 	float TSYS_ScaleTemp_C(uint16_t rawAdc);
-	void TSYS01_read(char *val);
+	float TSYS01GetTemp();
 
 private:	
 	float retVal = 0.0;
-	float Temp_float = 0.0;
 	uint16_t TSYS_coefficents[5];
 	byte Temp_byte[3];
-
-	int temp_cal = 0;
 };

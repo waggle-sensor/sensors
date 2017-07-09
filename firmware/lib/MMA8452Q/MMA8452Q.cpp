@@ -1,26 +1,17 @@
 #include "MMA8452Q.h"
 
 
-void CMMAQ::MMA8452_read(char *val)
+void MMAQ::MMA8452_read(float* magField)
 {
     readAccelData(Temp_int);
 
-    val[0] = Temp_int[0] >> 8;
-    val[1] = Temp_int[0] & 0xff;
+    for (int i = 0 ; i < 3 ; i++)
+        magField[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
 
-    val[2] = Temp_int[1] >> 8;
-    val[3] = Temp_int[1] & 0xff;
-
-    val[4] = Temp_int[2] >> 8;
-    val[5] = Temp_int[2] & 0xff;
-
-    // for (int i = 0 ; i < 3 ; i++)
-    //     val[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
-
-    // val[3] = sqrt(pow(val[0], 2) + pow(val[1], 2) + pow(val[2], 2));
+    magField[3] = sqrt(pow(magField[0], 2) + pow(magField[1], 2) + pow(magField[2], 2));
 }
 
-void CMMAQ::readAccelData(int *destination)
+void MMAQ::readAccelData(int *destination)
 {
     byte rawData[6];  // x/y/z accel register data stored here
 
@@ -43,7 +34,7 @@ void CMMAQ::readAccelData(int *destination)
 // Initialize the MMA8452 registers
 // See the many application notes for more info on setting all of these registers:
 // http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=MMA8452Q
-void CMMAQ::MMA8452_CONFIG()
+void MMAQ::MMA8452_CONFIG()
 {
     MMA8452Standby();  // Must be in standby to change registers
     // Set up the full scale range to 2, 4, or 8g.
@@ -58,21 +49,21 @@ void CMMAQ::MMA8452_CONFIG()
 }
 
 // Sets the MMA8452 to standby mode. It must be in standby to change most register settings
-void CMMAQ::MMA8452Standby()
+void MMAQ::MMA8452Standby()
 {
     byte c = MMA8452readRegister(CTRL_REG1);
     MMA8452writeRegister(CTRL_REG1, c & ~(0x01)); //Clear the active bit to go into standby
 }
 
 // Sets the MMA8452 to active mode. Needs to be in this mode to output data
-void CMMAQ::MMA8452Active()
+void MMAQ::MMA8452Active()
 {
     byte c = MMA8452readRegister(CTRL_REG1);
     MMA8452writeRegister(CTRL_REG1, c | 0x01); //Set the active bit to begin detection
 }
 
 // Read bytesToRead sequentially, starting at addressToRead into the dest byte array
-void CMMAQ::MMA8452readRegisters(byte addressToRead, int bytesToRead, byte *dest)
+void MMAQ::MMA8452readRegisters(byte addressToRead, int bytesToRead, byte *dest)
 {
     bool able = true;
 
@@ -91,7 +82,7 @@ void CMMAQ::MMA8452readRegisters(byte addressToRead, int bytesToRead, byte *dest
 }
 
 // Read a single byte from addressToRead and return it as a byte
-byte CMMAQ::MMA8452readRegister(byte addressToRead)
+byte MMAQ::MMA8452readRegister(byte addressToRead)
 {
     Wire.requestFrom((uint8_t) MMA8452_ADDRESS, (uint8_t) 1, (uint32_t) addressToRead, (uint8_t) 1, true);
     while(!Wire.available()) ; //Wait for the data to come back
@@ -99,7 +90,7 @@ byte CMMAQ::MMA8452readRegister(byte addressToRead)
 }
 
 // Writes a single byte (dataToWrite) into addressToWrite
-void CMMAQ::MMA8452writeRegister(byte addressToWrite, byte dataToWrite)
+void MMAQ::MMA8452writeRegister(byte addressToWrite, byte dataToWrite)
 {
     Wire.beginTransmission(MMA8452_ADDRESS);
     Wire.write(addressToWrite);

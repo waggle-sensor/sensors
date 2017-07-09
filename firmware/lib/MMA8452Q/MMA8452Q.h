@@ -9,11 +9,10 @@
 #define CTRL_REG1  0x2A
 #define GSCALE 2 // Sets full-scale range to +/-2, 4, or 8g. Used to calc real g values.
 
-class CMMAQ
+class MMAQ
 {
 public:
-
-	void MMA8452_read(char *val);
+	void MMA8452_read(float* magField);
 	void readAccelData(int *destination);
 	void MMA8452_CONFIG();
 	void MMA8452Standby();
@@ -26,8 +25,6 @@ private:
 	byte fsr;
 	int gCount = 0;
 
-	// byte Temp_byte;
 	int Temp_int[3];
 	// float Temp_float[3];
-	// byte dest;
 };

@@ -5,7 +5,7 @@
 
 #define NofSensor 22
 
-class CSensor
+class Sensor
 {
 public:
 	byte sensorID(const char *key);

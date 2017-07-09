@@ -12,10 +12,10 @@ void setup()
 	delay(10);
 
 	// SPI begin, alpha sensor configs
-	cspi.AlphaSetting();
+	spi.AlphaSetting();
 
 	// Serial3 begin, Chemsense configs
-	chem.setting();
+	chemsense.setting();
 }
 
 void commandID() 
@@ -49,7 +49,7 @@ void command2Write()
 		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
 		SensorBoardsMac = strtol(dataReading, NULL, 10);
 
-		cmet.WriteMac(SensorBoardsMac);
+		metsense.writeMac(SensorBoardsMac);
 	}
 	else
 	{
@@ -92,19 +92,19 @@ void readCore(byte sensor_ID)
 		// Mac addresses for Met and Chem
 		if (sensor_ID == 0x00)
 		{
-			cmet.ReadMac(&SensorBoardsMac);
+			metsense.readMac(&SensorBoardsMac);
 			Printf("data %x %ld", 0x00, SensorBoardsMac);
-			chem.ChemGet(&NumVal, dataReading);
+			chemsense.readChem(&NumVal, dataReading);
 		}
 		// Met data
 		else if (sensor_ID < 0x10)
-			cmet.MetGet(sensor_ID, &NumVal, dataReading);	
+			metsense.readMet(sensor_ID, &NumVal, dataReading);	
 		// Light data
 		else if (sensor_ID < 0x20)
-			clight.LightGet(sensor_ID, &NumVal, dataReading);
+			lightsense.readLight(sensor_ID, &NumVal, dataReading);
 		// Chem data	
 		else if (sensor_ID < 0x40)
-			chem.ChemGet(&NumVal, dataReading);
+			chemsense.readChem(&NumVal, dataReading);
 
 		printData(sensor_ID, NumVal, dataReading);
 	} while (scanner.Scan() != '\n');
@@ -123,14 +123,14 @@ void readAlpha(byte sensor_ID)
 	if (buffer[0] == 0x42)
 		buffer[NumVal - 1] = (int)buffer[NumVal - 1];
 
-	cspi.AlstartTrans();
+	spi.AlstartTrans();
 	for (int i = 0; i < NumVal; i++)
 	{
-		buffer[i] = cspi.readSPI(buffer[i]);
+		buffer[i] = spi.readSPI(buffer[i]);
 		if (i == 0)
 			delay(10);
 	}
-	cspi.AlendTrans();
+	spi.AlendTrans();
 	
 	printData(sensor_ID, NumVal, buffer);
 }

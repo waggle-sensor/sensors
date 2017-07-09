@@ -1,6 +1,6 @@
 #include "findSensor.h"
 
-byte CSensor::sensorID(const char *key) {
+byte Sensor::sensorID(const char *key) {
 	for (int i = 0; i < NofSensor; i++)
 	{
 		condition = matches(key, sArray[i]);
@@ -11,7 +11,7 @@ byte CSensor::sensorID(const char *key) {
     return 0xff;
 }
 
-void CSensor::sensorName(byte sensor_ID, char** sensorNM)
+void Sensor::sensorName(byte sensor_ID, char** sensorNM)
 {
 	for (int i = 0; i < NofSensor; i++)
 	{

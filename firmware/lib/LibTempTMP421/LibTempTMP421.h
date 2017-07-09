@@ -34,7 +34,7 @@ class LibTempTMP421
 
   public:
     LibTempTMP421();
-    float GetTemperature(char* val);
+    float GetTemperature(void);
 };
 
 #endif

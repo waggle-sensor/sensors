@@ -6,7 +6,7 @@
 
 #define SPI_MAX_speed 500000
 
-class Cspi
+class SerialPeripheralInterface
 {
 public:
 	void AlphaSetting();

@@ -11,7 +11,7 @@
 #include "./met/met.h"
 #include "./light/light.h"
 #include "./chem/chem.h"
-#include "./SPI/spi.h"
+#include "./spi/spi.h"
 // OneWire ds(48);
 
 #define PRINTF_BUF 256
@@ -25,8 +25,8 @@ char dataReading[PRINTF_BUF];
 char InputComm;
 
 Scanner scanner;
-CSensor sensor;
-CMet cmet;
-CLight clight;
-Cchem chem;
-Cspi cspi;
+Sensor sensor;
+Metsense metsense;
+Lightsense lightsense;
+Chemsense chemsense;
+SerialPeripheralInterface spi;

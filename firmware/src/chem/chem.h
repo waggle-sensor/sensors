@@ -3,11 +3,11 @@
 #define PIN_CHEMSENSE_POW 47
 #define CHEMSENSE_DATARATE 115200
 
-class Cchem
+class Chemsense
 {
 public:
 	void setting();
-	void ChemGet(int* NumVal, char* reading);
+	void readChem(int* NumVal, char* reading);
 
 private:
 	char input_byte;

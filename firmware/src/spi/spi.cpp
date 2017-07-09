@@ -1,6 +1,6 @@
 #include "spi.h"
 
-void Cspi::AlphaSetting()
+void SerialPeripheralInterface::AlphaSetting()
 {
 	// SPI begin
     SPI.begin();
@@ -12,7 +12,7 @@ void Cspi::AlphaSetting()
     set = SPISettings(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
 }
 
-void Cspi::AlstartTrans()
+void SerialPeripheralInterface::AlstartTrans()
 {
 	// SPI.beginTransaction(SPI_MAX_speed, MSBFIRST, SPI_MODE1);
 	SPI.beginTransaction(set);
@@ -21,13 +21,13 @@ void Cspi::AlstartTrans()
 	
 }
 
-void Cspi::AlendTrans()
+void SerialPeripheralInterface::AlendTrans()
 {
 	digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
 	SPI.endTransaction();
 }
 
-char Cspi::readSPI(char comm)
+char SerialPeripheralInterface::readSPI(char comm)
 {
 	return SPI.transfer(comm);
 }

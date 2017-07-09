@@ -19,37 +19,38 @@
 //SPV1840
 #define PIN_RAW_MIC	A9
 
-class CMet
+class Metsense
 {
 public:
-	void MetGet(byte id, int *NumVal, char *val);
+	void readMet(byte id, int *NumVal, char *val);
 
-	void WriteMac(long MLMac);
-	void ReadMac(long* MLMac);
+	void writeMac(long MLMac);
+	void readMac(long* MLMac);
 
-	void TMP112(int* NumVal, char* val);
-	void HTU21D(int* NumVal, char* val);
-	void BMP180(int* NumVal, char* val);
-	void PR103J2(int* NumVal, char* val);
-	void TSL250(int* NumVal, char* val);
+	void readTMP112(int* NumVal, char* val);
+	void readHTU21D(int* NumVal, char* val);
+	void readBMP180(int* NumVal, char* val);
+	void readPR103J2(int* NumVal, char* val);
+	void readTSL250(int* NumVal, char* val);
 
-	void MMA8452Q(int* NumVal, char* val);
-	void SPV1840(int* NumVal, char* val);
-	void TSYS01(int* NumVal, char* val);
+	void readMMA8452Q(int* NumVal, char* val);
+	void readSPV1840(int* NumVal, char* val);
+	void readTSYS01(int* NumVal, char* val);
 
 private:
         
 	Adafruit_BMP085_Unified bmpp = Adafruit_BMP085_Unified(10085);
 	sensors_event_t event;
 
-	CTMP112 tmpp = CTMP112();
-    CHTU21D htuu = CHTU21D();
-	CMMAQ mmaq = CMMAQ();
-	CTSYS01 tsys = CTSYS01(); 
+	TMP112 tmpp = TMP112();
+    HTU21D htu = HTU21D();
+	MMAQ mmaq = MMAQ();
+	TSYS01 tsys = TSYS01(); 
 
-	long MetLightMac = 30817011;
+	long coreMac = 30817011;
+	int reference;
 
-    int temp;
+
 	long SPV_AMPV[100];
     bool conf = false;
 };

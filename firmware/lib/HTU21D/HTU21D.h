@@ -28,15 +28,15 @@
 #define READ_USER_REG  0xE7
 #define SOFT_RESET  0xFE
 
-class CHTU21D {
+class HTU21D {
 
 public:
-  CHTU21D();
+  HTU21D();
 
   //Public Functions
   void begin();
-  void readHumidity(char* val);
-  void readTemperature(char* val);
+  float readHumidity(void);
+  float readTemperature(void);
   void setResolution(byte resBits);
 
   //Public Variables

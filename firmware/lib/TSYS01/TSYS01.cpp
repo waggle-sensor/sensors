@@ -1,12 +1,12 @@
 #include "TSYS01.h"
 
-void CTSYS01::TSYS01_CONFIG()
+void TSYS01::TSYS01_CONFIG()
 {
     TSYS01INIT();
     TSYS_Get_Coeff();
 }
 
-void CTSYS01::TSYS01INIT()
+void TSYS01::TSYS01INIT()
 {
     Wire.beginTransmission(TSYS01Address);
     Wire.write(0x1E);
@@ -14,8 +14,7 @@ void CTSYS01::TSYS01INIT()
     delay(50);
 }
 
-
-void CTSYS01::TSYS_Get_Coeff()  //gathers calibration coefficients to array
+void TSYS01::TSYS_Get_Coeff()  //gathers calibration coefficients to array
 {
     for (uint8_t n = 0; n < 5; n++)
     {
@@ -32,21 +31,18 @@ void CTSYS01::TSYS_Get_Coeff()  //gathers calibration coefficients to array
 }
 
 
-float CTSYS01::TSYS_ScaleTemp_C(uint16_t rawAdc)
+float TSYS01::TSYS_ScaleTemp_C(uint16_t rawAdc)
 {
-
     retVal =
     (-2) * (float)TSYS_coefficents[TSYS_K4] * (float)pow(10, -21) * pow(rawAdc, 4) +
     4 * (float)TSYS_coefficents[TSYS_K3] * (float)pow(10, -16) * pow(rawAdc, 3) +
     (-2) * (float)TSYS_coefficents[TSYS_K2] * (float)pow(10, -11) * pow(rawAdc, 2) +
     1 * (float)TSYS_coefficents[TSYS_K1] * (float)pow(10, -6) * rawAdc +
     (-1.5) * (float)TSYS_coefficents[TSYS_K0] * (float)pow(10, -2);
-
-    return retVal;
 }
 
 
-void CTSYS01::TSYS01_read(char *val)
+float TSYS01::TSYS01GetTemp()
 {
     Wire.beginTransmission(TSYS01Address);
     Wire.write(TSYS01StartReg); //Start measurement process
@@ -73,11 +69,6 @@ void CTSYS01::TSYS01_read(char *val)
             Temp_byte[i] = 0xff;
     }
 
-    Temp_float = TSYS_ScaleTemp_C((((unsigned long)Temp_byte[0] << 8) | ((unsigned long)Temp_byte[1]))); //convert and cast to Temp with scaling equation
-    temp_cal = Temp_float * 100;
-
-    val[0] = temp_cal >> 24;
-    val[1] = temp_cal >> 16;
-    val[2] = temp_cal >> 8;
-    val[3] = temp_cal & 0xff;
+    TSYS_ScaleTemp_C((((unsigned long)Temp_byte[0] << 8) | ((unsigned long)Temp_byte[1]))); //convert and cast to Temp with scaling equation
+    return retVal;
 }

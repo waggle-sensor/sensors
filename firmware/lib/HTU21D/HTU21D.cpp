@@ -26,7 +26,7 @@
 #include <Wire.h>
 #include "HTU21D.h"
 
-CHTU21D::CHTU21D()
+HTU21D::HTU21D()
 {
   //Set initial values for private vars
 }
@@ -34,7 +34,7 @@ CHTU21D::CHTU21D()
 //Begin
 /*******************************************************************************************/
 //Start I2C communication
-void CHTU21D::begin(void)
+void HTU21D::begin(void)
 {
   return;
 }
@@ -44,7 +44,7 @@ void CHTU21D::begin(void)
 //Calc humidity and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-void CHTU21D::readHumidity(char* val)
+float HTU21D::readHumidity(void)
 {
 	//Request a humidity reading
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -59,36 +59,17 @@ void CHTU21D::readHumidity(char* val)
 
 	//Wait for data to become available
 	int counter = 0;
-	bool able = true;
 	while(Wire.available() < 3)
 	{
 		counter++;
 		delay(1);
-		if(counter > 100)
-			able = false;
-		// {
-		// 	val[2] = 0xff;
-		// 	val[3] = 0xff;
-		// 	// return(999); //Error out
-		// }
+		if(counter > 100) return 998; //Error out
 	}
 
-	// byte msb, lsb, checksum;
-	unsigned char checksum;
-	// msb = Wire.read();
-	// lsb = Wire.read();
-	if (able == true)
-	{
-		val[2] = Wire.read();
-		val[3] = Wire.read();
-		checksum = Wire.read();
-	}
-	else
-	{
-		val[2] = 0xff;
-		val[3] = 0xff;
-		checksum = Wire.read();		
-	}
+	byte msb, lsb, checksum;
+	msb = Wire.read();
+	lsb = Wire.read();
+	checksum = Wire.read();
 
 	/* //Used for testing
 	byte msb, lsb, checksum;
@@ -96,35 +77,23 @@ void CHTU21D::readHumidity(char* val)
 	lsb = 0x85;
 	checksum = 0x6B;*/
 
-	
-	unsigned int rawHumidity = ((unsigned int) val[2] << 8) | (unsigned int) val[3];
+	unsigned int rawHumidity = ((unsigned int) msb << 8) | (unsigned int) lsb;
 
+	if(check_crc(rawHumidity, checksum) != 0) return(999); //Error out
 
-	if(check_crc(rawHumidity, checksum) != 0)
-	{
-		val[2] = 0xff;
-		val[3] = 0xff;
-		// return(999); //Error out
-	}
+	//sensorStatus = rawHumidity & 0x0003; //Grab only the right two bits
+	rawHumidity &= 0xFFFC; //Zero out the status bits but keep them in place
 
-	// unsigned int rawHumidity = ((unsigned int) msb << 8) | (unsigned int) lsb;
+	//Given the raw humidity data, calculate the actual relative humidity
+	float tempRH = rawHumidity / (float)65536; //2^16 = 65536
+	float rh = -6 + (125 * tempRH); //From page 14
 
-	// //sensorStatus = rawHumidity & 0x0003; //Grab only the right two bits
-	// rawHumidity &= 0xFFFC; //Zero out the status bits but keep them in place
+	//**** SHSHSHSHSHSHSH
+	// if (able == false)
+	// 	rh = 0;
+	//**** SHSHSHSHSHSHSH
 
-	// //Given the raw humidity data, calculate the actual relative humidity
-	// float tempRH = rawHumidity / (float)65536; //2^16 = 65536
-	// float rh = -6 + (125 * tempRH); //From page 14
-
-	// //return(rh);
-
-	// //** TEST_SH
-	// //raw_humid= (((s32)tmpdata[0])<<8)+(tmpdata[1]&0xF0);
-	// float humid=(((rawHumidity*12500)>>16)-600)/(float)100;     // humidity in hundreths of percent
-	// //sht25_readState=sht25_FINISHED;
-
-	// return(humid);
-	//** TEST_SH
+	return(rh);
 }
 
 //Read the temperature
@@ -132,7 +101,7 @@ void CHTU21D::readHumidity(char* val)
 //Calc temperature and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-void CHTU21D::readTemperature(char* val)
+float HTU21D::readTemperature(void)
 {
 	//Request the temperature
 	Wire.beginTransmission(HTDU21D_ADDRESS);
@@ -151,20 +120,12 @@ void CHTU21D::readTemperature(char* val)
 	{
 		counter++;
 		delay(1);
-		if(counter > 100)
-		{
-			val[0] = 0xff;
-			val[1] = 0xff;
-			// return(999); //Error out
-		}
+		if(counter > 100) return 998; //Error out
 	}
 
-	// unsigned char msb, lsb, checksum;
-	unsigned char checksum;
-	// msb = Wire.read();
-	// lsb = Wire.read();
-	val[0] = Wire.read();
-	val[1] = Wire.read();
+	unsigned char msb, lsb, checksum;
+	msb = Wire.read();
+	lsb = Wire.read();
 	checksum = Wire.read();
 
 	/* //Used for testing
@@ -173,25 +134,18 @@ void CHTU21D::readTemperature(char* val)
 	lsb = 0x3A;
 	checksum = 0x7C; */
 
-	unsigned int rawTemperature = ((unsigned int) val[0] << 8) | (unsigned int) val[1];
-	
-	if(check_crc(rawTemperature, checksum) != 0)
-	{
-		val[0] = 0xff;
-		val[1] = 0xff;
-		// return(999); //Error out
-	}
+	unsigned int rawTemperature = ((unsigned int) msb << 8) | (unsigned int) lsb;
 
-	// unsigned int rawTemperature = ((unsigned int) msb << 8) | (unsigned int) lsb;
+	if(check_crc(rawTemperature, checksum) != 0) return(999); //Error out
 
-	// //sensorStatus = rawTemperature & 0x0003; //Grab only the right two bits
-	// rawTemperature &= 0xFFFC; //Zero out the status bits but keep them in place
+	//sensorStatus = rawTemperature & 0x0003; //Grab only the right two bits
+	rawTemperature &= 0xFFFC; //Zero out the status bits but keep them in place
 
-	// //Given the raw temperature data, calculate the actual temperature
-	// float tempTemperature = rawTemperature / (float)65536; //2^16 = 65536
-	// float realTemperature = (float)(175.72 * tempTemperature - 46.85); //From page 14
+	//Given the raw temperature data, calculate the actual temperature
+	float tempTemperature = rawTemperature / (float)65536; //2^16 = 65536
+	float realTemperature = (float)(-46.85 + (175.72 * tempTemperature)); //From page 14
 
-	// return(realTemperature);
+	return(realTemperature);
 }
 
 //Set sensor resolution
@@ -204,7 +158,7 @@ void CHTU21D::readTemperature(char* val)
 // 1/1 = 11bit RH, 11bit Temp
 //Power on default is 0/0
 
-void CHTU21D::setResolution(byte resolution)
+void HTU21D::setResolution(byte resolution)
 {
   byte userRegister = read_user_register(); //Go get the current register state
   userRegister &= B01111110; //Turn off the resolution bits
@@ -219,7 +173,7 @@ void CHTU21D::setResolution(byte resolution)
 }
 
 //Read the user register
-byte CHTU21D::read_user_register(void)
+byte HTU21D::read_user_register(void)
 {
   byte userRegister;
 
@@ -243,7 +197,7 @@ byte CHTU21D::read_user_register(void)
 //POLYNOMIAL = 0x0131 = x^8 + x^5 + x^4 + 1 : http://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks
 #define SHIFTED_DIVISOR 0x988000 //This is the 0x0131 polynomial shifted to farthest left of three bytes
 
-byte CHTU21D::check_crc(uint16_t message_from_sensor, uint8_t check_value_from_sensor)
+byte HTU21D::check_crc(uint16_t message_from_sensor, uint8_t check_value_from_sensor)
 {
   //Test cases from datasheet:
   //message = 0xDC, checkvalue is 0x79
