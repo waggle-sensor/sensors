@@ -6,7 +6,10 @@ class Metsense():
 	def metDecode(self, ID, line):
 		# Call function according to the sensor ID
 		met_dict = {}
-		if ID == 0x01:
+		if  ID == 0x00:
+			met_dict['MetMac'] = self.decodeMAC(line)
+			return met_dict
+		elif ID == 0x01:
 			met_dict['TMP112'] = self.decodeTMP112(line)
 			return met_dict
 		elif ID == 0x02:
@@ -33,6 +36,16 @@ class Metsense():
 
 		else:
 			return 0
+
+	def decodeMAC(self, line):
+		text_spl = line.strip().split(' ')
+		# Temperature
+		val1 = int(text_spl[1], 16) << 24
+		val2 = int(text_spl[2], 16) << 16
+		val3 = int(text_spl[3], 16) << 8
+		val4 = int(text_spl[4], 16)
+
+		return val1|val2|val3|val4
 
 
 	def decodeTMP112(self, line):

@@ -12,10 +12,10 @@ void setup()
 	delay(10);
 
 	// SPI begin, alpha sensor configs
-	spi.AlphaSetting();
+	// customspi.alphaSetting();
 
 	// Serial3 begin, Chemsense configs
-	chemsense.setting();
+	// customserial.setting();
 }
 
 void commandID() 
@@ -38,101 +38,32 @@ void commandVersion()
 	Printf("ok: Ver 4.0.1");
 }
 
-void command2Write() 
+void commandwriteCore() 
 {
 	scanner.Scan();
 
 	// If user wants to change Mac address of Met/Lightsense boards,
-	if (matches(scanner.TokenText(), "mac"))
-	{
-		scanner.Scan();
-		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-		SensorBoardsMac = strtol(dataReading, NULL, 10);
-
-		metsense.writeMac(SensorBoardsMac);
-	}
-	else
-	{
-		Printf("err: %s", "no match");
-		// consume trailing tokens
-		while (scanner.Scan() != '\n') {
-		}
-	}
-}
-
-void command2Read() 
-{
-	// Let's grap some data
-
-	// check input command
-	// according to the input command,
-	// we will grap data from Met/Light/or Chem board
 	scanner.Scan();
-	byte sensor_ID = sensor.sensorID(scanner.TokenText());
+	strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
+	SensorBoardsMac = strtol(dataReading, NULL, 10);
 
-	// Call functions according to the sensor_ID
-	if (sensor_ID < 0x40)
-		readCore(sensor_ID);
-	else if (sensor_ID == 0x40)
-		readAlpha(sensor_ID);
-	else
-	{
-		Printf("err: %x %s", sensor_ID, "no match");
-			// consume trailing tokens
-		while (scanner.Scan() != '\n') {
-		}
-	}
+	metsense.writeMac(SensorBoardsMac);
 }
 
-void readCore(byte sensor_ID)
-{
-	do
+void commandreadCore()
+{	
+	while (scanner.Scan() != '\n')
 	{
-		byte sensor_ID = sensor.sensorID(scanner.TokenText());
-		// Mac addresses for Met and Chem
-		if (sensor_ID == 0x00)
-		{
-			metsense.readMac(&SensorBoardsMac);
-			Printf("data %x %ld", 0x00, SensorBoardsMac);
-			chemsense.readChem(&NumVal, dataReading);
-		}
+		byte sensor_ID = sensor.sensorID(scanner.TokenText());	
 		// Met data
-		else if (sensor_ID < 0x10)
+		if (sensor_ID < 0x10)
 			metsense.readMet(sensor_ID, &NumVal, dataReading);	
 		// Light data
 		else if (sensor_ID < 0x20)
 			lightsense.readLight(sensor_ID, &NumVal, dataReading);
-		// Chem data	
-		else if (sensor_ID < 0x40)
-			chemsense.readChem(&NumVal, dataReading);
 
 		printData(sensor_ID, NumVal, dataReading);
-	} while (scanner.Scan() != '\n');
-}
-
-void readAlpha(byte sensor_ID)
-{
-	NumVal = 0;
-	char buffer[256];
-	while (scanner.Scan() != '\n') 
-	{
-		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-		buffer[NumVal++] = strtol(dataReading, NULL, 16);
 	}
-
-	if (buffer[0] == 0x42)
-		buffer[NumVal - 1] = (int)buffer[NumVal - 1];
-
-	spi.AlstartTrans();
-	for (int i = 0; i < NumVal; i++)
-	{
-		buffer[i] = spi.readSPI(buffer[i]);
-		if (i == 0)
-			delay(10);
-	}
-	spi.AlendTrans();
-	
-	printData(sensor_ID, NumVal, buffer);
 }
 
 void printData(byte ID, int NumVal, char* dataReading)
@@ -150,6 +81,107 @@ void printData(byte ID, int NumVal, char* dataReading)
 	SerialUSB.println("");
 }
 
+
+// void readAlpha(byte sensor_ID)
+// {
+// 	fillBuffer();
+
+// 	if (buffer[0] == 0x42)
+// 		buffer[NumVal - 1] = (int)buffer[NumVal - 1];
+
+// 	customspi.alphaStartTrans();
+// 	for (int i = 0; i < NumVal; i++)
+// 	{
+// 		buffer[i] = customspi.readSPI(buffer[i]);
+// 		if (i == 0)
+// 			delay(10);
+// 	}
+// 	customspi.alphaEndTrans();
+	
+// 	printData(sensor_ID, NumVal, buffer);
+// }
+
+
+void commandSPIconfig()
+{
+	fillBuffer();
+	int slavePin = (int)buffer[0];
+	int bitOrder = (int)buffer[NumVal - 2];
+	int dataMode = (int)buffer[NumVal - 1];
+
+	long maxSpeed = (buffer[1] << 16) | (buffer[2] << 8) | (buffer[3]);
+
+	customspi.configSPI(slavePin, maxSpeed, bitOrder, dataMode);
+}
+
+void commandSPIread()
+{
+	fillBuffer();
+	int bufferlength = NumVal - 2;
+	int delaytime = (int)buffer[0];
+	int iter = (int)buffer[1];
+
+	for (int i = 0; i < bufferlength; i++)
+		buffer[i] = buffer[i + 2];
+	
+	customspi.readSPI(buffer, bufferlength, delaytime, iter);
+	printData(0x40, bufferlength, buffer);
+
+}
+
+void commandSerialpower()
+{	
+	fillBuffer();
+	int powerPin = (int)buffer[0];
+	int sign = (int)buffer[1];
+
+	customserial.powerSerialSensor(powerPin, sign);
+}
+
+void commandSerialconfig()
+{
+	fillBuffer();
+	int port = (int)buffer[0];
+	int powerPin = (int)buffer[NumVal - 1];
+	long datarate = (buffer[1] << 16) | (buffer[2] << 8) | (buffer[3]);
+	long timeout = (buffer[4] << 16) | (buffer[5] << 8) | (buffer[6]);
+
+	customserial.configSerial(port, datarate, timeout, powerPin);
+}
+
+void commandSerialwrite()
+{
+	fillBuffer();
+	int port = (int)buffer[0];
+	int bufferlength = NumVal - 1;
+
+	for (int i = 0; i < bufferlength; i++)
+		buffer[i] = buffer[i + 1];
+
+	customserial.writeSerial(buffer, bufferlength, port);
+}
+
+void commandSerialread()
+{
+	fillBuffer();
+	int port = (int)buffer[0];
+
+	customserial.readSerial(buffer, &NumVal, port);
+	int serialID = 0xc0 | port;
+	printData(serialID, NumVal, buffer);
+}
+
+void fillBuffer()
+{
+	memset(buffer, '\0', PRINTF_BUF);
+	NumVal = 0;
+	while (scanner.Scan() != '\n') 
+	{
+		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
+		buffer[NumVal++] = strtol(dataReading, NULL, 16);
+	}
+}
+
 bool execCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
@@ -160,26 +192,31 @@ bool execCommand() {
 
 	// Printf("debug: command <%s>", scanner.TokenText());
 
-	if (matches(scanner.TokenText(), "ver")) {
+	if (matches(scanner.TokenText(), "ver"))
 		commandID();
-		return true;
-	}
 
-	else if (matches(scanner.TokenText(), "id")) {
+	else if (matches(scanner.TokenText(), "id"))
 		commandVersion();
-		return true;
-	}
 
-	else if (matches(scanner.TokenText(), "2write")) {
-		command2Write();
-		return true;
-	}
 
-	// Let's get data,
-	else if (matches(scanner.TokenText(), "2read")) {
-		command2Read();
-		return true;
-	}
+	else if (matches(scanner.TokenText(), "Corewrite"))
+		commandwriteCore();
+	else if (matches(scanner.TokenText(), "Coreread"))
+		commandreadCore();
+
+	else if (matches(scanner.TokenText(), "SPIconfig"))
+		commandSPIconfig();
+	else if (matches(scanner.TokenText(), "SPIread"))
+		commandSPIread();
+
+	else if (matches(scanner.TokenText(), "Serialpower"))
+		commandSerialpower();
+	else if (matches(scanner.TokenText(), "Serialconfig"))
+		commandSerialconfig();
+	else if (matches(scanner.TokenText(), "Serialwrite"))
+		commandSerialwrite();
+	else if (matches(scanner.TokenText(), "Serialread"))
+		commandSerialread();
 
 	else if (matches(scanner.TokenText(), "data")) {
 		SerialUSB.print("data ");
@@ -190,12 +227,12 @@ bool execCommand() {
 		}
 		SerialUSB.println("");
 		Printf("ok: %s", "end data");
-		return true;
 	}
 
 	else
 		return false;
 
+	return true;
 	// consume trailing tokens
 	// while (scanner.Scan() != '\n') {
 	// }
@@ -207,10 +244,10 @@ void loop() {
 	bool ok = execCommand();
 
 	if (ok)
-		Printf("ok: next command");
+		Printf("end: next command");
 	else
 	{
-		Printf("ok: invalid command");
+		Printf("end: invalid command");
 			// consume trailing tokens
 		while (scanner.Scan() != '\n') {
 		}

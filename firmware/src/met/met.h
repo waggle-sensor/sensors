@@ -24,9 +24,9 @@ class Metsense
 public:
 	void readMet(byte id, int *NumVal, char *val);
 
-	void writeMac(long MLMac);
-	void readMac(long* MLMac);
+	void writeMac(int32_t MLMac);
 
+	void readMac(int* NumVal, char* val);
 	void readTMP112(int* NumVal, char* val);
 	void readHTU21D(int* NumVal, char* val);
 	void readBMP180(int* NumVal, char* val);
@@ -47,7 +47,7 @@ private:
 	MMAQ mmaq = MMAQ();
 	TSYS01 tsys = TSYS01(); 
 
-	long coreMac = 30817011;
+	int32_t coreMac = 30817011;
 	int reference;
 
 

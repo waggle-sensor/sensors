@@ -6,17 +6,23 @@
 
 #define SPI_MAX_speed 500000
 
-class SerialPeripheralInterface
+class customSPI
 {
 public:
-	void AlphaSetting();
-	void AlstartTrans();
-	void AlendTrans();
-	char readSPI(char comm);
+	void alphaSetting();
+	void alphaStartTrans();
+	void alphaEndTrans();
+	char readSPI(char Input);
+
+	void configSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode);
+
+	char readSPI(char* buff, int bufflen, int msdelay, int delayiter);
 
 private:
 	// long SPI_MAX_speed = 500000;
 	// long SPI_MAX_speed = 11;
+
+	int PIN_SLAVE;
 	SPISettings set;
 
 	// SPISettings set1(SPI_MAX_speed, MSBFIRST, SPI_MODE1);

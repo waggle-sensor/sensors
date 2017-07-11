@@ -10,7 +10,7 @@
 #include "./util/findSensor.h"
 #include "./met/met.h"
 #include "./light/light.h"
-#include "./chem/chem.h"
+#include "./serial/serial.h"
 #include "./spi/spi.h"
 // OneWire ds(48);
 
@@ -22,11 +22,12 @@
 long SensorBoardsMac;
 int NumVal = 0;
 char dataReading[PRINTF_BUF];
-char InputComm;
+// char InputComm;
+char buffer[PRINTF_BUF];
 
 Scanner scanner;
 Sensor sensor;
 Metsense metsense;
 Lightsense lightsense;
-Chemsense chemsense;
-SerialPeripheralInterface spi;
+customSerial customserial;
+customSPI customspi;

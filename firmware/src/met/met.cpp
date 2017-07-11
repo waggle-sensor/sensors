@@ -15,7 +15,9 @@ void Metsense::readMet(byte ID, int* NumVal, char* val)
 	}
 	
 	// Call a function in accordance of sensor ID
-	if (ID == 0x01)
+	if (ID == 0x00)
+		readMac(NumVal, val);
+	else if (ID == 0x01)
 		readTMP112(NumVal, val);
 	else if (ID == 0x02)
 		readHTU21D(NumVal, val);
@@ -35,14 +37,19 @@ void Metsense::readMet(byte ID, int* NumVal, char* val)
 		NumVal = 0;
 }
 
-void Metsense::writeMac(long MLMac)
+void Metsense::writeMac(int32_t MLMac)
 {
 	coreMac = MLMac;
 }
 
-void Metsense::readMac(long* MLMac)
+void Metsense::readMac(int* NumVal, char* val)
 {
-	*MLMac = coreMac;
+	val[0] = coreMac >> 24;
+	val[1] = coreMac >> 16;
+	val[2] = coreMac >> 8;
+	val[3] = coreMac & 0xff;
+
+	*NumVal = 4;
 }
 
 void Metsense::readTMP112(int* NumVal, char* val) 
@@ -81,7 +88,7 @@ void Metsense::readBMP180(int* NumVal, char* val)
 	    
 		// long temp_press = long(event.pressure);
 		bmpp.getPressure(&sensorValue);
-		reference = (int)sensorValue;
+		reference = (int32_t)sensorValue;
 		val[2] = reference >> 24;
 		val[3] = reference >> 16;
 		val[4] = reference >> 8;

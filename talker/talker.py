@@ -33,30 +33,30 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 			if cmd == 'exit':
 				break
 
+			# # test
 			# if t == 0:
 			# 	time.sleep(60)
 
 			# if first == False:
-			# 	test_cmd = ['2read met light', '2read alpha histogram', '2read alpha config']
+			# 	test_cmd = ['Coreread met light mac', 'Serialread 0x03', 'SPIread 0x0A 0x01 histogram', 'SPIread 0x0A 0x01 config']
 			# 	cmd = test_cmd[t]
 				
 			# 	if t == 0:
 			# 		t = 1
 			# 	elif t == 1:
 			# 		t = 2
+			# 	elif t == 2:
+			# 		t = 3
 			# 	else:
 			# 		t = 0
 
 			# elif first == True:
 			# 	first = False
-			# 	cmd = '2read alpha power_on'
-
-			# cmd = '2request met light chem chem chem mac'
+			# 	cmd = 'SPIread 0x0A 0x01 power_on'
+			# # test
 
 			item, comm = commands.GetCmd(cmd)
-			# print(comm)
-			# dol = ' '.join(comm).encode()
-			# print(dol)
+			print(comm)
 
 			ser.write(comm)
 			ser.write(b'\n')
@@ -70,7 +70,7 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 					print('timeout')
 					break
 
-				match = re.match('(ok:|err:|data) (.*)', line)
+				match = re.match('(ok:|err:|data|end:) (.*)', line)
 
 				if match is None:
 					continue
@@ -79,7 +79,7 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 
 				# print(status)
 				# if status == 'ok:' or status == 'err:':
-				if status == 'ok:':
+				if status == 'end:':
 					# print("hello hell")
 					# print (text)
 					break
@@ -87,6 +87,8 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 				#     print ("Please print anything")
 
 				# print(text)
+				# continue
+				# print(len(text))
 				# print(type(text))
 				# # print(match.group())
 
@@ -97,16 +99,16 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 				# print(text_spl[0], sensorID)
 
 				# Call function according to the sensor ID
-				if sensorID == 0x00:
-					return_val = chemsense.macDecode(text)
+				# if sensorID == 0x00:
+				# 	return_val = chemsense.macDecode(text)
 
-				elif sensorID < 0x10:
+				if sensorID < 0x10:
 					return_val = metsense.metDecode(sensorID, text)
 
 				elif sensorID < 0x20:
 					return_val = lightsense.lightDecode(sensorID, text)
 
-				elif sensorID < 0x40:
+				elif sensorID >= 0xc1 and sensorID <= 0xc3:
 					return_val = chemsense.chemDecode(text)
 
 				elif sensorID == 0x40:
