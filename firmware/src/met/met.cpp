@@ -134,6 +134,8 @@ void Metsense::readMMA8452Q(int* NumVal, char* val)
 
 void Metsense::readSPV1840(int* NumVal, char* val)
 {
+	long SPV_AMPV[100];
+
 	for(int i = 0; i < 100; i++)
 	{
 		SPV_AMPV[i] = 512 - analogRead(PIN_RAW_MIC);

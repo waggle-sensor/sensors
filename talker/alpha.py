@@ -32,12 +32,10 @@ class Alphasensor:
 			return
 		elif len(data) < 3:
 			return
-		elif data[1] == 0xf3 and data[2] == 0x03:
+		elif data[0] == 0xf3 and data[1] == 0x03:
 			return "power on/off"
 		else:
 			print(data)
-			# raise RuntimeError('not ready')
-			# print (line)
 			return
 
 	def unpack_structs(self, structs, data):

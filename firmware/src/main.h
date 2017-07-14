@@ -12,6 +12,7 @@
 #include "./light/light.h"
 #include "./serial/serial.h"
 #include "./spi/spi.h"
+#include "./i2c/i2c.h"
 // OneWire ds(48);
 
 #define PRINTF_BUF 256
@@ -19,15 +20,14 @@
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 
-long SensorBoardsMac;
 int NumVal = 0;
 char dataReading[PRINTF_BUF];
-// char InputComm;
 char buffer[PRINTF_BUF];
 
 Scanner scanner;
 Sensor sensor;
 Metsense metsense;
 Lightsense lightsense;
-customSerial customserial;
-customSPI customspi;
+CustomSerial customserial;
+CustomSPI customspi;
+CustomI2C customi2c;

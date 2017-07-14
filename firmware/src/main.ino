@@ -9,7 +9,7 @@ void setup()
 
 	// I2C begin, various sensors on met/lightsense boards
 	Wire.begin();
-	delay(10);
+	delay(1000);
 
 	// SPI begin, alpha sensor configs
 	// customspi.alphaSetting();
@@ -45,9 +45,9 @@ void commandwriteCore()
 	// If user wants to change Mac address of Met/Lightsense boards,
 	scanner.Scan();
 	strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-	SensorBoardsMac = strtol(dataReading, NULL, 10);
+	long metmac = strtol(dataReading, NULL, 10);
 
-	metsense.writeMac(SensorBoardsMac);
+	metsense.writeMac(metmac);
 }
 
 void commandreadCore()
@@ -68,8 +68,7 @@ void commandreadCore()
 
 void printData(byte ID, int NumVal, char* dataReading)
 {
-	// Print data, for all data from three boards 
-	// Met, light, and chem
+	// Print data,
 	SerialUSB.print("data ");
 	SerialUSB.print(ID, HEX);
 	SerialUSB.print(' ');
@@ -80,27 +79,6 @@ void printData(byte ID, int NumVal, char* dataReading)
 	}
 	SerialUSB.println("");
 }
-
-
-// void readAlpha(byte sensor_ID)
-// {
-// 	fillBuffer();
-
-// 	if (buffer[0] == 0x42)
-// 		buffer[NumVal - 1] = (int)buffer[NumVal - 1];
-
-// 	customspi.alphaStartTrans();
-// 	for (int i = 0; i < NumVal; i++)
-// 	{
-// 		buffer[i] = customspi.readSPI(buffer[i]);
-// 		if (i == 0)
-// 			delay(10);
-// 	}
-// 	customspi.alphaEndTrans();
-	
-// 	printData(sensor_ID, NumVal, buffer);
-// }
-
 
 void commandSPIconfig()
 {
@@ -120,13 +98,13 @@ void commandSPIread()
 	int bufferlength = NumVal - 2;
 	int delaytime = (int)buffer[0];
 	int iter = (int)buffer[1];
+	int slavePin;
 
 	for (int i = 0; i < bufferlength; i++)
 		buffer[i] = buffer[i + 2];
 	
-	customspi.readSPI(buffer, bufferlength, delaytime, iter);
-	printData(0x40, bufferlength, buffer);
-
+	customspi.readSPI(buffer, bufferlength, delaytime, iter, &slavePin);
+	printData(slavePin, bufferlength, buffer);
 }
 
 void commandSerialpower()
@@ -169,6 +147,28 @@ void commandSerialread()
 	customserial.readSerial(buffer, &NumVal, port);
 	int serialID = 0xc0 | port;
 	printData(serialID, NumVal, buffer);
+}
+
+void commandI2Cwrite()
+{
+	fillBuffer();
+	char address = buffer[0];
+	int bufferlength = NumVal - 1;
+
+	for (int i = 0; i < bufferlength; i++)
+		buffer[i] = buffer[i + 1];
+
+	customi2c.writeI2C(address, bufferlength, buffer);
+}
+
+void commandI2Cread()
+{
+	fillBuffer();
+	char address = buffer[0];
+	int length = buffer[1];
+
+	customi2c.readI2C(address, length, buffer);
+	printData(address, length, buffer);
 }
 
 void fillBuffer()
@@ -218,16 +218,10 @@ bool execCommand() {
 	else if (matches(scanner.TokenText(), "Serialread"))
 		commandSerialread();
 
-	else if (matches(scanner.TokenText(), "data")) {
-		SerialUSB.print("data ");
-		for (int i = 0; i < 256; i++)
-		{
-			SerialUSB.print(dataReading[i], HEX);
-			SerialUSB.print(' ');
-		}
-		SerialUSB.println("");
-		Printf("ok: %s", "end data");
-	}
+	else if (matches(scanner.TokenText(), "I2Cwrite")) 
+		commandI2Cwrite();
+	else if (matches(scanner.TokenText(), "I2Cread"))
+		commandI2Cread();
 
 	else
 		return false;

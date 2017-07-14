@@ -34,7 +34,7 @@ float TMP112::TMP112_read()
         able = false;
 
     Temp_byte[0] = Wire.read(); // receive DATA
-    Temp_byte[1] = Wire.read();// receive DATA
+    Temp_byte[1] = Wire.read(); // receive DATA
     Wire.endTransmission(); // end transmission
 
     if ((Temp_byte[0] & 0x80) == 0x00)

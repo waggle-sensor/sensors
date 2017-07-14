@@ -2,49 +2,48 @@ import math
 
 class Lightsense():
 
-	def lightDecode(self, ID, line):
+	def lightDecode(self, ID, textlist):
 		# Call function according to the sensor ID
 		light_dict = {}
 		if ID == 0x10:
-			light_dict['HMC5883'] = self.decodeHMC5883(line)
+			light_dict['HMC5883'] = self.decodeHMC5883(textlist)
 			return light_dict
 		elif ID == 0x11:
-			light_dict['HIH6130'] = self.decodeHIH6130(line)
+			light_dict['HIH6130'] = self.decodeHIH6130(textlist)
 			return light_dict
 		elif ID == 0x12:
-			light_dict['APDS9006'] = self.decodeAPDS9006(line)
+			light_dict['APDS9006'] = self.decodeAPDS9006(textlist)
 			return light_dict
 		elif ID == 0x13:
-			light_dict['TSL260RD'] = self.decodeTSL260RD(line)
+			light_dict['TSL260RD'] = self.decodeTSL260RD(textlist)
 			return light_dict
 		elif ID == 0x14:
-			light_dict['TSL250RD'] = self.decodeTSL250RD(line)
+			light_dict['TSL250RD'] = self.decodeTSL250RD(textlist)
 			return light_dict
 		elif ID == 0x15:
-			light_dict['MLX75305'] = self.decodeMLX75305(line)
+			light_dict['MLX75305'] = self.decodeMLX75305(textlist)
 			return light_dict
 		elif ID == 0x16:
-			light_dict['ML8511'] = self.decodeML8511(line)
+			light_dict['ML8511'] = self.decodeML8511(textlist)
 			return light_dict
 		elif ID == 0x17:
-			light_dict['TMP421'] = self.decodeTMP421(line)
+			light_dict['TMP421'] = self.decodeTMP421(textlist)
 			return light_dict
 
 		else:
 			return 0
 
-	def decodeHMC5883(self, line):
-		text_spl = line.strip().split(' ')
+	def decodeHMC5883(self, textlist):
 		# Magnetic field
 		# Gx
-		val1 = int(text_spl[1], 16) << 8
-		val2 = int(text_spl[2], 16)
+		val1 = int(textlist[0], 16) << 8
+		val2 = int(textlist[1], 16)
 		# Gy
-		val3 = int(text_spl[3], 16) << 8
-		val4 = int(text_spl[4], 16)
+		val3 = int(textlist[2], 16) << 8
+		val4 = int(textlist[3], 16)
 		# Gz
-		val5 = int(text_spl[5], 16) << 8
-		val6 = int(text_spl[6], 16)
+		val5 = int(textlist[4], 16) << 8
+		val6 = int(textlist[5], 16)
 
 		val = [val1 | val2, val3 | val4, val5 | val6]
 
@@ -59,14 +58,13 @@ class Lightsense():
 		return val
 
 
-	def decodeHIH6130(self, line):
-		text_spl = line.strip().split(' ')
+	def decodeHIH6130(self, textlist):
 		# Temperature
-		val1 = int(text_spl[1], 16) << 8
-		val2 = int(text_spl[2], 16)
+		val1 = int(textlist[0], 16) << 8
+		val2 = int(textlist[1], 16)
 		# Humidity
-		val3 = int(text_spl[3], 16) << 8
-		val4 = int(text_spl[4], 16)
+		val3 = int(textlist[2], 16) << 8
+		val4 = int(textlist[3], 16)
 
 		val = [val1 | val2, val3 | val4]
 
@@ -79,11 +77,10 @@ class Lightsense():
 
 		return val
 
-	def lightSensors(self, line):
-		text_spl = line.strip().split(' ')
+	def lightSensors(self, textlist):
 		# Raw light
-		val1 = int(text_spl[1], 16) << 8
-		val2 = int(text_spl[2], 16)
+		val1 = int(textlist[0], 16) << 8
+		val2 = int(textlist[1], 16)
 
 		val = val1 | val2
 
@@ -92,26 +89,25 @@ class Lightsense():
 		else:
 			return val
 
-	def decodeAPDS9006(self, line):
-		return self.lightSensors(line)
+	def decodeAPDS9006(self, textlist):
+		return self.lightSensors(textlist)
 
-	def decodeTSL260RD(self, line):
-		return self.lightSensors(line)
+	def decodeTSL260RD(self, textlist):
+		return self.lightSensors(textlist)
 
-	def decodeTSL250RD(self, line):
-		return self.lightSensors(line)
+	def decodeTSL250RD(self, textlist):
+		return self.lightSensors(textlist)
 
-	def decodeMLX75305(self, line):
-		return self.lightSensors(line)
+	def decodeMLX75305(self, textlist):
+		return self.lightSensors(textlist)
 
-	def decodeML8511(self, line):
-		return self.lightSensors(line)
+	def decodeML8511(self, textlist):
+		return self.lightSensors(textlist)
 
-	def decodeTMP421(self, line):
-		text_spl = line.strip().split(' ')
+	def decodeTMP421(self, textlist):
 		# Temperature
-		val1 = int(text_spl[1], 16) << 8;
-		val2 = int(text_spl[2], 16)
+		val1 = int(textlist[0], 16) << 8;
+		val2 = int(textlist[1], 16)
 
 		val = val1 | val2
 		# if the value is negative

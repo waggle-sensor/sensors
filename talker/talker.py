@@ -4,63 +4,87 @@ import sys
 import re
 import time
 import datetime
+import argparse
 
 from met import *
 from light import *
-from chem import *
+from serialread import *
 from alpha import *
 from cmd import *
 
 metsense = Metsense()
 lightsense = Lightsense()
-chemsense = Chemsense()
+serialread = Serialread()
 alphasensor = Alphasensor()
 commands = Commands()
-
-t = 0
-first = True
 
 # linehex = 64
 # val = []
 # for i in range(linehex):
 #     val.append(0x00)
 
-with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
+parser = argparse.ArgumentParser(
+	description='Now this python script can use three arguments. At lease, you have to identify a serial port.')
+
+parser.add_argument('-s', dest='serial_device', help='Path to serial port')
+parser.add_argument('-c', dest='command_list', help='Path to command list')
+parser.add_argument('-r', dest='repeat', help='Repeat the command list', action='store_true')
+
+args = parser.parse_args()
+print(args)
+
+# Read commands from a file
+CMD = []
+CMDlist = []
+CMDinit = []
+if args.command_list is not None:
+	loop = False
+	with open(args.command_list, 'r') as file:
+		for line in file:
+			
+			if 'loop' in line:
+				loop = True
+				continue
+
+			if loop == False:
+				CMDinit.append(line.strip())
+			else:
+				CMD.append(line.strip())
+	CMDlist = CMD
+	CMDinit.extend(CMD)
+	CMD = CMDinit
+	# print(CMD)
+
+with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 	while True:
 		try:
-			cmd = input('$ ')
+			if len(CMD) == 0:
+				if args.repeat is not False:
+					CMD.extend(CMDlist)
+					cmd = CMD[0]
+					del CMD[0]
+				else:
+					cmd = input('$ ')
+			else:
+				cmd = CMD[0]
+				del CMD[0]
 
 			if cmd == 'exit':
 				break
 
-			# # test
-			# if t == 0:
-			# 	time.sleep(60)
-
-			# if first == False:
-			# 	test_cmd = ['Coreread met light mac', 'Serialread 0x03', 'SPIread 0x0A 0x01 histogram', 'SPIread 0x0A 0x01 config']
-			# 	cmd = test_cmd[t]
-				
-			# 	if t == 0:
-			# 		t = 1
-			# 	elif t == 1:
-			# 		t = 2
-			# 	elif t == 2:
-			# 		t = 3
-			# 	else:
-			# 		t = 0
-
-			# elif first == True:
-			# 	first = False
-			# 	cmd = 'SPIread 0x0A 0x01 power_on'
-			# # test
-
 			item, comm = commands.GetCmd(cmd)
-			print(comm)
+			print (str(datetime.datetime.now()).strip().split('.')[0])
+
+			# a = str(datetime.datetime(2017, 7, 13, 14, 44, 0, 0) - datetime.datetime.now())
+			# b = a.strip().split('.')[0].split(':')
+			# if int(b[0]) == 0 and int(b[1]) == 0 and int(b[2]) < 30:
+			# 	exit(0)
+			# else:
+			# 	print(a)
+			# print(comm)
 
 			ser.write(comm)
 			ser.write(b'\n')
-			print (str(datetime.datetime.now()).strip().split('.')[0])
 
 			while True:
 				line = ser.readline().decode()
@@ -76,46 +100,30 @@ with Serial(sys.argv[1], baudrate=115200, timeout=10) as ser:
 					continue
 
 				status, text = match.groups()
-
 				# print(status)
-				# if status == 'ok:' or status == 'err:':
 				if status == 'end:':
-					# print("hello hell")
 					# print (text)
 					break
-				# else:
-				#     print ("Please print anything")
 
-				# print(text)
-				# continue
-				# print(len(text))
-				# print(type(text))
-				# # print(match.group())
 
 				# test shpark change hex string to hex integer
 				text_spl = text.strip().split(" ")
-				# Grab sensor ID
 				sensorID = int(text_spl[0], 16)
-				# print(text_spl[0], sensorID)
-
-				# Call function according to the sensor ID
-				# if sensorID == 0x00:
-				# 	return_val = chemsense.macDecode(text)
 
 				if sensorID < 0x10:
-					return_val = metsense.metDecode(sensorID, text)
+					return_val = metsense.metDecode(sensorID, text_spl[1:])
 
 				elif sensorID < 0x20:
-					return_val = lightsense.lightDecode(sensorID, text)
+					return_val = lightsense.lightDecode(sensorID, text_spl[1:])
 
 				elif sensorID >= 0xc1 and sensorID <= 0xc3:
-					return_val = chemsense.chemDecode(text)
+					return_val = serialread.serialDecode(sensorID, text_spl[1:])
 
-				elif sensorID == 0x40:
-					return_val = alphasensor.alphaDecode(item, text_spl)
+				elif sensorID == 0x28:
+					return_val = alphasensor.alphaDecode(item, text_spl[1:])
 				else:
 					print (text)
-					break
+					continue
 
 
 				if isinstance(return_val, tuple):

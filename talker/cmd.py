@@ -34,9 +34,6 @@ class Commands:
 				elif 'light' in arg:
 					return_command.extend(["hmc5883l", "hih6130", "apds9006", "tsl260rd", "tsl250rd", "mlx75305", "ml8511", "tmp421"])
 					key = None
-				elif 'chem' in arg:
-					return_command.extend(["chem"])
-					key = None
 				else:
 					return_command.append(arg)
 					key = None

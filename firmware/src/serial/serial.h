@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
-#define PIN_CHEMSENSE_POW 47
-#define CHEMSENSE_DATARATE 115200
+// #define PIN_CHEMSENSE_POW 47
+// #define CHEMSENSE_DATARATE 115200
 
-class customSerial
+class CustomSerial
 {
 public:
 	// void setting();

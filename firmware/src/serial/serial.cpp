@@ -15,8 +15,7 @@
 // }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-void customSerial::configSerial(int port, long datarate, long timeout, int powerPin)
+void CustomSerial::configSerial(int port, long datarate, long timeout, int powerPin)
 {
 	if (port == 3)
 	{
@@ -24,6 +23,7 @@ void customSerial::configSerial(int port, long datarate, long timeout, int power
 		Serial3.setTimeout(timeout); //ms
 		pinMode(powerPin, OUTPUT); // Set a GPIO pin
 		digitalWrite(powerPin, LOW); // LOW means power on
+		delay(500);
 	}
 	else if (port == 2)
 	{
@@ -31,6 +31,7 @@ void customSerial::configSerial(int port, long datarate, long timeout, int power
 		Serial2.setTimeout(timeout);
 		pinMode(powerPin, OUTPUT);
 		digitalWrite(powerPin, LOW);
+		delay(500);
 	}
 	else if (port == 1)
 	{
@@ -38,10 +39,11 @@ void customSerial::configSerial(int port, long datarate, long timeout, int power
 		Serial1.setTimeout(timeout);
 		pinMode(powerPin, OUTPUT);
 		digitalWrite(powerPin, LOW);
+		delay(500);
 	}
 }
 
-void customSerial::powerSerialSensor(int powerPin, int sign)
+void CustomSerial::powerSerialSensor(int powerPin, int sign)
 {
 	if (sign == 0)
 		digitalWrite(powerPin, LOW); // power on
@@ -49,7 +51,7 @@ void customSerial::powerSerialSensor(int powerPin, int sign)
 		digitalWrite(powerPin, HIGH); // power off
 }
 
-void customSerial::readSerial(char* reading, int* NumVal, int port)
+void CustomSerial::readSerial(char* reading, int* NumVal, int port)
 {
 	int len = 0;
 	char inputbyte;
@@ -81,7 +83,7 @@ void customSerial::readSerial(char* reading, int* NumVal, int port)
 	*NumVal = len;
 }
 
-void customSerial::writeSerial(char* writing, int length, int port)
+void CustomSerial::writeSerial(char* writing, int length, int port)
 {
 	if (port == 3)
 		Serial3.write(writing, length);

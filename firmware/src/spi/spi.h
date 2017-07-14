@@ -1,22 +1,20 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-#define PIN_ALPHASENSE_SLAVE 40
+// #define PIN_ALPHASENSE_SLAVE 40
+// #define SPI_MAX_speed 500000
 
-
-#define SPI_MAX_speed 500000
-
-class customSPI
+class CustomSPI
 {
 public:
-	void alphaSetting();
-	void alphaStartTrans();
-	void alphaEndTrans();
-	char readSPI(char Input);
+	// void alphaSetting();
+	// void alphaStartTrans();
+	// void alphaEndTrans();
+	// char readSPI(char Input);
 
 	void configSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode);
 
-	char readSPI(char* buff, int bufflen, int msdelay, int delayiter);
+	void readSPI(char* buff, int bufflen, int msdelay, int delayiter, int* slavePin);
 
 private:
 	// long SPI_MAX_speed = 500000;

@@ -50,7 +50,5 @@ private:
 	int32_t coreMac = 30817011;
 	int reference;
 
-
-	long SPV_AMPV[100];
     bool conf = false;
 };
