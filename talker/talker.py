@@ -108,6 +108,8 @@ with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 
 				# test shpark change hex string to hex integer
 				text_spl = text.strip().split(" ")
+				
+				# the first byte of data is sensor identification number
 				sensorID = int(text_spl[0], 16)
 
 				if sensorID < 0x10:
