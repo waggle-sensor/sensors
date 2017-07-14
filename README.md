@@ -1,46 +1,25 @@
 # Firmware v4
 
-Simple explanation of talker and firmware is given along with sample commands to get sensor data from coresense boards and sensors.
+Firmware version 4 is based on version 3, which means that the sensors what had been there are working the same method. So that some of the data are sent as byte values as they collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
 
-## Firmware
-This firmware is based on C language. main.ino basically follows ardunio C language, and others follow C.
+This firmware works as a form of "get request and send data". Thus if a user wants some data, the user need to send relevant command.
 
-In the firmware, sensors have each of sensor ID:
+Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
+
+Two difference between this new firmware and the old version is: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware (plug-in and play). 
+
+Serial (Serial1, Serial2, and Serial3 for chemsense board), SPI, and I2C on metsense board are now available to use with new sensors if they can communicate through one of those communication methods.
+
+When a user read data from sensors on coreboards, the user can use customized universal I2C function or sensor specific implemented functions. But for Serial and SPI, there are no sensor specific functions but only customized universal serial and SPI function. 
+
+### Flashing firmware
+Platformio is used to complie and flash the firmware to coresense boards.
+
+To install platformio using pip:
 ```
-<sensor name>     <sensor ID>
-   mac               0x00
-   tmp112            0x01
-   htu21d            0x02
-   bmp180            0x03
-   pr103j2           0x04
-   tsl250            0x05
-   mma8452q          0x06
-   spv1840           0x07
-   tsys01            0x08
-   met               0x0F
-   hmc5883l          0x10
-   hih6130           0x11
-   apds9006          0x12
-   tsl260rd          0x13
-   tsl250rd          0x14
-   mlx75305          0x15
-   ml8511            0x16
-   tmp421            0x17
-   light             0x1F
-   chem              0x20
-   alpha             0x40
+pip install -U platformio
 ```
-If an ID is smaller than 0x10, the sensor is on a metsense boards, and if an ID is smaller than 0x20 but greater than 0x0F, the sensor is on a lightsense board.
-
-As a sensor name, mac means mac address for all coresense boards and chemsense board. So when the user wants to know all the mac addresses, the user can use "mac" as a key word.
-
-"chem" is also a key word to get a data line. A chemsense board sends a data line every second, containing multiple sensor values. According to the document which is given by the company designed chemsense, the chemsense will send five data lines in five seconds, but three data lines are given for now. Chemsense does not send any data for following two seconds. 
-
-"alpha" is a key word to send command to alpha sensor. A following key words or commands are necessary, and these have  to be given through talker.py, coresense plug in or any of equivalent script. Detailed commands are described below.
-
-Libraries for I2C sensors on boards are in folder "lib". All the data collection is performed through met.cpp, light.cpp, chem.cpp, or spi.cpp, which are in each of folders respectively.
-
-To flash new Firmware, do:
+To flash new Firmware, use command below at where platformio.ini exists:
 ```
 platformio run -t upload
 ```
@@ -48,37 +27,79 @@ Or just to compile your code, do:
 ```
 platformio run
 ```
-To perform the two commands above, you need to install "platformio" on your laptop/device.
-
-
-## Talker
-These python script are a method to communicate with coresense boards. Basically, the coresense boards send binary data through serial, and the talker trasnforms the data into human readable forms.
-
-"talker.py" is the main script, and other python scripts work to convert raw data into human understandable value.
-
-### To start talker.py
-
-To start talker.py, do:
-```
-python3 talker.py <port name>
-```
-<port name> means the name of port which coresense boards are connected.
-For example,
-```
-python3 talker.py /dev/ttyACM0
-```
 
 ### Commands
-There are four primary commands as following. 
+Below commands are primary commands. 
+```  
+ver            requests coresense firmware version
+id             requests id of the node
+
+Corewrite      change mac address of the coresense board
+Coreread       request sensor value on metsense or lightsense board
+
+SPIconfig      establish configuration for a SPI line
+SPIread        read sensor value
+
+Serialpower    power on or off the sensor connected to serial if it is needed
+Serialconfig   establish configuration for a serial line
+Serialwrite    write data through serial if it is needed
+Serialread     read serial line
+
+I2Cwrite       write data through I2C if it is needed 
+I2Cread        read sensor value
 ```
-ver       requests coresense firmware version
-id        requests id of the node
-2write    change variables such as mac address of Metsense boards
-2read     request data from each sensor boards and sensors
+All the primary commands requires following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string.
 ```
-Two of the primary commands requires secondary commands, which are "2write" and "2read".
-When you send commands, do not send multiple primary commands in one line, especially 2write and 2read.
-Detailed examples will be given below.
+Coreread <sensor name>
+Corewrite mac <address>
+
+SPIconfig <slavePin> <maxSpeed(3bytes)> <bitOrder> <dataMode>
+SPIread <delay time> <the number of iteration of delay> <command>
+
+Serialpower <power pin number> <sign(on/off)>
+Serialconfig <port> <datarate(3bytes)> <timeout(3bytes)> <power pin number>
+Serialwrite <port> <data>
+Serialread <port>
+
+I2Cwrite <address> <data>
+I2Cread <address> <length>
+```
+For example, to get a line of data from a chemsense board which is connected through serial3, a user need to establish configuration of the line and request data through:
+```
+use pin 47 as a power line for chemsense board, baudrate is 115200, and the line will wait for 4 second if no data is comming through.
+Serialconfig 0x03 0x01 0xc2 0x00 0x00 0x00 0x0f 0xa0 0x2f
+Serialread 0x03
+```
+
+
+### Identification numbers
+
+To identify data at plug-in side, sensors have each of identification number. The first byte of data sent from firmware is sensor identification number:
+```
+       <sensor name>                   <identification number>
+            mac                                 0x00
+            tmp112                              0x01
+            htu21d                              0x02
+            bmp180                              0x03
+            pr103j2                             0x04
+            tsl250                              0x05
+            mma8452q                            0x06
+            spv1840                             0x07
+            tsys01                              0x08
+            hmc5883l                            0x10
+            hih6130                             0x11
+            apds9006                            0x12
+            tsl260rd                            0x13
+            tsl250rd                            0x14
+            mlx75305                            0x15
+            ml8511                              0x16
+            tmp421                              0x17
+   
+sensor communicate through serial      0xc0|port number (0x01 - 0x03)
+sensor communicate through SPI         slave pin number
+sensor communicate through I2C         address
+```
+If an ID is smaller than 0x10, the sensor is on a metsense boards, and if an ID is smaller than 0x20 but greater than 0x0F, the sensor is on a lightsense board. As a sensor name, mac means mac address of coresense boards.
 
 
 ### To request data from coresense boards, use command <2read>:
@@ -176,4 +197,21 @@ The mac address should be a long type number. For example,
 You can comfirm that mac address has been changed through
 ```
 2request mac
+```
+
+## Talker
+These python script are a method to communicate with coresense boards. Basically, the coresense boards send binary data through serial, and the talker trasnforms the data into human readable forms.
+
+"talker.py" is the main script, and other python scripts work to convert raw data into human understandable value.
+
+### To start talker.py
+
+To start talker.py, do:
+```
+python3 talker.py <port name>
+```
+<port name> means the name of port which coresense boards are connected.
+For example,
+```
+python3 talker.py /dev/ttyACM0
 ```
