@@ -1,8 +1,8 @@
 # Firmware v4
-
-Firmware version 4 is based on version 3, which means that the sensors that had been on the coresense boards are working the same method. Libraries that have been used for version 2 and 3 are implemented on the new version, so that the type of sensor values are the same with the previous versions. Some of the data are sent as byte values as they collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
-
 This firmware works as a form of "get request and send data". Thus if a user wants some data, the user need to send relevant command. Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
+
+## Firmware
+Firmware version 4 is based on version 3, which means that the sensors that had been on the coresense boards are working the same method. Libraries that have been used for version 2 and 3 are implemented on the new version, so that the type of sensor values are the same with the previous versions. Some of the data are sent as byte values as they collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
 
 Two difference between this new firmware and the old version is: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware if the sensor sends data through serial, SPI, or I2C (plug-in and play). Serial (Serial1, Serial2, and Serial3 for chemsense board), SPI, and I2C on metsense board are now available to use with new sensors if they can communicate through one of those communication methods.
 
@@ -46,22 +46,22 @@ I2Cread        read sensor value
 ```
 All the primary commands requires following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string except Coreread and Corewrite. 
 ```
-ver
-id
+$ ver
+$ id
 
-Corewrite mac <address(long integer)>
-Coreread <sensor name>
+$ Corewrite mac <address(long integer)>
+$ Coreread <sensor name>
 
-SPIconfig <slave pin> <max speed(3bytes)> <bit order> <SPI mode>
-SPIread <delay time> <the number of iteration of delay> <command>
+$ SPIconfig <slave pin> <max speed(3bytes)> <bit order> <SPI mode>
+$ SPIread <delay time> <the number of iteration of delay> <command>
 
-Serialpower <power pin number> <sign(on/off)>
-Serialconfig <port> <baud rate(3bytes)> <time out(3bytes)> <power pin number>
-Serialwrite <port> <data>
-Serialread <port>
+$ Serialpower <power pin number> <sign(on/off)>
+$ Serialconfig <port> <baud rate(3bytes)> <time out(3bytes)> <power pin number>
+$ Serialwrite <port> <data>
+$ Serialread <port>
 
-I2Cwrite <address> <data(1byte)>
-I2Cread <address> <byte length to read>
+$ I2Cwrite <address> <data(1byte)>
+$ I2Cread <address> <byte length to read>
 
 # reference values:
 <SPI bit Order>
@@ -100,7 +100,6 @@ mlx75305      Light sensor (400-1000 nm, high responsivity at ~700 nm)
 ml8511        UV sensor (280-420 nm)
 tmp421        Temperature sensor
 ```
-
 
 
 #### Reference for coresense data
@@ -172,7 +171,7 @@ t+4s: Fifth data line
        TBD
 ```
 
-#### Examples
+#### Example commands
 1. To read temperature sensors and get mac address for the coresense boards:
 ```
 $ Coreread tmp112 htu21d pr103j2 tsys01 hih6130 tmp421 mac
@@ -208,22 +207,19 @@ $ id
 $ ver
 ```
 
-
 ## Talker
-For a purpose to talk with new firmware, scripts in talker folder have been designed. Basically, the coresense boards send calculated sensor values through serial.
-
-"talker.py" is the main script, and other python scripts work to convert raw data into human understandable value.
+Scripts in talker folder have been designed to talk with the new firmware.
 
 ### To start talker.py
 
 To start talker.py, do:
 ```
-python3 talker.py <port name>
+python3 talker.py -s <port name> -c <command set text file> -r
 ```
-<port name> means the name of port which coresense boards are connected.
-For example,
+A user has to put a serial device name. -c option is to import command sets from a text file, and -r option is to send command sets imported from a text file repeatedly.
+For example:
 ```
-python3 talker.py /dev/ttyACM0
+$ python3 talker.py -s /dev/ttyACM0 -c cmdset.txt -r
 ```
 
 
