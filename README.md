@@ -1,31 +1,27 @@
 # Firmware v4
 
-Firmware version 4 is based on version 3, which means that the sensors what had been there are working the same method. So that some of the data are sent as byte values as they collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
+Firmware version 4 is based on version 3, which means that the sensors that had been on the coresense boards are working the same method. Libraries that have been used for version 2 and 3 are implemented on the new version, so that the type of sensor values are the same with the previous versions. Some of the data are sent as byte values as they collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
 
-This firmware works as a form of "get request and send data". Thus if a user wants some data, the user need to send relevant command.
+This firmware works as a form of "get request and send data". Thus if a user wants some data, the user need to send relevant command. Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
 
-Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
+Two difference between this new firmware and the old version is: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware if the sensor sends data through serial, SPI, or I2C (plug-in and play). Serial (Serial1, Serial2, and Serial3 for chemsense board), SPI, and I2C on metsense board are now available to use with new sensors if they can communicate through one of those communication methods.
 
-Two difference between this new firmware and the old version is: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware (plug-in and play). 
-
-Serial (Serial1, Serial2, and Serial3 for chemsense board), SPI, and I2C on metsense board are now available to use with new sensors if they can communicate through one of those communication methods.
-
-When a user read data from sensors on coreboards, the user can use customized universal I2C function or sensor specific implemented functions. But for Serial and SPI, there are no sensor specific functions but only customized universal serial and SPI function. 
+When a user read data from sensors on coreboards, the user can use customized universal I2C function or sensor specific implemented functions. To use the sensor specific functions, wire communication (I2C) will be initialized when a coresense boards is powered on. But for Serial and SPI, there are no sensor specific functions but only customized universal serial and SPI function. 
 
 ### Flashing firmware
 Platformio is used to complie and flash the firmware to coresense boards.
 
 To install platformio using pip:
 ```
-pip install -U platformio
+$ pip install -U platformio
 ```
 To flash new Firmware, use command below at where platformio.ini exists:
 ```
-platformio run -t upload
+$ platformio run -t upload
 ```
 Or just to compile your code, do:
 ```
-platformio run
+$ platformio run
 ```
 
 ### Commands
@@ -48,31 +44,191 @@ Serialread     read serial line
 I2Cwrite       write data through I2C if it is needed 
 I2Cread        read sensor value
 ```
-All the primary commands requires following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string.
+All the primary commands requires following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string except Coreread and Corewrite. 
 ```
-Coreread <sensor name>
-Corewrite mac <address>
+ver
+id
 
-SPIconfig <slavePin> <maxSpeed(3bytes)> <bitOrder> <dataMode>
+Corewrite mac <address(long integer)>
+Coreread <sensor name>
+
+SPIconfig <slave pin> <max speed(3bytes)> <bit order> <SPI mode>
 SPIread <delay time> <the number of iteration of delay> <command>
 
 Serialpower <power pin number> <sign(on/off)>
-Serialconfig <port> <datarate(3bytes)> <timeout(3bytes)> <power pin number>
+Serialconfig <port> <baud rate(3bytes)> <time out(3bytes)> <power pin number>
 Serialwrite <port> <data>
 Serialread <port>
 
-I2Cwrite <address> <data>
-I2Cread <address> <length>
+I2Cwrite <address> <data(1byte)>
+I2Cread <address> <byte length to read>
+
+# reference values:
+<SPI bit Order>
+LSB first = 0x00
+MSB first = 0x01
+
+<SPI mode>
+SPI mode0 = 0x00
+SPI mode1 = 0x04
+SPI mode2 = 0x08
+SPI mode3 = 0x0c
+
+<Serial power sign>
+power on = 0x00
+power off = 0x01
 ```
-For example, to get a line of data from a chemsense board which is connected through serial3, a user need to establish configuration of the line and request data through:
+
+Sensor names as parameters for Coreread are shown below. 
+Coreread are able to take multiple parameters, and has no limitation on the number of parameters.
 ```
-use pin 47 as a power line for chemsense board, baudrate is 115200, and the line will wait for 4 second if no data is comming through.
-Serialconfig 0x03 0x01 0xc2 0x00 0x00 0x00 0x0f 0xa0 0x2f
-Serialread 0x03
+mac           Mac address of coresense boards 
+tmp112        Temperature sensor
+htu21d        Temperature and relative humidity sensor
+bmp180        Temperature and barometric pressure sensor
+pr103j2       Temperature sensor
+tsl250        Light sensor (300-1100 nm, high responsivity at 640 nm) 
+mma8452q      Accelerate force sensor
+spv1840       Sound sensor
+tsys01        Temperature sensor
+hmc5883l      Magnetic field sensor
+hih6130       Temperature and relative humidity sensor
+apds9006      Light sensor (480-640 nm, high responsivity at ~500 nm)
+tsl260rd      Light sensor (820-1100 nm, high responsivity at 640 nm) 
+tsl250rd      Light sensor (300-1100 nm, high responsivity at 940 nm) 
+mlx75305      Light sensor (400-1000 nm, high responsivity at ~700 nm) 
+ml8511        UV sensor (280-420 nm)
+tmp421        Temperature sensor
 ```
 
 
-### Identification numbers
+
+#### Reference for coresense data
+Information given here is a reference to understand data from the coresense boards.
+```
+tmp112        <mac address>
+htu21d        <100ths of degree C, 100ths of %RH>
+bmp180        <100ths of degree C, barometic pressure in Pa>
+pr103j2       <100ths of degree C>
+tsl250        <raw read>
+mma8452q      <100ths of g (gx, gy, gz, norm)>
+spv1840       <raw read>
+tsys01        <100ths of degree C>
+hmc5883l      <100ths of G (Gx, Gy, Gz)>
+hih6130       <100ths of degree C, 100ths of %RH>
+apds9006      <raw read>
+tsl260rd      <raw read> 
+tsl250rd      <raw read> 
+mlx75305      <raw read> 
+ml8511        <raw read>
+tmp421        <100ths of degree C>
+```
+
+#### Reference for chemsense data
+Information given here is a reference to understand data from the chemsense board. Chemsense board sends 5 different data lines, and each data line is sent in each second. Which means that to collect all the data sent from chemsense boards, the user needs to read Serial 5 continuous times. However for now (07/17/2017), only 3 data lines are valid. 
+```
+header: this header is contained each of data lines.
+       BAD=<board address>
+
+t+0s: First data line
+       HDT=<temperature in 100ths of degree C>
+       HDH=<relative humidity in 100ths of %RH>
+       SHT=<temperature in 100ths of degree C>
+       SHH=<relative humidity in 100ths of %RH>
+       LPT=<temperature in 100ths of degree C>
+       LPP=<barometric pressure in Pascals>
+       SUV=<Raw UV register>
+       SVL=<Raw VL register>
+       SIR=<Raw IR register>
+       
+t+1s: Second data line
+       IRR=<AFE pA of respiratory irritant sensor current>
+       IAQ=<AFE pA of indoor air quality sensor current>
+       SO2=<AFE pA of SO2 sensor current>
+       H2S=<AFE pA of H2S sensor current>
+       OZO=<AFE pA of ozone sensor current>
+       NO2=<AFE pA of NO2 sensor current>
+       CMO=<AFE pA of CO sensor current>
+       
+t+2s: Third data line
+       AT0=<ADC temperature in 100ths of degree C>
+       AT1=<ADC temperature in 100ths of degree C>
+       AT2=<ADC temperature in 100ths of degree C>
+       AT3=<ADC temperature in 100ths of degree C>
+       LTM=<LMP temperature in 100ths of degree C>
+
+# planned to be
+t+3s: Fourth data line
+       ACX=<raw register of acceloration in x direction>
+       ACY=<raw register of acceloration in y direction>
+       ACZ=<raw register of acceloration in z direction>
+       VIX=<vibration "index" high-water>
+       GYX=<raw register of orientation in x direction>
+       GYY=<raw register of orientation in x direction>
+       GYZ=<raw register of orientation in x direction>
+       OIX=<orientation "index" high-water>
+       
+t+4s: Fifth data line
+       TBD
+```
+
+#### Examples
+1. To read temperature sensors and get mac address for the coresense boards:
+```
+$ Coreread tmp112 htu21d pr103j2 tsys01 hih6130 tmp421 mac
+```
+2. To change mac address for the coresense to 12345 and read the mac again:
+```
+$ Corewrite mac 12345
+$ Coreread mac
+```
+3. To read Serial3 which is connected to a Chemsense board: Chemsense board uses pin 47 as a power line, 115200 as baud rate, and I want that Serial3 waits for 4 seconds if there is no data to read.
+```
+$ Serialconfig 0x03 0x01 0xc2 0x00 0x00 0x0f 0xa0 0x2f
+$ Serialread 0x03
+```
+4. To read SPI which is connected to a alpha sensor: alpha sensor needs 10 ms delay between first command and second command (just one time). Also it sends MSB first, uses SPI mode1, and slave select pin is connected to GPIO pin 40:
+```
+$ SPIconfig 0x28 0x07 0xa1 0x20 0x01 0x04
+$ SPIread 0x0a 0x01 0x03 0x00 (power on)
+$ SPIread 0x0a 0x01 ... (command to read version, serial number, configuration, or histogram)
+...
+$ SPIread 0x0a 0x01 0x03 0x01 (power off)
+```
+5. To read tmp112 and HIH6130 through I2C command:
+```
+/*If the wire communication is initialized. For this firmware,
+wire communication is always initialized when the board is powered on.*/`
+$ I2Cread 0x48 2
+$ I2Cread 0x27 4
+```
+6. To get node id and firmware version:
+```
+$ id
+$ ver
+```
+
+
+## Talker
+For a purpose to talk with new firmware, scripts in talker folder have been designed. Basically, the coresense boards send calculated sensor values through serial.
+
+"talker.py" is the main script, and other python scripts work to convert raw data into human understandable value.
+
+### To start talker.py
+
+To start talker.py, do:
+```
+python3 talker.py <port name>
+```
+<port name> means the name of port which coresense boards are connected.
+For example,
+```
+python3 talker.py /dev/ttyACM0
+```
+
+
+
+#### Identification numbers
 
 To identify data at plug-in side, sensors have each of identification number. The first byte of data sent from firmware is sensor identification number:
 ```
@@ -102,36 +258,6 @@ sensor communicate through I2C         address
 If an ID is smaller than 0x10, the sensor is on a metsense boards, and if an ID is smaller than 0x20 but greater than 0x0F, the sensor is on a lightsense board. As a sensor name, mac means mac address of coresense boards.
 
 
-### To request data from coresense boards, use command <2read>:
-
-To read data from sensor borads, you need to send secondary command(s) along with the primary command "2read".
-Secondary commands are following:
-```
-<secondary>       <data type>
-  met             all the sensor data from Metsense board
-  tmp112          temperature
-  htu21d          temperature & humidity
-  bmp180          temperature & pressure
-  pr103j2         temperature
-  tsl250          light
-  mma8452q        accelerate force
-  spv1840         sound
-  tsys01          temperature
-  
-  light           all the sensor data from Lightsense board
-  hmc5883l        magenetic field
-  hih6130         temperature 
-  apds9006        light
-  tsl260rd        light
-  tsl250rd        light
-  mlx75305        light
-  ml8511          light
-  tmp421          temperature
-  
-  chem            one data line from Chemsense board
-  
-  alpha           <need third command for alpha>
-```
 
 To collect data from an alpha sensor, you need to send a third command, which are:
 ```
@@ -197,21 +323,4 @@ The mac address should be a long type number. For example,
 You can comfirm that mac address has been changed through
 ```
 2request mac
-```
-
-## Talker
-These python script are a method to communicate with coresense boards. Basically, the coresense boards send binary data through serial, and the talker trasnforms the data into human readable forms.
-
-"talker.py" is the main script, and other python scripts work to convert raw data into human understandable value.
-
-### To start talker.py
-
-To start talker.py, do:
-```
-python3 talker.py <port name>
-```
-<port name> means the name of port which coresense boards are connected.
-For example,
-```
-python3 talker.py /dev/ttyACM0
 ```
