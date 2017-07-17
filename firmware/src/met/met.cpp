@@ -1,6 +1,6 @@
 #include "met.h"
 
-void Metsense::readMet(byte ID, int* NumVal, char* val) 
+void Metsense::readMet(byte ID, int* NumVal, int* val) 
 {
 	// initialize libraries
 	if (conf == false)
@@ -42,39 +42,26 @@ void Metsense::writeMac(int32_t MLMac)
 	coreMac = MLMac;
 }
 
-void Metsense::readMac(int* NumVal, char* val)
+void Metsense::readMac(int* NumVal, int* val)
 {
-	val[0] = coreMac >> 24;
-	val[1] = coreMac >> 16;
-	val[2] = coreMac >> 8;
-	val[3] = coreMac & 0xff;
-
-	*NumVal = 4;
+	val[0] = coreMac;
+	*NumVal = 1;
 }
 
-void Metsense::readTMP112(int* NumVal, char* val) 
+void Metsense::readTMP112(int* NumVal, int* val) 
 {
-	reference = tmpp.TMP112_read() * 100;
-    val[0] = reference >> 8;
-    val[1] = reference & 0xff;
+	val[0] = tmpp.TMP112_read() * 100;
+	*NumVal = 1;
+}
 
+void Metsense::readHTU21D(int* NumVal, int* val) 
+{
+	val[0] = htu.readTemperature() * 100;
+	val[1] = htu.readHumidity() * 100;
 	*NumVal = 2;
 }
 
-void Metsense::readHTU21D(int* NumVal, char* val) 
-{
-	reference = htu.readTemperature() * 100;
-    val[0] = reference >> 8;
-    val[1] = reference & 0xff;
-
-	reference = htu.readHumidity() * 100;
-    val[2] = reference >> 8;
-    val[3] = reference & 0xff;
-
-	*NumVal = 4;
-}
-
-void Metsense::readBMP180(int* NumVal, char* val) 
+void Metsense::readBMP180(int* NumVal, int* val) 
 {
 	float sensorValue;
 
@@ -82,58 +69,41 @@ void Metsense::readBMP180(int* NumVal, char* val)
 	if (event.pressure)
 	{
 		bmpp.getTemperature(&sensorValue);
-		reference = sensorValue * 100;
-	    val[0] = reference >> 8;
-	    val[1] = reference & 0xff;
-	    
-		// long temp_press = long(event.pressure);
+		val[0] = sensorValue * 100;
+
 		bmpp.getPressure(&sensorValue);
-		reference = (int32_t)sensorValue;
-		val[2] = reference >> 24;
-		val[3] = reference >> 16;
-		val[4] = reference >> 8;
-		val[5] = reference & 0xff;		
+		val[1] = (int32_t)sensorValue;
 	}
 
-	*NumVal = 6;
-}
-
-void Metsense::readPR103J2(int* NumVal, char* val) 
-{
-	reference = analogRead(A2D_PRJ103J2);
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;	
-
 	*NumVal = 2;
 }
 
-void Metsense::readTSL250(int* NumVal, char* val)
+void Metsense::readPR103J2(int* NumVal, int* val) 
 {
-	reference = analogRead(A2D_TSL250RD_1);
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;	
-
-	*NumVal = 2;
+	val[0] = analogRead(A2D_PRJ103J2);
+	*NumVal = 1;
 }
 
-void Metsense::readMMA8452Q(int* NumVal, char* val)
+void Metsense::readTSL250(int* NumVal, int* val)
 {
-	float magField[4];
-	mmaq.MMA8452_read(magField);
+	val[0] = analogRead(A2D_TSL250RD_1);
+	*NumVal = 1;
+}
+
+void Metsense::readMMA8452Q(int* NumVal, int* val)
+{
+	float accelForce[4];
+	mmaq.MMA8452_read(accelForce);
 
 	for (int i = 0; i < 4; i++)
-	{
-		reference = magField[i] * 100;
+		val[i] = accelForce[i] * 100;
 
-		val[i * 2] = reference >> 8;
-		val[i * 2 + 1] = reference & 0xff;
-	}
-
-	*NumVal = 8;
+	*NumVal = 4;
 }
 
-void Metsense::readSPV1840(int* NumVal, char* val)
+void Metsense::readSPV1840(int* NumVal, int* val)
 {
+	val[0] = 0;
 	long SPV_AMPV[100];
 
 	for(int i = 0; i < 100; i++)
@@ -145,19 +115,13 @@ void Metsense::readSPV1840(int* NumVal, char* val)
 	}
 
 	for(int i = 0; i < 100; i++)
-		reference = ((reference * i) + SPV_AMPV[i]) / (i+1);
+		val[0] = ((val[0] * i) + SPV_AMPV[i]) / (i+1);
 
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-
-	*NumVal = 2;
+	*NumVal = 1;
 }
 
-void Metsense::readTSYS01(int* NumVal, char* val)
+void Metsense::readTSYS01(int* NumVal, int* val)
 {
-	reference = tsys.TSYS01GetTemp() * 100;
-    val[0] = reference >> 8;
-    val[1] = reference & 0xff;
-
-	*NumVal = 2;
+	val[0] = tsys.TSYS01GetTemp() * 100;
+	*NumVal = 1;
 }

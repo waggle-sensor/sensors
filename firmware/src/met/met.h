@@ -22,20 +22,20 @@
 class Metsense
 {
 public:
-	void readMet(byte id, int *NumVal, char *val);
+	void readMet(byte id, int *NumVal, int *val);
 
 	void writeMac(int32_t MLMac);
+	void readMac(int* NumVal, int* val);
 
-	void readMac(int* NumVal, char* val);
-	void readTMP112(int* NumVal, char* val);
-	void readHTU21D(int* NumVal, char* val);
-	void readBMP180(int* NumVal, char* val);
-	void readPR103J2(int* NumVal, char* val);
-	void readTSL250(int* NumVal, char* val);
+	void readTMP112(int* NumVal, int* val);
+	void readHTU21D(int* NumVal, int* val);
+	void readBMP180(int* NumVal, int* val);
+	void readPR103J2(int* NumVal, int* val);
+	void readTSL250(int* NumVal, int* val);
 
-	void readMMA8452Q(int* NumVal, char* val);
-	void readSPV1840(int* NumVal, char* val);
-	void readTSYS01(int* NumVal, char* val);
+	void readMMA8452Q(int* NumVal, int* val);
+	void readSPV1840(int* NumVal, int* val);
+	void readTSYS01(int* NumVal, int* val);
 
 private:
         
@@ -48,7 +48,6 @@ private:
 	TSYS01 tsys = TSYS01(); 
 
 	int32_t coreMac = 30817011;
-	int reference;
 
     bool conf = false;
 };

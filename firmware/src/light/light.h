@@ -9,16 +9,16 @@
 class Lightsense
 {
 public:
-	void readLight(byte id, int *NumVal, char *val);
+	void readLight(byte id, int *NumVal, int *val);
 
-	void readHMC5883L(int* NumVal, char* val);
-	void readHIH6130(int* NumVal, char* val);
-	void readAPDS9006(int* NumVal, char* val);
-	void readTSL260RD(int* NumVal, char* val);
-	void readTSL250RD(int* NumVal, char* val);
-	void readMLX75305(int* NumVal, char* val);
-	void readML8511(int* NumVal, char* val);
-	void readTMP421(int* NumVal, char* val);
+	void readHMC5883L(int* NumVal, int* val);
+	void readHIH6130(int* NumVal, int* val);
+	void readAPDS9006(int* NumVal, int* val);
+	void readTSL260RD(int* NumVal, int* val);
+	void readTSL250RD(int* NumVal, int* val);
+	void readMLX75305(int* NumVal, int* val);
+	void readML8511(int* NumVal, int* val);
+	void readTMP421(int* NumVal, int* val);
 
 private:
 	HMC5883_Sensor hmc5883 = HMC5883_Sensor(&Wire);
@@ -31,6 +31,5 @@ private:
 
 	LibTempTMP421 tmp421 = LibTempTMP421();
 
-	int reference;
 	bool conf = false;
 };

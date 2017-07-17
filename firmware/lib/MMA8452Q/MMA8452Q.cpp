@@ -1,14 +1,14 @@
 #include "MMA8452Q.h"
 
 
-void MMAQ::MMA8452_read(float* magField)
+void MMAQ::MMA8452_read(float* accelForce)
 {
     readAccelData(Temp_int);
 
     for (int i = 0 ; i < 3 ; i++)
-        magField[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
+        accelForce[i] = (float)Temp_int[i] / ((1 << 12) / (2 * GSCALE));  // get actual g value, this depends on scale being set
 
-    magField[3] = sqrt(pow(magField[0], 2) + pow(magField[1], 2) + pow(magField[2], 2));
+    accelForce[3] = sqrt(pow(accelForce[0], 2) + pow(accelForce[1], 2) + pow(accelForce[2], 2));
 }
 
 void MMAQ::readAccelData(int *destination)

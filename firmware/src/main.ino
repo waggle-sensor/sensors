@@ -4,12 +4,12 @@ void setup()
 {
 	SerialUSB.begin(115200);
 
-	while (!SerialUSB) {
-	}
+	// while (!SerialUSB) {
+	// }
 
 	// I2C begin, various sensors on met/lightsense boards
 	Wire.begin();
-	delay(1000);
+	delay(10);
 
 	// SPI begin, alpha sensor configs
 	// customspi.alphaSetting();
@@ -52,17 +52,27 @@ void commandwriteCore()
 
 void commandreadCore()
 {	
+	int intValue[4];
 	while (scanner.Scan() != '\n')
 	{
 		byte sensor_ID = sensor.sensorID(scanner.TokenText());	
 		// Met data
 		if (sensor_ID < 0x10)
-			metsense.readMet(sensor_ID, &NumVal, dataReading);	
+			metsense.readMet(sensor_ID, &NumVal, intValue);	
 		// Light data
 		else if (sensor_ID < 0x20)
-			lightsense.readLight(sensor_ID, &NumVal, dataReading);
+			lightsense.readLight(sensor_ID, &NumVal, intValue);
 
-		printData(sensor_ID, NumVal, dataReading);
+		// Print data,
+		SerialUSB.print("data ");
+		SerialUSB.print(sensor_ID, HEX);
+		SerialUSB.print(' ');
+		for (int i = 0; i < NumVal; i++)
+		{
+			SerialUSB.print(intValue[i]);
+			SerialUSB.print(' ');
+		}
+		SerialUSB.println("");
 	}
 }
 

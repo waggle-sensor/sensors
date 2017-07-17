@@ -1,13 +1,13 @@
 #include "light.h"
 
-void Lightsense::readLight(byte ID, int* NumVal, char* val) 
+void Lightsense::readLight(byte ID, int* NumVal, int* val) 
 {
 	// initialize libraries
 	if (conf == false)
 	{
 		hmc5883.begin();
-	    mcp3428_1.init(MCP342X::L, MCP342X::L);
-	    mcp3428_2.init(MCP342X::L, MCP342X::F);
+		mcp3428_1.init(MCP342X::L, MCP342X::L);
+		mcp3428_2.init(MCP342X::L, MCP342X::F);
 		conf = true;
 	}
 
@@ -33,96 +33,63 @@ void Lightsense::readLight(byte ID, int* NumVal, char* val)
 		NumVal = 0;
 }
 
-void Lightsense::readHMC5883L(int* NumVal, char* val)
+void Lightsense::readHMC5883L(int* NumVal, int* val)
 {
-    hmc5883.getEvent(&event);
-    val[0] = (int)(event.magnetic.x * 100) >> 8;
-    val[1] = (int)(event.magnetic.x * 100) & 0xff;
-
-    val[2] = (int)(event.magnetic.y * 100) >> 8;
-    val[3] = (int)(event.magnetic.y * 100) & 0xff;
-
-    val[4] = (int)(event.magnetic.z * 100) >> 8;
-    val[5] = (int)(event.magnetic.z * 100) & 0xff;
-
-	*NumVal = 6;
+	hmc5883.getEvent(&event);
+	val[0] = (int)(event.magnetic.x * 100);
+	val[1] = (int)(event.magnetic.y * 100);
+	val[2] = (int)(event.magnetic.z * 100);
+	*NumVal = 3;
 }
 
-void Lightsense::readHIH6130(int* NumVal, char* val)
+void Lightsense::readHIH6130(int* NumVal, int* val)
 {
 	float sensorValue[2];
 	hih6.HIH_fetch_humidity_temperature(sensorValue);
 
 	for (int i = 0; i < 2; i ++)
-	{
-		reference = sensorValue[i] * 100;
-		val[i * 2] = reference >> 8;
-		val[i * 2 + 1] = reference & 0xff;
-	}
+		val[i] = sensorValue[i] * 100;
 
-	*NumVal = 4;
+	*NumVal = 2;
 }
 
-void Lightsense::readAPDS9006(int* NumVal, char* val)
+void Lightsense::readAPDS9006(int* NumVal, int* val)
 {
 	mcp3428_2.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	reference = mcp3428_2.readADC();
-
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-
-	*NumVal = 2;
+	val[0] = mcp3428_2.readADC();
+	*NumVal = 1;
 }
 
-void Lightsense::readTSL260RD(int* NumVal, char* val)
+void Lightsense::readTSL260RD(int* NumVal, int* val)
 {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
-	reference = mcp3428_1.readADC();
-
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-	
-	*NumVal = 2;
+	val[0] = mcp3428_1.readADC();
+	*NumVal = 1;
 }
 
-void Lightsense::readTSL250RD(int* NumVal, char* val)
+void Lightsense::readTSL250RD(int* NumVal, int* val)
 {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
-	reference = mcp3428_1.readADC();
-
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-	
-	*NumVal = 2;
+	val[0] = mcp3428_1.readADC();
+	*NumVal = 1;
 }
 
-void Lightsense::readMLX75305(int* NumVal, char* val)
+void Lightsense::readMLX75305(int* NumVal, int* val)
 {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	reference = mcp3428_1.readADC();
-
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-	
-	*NumVal = 2;
+	val[0] = mcp3428_1.readADC();
+	*NumVal = 1;
 }
 
-void Lightsense::readML8511(int* NumVal, char* val)
+void Lightsense::readML8511(int* NumVal, int* val)
 {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
-	reference = mcp3428_1.readADC();
-
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-	
-	*NumVal = 2;
+	val[0] = mcp3428_1.readADC();
+	*NumVal = 1;
 }
 
-void Lightsense::readTMP421(int* NumVal, char* val)
+void Lightsense::readTMP421(int* NumVal, int* val)
 {
-	reference = tmp421.GetTemperature() * 100;
-	val[0] = reference >> 8;
-	val[1] = reference & 0xff;
-
-	*NumVal = 2;
+	val[0] = tmp421.GetTemperature() * 100;
+	*NumVal = 1;
 }

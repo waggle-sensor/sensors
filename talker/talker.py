@@ -6,14 +6,12 @@ import time
 import datetime
 import argparse
 
-from met import *
-from light import *
+from core import *
 from serialread import *
 from alpha import *
 from cmd import *
 
-metsense = Metsense()
-lightsense = Lightsense()
+coresense = Coresense()
 serialread = Serialread()
 alphasensor = Alphasensor()
 commands = Commands()
@@ -112,11 +110,9 @@ with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 				# the first byte of data is sensor identification number
 				sensorID = int(text_spl[0], 16)
 
-				if sensorID < 0x10:
-					return_val = metsense.metDecode(sensorID, text_spl[1:])
 
-				elif sensorID < 0x20:
-					return_val = lightsense.lightDecode(sensorID, text_spl[1:])
+				if sensorID < 0x20:
+					return_val = coresense.coreDecode(sensorID, text_spl[1:])
 
 				elif sensorID >= 0xc1 and sensorID <= 0xc3:
 					return_val = serialread.serialDecode(sensorID, text_spl[1:])
