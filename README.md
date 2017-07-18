@@ -27,22 +27,22 @@ $ platformio run
 ### Commands
 Below commands are primary commands. 
 ```  
-ver            request a coresense firmware version
-id             request a node id
+ver            to request a coresense firmware version
+id             to request a node id
 
-Corewrite      change a coresense board mac address
-Coreread       request sensor values from coresense boards (metsense and lightsense boards)
+Corewrite      to to change a coresense board mac address
+Coreread       to request sensor values from coresense boards (metsense and lightsense boards)
 
-SPIconfig      establish connection and configuration for a SPI line
-SPIread        read command relavent sensor values
+SPIconfig      to establish connection and configuration for a SPI line
+SPIread        to read command relavent sensor values
 
-Serialpower    power on or off a sensor communicate through a serial if it is needed
-Serialconfig   establish connection and configuration for a serial line
-Serialwrite    write data through a serial if it is needed
-Serialread     read a serial line
+Serialpower    to power on or off a sensor communicate through a serial if it is needed
+Serialconfig   to establish connection and configuration for a serial line
+Serialwrite    to write data through a serial if it is needed
+Serialread     to read a serial line
 
-I2Cwrite       write data through I2C if it is needed 
-I2Cread        read sensor values
+I2Cwrite       to write data through I2C if it is needed 
+I2Cread        to read sensor values
 ```
 All the primary commands require following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string except Coreread and Corewrite. 
 ```
@@ -65,8 +65,8 @@ $ I2Cread <address> <byte length to read>
 
 # reference values:
 <SPI bit Order>
-LSB first = 0x00
-MSB first = 0x01
+LSB first = 0
+MSB first = 1
 
 <SPI mode>
 SPI mode0 = 0x00
@@ -75,8 +75,21 @@ SPI mode2 = 0x08
 SPI mode3 = 0x0c
 
 <Serial power sign>
-power on = 0x00
-power off = 0x01
+power on = 0
+power off = 1
+
+<<Chemsense configuration>>
+power pin number = 47
+serial port = 3
+baud rate = 115200
+
+<<Alpha sensor configuration>>
+slave pin number = 40
+max SPI speed = 500000
+bit order = MSB first
+SPI mode = mode1
+delay time = 10 ms
+the number of iteration of delay = 1 (always)
 ```
 
 Sensor names as parameters for Coreread are shown below. 
