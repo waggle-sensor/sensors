@@ -27,12 +27,11 @@ class Serialread():
 
 			key = a_data[0]
 			val = a_data[1]
-			print(key, val)
 
 			if 'SQN' in key:
 				continue
 			elif 'BAD' in key:
-				chem_dict[key] = val
+				chem_dict['ChemMac'] = val
 			elif 'SH' in key or 'HD' in key or 'LP' in key or 'AT' in key or 'LT' in key:
 				val = float(val)/100.0
 				chem_dict[key] = val
