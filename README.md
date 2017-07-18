@@ -222,7 +222,7 @@ t+4s: Fifth data line
 
 ## Talker
 
-Scripts in talker folder have been designed to talk with the new firmware. The talker can use a text file to send command sets, or it can get input. The script will convert integer or string values to hex string in commands (which means, if a user put "$ Serialconfig 3 115200 4 47" as a command line, talker changes the numbers to hex string).
+Scripts in talker folder have been designed to talk with the new firmware. The talker can use a text file to send command sets, or it can get input. The script will convert some of command inputs to relavent values (Mostly for parameters for configuration and request values. For the details, please refer talker scripts. Some of the commands do not need to be converted..).
 
 ### To start talker.py
 
@@ -309,7 +309,7 @@ $ Serialread 3
 ```
 4. To read SPI which is connected to a alpha sensor: alpha sensor needs 10 ms delay between first command and second command (just one time). Also it sends MSB first, uses SPI mode1, and slave select pin is connected to GPIO pin 40:
 ```
-$ SPIconfig 40 500000 1 mode1
+$ SPIconfig 40 500000 MSB_first mode1
 $ SPIread 10 1 power_on
 $ SPIread 10 1 ... (version, serial, config, or histogram)
 ...
