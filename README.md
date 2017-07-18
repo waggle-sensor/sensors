@@ -176,6 +176,7 @@ tmp421        <100ths of degree C>
 Information given below is a reference to understand data from the chemsense board. Chemsense board sends 5 different data lines, and each data line is sent in each second. Which means that to collect all the data sent from chemsense boards, the user needs to read Serial3 for 5 continuous times. However for now (07/17/2017), only 3 data lines are valid. 
 ```
 header: this header is contained each of data lines.
+       The header will be saved in dictionary with a key "ChemMac" in talker.
        BAD=<board address>
 
 t+0s: First data line
