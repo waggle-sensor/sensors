@@ -118,7 +118,7 @@ class Commands:
 					key = 'histogram'
 
 				else:
-					return_command.append(arg)
+					return_command.append("0x{:02x}".format(int(arg)))
 					key = None
 					
 		else:

@@ -1,10 +1,14 @@
-Serialconfig 0x03 0x01 0xc2 0x00 0x00 0x0F 0xA0 0x2F
-SPIconfig 0x28 0x07 0xA1 0x20 0x01 0x04
-SPIread 0x0A 0x01 power_on
-SPIread 0x0A 0x01 config
+Serialconfig 3 115200 4000 47
+SPIconfig 40 500000 MSB mode1
+SPIread 10 1 power_on
+Coreread met light mac
+Serialread 1
+Serialread 2
+Serialread 3
+SPIread 10 1 config
 loop
 Coreread met light mac
-Serialread 0x01
-Serialread 0x02
-Serialread 0x03
-SPIread 0x0A 0x01 histogram
+Serialread 1
+Serialread 2
+Serialread 3
+SPIread 10 1 histogram
