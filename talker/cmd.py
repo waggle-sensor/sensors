@@ -16,15 +16,8 @@ class Commands:
 
 		value_count = 0
 		key = ''
-		if cmd == '2SPIwrite':
-			arg = args.strip().split(' ')
-		
-			maxSpeed = arg[0].to_bytes(3, byteorder='big')
-			for i in maxSpeed:
-				return_command.append()
-			# return_command.
 
-		elif cmd == 'Coreread':
+		if cmd == 'Coreread':
 
 			for arg in args.strip().split(' '):
 
@@ -38,6 +31,51 @@ class Commands:
 					return_command.append(arg)
 					key = None
 
+			# Corewrite don't need to translate inputs (mac, 12345) to hex
+
+
+		elif cmd == 'Serialconfig':
+			values = [int(x) for x in args.strip().split(' ')]
+
+			return_command.append("0x{:02x}".format(values[0]))
+			return_command.extend(["0x{:02x}".format(values[1] >> 16), "0x{:02x}".format((values[1] >> 8) & 0xff), "0x{:02x}".format(values[1] & 0xff)])
+			return_command.extend(["0x{:02x}".format(values[2] >> 16), "0x{:02x}".format((values[2] >> 8) & 0xff), "0x{:02x}".format(values[2] & 0xff)])
+			return_command.append("0x{:02x}".format(values[3]))
+
+		elif cmd == 'Serialread':
+			return_command.append("0x{:02x}".format(int(args)))
+
+		elif cmd == 'Serialpower':
+			values = [int(x) for x in args.strip().split(' ')]
+			for i in range(len(values)):
+				return_command.append("0x{:02x}".format(values[i]))
+			print(return_command)
+
+			# To write something through serial, need to implement elif function to translate inputs to hex string
+
+
+
+		elif cmd == 'SPIconfig':
+			values = args.strip().split(' ')
+			values[0] = int(values[0])
+			values[1] = int(values[1])
+
+			return_command.append("0x{:02x}".format(values[0]))
+			return_command.extend(["0x{:02x}".format(values[1] >> 16), "0x{:02x}".format((values[1] >> 8) & 0xff), "0x{:02x}".format(values[1] & 0xff)])
+			
+			if 'MSB' in values[2]:
+				return_command.append("0x01")
+			else:
+				return_command.append("0x00")
+
+			if '0' in values[3]:
+				return_command.append("0x00")
+			elif '1' in values[3]:
+				return_command.append("0x04")
+			elif '2' in values[3]:
+				return_command.append("0x08")
+			else:
+				return_command.append("0x0c")
 
 		elif cmd == 'SPIread':
 

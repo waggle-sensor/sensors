@@ -79,7 +79,7 @@ with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 			# 	exit(0)
 			# else:
 			# 	print(a)
-			# print(comm)
+			print(comm)
 
 			ser.write(comm)
 			ser.write(b'\n')

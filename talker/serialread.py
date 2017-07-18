@@ -12,6 +12,8 @@ class Serialread():
 			charactor = chr(int(textlist[i], 16))
 			data = data + charactor
 
+		print(data)
+
 		chem_dict = {}
 		temp = data.strip().split(' ')
 
@@ -20,17 +22,21 @@ class Serialread():
 			return chem_dict
 
 
-		for i in range(1, len(temp)):
+		for i in range(len(temp)):
 			a_data = temp[i].split('=')
 
 			key = a_data[0]
 			val = a_data[1]
+			print(key, val)
 
-			if a_data[0] != 'BAD' and a_data[0] != 'SQN':
-				if 'SH' in key or 'HD' in key or 'LP' in key or 'AT' in key or 'LT' in key:
-					val = float(val)/100.0
-					chem_dict[key] = val
-				else:
-					chem_dict[key] = int(val)
+			if 'SQN' in key:
+				continue
+			elif 'BAD' in key:
+				chem_dict[key] = val
+			elif 'SH' in key or 'HD' in key or 'LP' in key or 'AT' in key or 'LT' in key:
+				val = float(val)/100.0
+				chem_dict[key] = val
+			else:
+				chem_dict[key] = [int(val)]
 
 		return chem_dict
