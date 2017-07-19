@@ -43,14 +43,6 @@ void CustomSerial::configSerial(int port, long datarate, long timeout, int power
 	}
 }
 
-void CustomSerial::powerSerialSensor(int powerPin, int sign)
-{
-	if (sign == 0)
-		digitalWrite(powerPin, LOW); // power on
-	else if (sign == 1)
-		digitalWrite(powerPin, HIGH); // power off
-}
-
 void CustomSerial::readSerial(char* reading, int* NumVal, int port)
 {
 	int len = 0;

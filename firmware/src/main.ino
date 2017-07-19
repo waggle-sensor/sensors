@@ -117,15 +117,6 @@ void commandSPIread()
 	printData(slavePin, bufferlength, buffer);
 }
 
-void commandSerialpower()
-{	
-	fillBuffer();
-	int powerPin = (int)buffer[0];
-	int sign = (int)buffer[1];
-
-	customserial.powerSerialSensor(powerPin, sign);
-}
-
 void commandSerialconfig()
 {
 	fillBuffer();
@@ -181,9 +172,59 @@ void commandI2Cread()
 	printData(address, length, buffer);
 }
 
+void commandAnalogread()
+{
+	fillBuffer();
+	int analogPin = (int)buffer[0];
+	char analogid = 0xa0|analogPin;
+
+	SerialUSB.print("data ");
+	SerialUSB.println(buffer[0], HEX);
+
+	int analogreading = analogRead(analogPin);
+	// Print data,
+	printReading(analogid, analogreading);
+}
+
+void commandDigitalread()
+{
+	fillBuffer();
+	int digitalPin = (int)buffer[0];
+	char digitalid = digitalPin;
+
+	SerialUSB.print("data ");
+	SerialUSB.println(buffer[0], HEX);
+
+	int digitalreading = digitalRead(digitalPin);
+	// Print data,
+	printReading(digitalid, digitalreading);
+}
+
+void commandDigitalwrite()
+{
+	fillBuffer();
+	int digitalPin = (int)buffer[0];
+	int power = (int)buffer[1];
+
+	if (power == 0)
+		digitalWrite(digitalPin, LOW); // power on
+	else if (power == 1)
+		digitalWrite(digitalPin, HIGH); // power off
+}
+
+void printReading(char id, int value)
+{
+	// Print data,
+	SerialUSB.print("data ");
+	SerialUSB.print(id, HEX);
+	SerialUSB.print(' ');
+	SerialUSB.println(value);
+}
+
 void fillBuffer()
 {
-	memset(buffer, '\0', PRINTF_BUF);
+	memset(buffer, 0, MaxSize);
+	memset(dataReading, 0, MaxSize);
 	NumVal = 0;
 	while (scanner.Scan() != '\n') 
 	{
@@ -219,8 +260,6 @@ bool execCommand() {
 	else if (matches(scanner.TokenText(), "SPIread"))
 		commandSPIread();
 
-	else if (matches(scanner.TokenText(), "Serialpower"))
-		commandSerialpower();
 	else if (matches(scanner.TokenText(), "Serialconfig"))
 		commandSerialconfig();
 	else if (matches(scanner.TokenText(), "Serialwrite"))
@@ -232,6 +271,13 @@ bool execCommand() {
 		commandI2Cwrite();
 	else if (matches(scanner.TokenText(), "I2Cread"))
 		commandI2Cread();
+
+	else if (matches(scanner.TokenText(), "analogRead"))
+		commandAnalogread();
+	else if (matches(scanner.TokenText(), "digitalRead"))
+		commandDigitalread();
+	else if (matches(scanner.TokenText(), "digitalWrite"))
+		commandDigitalwrite();
 
 	else
 		return false;

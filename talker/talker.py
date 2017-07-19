@@ -86,7 +86,7 @@ with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 
 			while True:
 				line = ser.readline().decode()
-				# print(line)
+				print(line)
 
 				if len(line) == 0:
 					print('timeout')
@@ -120,7 +120,7 @@ with Serial(args.serial_device, baudrate=115200, timeout=10) as ser:
 				elif sensorID == 0x28:
 					return_val = alphasensor.alphaDecode(item, text_spl[1:])
 				else:
-					print (text)
+					# print (text)
 					continue
 
 

@@ -9,7 +9,6 @@ public:
 	// void setting();
 
 	void configSerial(int port, long datarate, long timeout, int powerPin);
-	void powerSerialSensor(int powerPin, int sign);
 	void readSerial(char* reading, int* NumVal, int port);
 	void writeSerial(char* writing, int length, int port);
 

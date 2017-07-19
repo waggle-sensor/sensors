@@ -4,7 +4,7 @@ This firmware works as a form of "get request and send data". Thus if a user wan
 ## Firmware
 Firmware version 4 is based on version 3, which means that the sensors that had been on the coresense boards are working the same method. Libraries that have been used for version 2 and 3 are implemented on the new version, so that the type of sensor values are the same with the previous versions. Some of the data are sent as byte values as they are collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
 
-Two big difference between this new firmware and the old version are: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware if the sensor talks through serial, SPI, or I2C (plug-in and play). Serial (Serial1, Serial2, and Serial3), SPI, and I2C on metsense board are available to use with new sensors if they can communicate through one of those communication methods.
+Two big difference between this new firmware and the old version are: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware if the sensor talks through serial, SPI, I2C (plug-in and play), analog read, and digital read. Serial (Serial1, Serial2, and Serial3), SPI, and I2C on metsense board are available to use with new sensors if they can communicate through one of those communication methods.
 
 When a user collects data from sensors on coreboards, the user can use customized universal I2C function or sensor specific implemented functions. To use the sensor specific functions, wire communication (I2C) is initialized when a coresense boards is powered on. But for Serial and SPI, there are no sensor specific functions but only customized universal serial and SPI function. 
 
@@ -36,13 +36,16 @@ Coreread       to request sensor values from coresense boards (metsense and ligh
 SPIconfig      to establish connection and configuration for a SPI line
 SPIread        to read command relavent sensor values
 
-Serialpower    to power on or off a sensor communicate through a serial if it is needed
 Serialconfig   to establish connection and configuration for a serial line
 Serialwrite    to write data through a serial if it is needed
 Serialread     to read a serial line
 
 I2Cwrite       to write data through I2C if it is needed 
-I2Cread        to read sensor values
+I2Cread        to read i2c sensor values
+
+analogRead     to read analog sensor values
+digitalRead    to read digital sensor values
+digitalWrite    to power on or off a digital pin if it is needed
 ```
 All the primary commands require following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string except Coreread and Corewrite. 
 ```
@@ -55,13 +58,16 @@ $ Coreread <sensor name>
 $ SPIconfig <slave pin> <max speed(3bytes)> <bit order> <SPI mode>
 $ SPIread <delay time> <the number of iteration of delay> <command>
 
-$ Serialpower <power pin number> <sign(on/off)>
 $ Serialconfig <port> <baud rate(3bytes)> <time out(3bytes)> <power pin number>
 $ Serialwrite <port> <data>
 $ Serialread <port>
 
 $ I2Cwrite <address> <data(1byte)>
 $ I2Cread <address> <byte length to read>
+
+$ analogRead <pin number>
+$ digitalRead <pin number>
+$ digitalWrite <power pin number> <power on/off>
 
 # reference values:
 <SPI bit Order>
@@ -90,6 +96,9 @@ bit order = MSB first
 SPI mode = mode1
 delay time = 10 ms
 the number of iteration of delay = 1 (always)
+
+<<analog pins>>
+There are two open analog pins, which are 2 and 3 on 3V3AD pins.
 ```
 
 Sensor names as parameters for Coreread are shown below. 
@@ -148,6 +157,17 @@ $ I2Cread 0x27 4
 ```
 $ id
 $ ver
+```
+7. To get data reading from analog pin or digital pin:
+```
+$ analogRead 2
+$ digitalRead 33
+```
+
+8. To turn on/off a sensor that provides power through a digital pin:
+```
+$ digitalWrite 47 0  (chemsense board power on)
+$ digitalWrite 47 1  (chemsense board power off)
 ```
 
 #### Reference for coresense data
@@ -270,8 +290,10 @@ To identify data at talker side, each sensors have each of identification number
             tmp421                              0x17
    
 sensor communicate through serial      0xc0|port number (0x01 - 0x03)
-sensor communicate through SPI         slave pin number
+sensor communicate through SPI         slave pin number (one of digital pins)
 sensor communicate through I2C         address
+analog read                            0xa0|pin number (0x02 - 0x03)
+digital read                           digital pin number (33 - 40)
 ```
 If an ID is smaller than 0x10, the sensor is on a metsense boards, and if an ID is smaller than 0x20 but greater than 0x0F, the sensor is on a lightsense board. As a sensor name, mac means mac address of coresense boards.
 
@@ -329,6 +351,17 @@ $ id
 $ ver
 ```
 
+7. To get data reading from analog pin or digital pin:
+```
+$ analogRead 2
+$ digitalRead 33
+```
+
+8. To turn on/off a sensor that provides power through a digital pin:
+```
+$ digitalWrite 47 0  (chemsense board power on)
+$ digitalWrite 47 1  (chemsense board power off)
+```
 #### Caution
 * After you power on the alpha sensor, you'd better wait about 5 second before request data. If not, the values from alpha sensor are not correct values and some nonsenses.
 * Alphasense company recommands to do not change laser power because it is adjusted for each sensor after calibration.

@@ -15,14 +15,14 @@
 #include "./i2c/i2c.h"
 // OneWire ds(48);
 
-#define PRINTF_BUF 256
+#define MaxSize 256
 
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 
 int NumVal = 0;
-char dataReading[PRINTF_BUF];
-char buffer[PRINTF_BUF];
+char dataReading[MaxSize];
+char buffer[MaxSize];
 
 Scanner scanner;
 Sensor sensor;
