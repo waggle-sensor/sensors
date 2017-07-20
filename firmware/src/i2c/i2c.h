@@ -14,7 +14,9 @@ private:
 struct I2CDevice {
 	const char *name;
 	int addr;
-	int (*read)();
+	void (*init)();
+	void (*read)();
 };
 
+void InitI2CDevices();
 const I2CDevice *FindI2CDevice(const char *name);

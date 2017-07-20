@@ -1,24 +1,26 @@
 #include "i2c.h"
+#include <TMP112.h>
+#include <HTU21D.h>
 
-// static void readMac(int* NumVal, int* val)
-// {
-// 	val[0] = coreMac;
-// 	*NumVal = 1;
-// }
-//
-// static void readTMP112(int* NumVal, int* val)
-// {
-// 	val[0] = tmpp.TMP112_read() * 100;
-// 	*NumVal = 1;
-// }
-//
-// static void readHTU21D(int* NumVal, int* val)
-// {
-// 	val[0] = htu.readTemperature() * 100;
-// 	val[1] = htu.readHumidity() * 100;
-// 	*NumVal = 2;
-// }
-//
+static TMP112 tmp112 = TMP112();
+
+static void initTMP112() {
+	tmp112.TMP112_CONFIG();
+}
+
+static void readTMP112() {
+	SerialUSB.print(tmp112.TMP112_read());
+}
+
+static HTU21D htu21d = HTU21D();
+
+static void readHTU21D()
+{
+	SerialUSB.print(htu21d.readTemperature());
+	SerialUSB.print(" ");
+	SerialUSB.print(htu21d.readHumidity());
+}
+
 // static void readBMP180(int* NumVal, int* val)
 // {
 // 	float sensorValue;
@@ -110,26 +112,39 @@ void CustomI2C::writeI2C(char address, int length, char* in)
 }
 
 static const I2CDevice devices[] = {
-	{"mac", 0x00},
-	{"tmp112", 0x01},
-	{"htu21d", 0x02},
-	{"bmp180", 0x03},
-	{"pr103j2", 0x04},
-	{"tsl250", 0x05},
-	{"mma8452q", 0x06},
-	{"spv1840", 0x07},
-	{"tsys01", 0x08},
-	{"hmc5883l", 0x10},
-	{"hih6130", 0x11},
-	{"apds9006", 0x12},
-	{"tsl260rd", 0x13},
-	{"tsl250rd", 0x14},
-	{"mlx75305", 0x15},
-	{"ml8511", 0x16},
-	{"tmp421", 0x17},
+	{"mac", 0x00, NULL, NULL},
+	{"tmp112", 0x01, initTMP112, readTMP112},
+	{"htu21d", 0x02, NULL, readHTU21D},
+	{"bmp180", 0x03, NULL, NULL},
+	{"pr103j2", 0x04, NULL, NULL},
+	{"tsl250", 0x05, NULL, NULL},
+	{"mma8452q", 0x06, NULL, NULL},
+	{"spv1840", 0x07, NULL, NULL},
+	{"tsys01", 0x08, NULL, NULL},
+	{"hmc5883l", 0x10, NULL, NULL},
+	{"hih6130", 0x11, NULL, NULL},
+	{"apds9006", 0x12, NULL, NULL},
+	{"tsl260rd", 0x13, NULL, NULL},
+	{"tsl250rd", 0x14, NULL, NULL},
+	{"mlx75305", 0x15, NULL, NULL},
+	{"ml8511", 0x16, NULL, NULL},
+	{"tmp421", 0x17, NULL, NULL},
 };
 
 static const int numdevices = sizeof(devices) / sizeof(devices[0]);
+
+void InitI2CDevices() {
+	Wire.begin();
+	delay(10);
+
+	for (int i = 0; i < numdevices; i++) {
+		const I2CDevice *dev = devices+i;
+
+		if (dev->init) {
+			dev->init();
+		}
+	}
+}
 
 const I2CDevice *FindI2CDevice(const char *name) {
 	for (int i = 0; i < numdevices; i++) {
@@ -142,3 +157,17 @@ const I2CDevice *FindI2CDevice(const char *name) {
 
 	return NULL;
 }
+
+// Adafruit_BMP085_Unified bmpp = Adafruit_BMP085_Unified(10085);
+// sensors_event_t event;
+// MMAQ mmaq = MMAQ();
+// TSYS01 tsys = TSYS01();
+// int32_t coreMac = 30817011;
+// bool conf = false;
+// bmpp.begin();
+// tmpp.TMP112_CONFIG();
+// mmaq.MMA8452_CONFIG();
+// tsys.TSYS01_CONFIG();
+//
+// pinMode(PIN_RAW_MIC,INPUT);
+// conf = true;

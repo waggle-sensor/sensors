@@ -1,21 +1,8 @@
 #include "main.h"
 
-void setup()
-{
+void InitSerialUSB() {
 	SerialUSB.begin(115200);
-
-	// while (!SerialUSB) {
-	// }
-
-	// I2C begin, various sensors on met/lightsense boards
-	Wire.begin();
-	delay(10);
-
-	// SPI begin, alpha sensor configs
-	// customspi.alphaSetting();
-
-	// Serial3 begin, Chemsense configs
-	// customserial.setting();
+	delay(100);
 }
 
 void commandID() {
@@ -40,28 +27,37 @@ void commandwriteCore() {
 void commandreadCore()
 {
 	int intValue[4];
+
 	while (scanner.Scan() != '\n')
 	{
-		const I2CDevice *device = FindI2CDevice(scanner.TokenText());
-		byte sensor_ID = device->addr;
+		const I2CDevice *dev = FindI2CDevice(scanner.TokenText());
+		int sensor_ID = dev->addr;
 
-		// Met data
-		if (sensor_ID < 0x10)
+		if (dev->read != NULL) {
+			SerialUSB.print("data ");
+			SerialUSB.print(dev->name);
+			SerialUSB.print(" ");
+			dev->read();
+			SerialUSB.println();
+			return;
+		}
+
+		if (sensor_ID < 0x10) {
 			metsense.readMet(sensor_ID, &NumVal, intValue);
-
-		// Light data
-		else if (sensor_ID < 0x20)
+		} else if (sensor_ID < 0x20) {
 			lightsense.readLight(sensor_ID, &NumVal, intValue);
+		}
 
-		// Print data
 		SerialUSB.print("data ");
 		SerialUSB.print(sensor_ID, HEX);
 		SerialUSB.print(' ');
+
 		for (int i = 0; i < NumVal; i++)
 		{
 			SerialUSB.print(intValue[i]);
 			SerialUSB.print(' ');
 		}
+
 		SerialUSB.println("");
 	}
 }
@@ -273,6 +269,12 @@ bool ExecCommand() {
 
 	cmd->func();
 	return true;
+}
+
+void setup()
+{
+	InitSerialUSB();
+	InitI2CDevices();
 }
 
 void loop() {
