@@ -7,7 +7,6 @@
 #include "stringutils.h"
 #include "fmt.h"
 
-#include "./util/findSensor.h"
 #include "./met/met.h"
 #include "./light/light.h"
 #include "./serial/serial.h"
