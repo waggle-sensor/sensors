@@ -19,7 +19,7 @@ void commandVersion() {
 	Printf("ok: 4.0.1\n");
 }
 
-void commandwriteCore() {
+void commandWriteCore() {
 	scanner.Scan();
 
 	// If user wants to change Mac address of Met/Lightsense boards,
@@ -30,7 +30,7 @@ void commandwriteCore() {
 	// metsense.writeMac(metmac);
 }
 
-void commandreadCore()
+void commandReadCore()
 {
 	int intValue[16];
 
@@ -47,8 +47,6 @@ void commandreadCore()
 
 		if (dev->read != NULL) {
 			NumVal = dev->read(intValue);
-		} else if (sensor_ID < 0x10) {
-			metsense.readMet(sensor_ID, &NumVal, intValue);
 		} else if (sensor_ID < 0x20) {
 			lightsense.readLight(sensor_ID, &NumVal, intValue);
 		}
@@ -233,8 +231,8 @@ struct Command {
 const Command commands[] = {
 	{"id", commandID},
 	{"ver", commandVersion},
-	{"Corewrite", commandwriteCore},
-	{"Coreread", commandreadCore},
+	{"Corewrite", commandWriteCore},
+	{"Coreread", commandReadCore},
 	{"SPIconfig", commandSPIconfig},
 	{"SPIread", commandSPIread},
 	{"Serialconfig", commandSerialconfig},

@@ -7,7 +7,6 @@
 #include "stringutils.h"
 #include "fmt.h"
 
-#include "./met/met.h"
 #include "./light/light.h"
 #include "./serial/serial.h"
 #include "./spi/spi.h"
@@ -24,8 +23,6 @@ char dataReading[MaxSize];
 char buffer[MaxSize];
 
 Scanner scanner;
-// Sensor sensor;
-Metsense metsense;
 Lightsense lightsense;
 CustomSerial customserial;
 CustomSPI customspi;
