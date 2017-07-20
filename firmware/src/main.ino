@@ -18,28 +18,15 @@ void setup()
 	// customserial.setting();
 }
 
-void commandID()
-{
-	if (scanner.Scan() != '\n')
-	{
-		Printf("err: invalid args");
-		return;
-	}
+void commandID() {
+	Printf("ok: 12345678\n");
 }
 
-void commandVersion()
-{
-	if (scanner.Scan() != '\n')
-	{
-		Printf("err: invalid args");
-		return;
-	}
-
-	Printf("ok: Ver 4.0.1");
+void commandVersion() {
+	Printf("ok: 4.0.1\n");
 }
 
-void commandwriteCore()
-{
+void commandwriteCore() {
 	scanner.Scan();
 
 	// If user wants to change Mac address of Met/Lightsense boards,
@@ -55,7 +42,8 @@ void commandreadCore()
 	int intValue[4];
 	while (scanner.Scan() != '\n')
 	{
-		byte sensor_ID = sensor.sensorID(scanner.TokenText());
+		const I2CDevice *device = FindI2CDevice(scanner.TokenText());
+		byte sensor_ID = device->addr;
 		// Met data
 		if (sensor_ID < 0x10)
 			metsense.readMet(sensor_ID, &NumVal, intValue);
@@ -238,7 +226,7 @@ struct CommandEntry {
 	void (*func)();
 };
 
-const CommandEntry commandtable[] = {
+const CommandEntry commands[] = {
 	{"id", commandID},
 	{"ver", commandVersion},
 	{"Corewrite", commandwriteCore},
@@ -255,7 +243,7 @@ const CommandEntry commandtable[] = {
 	{"digitalWrite", commandDigitalwrite},
 };
 
-const int numcommands = sizeof(commandtable) / sizeof(commandtable[0]);
+const int numcommands = sizeof(commands) / sizeof(commands[0]);
 
 bool execCommand() {
 	// consume leading newline tokens
@@ -263,10 +251,8 @@ bool execCommand() {
 	}
 
 	for (int i = 0; i < numcommands; i++) {
-		const CommandEntry *c = &commandtable[i];
-
-		if (strcmp(c->name, scanner.TokenText()) == 0) {
-			c->func();
+		if (strcmp(commands[i].name, scanner.TokenText()) == 0) {
+			commands[i].func();
 			return true;
 		}
 	}
@@ -277,13 +263,13 @@ bool execCommand() {
 void loop() {
 	bool ok = execCommand();
 
-	if (ok)
+	if (ok) {
 		Printf("end: next command");
-	else
-	{
+	} else {
 		Printf("end: invalid command");
-			// consume trailing tokens
-		while (scanner.Scan() != '\n') {
-		}
+	}
+
+	// consume trailing tokens
+	while (scanner.Scan() != '\n') {
 	}
 }

@@ -25,7 +25,7 @@ char dataReading[MaxSize];
 char buffer[MaxSize];
 
 Scanner scanner;
-Sensor sensor;
+// Sensor sensor;
 Metsense metsense;
 Lightsense lightsense;
 CustomSerial customserial;
