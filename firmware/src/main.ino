@@ -36,20 +36,17 @@ void commandReadCore()
 
 	while (scanner.Scan() != '\n')
 	{
-		const Device *dev = FindDevice(scanner.TokenText());
+		const char *name = scanner.TokenText();
+		const Device *dev = FindDevice(name);
 
 		if (dev == NULL) {
-			SerialUSB.println("err: invalid device");
+			SerialUSB.print("err: no device ");
+			SerialUSB.println(name);
 			continue;
 		}
 
 		int sensor_ID = dev->addr;
-
-		if (dev->read != NULL) {
-			NumVal = dev->read(intValue);
-		} else if (sensor_ID < 0x20) {
-			lightsense.readLight(sensor_ID, &NumVal, intValue);
-		}
+		NumVal = dev->read(intValue);
 
 		SerialUSB.print("data ");
 		SerialUSB.print(sensor_ID, HEX);

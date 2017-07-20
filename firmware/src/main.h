@@ -7,7 +7,6 @@
 #include "stringutils.h"
 #include "fmt.h"
 
-#include "./light/light.h"
 #include "./serial/serial.h"
 #include "./spi/spi.h"
 #include "./i2c/i2c.h"
@@ -23,6 +22,5 @@ char dataReading[MaxSize];
 char buffer[MaxSize];
 
 Scanner scanner;
-Lightsense lightsense;
 CustomSerial customserial;
 CustomSPI customspi;
