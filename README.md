@@ -47,7 +47,7 @@ analogRead     to read analog sensor values
 digitalRead    to read digital sensor values
 digitalWrite    to power on or off a digital pin if it is needed
 ```
-All the primary commands require following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string except Coreread and Corewrite. 
+All the primary commands require following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string for SPI, Serial, and I2C commands.
 ```
 $ ver
 $ id
@@ -98,7 +98,7 @@ delay time = 10 ms
 the number of iteration of delay = 1 (always)
 
 <<analog pins>>
-There are two open analog pins, which are 2 and 3 on 3V3AD pins.
+There are two opened analog pins, which are 2 and 3 on 3V3AD pins.
 ```
 
 Sensor names as parameters for Coreread are shown below. 
@@ -169,6 +169,26 @@ $ digitalRead 33
 $ digitalWrite 47 0  (chemsense board power on)
 $ digitalWrite 47 1  (chemsense board power off)
 ```
+
+
+#### Reference for data structure (the data comes from firmware)
+The data is a line of string: "data <SensorID(1byte)> <data(as much as sensor needs)> "
+The first string "data" is to distinguish the data line with other message in talker side (for example error or function end message)
+
+Example:
+```
+messeges that contains sensor data: "data sensorID data"
+e.g.) data 0xC3 BAD=0f030dh2351 SHT=2467 SHH=4555 ...  (chemsense data)
+      data 0x01 2456                                   (tmp112 data)
+      data 0x28 0x00 0x12 0x..                         (alpha sensor data)
+      
+messeges:
+e.g.) end: next command                                (when a work for a command is finished)
+      end: invalid command                             (command invalid)
+      err: invalid args                                (node ID and fiemware version are not yet determined)
+      ok: Ver 4.0.1                                    (temporal FW version that I put arbitrarily)
+```
+
 
 #### Reference for coresense data
 Information given below is a reference to understand data from the coresense boards.
