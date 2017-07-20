@@ -221,12 +221,12 @@ void fillBuffer()
 	}
 }
 
-struct CommandEntry {
+struct Command {
 	const char *name;
 	void (*func)();
 };
 
-const CommandEntry commands[] = {
+const Command commands[] = {
 	{"id", commandID},
 	{"ver", commandVersion},
 	{"Corewrite", commandwriteCore},
@@ -245,19 +245,31 @@ const CommandEntry commands[] = {
 
 const int numcommands = sizeof(commands) / sizeof(commands[0]);
 
+const Command *FindCommand(const char *name) {
+	for (int i = 0; i < numcommands; i++) {
+		const Command *cmd = &commands[i];
+
+		if (strcmp(cmd->name, name) == 0) {
+			return cmd;
+		}
+	}
+
+	return NULL;
+}
+
 bool execCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
 	}
 
-	for (int i = 0; i < numcommands; i++) {
-		if (strcmp(commands[i].name, scanner.TokenText()) == 0) {
-			commands[i].func();
-			return true;
-		}
+	const Command *cmd = FindCommand(scanner.TokenText());
+
+	if (cmd == NULL) {
+		return false;
 	}
 
-	return false;
+	cmd->func();
+	return true;
 }
 
 void loop() {
