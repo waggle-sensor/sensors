@@ -1,8 +1,14 @@
 #include "main.h"
+#include "devices.h"
 
 void InitSerialUSB() {
 	SerialUSB.begin(115200);
-	delay(100);
+	delay(10);
+}
+
+void InitI2C() {
+	Wire.begin();
+	delay(10);
 }
 
 void commandID() {
@@ -21,28 +27,27 @@ void commandwriteCore() {
 	strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
 	long metmac = strtol(dataReading, NULL, 10);
 
-	metsense.writeMac(metmac);
+	// metsense.writeMac(metmac);
 }
 
 void commandreadCore()
 {
-	int intValue[4];
+	int intValue[16];
 
 	while (scanner.Scan() != '\n')
 	{
-		const I2CDevice *dev = FindI2CDevice(scanner.TokenText());
+		const Device *dev = FindDevice(scanner.TokenText());
+
+		if (dev == NULL) {
+			SerialUSB.println("err: invalid device");
+			continue;
+		}
+
 		int sensor_ID = dev->addr;
 
 		if (dev->read != NULL) {
-			SerialUSB.print("data ");
-			SerialUSB.print(dev->name);
-			SerialUSB.print(" ");
-			dev->read();
-			SerialUSB.println();
-			return;
-		}
-
-		if (sensor_ID < 0x10) {
+			NumVal = dev->read(intValue);
+		} else if (sensor_ID < 0x10) {
 			metsense.readMet(sensor_ID, &NumVal, intValue);
 		} else if (sensor_ID < 0x20) {
 			lightsense.readLight(sensor_ID, &NumVal, intValue);
@@ -58,7 +63,7 @@ void commandreadCore()
 			SerialUSB.print(' ');
 		}
 
-		SerialUSB.println("");
+		SerialUSB.println();
 	}
 }
 
@@ -145,7 +150,7 @@ void commandI2Cwrite()
 	for (int i = 0; i < bufferlength; i++)
 		buffer[i] = buffer[i + 1];
 
-	customi2c.writeI2C(address, bufferlength, buffer);
+	WriteI2C(address, bufferlength, buffer);
 }
 
 void commandI2Cread()
@@ -154,7 +159,7 @@ void commandI2Cread()
 	char address = buffer[0];
 	int length = buffer[1];
 
-	customi2c.readI2C(address, length, buffer);
+	ReadI2C(address, length, buffer);
 	printData(address, length, buffer);
 }
 
@@ -274,7 +279,8 @@ bool ExecCommand() {
 void setup()
 {
 	InitSerialUSB();
-	InitI2CDevices();
+	InitI2C();
+	InitDevices();
 }
 
 void loop() {

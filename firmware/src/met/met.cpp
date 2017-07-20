@@ -1,29 +1,19 @@
 #include "met.h"
 
-void Metsense::readMet(byte ID, int* NumVal, int* val) 
+void Metsense::readMet(byte ID, int* NumVal, int* val)
 {
 	// initialize libraries
 	if (conf == false)
-	{	
-		bmpp.begin();
-		tmpp.TMP112_CONFIG();
+	{
 		mmaq.MMA8452_CONFIG();
 		tsys.TSYS01_CONFIG();
 
 		pinMode(PIN_RAW_MIC,INPUT);
 		conf = true;
 	}
-	
+
 	// Call a function in accordance of sensor ID
-	if (ID == 0x00)
-		readMac(NumVal, val);
-	else if (ID == 0x01)
-		readTMP112(NumVal, val);
-	else if (ID == 0x02)
-		readHTU21D(NumVal, val);
-	else if (ID == 0x03)
-		readBMP180(NumVal, val);
-	else if (ID == 0x04)
+	if (ID == 0x04)
 		readPR103J2(NumVal, val);
 	else if (ID == 0x05)
 		readTSL250(NumVal, val);
@@ -37,48 +27,7 @@ void Metsense::readMet(byte ID, int* NumVal, int* val)
 		NumVal = 0;
 }
 
-void Metsense::writeMac(int32_t MLMac)
-{
-	coreMac = MLMac;
-}
-
-void Metsense::readMac(int* NumVal, int* val)
-{
-	val[0] = coreMac;
-	*NumVal = 1;
-}
-
-void Metsense::readTMP112(int* NumVal, int* val) 
-{
-	val[0] = tmpp.TMP112_read() * 100;
-	*NumVal = 1;
-}
-
-void Metsense::readHTU21D(int* NumVal, int* val) 
-{
-	val[0] = htu.readTemperature() * 100;
-	val[1] = htu.readHumidity() * 100;
-	*NumVal = 2;
-}
-
-void Metsense::readBMP180(int* NumVal, int* val) 
-{
-	float sensorValue;
-
-	bmpp.getEvent(&event);
-	if (event.pressure)
-	{
-		bmpp.getTemperature(&sensorValue);
-		val[0] = sensorValue * 100;
-
-		bmpp.getPressure(&sensorValue);
-		val[1] = (int32_t)sensorValue;
-	}
-
-	*NumVal = 2;
-}
-
-void Metsense::readPR103J2(int* NumVal, int* val) 
+void Metsense::readPR103J2(int* NumVal, int* val)
 {
 	val[0] = analogRead(A2D_PRJ103J2);
 	*NumVal = 1;

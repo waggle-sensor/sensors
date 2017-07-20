@@ -4,9 +4,8 @@
 #include "../../lib/TMP112/TMP112.h"
 #include "../../lib/HTU21D/HTU21D.h"
 #include "../../lib/Adafruit_BMP085_Unified-master/Adafruit_BMP085_U.h"
-#include "../../lib/MMA8452Q/MMA8452Q.h"
-#include "../../lib/TSYS01/TSYS01.h"
-
+#include <MMA8452Q.h>
+#include <TSYS01.h>
 #include "stringutils.h"
 
 //MAC
@@ -22,14 +21,8 @@
 class Metsense
 {
 public:
-	void readMet(byte id, int *NumVal, int *val);
 
-	void writeMac(int32_t MLMac);
-	void readMac(int* NumVal, int* val);
-
-	void readTMP112(int* NumVal, int* val);
-	void readHTU21D(int* NumVal, int* val);
-	void readBMP180(int* NumVal, int* val);
+	void readMet(byte ID, int* NumVal, int* val);
 	void readPR103J2(int* NumVal, int* val);
 	void readTSL250(int* NumVal, int* val);
 
@@ -38,16 +31,11 @@ public:
 	void readTSYS01(int* NumVal, int* val);
 
 private:
-        
+
 	Adafruit_BMP085_Unified bmpp = Adafruit_BMP085_Unified(10085);
 	sensors_event_t event;
-
-	TMP112 tmpp = TMP112();
-    HTU21D htu = HTU21D();
 	MMAQ mmaq = MMAQ();
-	TSYS01 tsys = TSYS01(); 
-
+	TSYS01 tsys = TSYS01();
 	int32_t coreMac = 30817011;
-
     bool conf = false;
 };

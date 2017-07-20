@@ -29,4 +29,3 @@ Metsense metsense;
 Lightsense lightsense;
 CustomSerial customserial;
 CustomSPI customspi;
-CustomI2C customi2c;
