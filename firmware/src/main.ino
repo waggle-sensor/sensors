@@ -1,6 +1,6 @@
 #include "main.h"
 
-void setup() 
+void setup()
 {
 	SerialUSB.begin(115200);
 
@@ -18,18 +18,18 @@ void setup()
 	// customserial.setting();
 }
 
-void commandID() 
+void commandID()
 {
-	if (scanner.Scan() != '\n') 
+	if (scanner.Scan() != '\n')
 	{
 		Printf("err: invalid args");
 		return;
 	}
 }
 
-void commandVersion() 
+void commandVersion()
 {
-	if (scanner.Scan() != '\n') 
+	if (scanner.Scan() != '\n')
 	{
 		Printf("err: invalid args");
 		return;
@@ -38,7 +38,7 @@ void commandVersion()
 	Printf("ok: Ver 4.0.1");
 }
 
-void commandwriteCore() 
+void commandwriteCore()
 {
 	scanner.Scan();
 
@@ -51,14 +51,14 @@ void commandwriteCore()
 }
 
 void commandreadCore()
-{	
+{
 	int intValue[4];
 	while (scanner.Scan() != '\n')
 	{
-		byte sensor_ID = sensor.sensorID(scanner.TokenText());	
+		byte sensor_ID = sensor.sensorID(scanner.TokenText());
 		// Met data
 		if (sensor_ID < 0x10)
-			metsense.readMet(sensor_ID, &NumVal, intValue);	
+			metsense.readMet(sensor_ID, &NumVal, intValue);
 		// Light data
 		else if (sensor_ID < 0x20)
 			lightsense.readLight(sensor_ID, &NumVal, intValue);
@@ -112,7 +112,7 @@ void commandSPIread()
 
 	for (int i = 0; i < bufferlength; i++)
 		buffer[i] = buffer[i + 2];
-	
+
 	customspi.readSPI(buffer, bufferlength, delaytime, iter, &slavePin);
 	printData(slavePin, bufferlength, buffer);
 }
@@ -226,68 +226,52 @@ void fillBuffer()
 	memset(buffer, 0, MaxSize);
 	memset(dataReading, 0, MaxSize);
 	NumVal = 0;
-	while (scanner.Scan() != '\n') 
+	while (scanner.Scan() != '\n')
 	{
 		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
 		buffer[NumVal++] = strtol(dataReading, NULL, 16);
 	}
 }
 
+struct CommandEntry {
+	const char *name;
+	void (*func)();
+};
+
+const CommandEntry commandtable[] = {
+	{"id", commandID},
+	{"ver", commandVersion},
+	{"Corewrite", commandwriteCore},
+	{"Coreread", commandreadCore},
+	{"SPIconfig", commandSPIconfig},
+	{"SPIread", commandSPIread},
+	{"Serialconfig", commandSerialconfig},
+	{"Serialwrite", commandSerialwrite},
+	{"Serialread", commandSerialread},
+	{"I2Cwrite", commandI2Cwrite},
+	{"I2Cread", commandI2Cread},
+	{"analogRead", commandAnalogread},
+	{"digitalRead", commandDigitalread},
+	{"digitalWrite", commandDigitalwrite},
+};
+
+const int numcommands = sizeof(commandtable) / sizeof(commandtable[0]);
+
 bool execCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
-		// if (scanner.Err()) {
-		//     scanner.Reset();
-		// }
 	}
 
-	// Printf("debug: command <%s>", scanner.TokenText());
+	for (int i = 0; i < numcommands; i++) {
+		const CommandEntry *c = &commandtable[i];
 
-	if (matches(scanner.TokenText(), "ver"))
-		commandID();
+		if (strcmp(c->name, scanner.TokenText()) == 0) {
+			c->func();
+			return true;
+		}
+	}
 
-	else if (matches(scanner.TokenText(), "id"))
-		commandVersion();
-
-
-	else if (matches(scanner.TokenText(), "Corewrite"))
-		commandwriteCore();
-	else if (matches(scanner.TokenText(), "Coreread"))
-		commandreadCore();
-
-	else if (matches(scanner.TokenText(), "SPIconfig"))
-		commandSPIconfig();
-	else if (matches(scanner.TokenText(), "SPIread"))
-		commandSPIread();
-
-	else if (matches(scanner.TokenText(), "Serialconfig"))
-		commandSerialconfig();
-	else if (matches(scanner.TokenText(), "Serialwrite"))
-		commandSerialwrite();
-	else if (matches(scanner.TokenText(), "Serialread"))
-		commandSerialread();
-
-	else if (matches(scanner.TokenText(), "I2Cwrite")) 
-		commandI2Cwrite();
-	else if (matches(scanner.TokenText(), "I2Cread"))
-		commandI2Cread();
-
-	else if (matches(scanner.TokenText(), "analogRead"))
-		commandAnalogread();
-	else if (matches(scanner.TokenText(), "digitalRead"))
-		commandDigitalread();
-	else if (matches(scanner.TokenText(), "digitalWrite"))
-		commandDigitalwrite();
-
-	else
-		return false;
-
-	return true;
-	// consume trailing tokens
-	// while (scanner.Scan() != '\n') {
-	// }
-
-	// return false;
+	return false;
 }
 
 void loop() {
