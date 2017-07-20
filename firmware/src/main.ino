@@ -44,14 +44,16 @@ void commandreadCore()
 	{
 		const I2CDevice *device = FindI2CDevice(scanner.TokenText());
 		byte sensor_ID = device->addr;
+
 		// Met data
 		if (sensor_ID < 0x10)
 			metsense.readMet(sensor_ID, &NumVal, intValue);
+
 		// Light data
 		else if (sensor_ID < 0x20)
 			lightsense.readLight(sensor_ID, &NumVal, intValue);
 
-		// Print data,
+		// Print data
 		SerialUSB.print("data ");
 		SerialUSB.print(sensor_ID, HEX);
 		SerialUSB.print(' ');
@@ -194,10 +196,11 @@ void commandDigitalwrite()
 	int digitalPin = (int)buffer[0];
 	int power = (int)buffer[1];
 
-	if (power == 0)
+	if (power == 0) {
 		digitalWrite(digitalPin, LOW); // power on
-	else if (power == 1)
+	} else if (power == 1) {
 		digitalWrite(digitalPin, HIGH); // power off
+	}
 }
 
 void printReading(char id, int value)
@@ -247,7 +250,7 @@ const int numcommands = sizeof(commands) / sizeof(commands[0]);
 
 const Command *FindCommand(const char *name) {
 	for (int i = 0; i < numcommands; i++) {
-		const Command *cmd = &commands[i];
+		const Command *cmd = commands+i;
 
 		if (strcmp(cmd->name, name) == 0) {
 			return cmd;
@@ -257,7 +260,7 @@ const Command *FindCommand(const char *name) {
 	return NULL;
 }
 
-bool execCommand() {
+bool ExecCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
 	}
@@ -273,7 +276,7 @@ bool execCommand() {
 }
 
 void loop() {
-	bool ok = execCommand();
+	bool ok = ExecCommand();
 
 	if (ok) {
 		Printf("end: next command");

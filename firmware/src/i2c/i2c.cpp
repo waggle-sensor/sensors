@@ -1,5 +1,89 @@
 #include "i2c.h"
 
+// static void readMac(int* NumVal, int* val)
+// {
+// 	val[0] = coreMac;
+// 	*NumVal = 1;
+// }
+//
+// static void readTMP112(int* NumVal, int* val)
+// {
+// 	val[0] = tmpp.TMP112_read() * 100;
+// 	*NumVal = 1;
+// }
+//
+// static void readHTU21D(int* NumVal, int* val)
+// {
+// 	val[0] = htu.readTemperature() * 100;
+// 	val[1] = htu.readHumidity() * 100;
+// 	*NumVal = 2;
+// }
+//
+// static void readBMP180(int* NumVal, int* val)
+// {
+// 	float sensorValue;
+//
+// 	bmpp.getEvent(&event);
+// 	if (event.pressure)
+// 	{
+// 		bmpp.getTemperature(&sensorValue);
+// 		val[0] = sensorValue * 100;
+//
+// 		bmpp.getPressure(&sensorValue);
+// 		val[1] = (int32_t)sensorValue;
+// 	}
+//
+// 	*NumVal = 2;
+// }
+//
+// static void readPR103J2(int* NumVal, int* val)
+// {
+// 	val[0] = analogRead(A2D_PRJ103J2);
+// 	*NumVal = 1;
+// }
+//
+// static void readTSL250(int* NumVal, int* val)
+// {
+// 	val[0] = analogRead(A2D_TSL250RD_1);
+// 	*NumVal = 1;
+// }
+//
+// static void readMMA8452Q(int* NumVal, int* val)
+// {
+// 	float accelForce[4];
+// 	mmaq.MMA8452_read(accelForce);
+//
+// 	for (int i = 0; i < 4; i++)
+// 		val[i] = accelForce[i] * 100;
+//
+// 	*NumVal = 4;
+// }
+//
+// static void readSPV1840(int* NumVal, int* val)
+// {
+// 	val[0] = 0;
+// 	long SPV_AMPV[100];
+//
+// 	for(int i = 0; i < 100; i++)
+// 	{
+// 		SPV_AMPV[i] = 512 - analogRead(PIN_RAW_MIC);
+// 		if (SPV_AMPV[i] < 0)
+// 			SPV_AMPV[i] = SPV_AMPV[i] * -1;
+// 		delay(1);
+// 	}
+//
+// 	for(int i = 0; i < 100; i++)
+// 		val[0] = ((val[0] * i) + SPV_AMPV[i]) / (i+1);
+//
+// 	*NumVal = 1;
+// }
+//
+// static void readTSYS01(int* NumVal, int* val)
+// {
+// 	val[0] = tsys.TSYS01GetTemp() * 100;
+// 	*NumVal = 1;
+// }
+
 void CustomI2C::readI2C(char address, int length, char* out)
 {
 	Wire.beginTransmission(address); // start transmission to device
@@ -49,10 +133,10 @@ static const int numdevices = sizeof(devices) / sizeof(devices[0]);
 
 const I2CDevice *FindI2CDevice(const char *name) {
 	for (int i = 0; i < numdevices; i++) {
-		const I2CDevice *device = &devices[i];
+		const I2CDevice *dev = devices+i;
 
-		if (strcmp(device->name, name) == 0) {
-			return device;
+		if (strcmp(dev->name, name) == 0) {
+			return dev;
 		}
 	}
 
