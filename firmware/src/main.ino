@@ -12,11 +12,11 @@ void InitI2C() {
 }
 
 void commandID() {
-	Printf("ok: 12345678\n");
+	SerialUSB.println("ok: 12345678");
 }
 
 void commandVersion() {
-	Printf("ok: 4.0.1\n");
+	SerialUSB.println("ok: 4.0.1");
 }
 
 void commandWriteCore() {
@@ -30,8 +30,7 @@ void commandWriteCore() {
 	// metsense.writeMac(metmac);
 }
 
-void commandReadCore()
-{
+void commandReadCore() {
 	int intValue[16];
 
 	while (scanner.Scan() != '\n')
@@ -213,8 +212,8 @@ void fillBuffer()
 	memset(buffer, 0, MaxSize);
 	memset(dataReading, 0, MaxSize);
 	NumVal = 0;
-	while (scanner.Scan() != '\n')
-	{
+
+	while (scanner.Scan() != '\n') {
 		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
 		buffer[NumVal++] = strtol(dataReading, NULL, 16);
 	}
@@ -272,23 +271,16 @@ bool ExecCommand() {
 	return true;
 }
 
-void setup()
-{
+void setup() {
 	InitSerialUSB();
 	InitI2C();
 	InitDevices();
 }
 
 void loop() {
-	bool ok = ExecCommand();
-
-	if (ok) {
+	if (ExecCommand()) {
 		Printf("end: next command");
 	} else {
 		Printf("end: invalid command");
-	}
-
-	// consume trailing tokens
-	while (scanner.Scan() != '\n') {
 	}
 }
