@@ -233,6 +233,7 @@ const Command commands[] = {
 	{"ver", commandVersion},
 	{"Corewrite", commandWriteCore},
 	{"Coreread", commandReadCore},
+	{"read", commandReadCore},
 	{"SPIconfig", commandSPIconfig},
 	{"SPIread", commandSPIread},
 	{"Serialconfig", commandSerialconfig},
