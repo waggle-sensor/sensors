@@ -1,9 +1,3 @@
-// #include <Arduino.h>
-// #include <stdio.h>
-
-#include "../../lib/TMP112/TMP112.h"
-#include "../../lib/HTU21D/HTU21D.h"
-#include "../../lib/Adafruit_BMP085_Unified-master/Adafruit_BMP085_U.h"
 #include <MMA8452Q.h>
 #include <TSYS01.h>
 #include "stringutils.h"
@@ -32,8 +26,6 @@ public:
 
 private:
 
-	Adafruit_BMP085_Unified bmpp = Adafruit_BMP085_Unified(10085);
-	sensors_event_t event;
 	MMAQ mmaq = MMAQ();
 	TSYS01 tsys = TSYS01();
 	int32_t coreMac = 30817011;
