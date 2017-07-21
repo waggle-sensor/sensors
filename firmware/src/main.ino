@@ -1,5 +1,24 @@
-#include "main.h"
+// #include "main.h"
+#include "scanner.h"
+#include "stringutils.h"
+#include "fmt.h"
 #include "devices.h"
+#include "serial/serial.h"
+#include "spi/spi.h"
+#include "i2c/i2c.h"
+#include <Arduino.h>
+#include <Wire.h>
+#include <SPI.h>
+
+// OneWire ds(48);
+#define MetSenNum 0x09
+#define LightSenNum 0x08
+
+char dataReading[256];
+char buffer[256];
+Scanner scanner;
+CustomSerial customserial;
+CustomSPI customspi;
 
 void InitSerialUSB() {
 	SerialUSB.begin(115200);
@@ -24,17 +43,16 @@ void commandWriteCore() {
 
 	// If user wants to change Mac address of Met/Lightsense boards,
 	scanner.Scan();
-	strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-	long metmac = strtol(dataReading, NULL, 10);
+	strncpy(dataReading, scanner.TokenText(), sizeof(dataReading));
 
+	// long metmac = strtol(dataReading, NULL, 10);
 	// metsense.writeMac(metmac);
 }
 
 void commandReadCore() {
-	int intValue[16];
+	int data[16];
 
-	while (scanner.Scan() != '\n')
-	{
+	while (scanner.Scan() != '\n') {
 		const char *name = scanner.TokenText();
 		const Device *dev = FindDevice(name);
 
@@ -45,15 +63,14 @@ void commandReadCore() {
 		}
 
 		int sensor_ID = dev->addr;
-		NumVal = dev->read(intValue);
+		int size = dev->read(data);
 
 		SerialUSB.print("data ");
 		SerialUSB.print(sensor_ID, HEX);
 		SerialUSB.print(' ');
 
-		for (int i = 0; i < NumVal; i++)
-		{
-			SerialUSB.print(intValue[i]);
+		for (int i = 0; i < size; i++) {
+			SerialUSB.print(data[i]);
 			SerialUSB.print(' ');
 		}
 
@@ -61,26 +78,28 @@ void commandReadCore() {
 	}
 }
 
-void printData(byte ID, int NumVal, char* dataReading)
+void printData(byte ID, int size, char *dataReading)
 {
 	// Print data,
 	SerialUSB.print("data ");
 	SerialUSB.print(ID, HEX);
 	SerialUSB.print(' ');
-	for (int i = 0; i < NumVal; i++)
-	{
+
+	for (int i = 0; i < size; i++) {
 		SerialUSB.print(dataReading[i], HEX);
 		SerialUSB.print(' ');
 	}
+
 	SerialUSB.println("");
 }
 
 void commandSPIconfig()
 {
-	fillBuffer();
+	int size = fillBuffer();
+
 	int slavePin = (int)buffer[0];
-	int bitOrder = (int)buffer[NumVal - 2];
-	int dataMode = (int)buffer[NumVal - 1];
+	int bitOrder = (int)buffer[size-2];
+	int dataMode = (int)buffer[size-1];
 
 	long maxSpeed = (buffer[1] << 16) | (buffer[2] << 8) | (buffer[3]);
 
@@ -89,8 +108,9 @@ void commandSPIconfig()
 
 void commandSPIread()
 {
-	fillBuffer();
-	int bufferlength = NumVal - 2;
+	int size = fillBuffer();
+
+	int bufferlength = size-2;
 	int delaytime = (int)buffer[0];
 	int iter = (int)buffer[1];
 	int slavePin;
@@ -104,9 +124,9 @@ void commandSPIread()
 
 void commandSerialconfig()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int port = (int)buffer[0];
-	int powerPin = (int)buffer[NumVal - 1];
+	int powerPin = (int)buffer[size-1];
 	long datarate = (buffer[1] << 16) | (buffer[2] << 8) | (buffer[3]);
 	long timeout = (buffer[4] << 16) | (buffer[5] << 8) | (buffer[6]);
 
@@ -115,9 +135,9 @@ void commandSerialconfig()
 
 void commandSerialwrite()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int port = (int)buffer[0];
-	int bufferlength = NumVal - 1;
+	int bufferlength = size-1;
 
 	for (int i = 0; i < bufferlength; i++)
 		buffer[i] = buffer[i + 1];
@@ -127,29 +147,30 @@ void commandSerialwrite()
 
 void commandSerialread()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int port = (int)buffer[0];
 
-	customserial.readSerial(buffer, &NumVal, port);
+	customserial.readSerial(buffer, &size, port);
 	int serialID = 0xc0 | port;
-	printData(serialID, NumVal, buffer);
+	printData(serialID, size, buffer);
 }
 
 void commandI2Cwrite()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	char address = buffer[0];
-	int bufferlength = NumVal - 1;
+	int bufferlength = size-1;
 
-	for (int i = 0; i < bufferlength; i++)
-		buffer[i] = buffer[i + 1];
+	for (int i = 0; i < bufferlength; i++) {
+		buffer[i] = buffer[i+1];
+	}
 
 	WriteI2C(address, bufferlength, buffer);
 }
 
 void commandI2Cread()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	char address = buffer[0];
 	int length = buffer[1];
 
@@ -159,7 +180,7 @@ void commandI2Cread()
 
 void commandAnalogread()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int analogPin = (int)buffer[0];
 	char analogid = 0xa0|analogPin;
 
@@ -173,7 +194,7 @@ void commandAnalogread()
 
 void commandDigitalread()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int digitalPin = (int)buffer[0];
 	char digitalid = digitalPin;
 
@@ -187,7 +208,7 @@ void commandDigitalread()
 
 void commandDigitalwrite()
 {
-	fillBuffer();
+	int size = fillBuffer();
 	int digitalPin = (int)buffer[0];
 	int power = (int)buffer[1];
 
@@ -198,25 +219,25 @@ void commandDigitalwrite()
 	}
 }
 
-void printReading(char id, int value)
-{
-	// Print data,
+void printReading(char id, int value) {
 	SerialUSB.print("data ");
 	SerialUSB.print(id, HEX);
 	SerialUSB.print(' ');
 	SerialUSB.println(value);
 }
 
-void fillBuffer()
-{
-	memset(buffer, 0, MaxSize);
-	memset(dataReading, 0, MaxSize);
-	NumVal = 0;
+int fillBuffer() {
+	memset(buffer, 0, sizeof(buffer));
+	memset(dataReading, 0, sizeof(dataReading));
+
+	int size = 0;
 
 	while (scanner.Scan() != '\n') {
-		strncpy(dataReading, scanner.TokenText(), strlen(scanner.TokenText()));
-		buffer[NumVal++] = strtol(dataReading, NULL, 16);
+		strncpy(dataReading, scanner.TokenText(), sizeof(dataReading));
+		buffer[size++] = strtol(dataReading, NULL, 16);
 	}
+
+	return size;
 }
 
 struct Command {
