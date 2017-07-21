@@ -1,0 +1,11 @@
+#include <Wire.h>
+
+struct Device {
+	const char *name;
+	int addr;
+	int (*init)();
+	int (*read)(int *);
+};
+
+void InitDevices();
+const Device *FindDevice(const char *name);
