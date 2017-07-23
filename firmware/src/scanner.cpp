@@ -1,7 +1,8 @@
 #include "scanner.h"
-#include "fmt.h"
+#include <ctype.h>
 
-Scanner::Scanner() {
+Scanner::Scanner(int (*readchar)()) {
+    this->readchar = readchar;
     lookahead = -1;
     tokpos = -1;
 }
@@ -11,8 +12,7 @@ char Scanner::Next() {
     lookahead = -1;
 
     while (lookahead < 0) {
-        delay(10);
-        lookahead = SerialUSB.read();
+        lookahead = readchar();
     }
 
     return lookahead;

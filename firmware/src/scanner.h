@@ -1,11 +1,7 @@
-#include <Arduino.h>
-
-// TODO Scanner should have error handling and propogation.
-
 class Scanner {
 public:
 
-    Scanner();
+    Scanner(int (*readchar)());
     char Next();
     char Peek();
     char Scan();
@@ -13,6 +9,7 @@ public:
 
 private:
 
+    int (*readchar)();
     int lookahead;
     char tok[64];
     int tokpos;

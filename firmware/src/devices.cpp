@@ -23,9 +23,12 @@ int initTMP112() {
 	return 0;
 }
 
-int readTMP112(int *val)
-{
-	val[0] = tmp112.TMP112_read() * 100;
+int readTMP112(int *val) {
+	auto temperature = tmp112.TMP112_read();
+
+	SerialUSB.print(temperature);
+
+	val[0] = temperature * 100;
 	return 1;
 }
 
@@ -39,8 +42,15 @@ int initHTU21D() {
 }
 
 int readHTU21D(int *val) {
-	val[0] = htu21d.readTemperature() * 100;
-	val[1] = htu21d.readHumidity() * 100;
+	auto temperature = htu21d.readTemperature();
+	auto humidity = htu21d.readHumidity();
+
+	SerialUSB.print(temperature);
+	SerialUSB.print(" ");
+	SerialUSB.print(humidity);
+
+	val[0] = temperature * 100;
+	val[1] = humidity * 100;
 	return 2;
 }
 
@@ -56,17 +66,22 @@ int initBMP180() {
 
 int readBMP180(int *val) {
 	sensors_event_t event;
-	float sensorValue;
-
 	bmp180.getEvent(&event);
 
 	if (event.pressure)
 	{
-		bmp180.getTemperature(&sensorValue);
-		val[0] = sensorValue * 100;
+		float temperature;
+		bmp180.getTemperature(&temperature);
 
-		bmp180.getPressure(&sensorValue);
-		val[1] = (int32_t)sensorValue;
+		float pressure;
+		bmp180.getPressure(&pressure);
+
+		SerialUSB.print(temperature);
+		SerialUSB.print(" ");
+		SerialUSB.print(pressure);
+
+		val[0] = temperature * 100;
+		val[1] = (int32_t)pressure;
 	}
 
 	return 2;
@@ -83,7 +98,9 @@ int initPR103J2() {
 }
 
 int readPR103J2(int *val) {
-	val[0] = analogRead(PR103J2_PIN);
+	auto value = analogRead(PR103J2_PIN);
+	SerialUSB.print(value);
+	val[0] = value;
 	return 1;
 }
 
@@ -98,7 +115,8 @@ int initTSL250() {
 }
 
 int readTSL250(int *val) {
-	val[0] = analogRead(TSL250_PIN);
+	auto value = analogRead(TSL250_PIN);
+	val[0] = value;
 	return 1;
 }
 
@@ -116,6 +134,11 @@ int readMMA8452Q(int *val) {
 	float accelForce[4];
 
 	mmaq.MMA8452_read(accelForce);
+
+	for (int i = 0; i < 4; i++) {
+		SerialUSB.print(accelForce[i]);
+		SerialUSB.print(" ");
+	}
 
 	for (int i = 0; i < 4; i++) {
 		val[i] = accelForce[i] * 100;
@@ -207,8 +230,9 @@ int readHIH6130(int *val)
 	float sensorValue[2];
 	hih6.HIH_fetch_humidity_temperature(sensorValue);
 
-	for (int i = 0; i < 2; i ++)
+	for (int i = 0; i < 2; i ++) {
 		val[i] = sensorValue[i] * 100;
+	}
 
 	return 2;
 }
@@ -295,23 +319,23 @@ int readTMP421(int *val)
 }
 
 static const Device devices[] = {
-	// {"mac", 0x00, NULL, NULL},
-	{"tmp112", 0x01, initTMP112, readTMP112},
-	{"htu21d", 0x02, initHTU21D, readHTU21D},
-	{"bmp180", 0x03, initBMP180, readBMP180},
-	{"pr103j2", 0x04, initPR103J2, readPR103J2},
-	{"tsl250", 0x05, initTSL250, readTSL250},
-	{"mma8452q", 0x06, initMMA8452Q, readMMA8452Q},
-	{"spv1840", 0x07, initSPV1840, readSPV1840},
-	{"tsys01", 0x08, initTSYS01, readTSYS01},
-	{"hmc5883l", 0x10, initHMC5883L, readHMC5883L},
-	{"hih6130", 0x11, initHIH6130, readHIH6130},
-	{"apds9006", 0x12, initAPDS9006, readAPDS9006},
-	{"tsl260rd", 0x13, initTSL260RD, readTSL260RD},
-	{"tsl250rd", 0x14, initTSL250RD, readTSL250RD},
-	{"mlx75305", 0x15, initMLX75305, readMLX75305},
-	{"ml8511", 0x16, initML8511, readML8511},
-	{"tmp421", 0x17, initTMP421, readTMP421},
+	// {"*", 0x00, NULL, NULL},
+	{"tmp112", initTMP112, readTMP112},
+	{"htu21d", initHTU21D, readHTU21D},
+	{"bmp180", initBMP180, readBMP180},
+	{"pr103j2", initPR103J2, readPR103J2},
+	{"tsl250", initTSL250, readTSL250},
+	{"mma8452q", initMMA8452Q, readMMA8452Q},
+	{"spv1840", initSPV1840, readSPV1840},
+	{"tsys01", initTSYS01, readTSYS01},
+	{"hmc5883l", initHMC5883L, readHMC5883L},
+	{"hih6130", initHIH6130, readHIH6130},
+	{"apds9006", initAPDS9006, readAPDS9006},
+	{"tsl260rd", initTSL260RD, readTSL260RD},
+	{"tsl250rd", initTSL250RD, readTSL250RD},
+	{"mlx75305", initMLX75305, readMLX75305},
+	{"ml8511", initML8511, readML8511},
+	{"tmp421", initTMP421, readTMP421},
 };
 
 static const int numdevices = sizeof(devices) / sizeof(devices[0]);

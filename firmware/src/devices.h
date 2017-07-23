@@ -2,7 +2,6 @@
 
 struct Device {
 	const char *name;
-	int addr;
 	int (*init)();
 	int (*read)(int *);
 };

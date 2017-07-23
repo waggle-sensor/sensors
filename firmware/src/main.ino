@@ -1,4 +1,3 @@
-// #include "main.h"
 #include "scanner.h"
 #include "stringutils.h"
 #include "fmt.h"
@@ -14,14 +13,22 @@
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 
+int ReadSerialUSB() {
+	while (SerialUSB.available() == 0) {
+		delay(1);
+	}
+
+	return SerialUSB.read();
+}
+
 char dataReading[256];
 char buffer[256];
-Scanner scanner;
+Scanner scanner(ReadSerialUSB);
 CustomSerial customserial;
 CustomSPI customspi;
 
 void InitSerialUSB() {
-	SerialUSB.begin(115200);
+	SerialUSB.begin(9600);
 	delay(10);
 }
 
@@ -38,6 +45,13 @@ void commandVersion() {
 	SerialUSB.println("ok: 4.0.1");
 }
 
+// command add notes???
+// serial read...
+// should not do a byte print out and ascii format...
+
+void commandListDevices() {
+}
+
 void commandWriteCore() {
 	scanner.Scan();
 
@@ -52,6 +66,8 @@ void commandWriteCore() {
 void commandReadCore() {
 	int data[16];
 
+	SerialUSB.println("begin");
+
 	while (scanner.Scan() != '\n') {
 		const char *name = scanner.TokenText();
 		const Device *dev = FindDevice(name);
@@ -62,25 +78,22 @@ void commandReadCore() {
 			continue;
 		}
 
-		int sensor_ID = dev->addr;
+		// SerialUSB.print("data: ");
+		SerialUSB.print(name);
+		SerialUSB.print(" ");
+
 		int size = dev->read(data);
 
-		SerialUSB.print("data ");
-		SerialUSB.print(sensor_ID, HEX);
-		SerialUSB.print(' ');
-
-		for (int i = 0; i < size; i++) {
-			SerialUSB.print(data[i]);
-			SerialUSB.print(' ');
-		}
+		// for (int i = 0; i < size; i++) {
+		// 	SerialUSB.print(data[i]);
+		// 	SerialUSB.print(' ');
+		// }
 
 		SerialUSB.println();
 	}
 }
 
-void printData(byte ID, int size, char *dataReading)
-{
-	// Print data,
+void printData(byte ID, int size, char *dataReading) {
 	SerialUSB.print("data ");
 	SerialUSB.print(ID, HEX);
 	SerialUSB.print(' ');
@@ -90,7 +103,7 @@ void printData(byte ID, int size, char *dataReading)
 		SerialUSB.print(' ');
 	}
 
-	SerialUSB.println("");
+	SerialUSB.println();
 }
 
 void commandSPIconfig()
@@ -145,8 +158,7 @@ void commandSerialwrite()
 	customserial.writeSerial(buffer, bufferlength, port);
 }
 
-void commandSerialread()
-{
+void commandSerialRead() {
 	int size = fillBuffer();
 	int port = (int)buffer[0];
 
@@ -155,7 +167,7 @@ void commandSerialread()
 	printData(serialID, size, buffer);
 }
 
-void commandI2Cwrite()
+void commandI2CWrite()
 {
 	int size = fillBuffer();
 	char address = buffer[0];
@@ -255,8 +267,8 @@ const Command commands[] = {
 	{"SPIread", commandSPIread},
 	{"Serialconfig", commandSerialconfig},
 	{"Serialwrite", commandSerialwrite},
-	{"Serialread", commandSerialread},
-	{"I2Cwrite", commandI2Cwrite},
+	{"Serialread", commandSerialRead},
+	{"I2Cwrite", commandI2CWrite},
 	{"I2Cread", commandI2Cread},
 	{"analogRead", commandAnalogread},
 	{"digitalRead", commandDigitalread},
@@ -300,8 +312,8 @@ void setup() {
 
 void loop() {
 	if (ExecCommand()) {
-		Printf("end: next command");
+		SerialUSB.println("end: next command");
 	} else {
-		Printf("end: invalid command");
+		SerialUSB.println("end: invalid command");
 	}
 }
