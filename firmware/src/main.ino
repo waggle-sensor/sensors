@@ -13,6 +13,11 @@
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 
+void InitSerialUSB() {
+	SerialUSB.begin(9600);
+	delay(10);
+}
+
 int ReadSerialUSB() {
 	while (SerialUSB.available() == 0) {
 		delay(1);
@@ -26,11 +31,6 @@ char buffer[256];
 Scanner scanner(ReadSerialUSB);
 CustomSerial customserial;
 CustomSPI customspi;
-
-void InitSerialUSB() {
-	SerialUSB.begin(9600);
-	delay(10);
-}
 
 void InitI2C() {
 	Wire.begin();
@@ -73,24 +73,19 @@ void commandReadCore() {
 		const Device *dev = FindDevice(name);
 
 		if (dev == NULL) {
-			SerialUSB.print("err: no device ");
+			SerialUSB.print("error no device ");
 			SerialUSB.println(name);
 			continue;
 		}
 
-		// SerialUSB.print("data: ");
+		SerialUSB.print("data ");
 		SerialUSB.print(name);
 		SerialUSB.print(" ");
-
 		int size = dev->read(data);
-
-		// for (int i = 0; i < size; i++) {
-		// 	SerialUSB.print(data[i]);
-		// 	SerialUSB.print(' ');
-		// }
-
 		SerialUSB.println();
 	}
+
+	SerialUSB.println("end");
 }
 
 void printData(byte ID, int size, char *dataReading) {
@@ -164,7 +159,10 @@ void commandSerialRead() {
 
 	customserial.readSerial(buffer, &size, port);
 	int serialID = 0xc0 | port;
-	printData(serialID, size, buffer);
+
+	SerialUSB.println("begin");
+	SerialUSB.println(buffer);
+	SerialUSB.println("end");
 }
 
 void commandI2CWrite()
@@ -289,7 +287,7 @@ const Command *FindCommand(const char *name) {
 	return NULL;
 }
 
-bool ExecCommand() {
+void ExecCommand() {
 	// consume leading newline tokens
 	while (scanner.Scan() == '\n') {
 	}
@@ -297,11 +295,12 @@ bool ExecCommand() {
 	const Command *cmd = FindCommand(scanner.TokenText());
 
 	if (cmd == NULL) {
-		return false;
+		SerialUSB.print("error no command ");
+		SerialUSB.println(scanner.TokenText());
+		return;
 	}
 
 	cmd->func();
-	return true;
 }
 
 void setup() {
@@ -311,9 +310,5 @@ void setup() {
 }
 
 void loop() {
-	if (ExecCommand()) {
-		SerialUSB.println("end: next command");
-	} else {
-		SerialUSB.println("end: invalid command");
-	}
+	ExecCommand();
 }
