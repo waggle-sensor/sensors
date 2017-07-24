@@ -70,7 +70,7 @@ void commandID() {
 }
 
 void commandVersion() {
-	SerialUSB.println("ok: 4.0.1");
+	SerialUSB.println("ver 4.0.1");
 }
 
 // command add notes???
@@ -94,7 +94,7 @@ void commandWriteCore() {
 void commandReadCore() {
 	int data[16];
 
-	SerialUSB.println("begin");
+	SerialUSB.println("read");
 
 	while (scanner.Scan() != '\n') {
 		const char *name = scanner.TokenText();
@@ -113,7 +113,7 @@ void commandReadCore() {
 		SerialUSB.println();
 	}
 
-	SerialUSB.println("end");
+	SerialUSB.println();
 }
 
 void printData(byte ID, int size, char *dataReading) {
