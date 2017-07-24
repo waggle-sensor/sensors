@@ -42,7 +42,7 @@ void commandID() {
 	byte id[8];
 
 	if (!ds2401.reset()) {
-		SerialUSB.println("error device not ready");
+		SerialUSB.println("! device not ready");
 		return;
 	}
 
@@ -53,7 +53,7 @@ void commandID() {
 	}
 
 	if (OneWire::crc8(id, 8) != 0) {
-		SerialUSB.println("error id failed crc");
+		SerialUSB.println("! id failed crc");
 		return;
 	}
 
@@ -78,6 +78,7 @@ void commandVersion() {
 // should not do a byte print out and ascii format...
 
 void commandListDevices() {
+	ListDevices();
 }
 
 void commandWriteCore() {
@@ -101,12 +102,11 @@ void commandReadCore() {
 		const Device *dev = FindDevice(name);
 
 		if (dev == NULL) {
-			SerialUSB.print("error no device ");
+			SerialUSB.print("! no device ");
 			SerialUSB.println(name);
 			continue;
 		}
 
-		SerialUSB.print("data ");
 		SerialUSB.print(name);
 		SerialUSB.print(" ");
 		int size = dev->read(data);
@@ -284,11 +284,12 @@ struct Command {
 };
 
 const Command commands[] = {
+	{"read", commandReadCore},
 	{"id", commandID},
 	{"ver", commandVersion},
+	{"devices", commandListDevices},
 	{"Corewrite", commandWriteCore},
 	{"Coreread", commandReadCore},
-	{"read", commandReadCore},
 	{"SPIconfig", commandSPIconfig},
 	{"SPIread", commandSPIread},
 	{"Serialconfig", commandSerialconfig},
@@ -323,7 +324,7 @@ void ExecCommand() {
 	const Command *cmd = FindCommand(scanner.TokenText());
 
 	if (cmd == NULL) {
-		SerialUSB.print("error no command ");
+		SerialUSB.print("! no command ");
 		SerialUSB.println(scanner.TokenText());
 		return;
 	}

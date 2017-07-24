@@ -8,3 +8,4 @@ struct Device {
 
 void InitDevices();
 const Device *FindDevice(const char *name);
+void ListDevices();

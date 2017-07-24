@@ -364,3 +364,14 @@ const Device *FindDevice(const char *name) {
 
 	return NULL;
 }
+
+void ListDevices() {
+	SerialUSB.println("devices");
+
+	for (int i = 0; i < numdevices; i++) {
+		const Device *dev = devices+i;
+		SerialUSB.println(dev->name);
+	}
+
+	SerialUSB.println();
+}
