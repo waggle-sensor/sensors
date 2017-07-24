@@ -100,6 +100,7 @@ int initPR103J2() {
 int readPR103J2(int *val) {
 	auto value = analogRead(PR103J2_PIN);
 	SerialUSB.print(value);
+
 	val[0] = value;
 	return 1;
 }
@@ -116,6 +117,8 @@ int initTSL250() {
 
 int readTSL250(int *val) {
 	auto value = analogRead(TSL250_PIN);
+	SerialUSB.print(value);
+
 	val[0] = value;
 	return 1;
 }
@@ -158,23 +161,17 @@ int initSPV1840() {
 }
 
 int readSPV1840(int *val) {
-	long SPV_AMPV[100];
+	long sum = 0;
 
-	val[0] = 0;
-
-	for(int i = 0; i < 100; i++) {
-		SPV_AMPV[i] = 512 - analogRead(PIN_RAW_MIC);
-
-		if (SPV_AMPV[i] < 0) {
-			SPV_AMPV[i] = SPV_AMPV[i] * -1;
-		}
-
+	for (int i = 0; i < 100; i++) {
+		long value = abs(512 - analogRead(PIN_RAW_MIC));
+		sum += value;
 		delay(1);
 	}
 
-	for(int i = 0; i < 100; i++) {
-		val[0] = ((val[0] * i) + SPV_AMPV[i]) / (i+1);
-	}
+	long avg = sum / 100L;
+
+	SerialUSB.print(avg);
 
 	return 1;
 }
@@ -190,7 +187,10 @@ int initTSYS01() {
 }
 
 int readTSYS01(int *val) {
-	val[0] = tsys.TSYS01GetTemp() * 100;
+	auto value = tsys.TSYS01GetTemp();
+	SerialUSB.print(value);
+
+	val[0] = value * 100;
 	return 1;
 }
 
@@ -206,8 +206,13 @@ int initHMC5883L() {
 
 int readHMC5883L(int *val) {
 	sensors_event_t event;
-
 	hmc5883.getEvent(&event);
+
+	SerialUSB.print(event.magnetic.x);
+	SerialUSB.print(" ");
+	SerialUSB.print(event.magnetic.y);
+	SerialUSB.print(" ");
+	SerialUSB.print(event.magnetic.z);
 
 	val[0] = (int)(event.magnetic.x * 100);
 	val[1] = (int)(event.magnetic.y * 100);
@@ -225,10 +230,13 @@ int initHIH6130() {
 	return 0;
 }
 
-int readHIH6130(int *val)
-{
+int readHIH6130(int *val) {
 	float sensorValue[2];
 	hih6.HIH_fetch_humidity_temperature(sensorValue);
+
+	SerialUSB.print(sensorValue[0]);
+	SerialUSB.print(" ");
+	SerialUSB.print(sensorValue[1]);
 
 	for (int i = 0; i < 2; i ++) {
 		val[i] = sensorValue[i] * 100;
@@ -247,7 +255,11 @@ int initAPDS9006() {
 int readAPDS9006(int *val)
 {
 	mcp3428_2.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	val[0] = mcp3428_2.readADC();
+
+	auto value = mcp3428_2.readADC();
+	SerialUSB.print(value);
+
+	val[0] = value;
 	return 1;
 }
 
@@ -260,7 +272,11 @@ int initTSL260RD() {
 
 int readTSL260RD(int *val) {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
-	val[0] = mcp3428_1.readADC();
+
+	auto value = mcp3428_1.readADC();
+	SerialUSB.print(value);
+
+	val[0] = value;
 	return 1;
 }
 
@@ -273,7 +289,11 @@ int initTSL250RD() {
 
 int readTSL250RD(int *val) {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
-	val[0] = mcp3428_1.readADC();
+
+	auto value = mcp3428_1.readADC();
+	SerialUSB.print(value);
+
+	val[0] = value;
 	return 1;
 }
 
@@ -286,7 +306,11 @@ int initMLX75305() {
 
 int readMLX75305(int *val) {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	val[0] = mcp3428_1.readADC();
+
+	auto value = mcp3428_1.readADC();
+	SerialUSB.print(value);
+
+	val[0] = value;
 	return 1;
 }
 
@@ -299,7 +323,11 @@ int initML8511() {
 
 int readML8511(int *val) {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
-	val[0] = mcp3428_1.readADC();
+
+	auto value = mcp3428_1.readADC();
+	SerialUSB.print(value);
+
+	val[0] = value;
 	return 1;
 }
 
@@ -314,7 +342,10 @@ int initTMP421() {
 
 int readTMP421(int *val)
 {
-	val[0] = tmp421.GetTemperature() * 100;
+	auto value = tmp421.GetTemperature();
+	SerialUSB.print(value);
+
+	val[0] = value * 100;
 	return 1;
 }
 
