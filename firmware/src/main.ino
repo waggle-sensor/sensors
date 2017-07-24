@@ -8,8 +8,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
+#include <OneWire.h>
 
-// OneWire ds(48);
+OneWire ds2401(48);
 #define MetSenNum 0x09
 #define LightSenNum 0x08
 
@@ -38,7 +39,34 @@ void InitI2C() {
 }
 
 void commandID() {
-	SerialUSB.println("ok: 12345678");
+	byte id[8];
+
+	if (!ds2401.reset()) {
+		SerialUSB.println("error device not ready");
+		return;
+	}
+
+	ds2401.write(0x33);
+
+	for (int i = 0; i < 8; i++) {
+		id[i] = ds2401.read();
+	}
+
+	if (OneWire::crc8(id, 8) != 0) {
+		SerialUSB.println("error id failed crc");
+		return;
+	}
+
+	SerialUSB.print("id ");
+
+	for (int i = 0; i < 8; i++) {
+		byte h = (id[i] >> 4) & 0xf;
+		byte l = (id[i] >> 0) & 0xf;
+		SerialUSB.print(h, HEX);
+		SerialUSB.print(l, HEX);
+	}
+
+	SerialUSB.println();
 }
 
 void commandVersion() {
