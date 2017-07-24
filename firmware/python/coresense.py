@@ -2,6 +2,7 @@ from serial import Serial
 from contextlib import closing
 import sys
 import re
+from datetime import datetime
 
 
 class Coresense:
@@ -70,8 +71,17 @@ if __name__ == '__main__':
         print('version', cs.read_version())
         print('id', cs.read_id())
 
-        devices = cs.list_devices()
-        print('devices', ', '.join(devices))
+        # devices = cs.list_devices()
+        # print('devices', ', '.join(devices))
+        devices = ['chem']
 
         while True:
-            print(cs.read_devices(devices))
+            dt = datetime.now()
+            results = cs.read_devices(devices)
+
+            print('timestamp', dt.strftime('%Y/%m/%d %H:%M:%S'))
+
+            for k, v in results.items():
+                print(k, ' '.join(v))
+
+            print()

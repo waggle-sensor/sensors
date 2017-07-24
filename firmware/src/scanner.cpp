@@ -11,9 +11,13 @@ Scanner::Scanner(int (*readchar)()) {
 char Scanner::Next() {
     lookahead = -1;
 
-    while (lookahead < 0) {
-        lookahead = readchar();
-    }
+    do {
+        int c = readchar();
+
+        if (isprint(c) || c == '\n' || c == '\r') {
+            lookahead = c;
+        }
+    } while(lookahead < 0);
 
     return lookahead;
 }
@@ -31,25 +35,23 @@ char Scanner::Scan() {
 
     tokpos = -1;
 
-    while (isspace(c) || c == '\0' || c == '\b') {
-        if (c == '\n' || c == '\r' || c == '\0' || c == '\b') {
-            lookahead = -1;
-            return '\n';
-        }
-
+    while (isspace(c) && c != '\r' && c != '\n') {
         c = Next();
     }
 
-    if (isgraph(c)) {
-        tokpos = 0;
-
-        while (isgraph(c)) {
-            tok[tokpos++] = c;
-            c = Next();
-        }
-
-        tok[tokpos] = '\0';
+    if (c == '\r' || c == '\n') {
+        lookahead = -1;
+        return '\n';
     }
+
+    tokpos = 0;
+
+    while (isgraph(c)) {
+        tok[tokpos++] = c;
+        c = Next();
+    }
+
+    tok[tokpos] = 0;
 
     return 0;
 }

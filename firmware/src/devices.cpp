@@ -349,8 +349,29 @@ int readTMP421(int *val)
 	return 1;
 }
 
+int initChemsense() {
+	Serial3.begin(115200);
+}
+
+int readChemsense(int *val) {
+	char buffer[512];
+	unsigned long start = millis();
+
+	Serial3.setTimeout(1500);
+	int len = Serial3.readBytes(buffer, 512);
+
+	SerialUSB.println("^^^");
+
+	if (len > 0) {
+		buffer[len] = 0;
+		SerialUSB.println(len);
+		SerialUSB.println(buffer);
+	}
+
+	SerialUSB.println("$$$");
+}
+
 static const Device devices[] = {
-	// {"*", 0x00, NULL, NULL},
 	{"tmp112", initTMP112, readTMP112},
 	{"htu21d", initHTU21D, readHTU21D},
 	{"bmp180", initBMP180, readBMP180},
@@ -367,6 +388,7 @@ static const Device devices[] = {
 	{"mlx75305", initMLX75305, readMLX75305},
 	{"ml8511", initML8511, readML8511},
 	{"tmp421", initTMP421, readTMP421},
+	{"chem", initChemsense, readChemsense},
 };
 
 static const int numdevices = sizeof(devices) / sizeof(devices[0]);
