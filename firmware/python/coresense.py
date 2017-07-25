@@ -8,7 +8,7 @@ from datetime import datetime
 class Coresense:
 
     def __init__(self, port):
-        self.ser = Serial(port, baudrate=9600)
+        self.ser = Serial(port, baudrate=9600, timeout=10000)
 
     def close(self):
         self.ser.close()

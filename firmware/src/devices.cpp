@@ -23,13 +23,10 @@ int initTMP112() {
 	return 0;
 }
 
-int readTMP112(int *val) {
+int readTMP112() {
 	auto temperature = tmp112.TMP112_read();
-
 	SerialUSB.print(temperature);
-
-	val[0] = temperature * 100;
-	return 1;
+	return 0;
 }
 
 // HTU21D
@@ -41,7 +38,7 @@ int initHTU21D() {
 	return 0;
 }
 
-int readHTU21D(int *val) {
+int readHTU21D() {
 	auto temperature = htu21d.readTemperature();
 	auto humidity = htu21d.readHumidity();
 
@@ -49,9 +46,7 @@ int readHTU21D(int *val) {
 	SerialUSB.print(" ");
 	SerialUSB.print(humidity);
 
-	val[0] = temperature * 100;
-	val[1] = humidity * 100;
-	return 2;
+	return 0;
 }
 
 // BMP180
@@ -64,7 +59,7 @@ int initBMP180() {
 	return 0;
 }
 
-int readBMP180(int *val) {
+int readBMP180() {
 	sensors_event_t event;
 	bmp180.getEvent(&event);
 
@@ -79,12 +74,9 @@ int readBMP180(int *val) {
 		SerialUSB.print(temperature);
 		SerialUSB.print(" ");
 		SerialUSB.print(pressure);
-
-		val[0] = temperature * 100;
-		val[1] = (int32_t)pressure;
 	}
 
-	return 2;
+	return 0;
 }
 
 // PR103J2
@@ -97,12 +89,10 @@ int initPR103J2() {
 	return 0;
 }
 
-int readPR103J2(int *val) {
+int readPR103J2() {
 	auto value = analogRead(PR103J2_PIN);
 	SerialUSB.print(value);
-
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // TSL250
@@ -115,12 +105,10 @@ int initTSL250() {
 	return 0;
 }
 
-int readTSL250(int *val) {
+int readTSL250() {
 	auto value = analogRead(TSL250_PIN);
 	SerialUSB.print(value);
-
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // MMA8452Q
@@ -133,9 +121,8 @@ int initMMA8452Q() {
 	return 0;
 }
 
-int readMMA8452Q(int *val) {
+int readMMA8452Q() {
 	float accelForce[4];
-
 	mmaq.MMA8452_read(accelForce);
 
 	for (int i = 0; i < 4; i++) {
@@ -143,11 +130,7 @@ int readMMA8452Q(int *val) {
 		SerialUSB.print(" ");
 	}
 
-	for (int i = 0; i < 4; i++) {
-		val[i] = accelForce[i] * 100;
-	}
-
-	return 4;
+	return 0;
 }
 
 // SPV1840
@@ -160,7 +143,7 @@ int initSPV1840() {
 	return 0;
 }
 
-int readSPV1840(int *val) {
+int readSPV1840() {
 	long sum = 0;
 
 	for (int i = 0; i < 100; i++) {
@@ -173,7 +156,7 @@ int readSPV1840(int *val) {
 
 	SerialUSB.print(avg);
 
-	return 1;
+	return 0;
 }
 
 // TSYS01
@@ -186,12 +169,10 @@ int initTSYS01() {
 	return 0;
 }
 
-int readTSYS01(int *val) {
+int readTSYS01() {
 	auto value = tsys.TSYS01GetTemp();
 	SerialUSB.print(value);
-
-	val[0] = value * 100;
-	return 1;
+	return 0;
 }
 
 // HMC5883L
@@ -204,7 +185,7 @@ int initHMC5883L() {
 	return 0;
 }
 
-int readHMC5883L(int *val) {
+int readHMC5883L() {
 	sensors_event_t event;
 	hmc5883.getEvent(&event);
 
@@ -214,11 +195,7 @@ int readHMC5883L(int *val) {
 	SerialUSB.print(" ");
 	SerialUSB.print(event.magnetic.z);
 
-	val[0] = (int)(event.magnetic.x * 100);
-	val[1] = (int)(event.magnetic.y * 100);
-	val[2] = (int)(event.magnetic.z * 100);
-
-	return 3;
+	return 0;
 }
 
 // HIH6130
@@ -230,7 +207,7 @@ int initHIH6130() {
 	return 0;
 }
 
-int readHIH6130(int *val) {
+int readHIH6130() {
 	float sensorValue[2];
 	hih6.HIH_fetch_humidity_temperature(sensorValue);
 
@@ -238,11 +215,7 @@ int readHIH6130(int *val) {
 	SerialUSB.print(" ");
 	SerialUSB.print(sensorValue[1]);
 
-	for (int i = 0; i < 2; i ++) {
-		val[i] = sensorValue[i] * 100;
-	}
-
-	return 2;
+	return 0;
 }
 
 // APDS9006
@@ -252,15 +225,13 @@ int initAPDS9006() {
 	return 0;
 }
 
-int readAPDS9006(int *val)
-{
+int readAPDS9006() {
 	mcp3428_2.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
 
 	auto value = mcp3428_2.readADC();
 	SerialUSB.print(value);
 
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // TSL260RD
@@ -270,14 +241,13 @@ int initTSL260RD() {
 	return 0;
 }
 
-int readTSL260RD(int *val) {
+int readTSL260RD() {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
 
 	auto value = mcp3428_1.readADC();
 	SerialUSB.print(value);
 
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // TSL250RD
@@ -287,14 +257,13 @@ int initTSL250RD() {
 	return 0;
 }
 
-int readTSL250RD(int *val) {
+int readTSL250RD() {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
 
 	auto value = mcp3428_1.readADC();
 	SerialUSB.print(value);
 
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // MLX75305
@@ -304,14 +273,13 @@ int initMLX75305() {
 	return 0;
 }
 
-int readMLX75305(int *val) {
+int readMLX75305() {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
 
 	auto value = mcp3428_1.readADC();
 	SerialUSB.print(value);
 
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // ML8511
@@ -321,14 +289,13 @@ int initML8511() {
 	return 0;
 }
 
-int readML8511(int *val) {
+int readML8511() {
 	mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
 
 	auto value = mcp3428_1.readADC();
 	SerialUSB.print(value);
 
-	val[0] = value;
-	return 1;
+	return 0;
 }
 
 // TMP421
@@ -340,26 +307,24 @@ int initTMP421() {
 	return 0;
 }
 
-int readTMP421(int *val)
-{
+int readTMP421() {
 	auto value = tmp421.GetTemperature();
 	SerialUSB.print(value);
 
-	val[0] = value * 100;
-	return 1;
+	return 0;
 }
 
 int initChemsense() {
 	Serial3.begin(115200);
 }
 
-bool match(const char *pat, const char *str) {
-	while (*pat != 0) {
-		if (*pat != *str) {
+bool isprefix(const char *str, const char *pre) {
+	while (*pre != 0) {
+		if (*pre != *str) {
 			return false;
 		}
 
-		pat++;
+		pre++;
 		str++;
 	}
 
@@ -376,7 +341,7 @@ void sanitize(char *s) {
 	}
 }
 
-int readChemsense(int *val) {
+int readChemsense() {
 	char buffer[256];
 	int numlines = 0;
 	Serial3.setTimeout(2500);
@@ -389,7 +354,7 @@ int readChemsense(int *val) {
 			break;
 		}
 
-		if (!match("BAD=", buffer)) {
+		if (!isprefix(buffer, "BAD=")) {
 			continue;
 		}
 

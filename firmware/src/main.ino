@@ -93,8 +93,6 @@ void commandWriteCore() {
 }
 
 void commandReadCore() {
-	int data[16];
-
 	SerialUSB.println("read");
 
 	while (scanner.Scan() != '\n') {
@@ -109,7 +107,7 @@ void commandReadCore() {
 
 		SerialUSB.print(name);
 		SerialUSB.print(" ");
-		int size = dev->read(data);
+		dev->read();
 		SerialUSB.println();
 	}
 

@@ -3,7 +3,7 @@
 struct Device {
 	const char *name;
 	int (*init)();
-	int (*read)(int *);
+	int (*read)();
 };
 
 void InitDevices();
