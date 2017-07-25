@@ -353,22 +353,55 @@ int initChemsense() {
 	Serial3.begin(115200);
 }
 
-int readChemsense(int *val) {
-	char buffer[512];
-	unsigned long start = millis();
+bool match(const char *pat, const char *str) {
+	while (*pat != 0) {
+		if (*pat != *str) {
+			return false;
+		}
 
-	Serial3.setTimeout(1500);
-	int len = Serial3.readBytes(buffer, 512);
-
-	SerialUSB.println("^^^");
-
-	if (len > 0) {
-		buffer[len] = 0;
-		SerialUSB.println(len);
-		SerialUSB.println(buffer);
+		pat++;
+		str++;
 	}
 
-	SerialUSB.println("$$$");
+	return true;
+}
+
+void sanitize(char *s) {
+	while (*s != 0) {
+		if (isspace(*s)) {
+			*s = ' ';
+		}
+
+		s++;
+	}
+}
+
+int readChemsense(int *val) {
+	char buffer[256];
+	int numlines = 0;
+	Serial3.setTimeout(2500);
+
+	while (1) {
+		int len = Serial3.readBytesUntil('\n', buffer, 255);
+		buffer[len] = 0;
+
+		if (len < 10) {
+			break;
+		}
+
+		if (!match("BAD=", buffer)) {
+			continue;
+		}
+
+		numlines++;
+		sanitize(buffer);
+		SerialUSB.print(buffer);
+	}
+
+	if (numlines == 0) {
+		SerialUSB.println();
+		SerialUSB.println("! timed out");
+	}
 }
 
 static const Device devices[] = {

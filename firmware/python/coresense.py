@@ -65,15 +65,28 @@ class Coresense:
 
         return results
 
+    def read_serial(self, port):
+        self.puts('readser {}'.format(port))
+        self.expect('readser')
+
+        lines = []
+
+        while True:
+            line = self.gets()
+            if len(line) == 0:
+                break
+            lines.append(line)
+
+        return '\n'.join(lines)
+
 
 if __name__ == '__main__':
     with closing(Coresense(sys.argv[1])) as cs:
         print('version', cs.read_version())
         print('id', cs.read_id())
 
-        # devices = cs.list_devices()
-        # print('devices', ', '.join(devices))
-        devices = ['chem']
+        devices = cs.list_devices()
+        print('devices', ', '.join(devices))
 
         while True:
             dt = datetime.now()

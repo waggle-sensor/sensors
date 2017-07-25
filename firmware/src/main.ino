@@ -181,16 +181,44 @@ void commandSerialwrite()
 	customserial.writeSerial(buffer, bufferlength, port);
 }
 
-void commandSerialRead() {
-	int size = fillBuffer();
-	int port = (int)buffer[0];
+void readSerial3() {
+	char buffer[256];
+	Serial3.setTimeout(5000);
+	int len = Serial3.readBytesUntil('\n', buffer, 255);
+	buffer[len] = 0;
 
-	customserial.readSerial(buffer, &size, port);
-	int serialID = 0xc0 | port;
+	// clean up whitespace
+	for (int i = 0; i < len; i++) {
+		int c = buffer[i];
+		if (isspace(c)) {
+			buffer[i] = ' ';
+		}
+	}
 
-	SerialUSB.println("begin");
 	SerialUSB.println(buffer);
-	SerialUSB.println("end");
+}
+
+void commandSerialRead() {
+	if (scanner.Scan() == '\n') {
+		SerialUSB.println("! missing port number");
+	}
+
+	void (*readFunc)();
+
+	if (strcmp(scanner.TokenText(), "3") == 0) {
+		readFunc = readSerial3;
+	} else {
+		readFunc = NULL;
+	}
+
+	if (readFunc == NULL) {
+		SerialUSB.println("! invalid port");
+		return;
+	}
+
+	SerialUSB.println("readser");
+	readFunc();
+	SerialUSB.println();
 }
 
 void commandI2CWrite()
@@ -288,6 +316,8 @@ const Command commands[] = {
 	{"id", commandID},
 	{"ver", commandVersion},
 	{"devices", commandListDevices},
+	{"readser", commandSerialRead},
+
 	{"Corewrite", commandWriteCore},
 	{"Coreread", commandReadCore},
 	{"SPIconfig", commandSPIconfig},
