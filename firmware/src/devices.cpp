@@ -63,8 +63,7 @@ int readBMP180() {
 	sensors_event_t event;
 	bmp180.getEvent(&event);
 
-	if (event.pressure)
-	{
+	if (event.pressure) {
 		float temperature;
 		bmp180.getTemperature(&temperature);
 

@@ -1,6 +1,6 @@
 #include "scanner.h"
 #include "stringutils.h"
-#include "fmt.h"
+// #include "fmt.h"
 #include "devices.h"
 #include "serial/serial.h"
 #include "spi/spi.h"
