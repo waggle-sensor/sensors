@@ -84,43 +84,43 @@ do
 
     if [[ $i == *"Chemsense;co"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
 
     if [[ $i == *"Chemsense;no2"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;h2s"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;so2"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;reducing_gases"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;oxidizing_gases"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;o3"* ]]; then
         parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="nA" 
+        y_label="pA" 
         graph_sensor=true
     fi
     
