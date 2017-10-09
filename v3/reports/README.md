@@ -1,7 +1,7 @@
 ## Documentation:
 
 The scripts in this directory can be used to create sensor reports in PDF for nodes - 
-The scripts in this directory need *gunzip* and *gnuplot* for extracting and plotting data. 
+The scripts in this directory need **gunzip** and **gnuplot** for extracting and plotting data. 
 
 ### Usage: 
 
@@ -9,7 +9,7 @@ The scripts in this directory need *gunzip* and *gnuplot* for extracting and plo
 
 Node IDs can be obtained from the [Beehive Portal](http://beehive1.mcs.anl.gov/).
 
-For example, to get reports on node 0000001E061130FE for 4 days excluding today, 
+For example, to get reports on node **001E061130FE** for 4 days excluding today, 
 
 `$./report 30FE 0 4`
 
