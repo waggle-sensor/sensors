@@ -1,7 +1,7 @@
 ## Documentation:
 
 The scripts in this directory can be used to create sensor reports in PDF for nodes - 
-The scripts in this directory need **gunzip** and **gnuplot** for extracting and plotting data. 
+The scripts in this directory need **wget**, **gunzip** and **gnuplot** for extracting and plotting data. 
 
 ### Usage: 
 
