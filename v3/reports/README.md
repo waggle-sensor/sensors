@@ -7,6 +7,10 @@ The scripts in this directory need *gunzip* and *gnuplot* for extracting and plo
 
 `$./report part_of_nodeid last_day how_many_days`
 
+Node IDs can be obtained from the beehive link - 
+
+`http://beehive1.mcs.anl.gov/`
+
 For example, to get reports on node 0000001E061130FE for 4 days excluding today, 
 
 `$./report 30FE 0 4`
