@@ -1,0 +1,150 @@
+#!/bin/bash 
+file_to_plot="$1"
+
+if [[ $(wc -l <$file_to_plot) -le 2 ]]; then
+echo "No datasets to plot, source file empty"
+exit 1
+fi
+
+mkdir -p ./data_files
+mkdir -p ./plots
+rm ./data_files/*
+start_date=$(head -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
+end_date=$(tail -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
+node_descr=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 5)
+node_vsn=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2 | sed "s/\ //g")
+node_id=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 4 | sed "s/0000001E06/001E06/g" | sed "s/\ //g")
+echo "$node_descr"
+sensor_array=$(cat  "$file_to_plot"  | cut -d ";" -f 5,6 | sort | uniq )
+for i in $sensor_array
+do
+    file_name=$(echo $i |  tr ";" "-").csv   
+    graph_sensor=false
+    
+    if [[ $i == *"temperature"* ]]; then
+        parameter_name="Temperature by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="deg C" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"humidity"* ]]; then
+        parameter_name="Relative Humidity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="%RH" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"intensity"* ]]; then
+        parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="ADC counts" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"pressure"* ]]; then
+        parameter_name="Atmospheric Pressure by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="Pa" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"acceleration.x"* ]]; then
+        parameter_name="X-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="g" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"acceleration.y"* ]]; then
+        parameter_name="Y-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="g" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"acceleration.z"* ]]; then
+        parameter_name="Z-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="g" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"magnetic_field.x"* ]]; then
+        parameter_name="X-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="milliGauss" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"magnetic_field.y"* ]]; then
+        parameter_name="Y-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="milliGauss" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"magnetic_field.z"* ]]; then
+        parameter_name="Z-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="milliGauss" 
+        graph_sensor=true
+    fi
+ 
+
+    if [[ $i == *"Chemsense;co"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;no2"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"Chemsense;h2s"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"Chemsense;so2"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"Chemsense;reducing_gases"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"Chemsense;oxidizing_gases"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    if [[ $i == *"Chemsense;o3"* ]]; then
+        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        y_label="nA" 
+        graph_sensor=true
+    fi
+    
+    
+    if [ $graph_sensor == true ]; then
+        echo "Plotting parameter - "$parameter_name
+        cat "$file_to_plot" | grep "$i" | cut -d ";" -f 2,7 > ./data_files/"$file_name"
+        echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
+#         echo "set output './plots/"$node_vsn"-"$node_id"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+        echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+        echo "set title \"""$node_descr""\"" >> graph.plt
+        echo "set tics font \"Helvetica,25\"" >> graph.plt
+        echo "set xlabel 'Time (UTC)'" >> graph.plt
+        echo "set ylabel '"$y_label"'" >> graph.plt
+        echo "set datafile separator ';'" >> graph.plt
+        echo "set timefmt '%Y_%m_%d_%H:%M:%S'" >> graph.plt
+        echo "set xdata time" >> graph.plt
+        echo "set format x \"%H.%M\n%m/%d\"" >> graph.plt
+        echo "set autoscale" >> graph.plt
+        echo "set tics" >> graph.plt
+        echo "set grid" >> graph.plt
+        echo "plot './data_files/"$file_name"' using 1:2 with lines title '"$parameter_name"'" >> graph.plt
+        gnuplot graph.plt
+    fi
+done
+
+rm graph.plt

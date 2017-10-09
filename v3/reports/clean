@@ -1,0 +1,4 @@
+#!/bin/bash
+rm ./data_files/*
+rm ./plots/*
+rm sensor_data_set.csv
