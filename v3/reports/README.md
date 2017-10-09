@@ -9,7 +9,7 @@ The scripts in this directory need **gunzip** and **gnuplot** for extracting and
 
 Node IDs can be obtained from the [Beehive Portal](http://beehive1.mcs.anl.gov/).
 
-For example, to get reports on node **001E061130FE** for 4 days excluding today, 
+For example, to get reports on node **001E061130FE** for 4 days (excluding today) ending today, 
 
 `$./report 30FE 0 4`
 
