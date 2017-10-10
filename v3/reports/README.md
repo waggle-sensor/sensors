@@ -1,7 +1,8 @@
 ## Documentation:
 
-The scripts in this directory can be used to create sensor reports in PDF for nodes - 
-The scripts in this directory need **wget**, **gunzip** and **gnuplot** for extracting and plotting data. 
+The bash shell scripts (for Linux or Mac OS X) in this directory can be used to create sensor reports in PDF for nodes - 
+The scripts in this directory depend on **wget**, **gunzip** and **gnuplot** for downloading, extracting and plotting data. 
+Please make sure they are installed in the system where they are intended to be used. 
 
 ### Usage: 
 
@@ -9,7 +10,7 @@ The scripts in this directory need **wget**, **gunzip** and **gnuplot** for extr
 
 Node IDs can be obtained from the [Beehive Portal](http://beehive1.mcs.anl.gov/).
 
-For example, to get reports on node **001E061130FE** for 4 days (excluding today) ending today, 
+For example, to get reports on node **001E061130FE** for 5 days ending today, 
 
 `$./report 30FE 0 4`
 
@@ -18,7 +19,7 @@ based on VSN start_time end_time and parameter.
 
 For the same node the report for a week ending yesterday can be generated using - 
 
-`$./report 30FE 1 7`
+`$./report 30FE 1 6`
 
 To clean the directories: 
 
