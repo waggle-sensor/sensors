@@ -35,7 +35,7 @@ do
     
     if [[ $i == *"intensity"* ]]; then
         parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="ADC counts" 
+        y_label="ADC counts (raw)" 
         graph_sensor=true
     fi
     
@@ -124,6 +124,43 @@ do
         graph_sensor=true
     fi
     
+    ############################################################################################
+    #     Do not plot these sensors, the are either non-calibrated or have not been converted into HRF
+    
+    if [[ $i == *"HIH4030"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"BMI160"* ]]; then
+        graph_sensor=false
+    fi
+    
+    
+    if [[ $i == *"PR103J2"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"SPV1840LR5H-B"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"SHT25"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"LPS25H;temperature"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"Chemsense"* ]]; then
+        graph_sensor=false
+    fi
+    
+    if [[ $i == *"Temp"* ]]; then
+        graph_sensor=false
+    fi
+    
+    ############################################################################################
     
     if [ $graph_sensor == true ]; then
         echo "Plotting parameter - "$parameter_name
