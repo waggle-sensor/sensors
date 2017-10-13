@@ -1,0 +1,14 @@
+Serialconfig 3 115200 4000 47
+SPIconfig 40 500000 MSB mode1
+SPIread 10 1 power_on
+Coreread met light mac
+Serialread 1
+Serialread 2
+Serialread 3
+SPIread 10 1 config
+loop
+Coreread met light mac
+Serialread 1
+Serialread 2
+Serialread 3
+SPIread 10 1 histogram
