@@ -4,7 +4,7 @@ if [ "$#" -ne 3 ]; then
     exit 1
 fi
 
-which_node=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $1' ' | tr "|" " "| tr -s " " | cut -d " " -f 4 | sed "s/0000001E061/001E061/g" |  tr '[:upper:]' '[:lower:]')
+which_node=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $1' ' | tr "|" " "| tr -s " " | cut -d " " -f 4 | sed "s/0000001E061/001E061/g" |  tr '[:upper:]' '[:lower:]')
 how_long_ago=$2
 how_long=$3
 
@@ -15,7 +15,7 @@ rm sensor_data_set.csv
 rm 2017*.csv.*
 for i in `seq 0 $how_long`;
 do
-    wget_output=$(wget "http://beehive1.mcs.anl.gov/datasets/2/"$which_node/"$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz")
+    wget_output=$(wget "http://www.mcs.anl.gov/research/projects/waggle/downloads/datasets/2/"$which_node/"$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz")
     if [ $? == 0 ]; then
         gunzip "$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz" 
     fi

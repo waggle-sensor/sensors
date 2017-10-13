@@ -11,9 +11,9 @@ mkdir -p ./plots
 rm ./data_files/*
 start_date=$(head -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
 end_date=$(tail -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
-node_descr=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 5)
-node_vsn=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2 | sed "s/\ //g")
-node_id=$(curl --silent http://beehive1.mcs.anl.gov/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 4 | sed "s/0000001E06/001E06/g" | sed "s/\ //g")
+node_descr=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 5)
+node_vsn=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2 | sed "s/\ //g")
+node_id=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 4 | sed "s/0000001E06/001E06/g" | sed "s/\ //g")
 echo "$node_descr"
 sensor_array=$(cat  "$file_to_plot"  | cut -d ";" -f 5,6 | sort | uniq )
 for i in $sensor_array
@@ -152,9 +152,9 @@ do
         graph_sensor=false
     fi
     
-    if [[ $i == *"Chemsense"* ]]; then
-        graph_sensor=false
-    fi
+#    if [[ $i == *"Chemsense"* ]]; then
+#        graph_sensor=false
+#    fi
     
     if [[ $i == *"Temp"* ]]; then
         graph_sensor=false
