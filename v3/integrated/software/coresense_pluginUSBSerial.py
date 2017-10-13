@@ -579,6 +579,12 @@ def parse_sensor (sensor_id,sensor_data):
         print "Sensor:", sensor_id,sensor_list[int(sensor_id)],'@ ',
         print  format2(sensor_data[0:2]),format2(sensor_data[2:4]),format2(sensor_data[4:6]),format4(sensor_data[6:9])
 
+#"HDC1010"
+    elif sensor_id == '53':
+        print "Sensor: 53 HDC1010 Temp & RH @ ",
+        HDC_temperature = format2(sensor_data[0:2]) / 100.00
+        HDC_humidity = format1(sensor_data[2:4]) / 100.00
+        print  HDC_temperature, HDC_humidity
 
 
 class usbSerial ( threading.Thread ):
