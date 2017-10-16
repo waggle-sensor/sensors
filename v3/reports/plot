@@ -152,9 +152,9 @@ do
         graph_sensor=false
     fi
     
-#    if [[ $i == *"Chemsense"* ]]; then
-#        graph_sensor=false
-#    fi
+    if [[ $i == *"Chemsense"* ]]; then
+        graph_sensor=false
+    fi
     
     if [[ $i == *"Temp"* ]]; then
         graph_sensor=false
