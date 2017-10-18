@@ -4,10 +4,11 @@ void ReadTMP112()
 	byte I2C_TMP112 = 0x48;
 	byte TMP112_TEMP_REG = 0x00;
 
-	byte testdata[2];
-	WriteI2C(I2C_TMP112, TMP112_TEMP_REG);
+	byte writebyte[1] = {TMP112_TEMP_REG};
+	byte readarray[2];
+	WriteI2C(I2C_TMP112, 1, writebyte);
 	delay(100);
-	ReadI2C(I2C_TMP112, *testdata);
+	ReadI2C(I2C_TMP112, 2, readarray);
 
 	// if ((Temp_byte[0] & 0x80) == 0x00)
 	// {
@@ -34,20 +35,14 @@ void ReadHTU21D()
 	byte TRIGGER_TEMP_MEASURE_NOHOLD = 0xF3;
 	byte TRIGGER_HUMD_MEASURE_NOHOLD = 0xF5;
 
-	// Read Temprature
-	byte testdata[3];
-	WriteI2C(HTDU21D_ADDRESS, TRIGGER_TEMP_MEASURE_NOHOLD);
-	//Hang out while measurement is taken. 50mS max, page 4 of datasheet.
-	delay(55);
-	//Comes back in three bytes, data(MSB) / data(LSB) / Checksum
-	ReadI2C(HTDU21D_ADDRESS, *testdata);
-
+	// Read Temprature, Hang out while measurement is taken 50mS max
+	byte readarray[3];
+	byte writebyte[1] = {TRIGGER_TEMP_MEASURE_NOHOLD};
+	WriteReadI2C(HTDU21D_ADDRESS, 1, writebyte, 3, readarray, 55);
+	
 	//Request a humidity reading
-	WriteI2C(HTDU21D_ADDRESS, TRIGGER_HUMD_MEASURE_NOHOLD);
-	//Hang out while measurement is taken. 50mS max, page 4 of datasheet.
-	delay(55);
-	//Comes back in three bytes, data(MSB) / data(LSB) / Checksum
-	ReadI2C(HTDU21D_ADDRESS, *testdata);
+	writebyte[0] = TRIGGER_HUMD_MEASURE_NOHOLD;
+	WriteReadI2C(HTDU21D_ADDRESS, 1, writebyte, 3, readarray, 55);
 }
 
 #define PIN_HIH4030 A10
@@ -58,39 +53,38 @@ void HIH4030()
 
 void BMP180()
 {
-	byte BMP085_ADDRESS = 0x77;
-	byte BMP085_REGISTER_CONTROL = 0xF4;
-	byte BMP085_REGISTER_TEMPDATA = 0xF6;
-	byte BMP085_REGISTER_PRESSUREDATA = 0xF6;
-	byte BMP085_REGISTER_READTEMPCMD = 0x2E;
-	byte BMP085_REGISTER_READPRESSURECMD = 0x34;
+	byte BMP180_ADDRESS = 0x77;
+	byte BMP180_REGISTER_CONTROL = 0xF4;
+	byte BMP180_REGISTER_TEMPDATA = 0xF6;
+	byte BMP180_REGISTER_PRESSUREDATA = 0xF6;
+	byte BMP180_REGISTER_READTEMPCMD = 0x2E;
+	byte BMP180_REGISTER_READPRESSURECMD = 0x34;
 	// Read temprature
-	byte testdata[2] = {BMP085_REGISTER_CONTROL, BMP085_REGISTER_READTEMPCMD};
-	byte testval;
-	WriteI2C(BMP085_ADDRESS, *testdata);
+	byte writearray[2] = {BMP180_REGISTER_CONTROL, BMP180_REGISTER_READTEMPCMD};
+	WriteI2C(BMP180_ADDRESS, 2, writearray);
 	delay(5);
-	ReadI2C(BMP085_REGISTER_TEMPDATA, testval);static void readRawPressure(int32_t *pressure)
+	byte writebyte[1] = {BMP180_REGISTER_TEMPDATA};
+	byte readarray[2];
+	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, readarray);
 
 	// Read pressure
-	int _bmp085Mode = 3;
-
-	byte reg = BMP085_REGISTER_READPRESSURECMD + (_bmp085Mode << 6)
-	WriteI2C(BMP085_REGISTER_CONTROL, reg);
+	byte _bmp180Mode = 3;
+	writebyte[0] = BMP180_REGISTER_CONTROL;
+	writebyte[1] = BMP085_REGISTER_READPRESSURECMD + (_bmp085Mode << 6);
+	WriteI2C(BMP085_ADDRESS, 2, writebyte);
 	delay(26);
-	WriteI2C(BMP085_ADDRESS, BMP085_REGISTER_PRESSUREDATA);
-	ReadI2C(BMP085_ADDRESS, *testdata);
-	// we even do not need this:
-	// int pressure = (testdata[0] << 8) | testdata[1];
-
-	WriteI2C(BMP085_ADDRESS, BMP085_REGISTER_PRESSUREDATA+2);
-	ReadI2C(BMP085_ADDRESS, *testdata);
+	writebyte[0] = BMP085_REGISTER_PRESSUREDATA;
+	WriteReadI2C(BMP085_ADDRESS, 1, writebyte, 2, readarray);
+	writebyte[0] = BMP085_REGISTER_PRESSUREDATA + 2;
+	byte readbyte[1];
+	WriteReadI2C(BMP085_ADDRESS, 1, writebyte, 1, readbyte);
 }
 
 #define A2D_PRJ103J2 0
 void PR103J2()
 {
 	int PR = analogRead(A2D_PRJ103J2);
-}
+}ssss
 
 #define A2D_TSL250RDms 1
 void TSL250ms()
@@ -103,13 +97,11 @@ void MMA()
 	byte MMA8452_ADDRESS = 0x1C;
 	byte OUT_X_MSB = 0x01;
 	byte XYZ_DATA_CFG = 0x0E;
-	byte WHO_AM_I = 0x0D;
 	byte CTRL_REG1 = 0x2A;
 
-	byte rawData[6];  // x/y/z accel register data stored here
-
-	WriteI2C(OUT_X_MSB, *rawData);
-	// MMA8452readRegisters(OUT_X_MSB, 6, rawData);  // Read the six raw data registers into data array
+	byte readarray[6];  // x/y/z accel register data stored here
+	byte writebyte[1] = {OUT_X_MSB};
+	WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 6, readarray, false);
 
 	// // Loop to calculate 12-bit ADC and g value for each axis
 	// for(i = 0; i < 3 ; i++)
@@ -132,9 +124,9 @@ void MMA()
 #define PIN_RAW_MIC A9
 void SPV()
 {
-	byte buff[128];
+	long buff[128];
 	for (int i = 0; i < 128; i++)
-		buff = analogRead(PIN_RAW_MIC);
+		buff[i] = analogRead(PIN_RAW_MIC);
 }
 
 void TSYS01()
@@ -143,11 +135,13 @@ void TSYS01()
 	byte TSYS01StartReg = 0x48; //commands sensor to begin measurement / output calculation
 	byte TSYS01TempReg = 0x00; //requests most recent output from measurement
 
-	byte testdata[2];
-	WriteI2C(TSYS01Address, TSYS01StartReg);
+	byte writebyte[1] = {TSYS01StartReg};
+	WriteI2C(TSYS01Address, 1, writebyte);
 	delay(10);
-	WriteI2C(TSYS01Address, TSYS01TempReg);
-	ReadI2C(TSYS01Address, *testdata);
+	writebyte[0] = {TSYS01TempReg};
+	byte readarray[3];
+	WriteReadI2C(TSYS01Address, 1, writebyte, 3, readarray);
+	// the last read is not used
 }
 
 void HMC()
@@ -155,20 +149,18 @@ void HMC()
 	byte HMC5883_ADDRESS_MAG = 0x3C >> 1;  // 0011110x
 	byte HMC5883_REGISTER_MAG_OUT_X_H_M = 0x03;
 
-	byte testdata[6];
-	WriteI2C(HMC5883_ADDRESS_MAG, HMC5883_REGISTER_MAG_OUT_X_H_M);
-	ReadI2C(HMC5883_ADDRESS_MAG, *testdata);
+	byte writebyte[1] = {HMC5883_REGISTER_MAG_OUT_X_H_M};
+	byte readarray[6];
+	WriteReadI2C(HMC5883_ADDRESS_MAG, 1, writebyte, 6, readarray);
 }
 
 void HIH6130()
 {
 	byte HIH_ADDRESS = 0x27;
-	byte testdata[4];
 
-	BeginEndI2C(HIH_ADDRESS);
-	delay(100);
-	ReadI2C(HIH_ADDRESS, *testdata);
-
+	byte readarray[4];
+	WriteReadI2C(HIH_ADDRESS, 4, readarray, 100);
+	
 	// Temp_byte[0] = (Temp_byte[1] >> 6) & 0x03;
 
 	// Temp_byte[1] = Temp_byte[1] & 0x3f;
@@ -183,43 +175,82 @@ void HIH6130()
 
 void APDS()
 {
-	mcp3428_2.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	int APDS = mcp3428_2.readADC();
+	byte address = mcp3428_2.returnAddress();
+	byte writebyte[1] = {mcp3428_2.returnRegister(MCP342X::CHANNEL_0)};
+	byte readarray[3];
+	WriteReadI2C(address, 1, writebyte, 3, readarray);
+	// the last read is not used
+
+	// selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
+	// int APDS = mcp3428_2.readADC();
 }
 
 void TSL260RD()
 {
-	mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
-	int TSL260 = mcp3428_1.readADC();
+	byte address = mcp3428_1.returnAddress();
+	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_1)};
+	byte readarray[3];
+	WriteReadI2C(address, 1, writebyte, 3, readarray);
+	// the last read is not used
+
+	// mcp3428_1.selectChannel(MCP342X::CHANNEL_1, MCP342X::GAIN_1);
+	// int TSL260 = mcp3428_1.readADC();
 }
 
 void TSL250RDls()
 {
-	mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
-	int TSL250_2 = mcp3428_1.readADC();
+	byte address = mcp3428_1.returnAddress();
+	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_3)};
+	byte readarray[3];
+	WriteReadI2C(address, 1, writebyte, 3, readarray);
+	// the last read is not used
+
+	// mcp3428_1.selectChannel(MCP342X::CHANNEL_3, MCP342X::GAIN_1);
+	// int TSL250_2 = mcp3428_1.readADC();
 }
 
 void MLX()
 {
-	mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
-	int MLX = mcp3428_1.readADC();
+	byte address = mcp3428_1.returnAddress();
+	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_0)};
+	byte readarray[3];
+	WriteReadI2C(address, 1, writebyte, 3, readarray);
+	// the last read is not used
+
+	// mcp3428_1.selectChannel(MCP342X::CHANNEL_0, MCP342X::GAIN_1);
+	// int MLX = mcp3428_1.readADC();
 }
 
 void ML8511()
 {
-	mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
-	int ML8511 = mcp3428_1.readADC();
+	byte address = mcp3428_1.returnAddress();
+	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_2)};
+	byte readarray[3];
+	WriteReadI2C(address, 1, writebyte, 3, readarray);
+	// the last read is not used
+
+	// mcp3428_1.selectChannel(MCP342X::CHANNEL_2, MCP342X::GAIN_1);
+	// int ML8511 = mcp3428_1.readADC();
 }
 
 void TMP421()
 {
-	char TMP421_ADDRESS = 0x4c;
-	byte testdata[2];
-	WriteI2C(TMP421_ADDRESS, char(0x00));
-	ReadI2C(TMP421_ADDRESS, testdata[0]); // high-byte
+	byte TMP421_ADDRESS = 0x4c;
+	byte readbyte[1];
+	
+	// high-byte
+	byte writebyte[1] = {0x00};
+	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte); 
+	// low-byte
+	writebyte[0] = 0x10;
+	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte);
 
-	WriteI2C(TMP421_ADDRESS, char(0x10));
-	ReadI2C(TMP421_ADDRESS, testdata[1]); // low-byte
+	// byte testdata[2];
+	// WriteI2C(TMP421_ADDRESS, char(0x00));
+	// ReadI2C(TMP421_ADDRESS, testdata[0]); // high-byte
+
+	// WriteI2C(TMP421_ADDRESS, char(0x10));
+	// ReadI2C(TMP421_ADDRESS, testdata[1]); // low-byte
 }
 
 void Chem()

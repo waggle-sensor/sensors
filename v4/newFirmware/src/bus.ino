@@ -1,13 +1,9 @@
 
 //** I2C
-void ReadI2C(char address, char *out)
+void ReadI2C(byte address, int length, byte *out)
 {
-	int length = sizeof(*out);
-	SerialUSB.print("data: ");
-	SerialUSB.println(length);
-
 	Wire.beginTransmission(address);
-	Wire.requestFrom(address, length);
+	Wire.requestFrom(address, (byte)length);
 
 	if (Wire.available() > 0) {
 		for (int i = 0; i < length; i++) {
@@ -18,34 +14,11 @@ void ReadI2C(char address, char *out)
 			out[i] = 0xff;
 		}
 	}
-
-	// TODO should return actual size read.
-
 	Wire.endTransmission();
 }
 
-
-void ReadI2C(char address, char out)
+void WriteI2C(byte address, int length, byte *in)
 {
-	Wire.beginTransmission(address);
-	Wire.requestFrom(address, 1);
-
-	if (Wire.available() > 0)
-		out = Wire.read();
-	else
-		out = 0xff;
-
-	// TODO should return actual size read.
-
-	Wire.endTransmission();
-}
-
-void WriteI2C(char address, char *in)
-{
-	int length = sizeof(*in);
-	SerialUSB.print("data: ");
-	SerialUSB.println(length);
-	
 	Wire.beginTransmission(address);
 
 	for (int i = 0; i < length; i++) {
@@ -55,21 +28,56 @@ void WriteI2C(char address, char *in)
 	Wire.endTransmission();
 }
 
-void WriteI2C(char address, char in)
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out)
+{
+	WriteReadI2C(address, inlength, in, outlength, out, 0, true);
+}
+
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
+{
+	WriteReadI2C(address, inlength, in, outlength, out, time, true);
+}
+
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, bool end)
+{
+	WriteReadI2C(address, inlength, in, outlength, out, 0, end);
+}
+
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time, bool end)
 {
 	Wire.beginTransmission(address);
-	Wire.write(in);
+	for (int i = 0; i < inlength; i++)
+		Wire.write(in[i]);
+	Wire.endTransmission(end);
+	delay(time);
+
+	Wire.requestFrom(address, (byte)outlength);
+	if (Wire.available() > 0)
+		for (int i = 0; i < outlength; i++)
+			out[i] = Wire.read();
+	else
+		for (int i = 0; i < outlength; i++)
+			out[i] = 0xff;
 	Wire.endTransmission();
 }
 
-void BeginEndI2C(char address)
+void WriteReadI2C(byte address, int outlength, byte *out, int time)
 {
 	Wire.beginTransmission(address);
+	Wire.endTransmission();
+	delay(time);
+
+	Wire.requestFrom(address, (byte)outlength);
+	if (Wire.available() > 0)
+		for (int i = 0; i < outlength; i++)
+			out[i] = Wire.read();
+	else
+		for (int i = 0; i < outlength; i++)
+			out[i] = 0xff;
 	Wire.endTransmission();
 }
 
 //** RS232
-
 void ConfigRS232(int port, long datarate, long timeout, int powerPin)
 {
 	if (port == 3)
@@ -157,38 +165,39 @@ void WriteRS232(char* writing, int length, int port)
 
 //** SPI
 
-// void ConfigSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode)
-// {
-// 	int PIN_SLAVE;
-// 	SPISettings set;
-// 	if (bitOrder == 1)
-// 		set = SPISettings(maxSpeed, MSBFIRST, dataMode);
-// 	else
-// 		set = SPISettings(maxSpeed, LSBFIRST, dataMode);
+int PIN_SLAVE;
+SPISettings set;
 
-// 	PIN_SLAVE = slavePin;
-// 	pinMode(slavePin, OUTPUT);
+void ConfigSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode)
+{
+	if (bitOrder == 1)
+		set = SPISettings(maxSpeed, MSBFIRST, dataMode);
+	else
+		set = SPISettings(maxSpeed, LSBFIRST, dataMode);
 
-// 	// SPI begin
-// 	SPI.begin();
-// }
+	PIN_SLAVE = slavePin;
+	pinMode(slavePin, OUTPUT);
 
-// void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
-// {
-// 	*pin = PIN_SLAVE;
+	// SPI begin
+	SPI.begin();
+}
+
+void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
+{
+	*pin = PIN_SLAVE;
 	
-// 	SPI.beginTransaction(set);
-// 	delay(400);
-// 	digitalWrite(PIN_SLAVE, LOW);
+	SPI.beginTransaction(set);
+	delay(400);
+	digitalWrite(PIN_SLAVE, LOW);
 
-// 	for (int i = 0; i < bufflen; i++)
-// 	{
-// 		buff[i] = SPI.transfer(buff[i]);
+	for (int i = 0; i < bufflen; i++)
+	{
+		buff[i] = SPI.transfer(buff[i]);
 
-// 		if (i < delayiter)
-// 			delay(msdelay);
-// 	}
+		if (i < delayiter)
+			delay(msdelay);
+	}
 
-// 	digitalWrite(PIN_SLAVE, HIGH);
-// 	SPI.endTransaction();
-// }
+	digitalWrite(PIN_SLAVE, HIGH);
+	SPI.endTransaction();
+}

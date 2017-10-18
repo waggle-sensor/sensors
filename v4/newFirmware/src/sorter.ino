@@ -1,0 +1,5 @@
+
+void SortReading(char *dataReading)
+{
+	
+}

@@ -22,6 +22,9 @@ public:
 	void init(byte A0, byte A1);
 	void selectChannel(byte channel, byte gain = GAIN_1);
 	unsigned int readADC();
+	byte returnAddress();
+	byte returnRegister(byte channel);
+
 private:
 	//communication register
 	static const byte BIT_RDY = 7; //data ready

@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <OneWire.h>
-#include "scanner.h"
+#include "./SCAN/scanner.h"
 
 // lib for sensors on lightsense
 #include "./MCP342X/MCP342X.h"
@@ -50,6 +50,8 @@ void ExecCommand()
 	while (scanner.Scan() == '\n') { }
 
 	strncpy(dataReading, scanner.TokenText(), sizeof(dataReading)); 
+
+	SortReading(dataReading);
 
 	SerialUSB.print("data: ");
 	SerialUSB.println(scanner.TokenText());

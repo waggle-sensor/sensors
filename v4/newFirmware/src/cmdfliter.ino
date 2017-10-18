@@ -1,6 +1,0 @@
-
-void cmdfilter()
-{
-	scanner.TokenText();	
-}
-

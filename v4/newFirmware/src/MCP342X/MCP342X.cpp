@@ -3,6 +3,10 @@
  * Kerry D. Wong
  * http://www.kerrywong.com
  * 5/2012
+ * Modified by
+ * Seongha Park
+ * park708@purdue.edu
+ * 10/2017
  */
 
 #include "MCP342X.h"
@@ -52,4 +56,16 @@ unsigned int MCP342X::readADC()
     	t = 65535;
     
     return t;
+}
+
+byte MCP342X::returnAddress()
+{
+  return I2C_ADDRESS;
+}
+
+byte MCP342X::returnRegister(byte channel)
+{
+  byte gain = GAIN_1;
+  byte reg = 1 << BIT_RDY | channel << BIT_C0 | 0 << BIT_OC | 1 << BIT_S1 | gain;
+  return reg;
 }
