@@ -48,20 +48,20 @@ void loop()
 		input = SerialUSB.read();
 		if (input == 0xaa)
 		{
-			inputarray[i++] = input;
-			inputarray[i] = '\0';
+			inputarray[length++] = input;
+			inputarray[length] = '\0';
 			while (!postscript)
 			{
 				input = SerialUSB.read();
-				inputarray[i++] = input;
-				inputarray[i] = '\0';
+				inputarray[length++] = input;
+				inputarray[length] = '\0';
 				if (input == 0x55)
 					postscript = true;
-				if (i == 256)
+				if (length == 256)
 					break;
 
 			}
-			if (i == 256)
+			if (length == 256)
 				break;
 		}
 	}

@@ -76,21 +76,21 @@ void ReadBMP180()
 	// Read pressure
 	byte _bmp180Mode = 3;
 	writebyte[0] = BMP180_REGISTER_CONTROL;
-	writebyte[1] = BMP085_REGISTER_READPRESSURECMD + (_bmp085Mode << 6);
-	WriteI2C(BMP085_ADDRESS, 2, writebyte);
+	writebyte[1] = BMP180_REGISTER_READPRESSURECMD + (_bmp180Mode << 6);
+	WriteI2C(BMP180_ADDRESS, 2, writebyte);
 	delay(26);
-	writebyte[0] = BMP085_REGISTER_PRESSUREDATA;
-	WriteReadI2C(BMP085_ADDRESS, 1, writebyte, 2, readarray);
-	writebyte[0] = BMP085_REGISTER_PRESSUREDATA + 2;
+	writebyte[0] = BMP180_REGISTER_PRESSUREDATA;
+	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, readarray);
+	writebyte[0] = BMP180_REGISTER_PRESSUREDATA + 2;
 	byte readbyte[1];
-	WriteReadI2C(BMP085_ADDRESS, 1, writebyte, 1, readbyte);
+	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, readbyte);
 }
 
 #define A2D_PRJ103J2 0
 void ReadPR103J2()
 {
 	int PR = analogRead(A2D_PRJ103J2);
-}ssss
+}
 
 #define A2D_TSL250RDms 1
 void ReadTSL250ms()

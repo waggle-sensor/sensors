@@ -6,13 +6,13 @@ void SortReading(byte *dataReading, int length)
 		int datalength = dataReading[3];
 		if (dataReading[0] == 0xaa && dataReading[datalength + 5] == 0x55)
 		{
-			bool checkcrc = CheckCRC(dataReading[datalength + 4])
+			bool checkcrc = CheckCRC(dataReading[datalength + 4]);
 			if (checkcrc)
 			{
 				byte data[datalength];
 				for (int i = 0; i < datalength; i++)
-					data[i] = datalength[4 + i];
-				CallFunction(data);
+					data[i] = dataReading[4 + i];
+				CallFunction((const char) data[0]);
 			}
 			else
 				DeleteReading(dataReading, length, datalength);
@@ -25,7 +25,7 @@ void SortReading(byte *dataReading, int length)
 int DeleteReading(byte *dataReading, int length, int datalength)
 {
 	length -= datalength - 6;
-	if (len > 6)
+	if (length > 6)
 	{
 		int newfirst = sizeof(dataReading) - (datalength + 5);
 		for (int i = 0; i < newfirst; i++)
@@ -46,13 +46,13 @@ bool CheckCRC(byte crc)
 		return false;
 }
 
-struct Function
+struct Conversion
 {
 	const byte sensorid;
 	void (*func)();
 };
 
-const Function functions[] = {
+const Conversion conv[] = {
 	{0x00, ReadMacAdd},
 	{0x01, ReadTMP112},
 	{0x02, ReadHTU21D},
@@ -72,16 +72,22 @@ const Function functions[] = {
 	{0x10, ReadML8511},
 	{0x13, ReadTMP421},
 	{0x15, ReadChem},
-}
+};
 
-int numfunc = sizeof(functions);
+int numfunc = sizeof(conv);
 
-void CallFunction(byte *data)
+void CallFunction(const byte data)
 {
-	Function fn;
+	// for (int..)
+	// {
+	// 	for each bytes:
+	// 		do under:
+	
 	for (int i = 0; i < numfunc; i++)
 	{
-		if (fn.sensorid = data)
-			callfunc->func();
+		const Conversion *fn = conv + i;
+		//if (strcmp(fn->sensorid, data) == 0)
+		if (fn->sensorid == data)
+			fn->func();
 	}
 }
