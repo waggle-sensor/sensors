@@ -39,30 +39,33 @@ void setup()
 
 void loop()
 {
-	ExecCommand();
-	SerialUSB.println("end: next command");
-	while (scanner.Scan() != '\n') { }
-}
+	byte inputarray[256];
+	byte input = '\0';
+	bool postscript = false;
+	int length = 0;
+	while (!postscript)
+	{
+		input = SerialUSB.read();
+		if (input == 0xaa)
+		{
+			inputarray[i++] = input;
+			inputarray[i] = '\0';
+			while (!postscript)
+			{
+				input = SerialUSB.read();
+				inputarray[i++] = input;
+				inputarray[i] = '\0';
+				if (input == 0x55)
+					postscript = true;
+				if (i == 256)
+					break;
 
-void ExecCommand()
-{
-	// consume trailing tokens
-	while (scanner.Scan() == '\n') { }
+			}
+			if (i == 256)
+				break;
+		}
+	}
 
-	strncpy(dataReading, scanner.TokenText(), sizeof(dataReading)); 
-
-	SortReading(dataReading);
-
-	SerialUSB.print("data: ");
-	SerialUSB.println(scanner.TokenText());
-
-// 	const Command *cmd = FindCommand(scanner.TokenText());
-
-// 	if (cmd == NULL) {
-// 		SerialUSB.print("! no command ");
-// 		SerialUSB.println(scanner.TokenText());
-// 		return;
-// 	}
-
-// cmd->func();
+	if (postscript)
+		SortReading(inputarray, length);
 }

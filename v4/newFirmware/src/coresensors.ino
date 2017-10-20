@@ -1,4 +1,10 @@
 
+
+void ReadMacAdd()
+{
+
+}
+
 void ReadTMP112()
 {
 	byte I2C_TMP112 = 0x48;
@@ -46,12 +52,12 @@ void ReadHTU21D()
 }
 
 #define PIN_HIH4030 A10
-void HIH4030()
+void ReadHIH4030()
 {
 	int value = analogRead(PIN_HIH4030);	
 }
 
-void BMP180()
+void ReadBMP180()
 {
 	byte BMP180_ADDRESS = 0x77;
 	byte BMP180_REGISTER_CONTROL = 0xF4;
@@ -81,18 +87,18 @@ void BMP180()
 }
 
 #define A2D_PRJ103J2 0
-void PR103J2()
+void ReadPR103J2()
 {
 	int PR = analogRead(A2D_PRJ103J2);
 }ssss
 
 #define A2D_TSL250RDms 1
-void TSL250ms()
+void ReadTSL250ms()
 {
 	int TSL250_1 = analogRead(A2D_TSL250RDms);
 }
 
-void MMA()
+void ReadMMA()
 {
 	byte MMA8452_ADDRESS = 0x1C;
 	byte OUT_X_MSB = 0x01;
@@ -122,14 +128,14 @@ void MMA()
 #define PIN_SPV_AMP A5
 #define PIN_SPV_SPL A6
 #define PIN_RAW_MIC A9
-void SPV()
+void ReadSPV()
 {
 	long buff[128];
 	for (int i = 0; i < 128; i++)
 		buff[i] = analogRead(PIN_RAW_MIC);
 }
 
-void TSYS01()
+void ReadTSYS01()
 {
 	byte TSYS01Address = 0x76;
 	byte TSYS01StartReg = 0x48; //commands sensor to begin measurement / output calculation
@@ -144,7 +150,7 @@ void TSYS01()
 	// the last read is not used
 }
 
-void HMC()
+void ReadHMC()
 {
 	byte HMC5883_ADDRESS_MAG = 0x3C >> 1;  // 0011110x
 	byte HMC5883_REGISTER_MAG_OUT_X_H_M = 0x03;
@@ -154,7 +160,7 @@ void HMC()
 	WriteReadI2C(HMC5883_ADDRESS_MAG, 1, writebyte, 6, readarray);
 }
 
-void HIH6130()
+void ReadHIH6130()
 {
 	byte HIH_ADDRESS = 0x27;
 
@@ -173,7 +179,7 @@ void HIH6130()
 	// Temp_float[0] = (float) Temp_int[1] * 1.007e-2 - 40.0;
 }
 
-void APDS()
+void ReadAPDS()
 {
 	byte address = mcp3428_2.returnAddress();
 	byte writebyte[1] = {mcp3428_2.returnRegister(MCP342X::CHANNEL_0)};
@@ -185,7 +191,7 @@ void APDS()
 	// int APDS = mcp3428_2.readADC();
 }
 
-void TSL260RD()
+void ReadTSL260RD()
 {
 	byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_1)};
@@ -197,7 +203,7 @@ void TSL260RD()
 	// int TSL260 = mcp3428_1.readADC();
 }
 
-void TSL250RDls()
+void ReadTSL250RDls()
 {
 	byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_3)};
@@ -209,7 +215,7 @@ void TSL250RDls()
 	// int TSL250_2 = mcp3428_1.readADC();
 }
 
-void MLX()
+void ReadMLX()
 {
 	byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_0)};
@@ -221,7 +227,7 @@ void MLX()
 	// int MLX = mcp3428_1.readADC();
 }
 
-void ML8511()
+void ReadML8511()
 {
 	byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_2)};
@@ -233,7 +239,7 @@ void ML8511()
 	// int ML8511 = mcp3428_1.readADC();
 }
 
-void TMP421()
+void ReadTMP421()
 {
 	byte TMP421_ADDRESS = 0x4c;
 	byte readbyte[1];
@@ -253,14 +259,14 @@ void TMP421()
 	// ReadI2C(TMP421_ADDRESS, testdata[1]); // low-byte
 }
 
-void Chem()
+void ReadChem()
 {
 	char buff[1024];
 	int numbytes = 0;
 	ReadRS232(buff, numbytes);
 }
 
-void Alpha()
+void ReadAlpha()
 {
 	
 }
