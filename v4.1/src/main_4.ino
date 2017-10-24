@@ -29,12 +29,16 @@ void setup()
 	InitSensors();
 
 	// initialization for chemsense board
-	// If chemsense is onboard????
+	// If chemsense is on board????
 	InitChemsense();
 
 	// initialization for alpha sensor
-	// If alpha sensor is onboard????
+	// If alpha sensor is on board????
 	InitAlphasensor();
+
+	// initialization for interruption function
+	// If rain gauge is on board?
+	InitInterrupt();
 }
 
 void loop()
