@@ -110,23 +110,23 @@ void loop()
     #ifdef LIGHTSENSE_INCLUDE    
     lightsense_initial();
     #endif
-// 
-//     #ifdef CHEMSENSE_INCLUDE 
-//     while(count < 10)
-//     {    
-//                
-//         flag_CHEM_WHILE = true;
-//         chemsense_acquire();
-//         
-//     }
-//     #endif
-//     
-//     
-//     #ifndef CHEMSENSE_INCLUDE
-//         delay(10000);
-//     #endif
-//     
-//     
+
+    #ifdef CHEMSENSE_INCLUDE 
+    while(count < 10)
+    {    
+               
+        flag_CHEM_WHILE = true;
+        chemsense_acquire();
+        
+    }
+    #endif
+    
+    
+    #ifndef CHEMSENSE_INCLUDE
+        delay(10000);
+    #endif
+    
+
     #ifdef AIRSENSE_INCLUDE    
     airsense_acquire();
     #endif
@@ -135,33 +135,33 @@ void loop()
     lightsense_acquire();
     #endif
 
-//     while (count < 24)       // every 24 sec
-//     {
-//         #ifdef ALPHASENSE_INCLUDE 
-//         
-//         alphasense_histo();
-//         delay(5000);
-// //         alphasense_serial();
-//         delay(5000);
-//         
-//         if (count == 23)        //every 23 sec
-//         {
-//             count_conf++;
-//             if (count_conf == 26)       // every 598 secs, about 10 min
-//             {
-//                 alphasense_config();
-//                 delay(100);
-//                 alphasense_firmware();
-//                 delay(100);
-//                 
-//                 flag_alpha = true;
-//                 count_conf = 0;
-//             }
-//         }
-//         #endif
-//         
-//         delay(1);
-//     }
+    while (count < 24)       // every 24 sec
+    {
+        #ifdef ALPHASENSE_INCLUDE 
+        
+        alphasense_histo();
+        delay(5000);
+//         alphasense_serial();
+        delay(5000);
+        
+        if (count == 23)        //every 23 sec
+        {
+            count_conf++;
+            if (count_conf == 26)       // every 598 secs, about 10 min
+            {
+                alphasense_config();
+                delay(100);
+                alphasense_firmware();
+                delay(100);
+                
+                flag_alpha = true;
+                count_conf = 0;
+            }
+        }
+        #endif
+        
+        delay(1);
+    }
         
     assemble_packet_whole();        //******** packetize air/light/chem
     for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
