@@ -71,7 +71,7 @@ void ReadBMP180()
 	delay(5);
 	byte writebyte[1] = {BMP180_REGISTER_TEMPDATA};
 	byte readarray[2];
-	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, readarray);
+	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, readarray);
 
 	// Read pressure
 	byte _bmp180Mode = 3;

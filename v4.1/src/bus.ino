@@ -78,7 +78,7 @@ void WriteReadI2C(byte address, int outlength, byte *out, int time)
 }
 
 //** RS232
-void ConfigRS232(int port, long datarate, long timeout, int powerPin)
+void InitRS232(int port, int powerPin, long datarate, long timeout)
 {
 	if (port == 3)
 	{
@@ -168,7 +168,7 @@ void WriteRS232(char* writing, int length, int port)
 int PIN_SLAVE;
 SPISettings set;
 
-void ConfigSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode)
+void InitSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode)
 {
 	if (bitOrder == 1)
 		set = SPISettings(maxSpeed, MSBFIRST, dataMode);
@@ -186,13 +186,15 @@ void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
 {
 	*pin = PIN_SLAVE;
 	
+	// get set with regard to pin_slave#
+
 	SPI.beginTransaction(set);
 	delay(400);
 	digitalWrite(PIN_SLAVE, LOW);
 
 	for (int i = 0; i < bufflen; i++)
 	{
-		buff[i] = SPI.transfer(buff[i]);
+		SPI.transfer(buff[i]);
 
 		if (i < delayiter)
 			delay(msdelay);
@@ -201,3 +203,24 @@ void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
 	digitalWrite(PIN_SLAVE, HIGH);
 	SPI.endTransaction();
 }
+
+
+// void WriteSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
+// {
+// 	*pin = PIN_SLAVE;
+	
+// 	SPI.beginTransaction(set);
+// 	delay(400);
+// 	digitalWrite(PIN_SLAVE, LOW);
+
+// 	for (int i = 0; i < bufflen; i++)
+// 	{
+// 		buff[i] = SPI.transfer(buff[i]);
+
+// 		if (i < delayiter)
+// 			delay(msdelay);
+// 	}
+
+// 	digitalWrite(PIN_SLAVE, HIGH);
+// 	SPI.endTransaction();
+// }

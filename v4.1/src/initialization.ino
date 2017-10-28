@@ -41,6 +41,14 @@ void InitAlphasensor()
 	// delay(10000);
 }
 
+void InitInterrupt()
+{
+	// pinMode(RAIN_INTERRUPT_PIN, INPUT_PULLUP);
+	// attachInterrupt(digitalPinToInterrupt(RAIN_INTERRUPT_PIN), blink, RISING);
+	// delay(5);
+	// pin_signal = 0;
+}
+
 //** Metsense
 void InitTMP112()
 {
@@ -202,4 +210,14 @@ void InitMCPmux()
 {
 	mcp3428_1.init(MCP342X::L, MCP342X::L);
 	mcp3428_2.init(MCP342X::L, MCP342X::F);
+}
+
+void blink()
+{
+	// pin_signal++;
+	// if (pin_signal == 2)
+	// {
+	// 	count_num++;
+	// 	pin_signal = 0;
+	// }
 }
