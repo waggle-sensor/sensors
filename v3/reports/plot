@@ -165,9 +165,14 @@ do
     if [ $graph_sensor == true ]; then
         echo "Plotting parameter - "$parameter_name
         cat "$file_to_plot" | grep "$i" | cut -d ";" -f 2,7 > ./data_files/"$file_name"
-        echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
-#         echo "set output './plots/"$node_vsn"-"$node_id"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
-        echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+
+        if [ "$(uname)" = Linux ]; then
+            echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
+            echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+        else
+            echo "set terminal svg size 1700,1100 fixed enhanced font \'Helvetica,30\'" > graph.plt
+            echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").svg"'" >> graph.plt
+        fi
         echo "set title \"""$node_descr""\"" >> graph.plt
         echo "set tics font \"Helvetica,25\"" >> graph.plt
         echo "set xlabel 'Time (UTC)'" >> graph.plt
