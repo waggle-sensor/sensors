@@ -170,7 +170,7 @@ do
             echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
             echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
         else
-            echo "set terminal svg size 1700,1100 fixed enhanced font \'Helvetica,30\'" > graph.plt
+            echo "set terminal svg size 1700,1100 fixed enhanced font 'Helvetica,30'" > graph.plt
             echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").svg"'" >> graph.plt
         fi
         echo "set title \"""$node_descr""\"" >> graph.plt
