@@ -11,7 +11,7 @@ mkdir -p ./plots
 rm ./data_files/*
 start_date=$(head -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
 end_date=$(tail -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
-node_descr=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 5)
+node_descr=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2,5,6)
 node_vsn=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2 | sed "s/\ //g")
 node_id=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 4 | sed "s/0000001E06/001E06/g" | sed "s/\ //g")
 echo "$node_descr"
@@ -165,9 +165,14 @@ do
     if [ $graph_sensor == true ]; then
         echo "Plotting parameter - "$parameter_name
         cat "$file_to_plot" | grep "$i" | cut -d ";" -f 2,7 > ./data_files/"$file_name"
-        echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
-#         echo "set output './plots/"$node_vsn"-"$node_id"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
-        echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+
+        if [ "$(uname)" = Linux ]; then
+            echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
+            echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+        else
+            echo "set terminal svg size 1700,1100 fixed enhanced font 'Helvetica,30'" > graph.plt
+            echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").svg"'" >> graph.plt
+        fi
         echo "set title \"""$node_descr""\"" >> graph.plt
         echo "set tics font \"Helvetica,25\"" >> graph.plt
         echo "set xlabel 'Time (UTC)'" >> graph.plt

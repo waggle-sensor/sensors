@@ -15,13 +15,30 @@ rm sensor_data_set.csv
 rm 2017*.csv.*
 for i in `seq 0 $how_long`;
 do
-    wget_output=$(wget "http://www.mcs.anl.gov/research/projects/waggle/downloads/datasets/2/"$which_node/"$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz")
+    if [ "$(uname)" = Linux ]; then
+        wget_output=$(wget "http://www.mcs.anl.gov/research/projects/waggle/downloads/datasets/2/"$which_node/"$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz")
+    else
+        wget_output=$(wget "http://www.mcs.anl.gov/research/projects/waggle/downloads/datasets/2/"$which_node/"$(date -v-$(($i + $how_long_ago))d +%Y-%m-%d)".csv.gz)
+    fi
     if [ $? == 0 ]; then
+    if [ "$(uname)" = Linux ]; then
         gunzip "$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz" 
+    else
+        gunzip "$(date -v-$(($i + $how_long_ago))d +%Y-%m-%d).csv.gz" 
+    fi
+      
     fi
 done     
-cat $(ls 2017*.csv | sort -V)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
-rm -rf 2017*.csv
+
+if [ "$(uname)" = Linux ]; then
+    cat $(ls 2017*.csv | sort -V)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
+    rm -rf 2017*.csv
+
+else
+    cat $(ls 2017*.csv | sort)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
+    rm -rf 2017*.csv
+fi
+
 echo "Downloaded files and created source dataset..."
 else
 echo "Unable to find node "$1
