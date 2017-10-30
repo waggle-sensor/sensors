@@ -3,6 +3,31 @@
  */
 
 #ifdef CHEMSENSE_INCLUDE
+
+void chemFWconfig() // read one time, at setup
+{
+    int numConfig = 0; // 0 - 15
+    for (int i = 0; i < 65535; i++)
+    {
+        if (Serial3.available() > 0)
+        {
+            String configReading = String(Serial3.readStringUntil('\n'));
+            if (configReading.length() > 2)
+            {
+                // SerialUSB.println(configReading.length());
+                SerialUSB.println(configReading);
+                numConfig++;
+
+                // 9 times
+                // if (numConfig == 15)
+                //     break;
+            }
+            // SerialUSB.println(Serial3.readStringUntil('\n'));
+        }
+        delay(1);
+    }
+}
+
 void form3_hex_string_to_hex()                     // Hex to hex: form3
 {
     Temp_ulong[0] = 0x000000;

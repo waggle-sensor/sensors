@@ -1,3 +1,4 @@
+// #include <ctype.h>
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -22,54 +23,52 @@ void setup()
 	delay(10);
 
 	// wire for sensors on met/lightsense boards
+	// AND initialization for sensors on met/lightsense boards
 	Wire.begin();
 	delay(10);
-
-	// initialization for sensors on met/lightsense boards
 	InitSensors();
-
-	// initialization for chemsense board
-	// If chemsense is on board????
-	InitChemsense();
-
-	// initialization for alpha sensor
-	// If alpha sensor is on board????
-	InitAlphasensor();
-
-	// initialization for interruption function
-	// If rain gauge is on board?
-	InitInterrupt();
 }
 
 void loop()
 {
-	byte inputarray[256];
+	int MaxInputLength = 260;
+	byte inputarray[MaxInputLength];
 	byte input = '\0';
 	bool postscript = false;
 	int length = 0;
+
+	// Read data until it gets a postscript
 	while (!postscript)
 	{
 		input = SerialUSB.read();
+
+		// If input is preamble, then store bytes from now
 		if (input == 0xaa)
 		{
-			inputarray[length++] = input;
-			inputarray[length] = '\0';
+			inputarray[length] = input;
+			inputarray[++length] = '\0';
+
+			// And keep reading until it gets a postscript
 			while (!postscript)
 			{
 				input = SerialUSB.read();
-				inputarray[length++] = input;
-				inputarray[length] = '\0';
+				inputarray[length] = input;
+
+				// If it gets a postscript, break loops
+				// If length of the input is 260, break loops
 				if (input == 0x55)
 					postscript = true;
-				if (length == 256)
+				if (length == MaxInputLength)
 					break;
 
+				inputarray[++length] = '\0';
+
 			}
-			if (length == 256)
+			if (length == MaxInputLength)
 				break;
 		}
 	}
 
 	if (postscript)
-		SortReading(inputarray, length);
+		SortReading(inputarray, length-1);
 }

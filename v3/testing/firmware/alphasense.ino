@@ -1,15 +1,25 @@
 #ifdef ALPHASENSE_INCLUDE
+byte alpha_status()
+{
+    SPI.beginTransaction(set1);
+    digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
+
+    byte returnbyte;
+    val1 = SPI.transfer(0xCF);
+    SPI.endTransaction();
+
+    return returnbyte;
+}
+
 void alphasense_on() 
 {
 	//** POWER ON
 	SPI.beginTransaction(set1);
     digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
-    delay(100);
 
     val1 = SPI.transfer(0x03);
-    delay(100);
+    delay(10);
     val2 = SPI.transfer(0x00);
-    delay(100);
     
     digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
     SPI.endTransaction();

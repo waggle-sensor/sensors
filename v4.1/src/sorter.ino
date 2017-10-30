@@ -1,41 +1,22 @@
 
 void SortReading(byte *dataReading, int length)
 {
-	while (length != 0)
+	int datalength = dataReading[3];
+	bool checkcrc = CheckCRC(dataReading[datalength + 4]);
+	if (checkcrc)
 	{
-		int datalength = dataReading[3];
-		if (dataReading[0] == 0xaa && dataReading[datalength + 5] == 0x55)
-		{
-			bool checkcrc = CheckCRC(dataReading[datalength + 4]);
-			if (checkcrc)
-			{
-				byte data[datalength];
-				for (int i = 0; i < datalength; i++)
-					data[i] = dataReading[4 + i];
-				CallFunction((const char) data[0]);
-			}
-			else
-				DeleteReading(dataReading, length, datalength);
-		}
-		else
-			DeleteReading(dataReading, length, datalength);
-	}
-}
-
-int DeleteReading(byte *dataReading, int length, int datalength)
-{
-	length -= datalength - 6;
-	if (length > 6)
-	{
-		int newfirst = sizeof(dataReading) - (datalength + 5);
-		for (int i = 0; i < newfirst; i++)
-		{
-			dataReading[i] = dataReading[datalength + 6 + i];
-			dataReading[i + 1] = '\0';				
-		}
+		byte data[datalength];
+		for (int i = 0; i < datalength; i++)
+			data[i] = dataReading[4 + i];
+		CallReadFunction(data);
 	}
 	else
-		length = 0;
+		ReturnFalse();
+}
+
+void ReturnFalse()
+{
+	// send any sign that the request packet is not correct
 }
 
 bool CheckCRC(byte crc)
@@ -46,13 +27,13 @@ bool CheckCRC(byte crc)
 		return false;
 }
 
-struct Conversion
+struct ReadCoresense
 {
 	const byte sensorid;
 	void (*func)();
 };
 
-const Conversion conv[] = {
+const ReadCoresense readcore[] = {
 	{0x00, ReadMacAdd},
 	{0x01, ReadTMP112},
 	{0x02, ReadHTU21D},
@@ -74,20 +55,30 @@ const Conversion conv[] = {
 	{0x15, ReadChem},
 };
 
-int numfunc = sizeof(conv);
+int numreadcore = sizeof(readcore);
 
-void CallFunction(const byte data)
+void CallReadFunction(byte *data)
 {
+	// assume the input byte array contains three subpackets
+
 	// for (int..)
 	// {
 	// 	for each bytes:
 	// 		do under:
-	
-	for (int i = 0; i < numfunc; i++)
+
+	for (int i = 0; i < sizeof(data); i++)
 	{
-		const Conversion *fn = conv + i;
+		SerialUSB.print("data");
+		SerialUSB.println(data[i]);
+	}
+
+	// SerialUSB.println(String(data));
+	
+	for (int i = 0; i < numreadcore; i++)
+	{
+		const ReadCoresense *fn = readcore + i;
 		//if (strcmp(fn->sensorid, data) == 0)
-		if (fn->sensorid == data)
+		if (fn->sensorid == data[0])
 			fn->func();
 	}
 }

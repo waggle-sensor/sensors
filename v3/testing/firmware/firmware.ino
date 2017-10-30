@@ -43,17 +43,10 @@ void setup()
     #ifdef I2C_SENSORS
     //** begin communication lines
     Wire.begin(); // Sensors are on the first I2C Bus, air and light sensor boards    
-    #endif
-
-
     delay(3000);
-    #ifdef CHEMSENSE_INCLUDE
-    Serial3.begin(CHEMSENSE_DATARATE); // data from the Chemsense board arrives here.
-    digitalWrite(PIN_CHEMSENSE_POW, LOW);  //** Power on the Chemsense board
-    #endif
-
     //** sensors_setup.ino, initialize sensors in airsense and lightsense boards
     Sensors_Setup();    // TMP112 config(); Chemsense turned off, This has to come later than chemsense digital write
+    #endif
 
     //** begin I2C interface
     #ifdef I2C_INTERFACE
@@ -66,15 +59,33 @@ void setup()
     SPI.begin(); // data from the ****************************************************** alphasensor
     delay(15000);
     alphasense_on();
+    byte fanval = alpha_status();
+    SerialUSB.println(fanval);
+    SerialUSB.println("Alphasensor");
+    // fanval = 0x01; // This is when alpha sensor is off
+    while (fanval != 0x00)
+    {
+        alphasense_on();
+        fanval = alpha_status();
+        SerialUSB.println(fanval);
+        SerialUSB.println("Alphasensor");
+        delay(5000);
+    }
     SerialUSB.print("on");
-    delay(10000);
+    // delay(10000);
 
-    alphasense_firmware();
-    alphasense_config();
+    // alphasense_firmware();
+    // alphasense_config();
     //     Serial.print("configuration");
     delay(1000);
 
-    flag_alpha = true;
+    // flag_alpha = true;
+    #endif
+
+    #ifdef CHEMSENSE_INCLUDE
+    Serial3.begin(CHEMSENSE_DATARATE); // data from the Chemsense board arrives here.
+    digitalWrite(PIN_CHEMSENSE_POW, LOW);  //** Power on the Chemsense board
+    chemFWconfig();
     #endif
 
     #ifdef VERSION_INCLUDE
@@ -99,7 +110,6 @@ void setup()
 void loop()
 {
     count = 0;
-
 
     while(count < 10)
     {    
@@ -190,6 +200,20 @@ void loop()
     #endif
     
     count = 0;
+
+    SerialUSB.println("");
+    byte fanval = alpha_status();
+    SerialUSB.println(fanval);
+    SerialUSB.println("Alphasensor");
+    while (fanval != 0x00)
+    {
+        alphasense_on();
+        fanval = alpha_status();
+        SerialUSB.println(fanval);
+        SerialUSB.println("Alphasensor");
+        delay(5000);
+    }
+    SerialUSB.println("on");
 }
 
 #ifdef I2C_INTERFACE

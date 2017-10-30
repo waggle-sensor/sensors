@@ -1,2 +1,0 @@
-#define BUILD_TIME 1509121104
-#define BUILD_GIT "e38c"

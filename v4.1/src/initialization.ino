@@ -27,7 +27,35 @@ void InitChemsense()
 	// power on the device --> LOW means power on
 	// chemense power pin = 47
 	digitalWrite(47, LOW);
-	delay(10);
+	ChemFWConfig();
+}
+
+void ChemFWConfig() // read one time, at setup
+{
+	byte totalReading[512];
+	byte configReading[128];
+	int numConfig = 0; // 0 - 9
+	int readingLength = 0;
+	int cum = 0;
+
+	for (int i = 0; i < 65535; i++)
+	{
+		if (Serial3.available() > 2)
+		{
+			numConfig++;
+
+			readingLength = Serial3.readBytesUntil('\n', configReading, 128);
+			cum += readingLength;
+
+			for (int j = 0; j < readingLength; j++)
+				totalReading[cum + j] = configReading[j];
+
+			// 47 times
+			if (numConfig == 47)
+				break;
+		}
+		delay(1);
+	}
 }
 
 void InitAlphasensor()
