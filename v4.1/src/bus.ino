@@ -224,3 +224,34 @@ void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
 // 	digitalWrite(PIN_SLAVE, HIGH);
 // 	SPI.endTransaction();
 // }
+
+
+
+//** EEPROM
+#define EEPROM_ADDRESS 0x50 
+
+void writeEEPROM (unsigned int memory_address, byte data_byte )
+{
+    Wire.beginTransmission(EEPROM_ADDRESS);
+    Wire.write((int)(memory_address >> 8));   // MSB
+    Wire.write((int)(memory_address & 0xFF)); // LSB
+    Wire.write(data_byte);
+    Wire.endTransmission();
+    delay(5);
+}
+
+byte readEEPROM (unsigned int memory_address )
+{
+    byte recv_data = 0xff;
+
+    Wire.beginTransmission(EEPROM_ADDRESS);
+    Wire.write((int)(memory_address >> 8));   // MSB
+    Wire.write((int)(memory_address & 0xFF)); // LSB
+    Wire.endTransmission();
+    Wire.requestFrom(EEPROM_ADDRESS,1);
+
+    if (Wire.available())
+        recv_data = Wire.read();
+
+    return recv_data;
+}

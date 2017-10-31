@@ -1,9 +1,7 @@
-// #include <ctype.h>
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <OneWire.h>
-#include "./SCAN/scanner.h"
 
 // lib for sensors on lightsense
 #include "./MCP342X/MCP342X.h"
@@ -14,12 +12,10 @@ OneWire ds2401(48);
 
 char dataReading[256];
 
-Scanner scanner;
-
 void setup()
 {
 	// serial between cs and np
-	SerialUSB.begin(115200);
+	SerialUSB.begin(9600);
 	delay(10);
 
 	// wire for sensors on met/lightsense boards

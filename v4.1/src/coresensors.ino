@@ -1,12 +1,42 @@
 
-
+// Metsense
 void ReadMacAdd()
 {
+	byte id[8];
 
+	if (!ds2401.reset()) 
+	{
+		SerialUSB.print("device is not ready");
+		// return any sign that this device is not ready!!!
+		return;
+	}
+
+	ds2401.write(0x33);
+
+	for (int i = 0; i < 8; i++)
+		id[i] = ds2401.read();
+
+	if (OneWire::crc8(id, 8) != 0)
+	{
+		SerialUSB.print("failed to pass crc check");
+		// return any sign that it is failed to checi crc
+		return;
+	}
+
+	for (int i = 0; i < 8; i++) 
+	{
+		byte h = (id[i] >> 4) & 0x0f;
+		byte l = (id[i] >> 0) & 0x0f;
+		SerialUSB.print(h, HEX);
+		SerialUSB.print(" and ");
+		SerialUSB.print(l, HEX);
+	}
 }
 
 void ReadTMP112()
 {
+	SerialUSB.print("TMP112");
+
 	byte I2C_TMP112 = 0x48;
 	byte TMP112_TEMP_REG = 0x00;
 
@@ -37,6 +67,8 @@ void ReadTMP112()
 
 void ReadHTU21D()
 {
+	SerialUSB.print("HTU21D");
+
 	byte HTDU21D_ADDRESS = 0x40;
 	byte TRIGGER_TEMP_MEASURE_NOHOLD = 0xF3;
 	byte TRIGGER_HUMD_MEASURE_NOHOLD = 0xF5;
@@ -135,6 +167,8 @@ void ReadSPV()
 		buff[i] = analogRead(PIN_RAW_MIC);
 }
 
+
+// Lightsense
 void ReadTSYS01()
 {
 	byte TSYS01Address = 0x76;
@@ -259,6 +293,8 @@ void ReadTMP421()
 	// ReadI2C(TMP421_ADDRESS, testdata[1]); // low-byte
 }
 
+
+// Chemsense
 void ReadChem()
 {
 	char buff[1024];
@@ -266,8 +302,91 @@ void ReadChem()
 	ReadRS232(buff, numbytes);
 }
 
-void ReadAlpha()
-{
-	
-}
 
+// // Alphasense
+// byte alphaReading[256];
+// void ReadAlphaHisto()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(33, LOW);
+// 	delay(100);
+
+// 	SPI.transfer(0x30);   // 0xF3
+// 	delay(100);
+
+// 	for (i = 0; i < 62; i++)
+// 	{
+// 		alphaReading[i] = SPI.transfer(0x30);
+// 		delay(100);
+// 	}
+
+// 	digitalWrite(33, HIGH);
+// 	SPI.endTransaction();	
+// }
+
+// void ReadAlphaSerial()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(33, LOW);
+// 	delay(100);
+
+// 	SPI.transfer(0x10);    // 0xF3
+// 	delay(100);
+
+// 	for (i = 0; i < 20; i++)
+// 	{
+// 	    alphaReading[i] = SPI.transfer(0x10);
+// 	    delay(100);
+// 	}
+
+// 	digitalWrite(33, HIGH);
+// 	SPI.endTransaction();
+// }
+
+// void ReadAlphaFWver()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(33, LOW);
+// 	delay(100);
+
+// 	SPI.transfer(0x12);    // 0xF3
+// 	delay(100);
+
+// 	alphaReading[0] = SPI.transfer(0x12);
+// 	delay(100);
+// 	alphaReading[1] = SPI.transfer(0x12);
+// 	delay(100);
+
+// 	digitalWrite(33, HIGH);
+// 	SPI.endTransaction();
+// }
+
+// void ReadAlphaConfig()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(33, LOW);
+// 	delay(100);
+
+// 	SPI.transfer(0x3C);   // 0xF3
+// 	delay(100);
+
+// 	for (i = 0; i < 256; i++)
+// 	{
+// 		alphaReading[i] = SPI.transfer(0x3C);
+// 		delay(100);
+// 	}
+
+// 	digitalWrite(33, HIGH);
+// 	SPI.endTransaction();
+
+// }
+
+// void ReadOnSet()
+// {
+
+// }
+
+// void ReadDecagon()
+// {
+
+// }

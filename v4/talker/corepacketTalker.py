@@ -31,7 +31,7 @@ parser.add_argument('-s', dest='serial_device', help='Path to serial port')
 args = parser.parse_args()
 print(args)
 
-with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
+with Serial(args.serial_device, baudrate=9600, timeout=4) as ser:
 	while True:
 		try:
 			cmd = input('$ ')
@@ -42,7 +42,8 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			print (str(datetime.datetime.now()).strip().split('.')[0])
 			print(cmd)
 
-			cmd = 'aa020101%s0055' % (cmd,)  # preamble type|protocel sequence DATAlength data crc=true postscript
+			cmd = 'aa%s0055' % (cmd,)  # preamble type|protocel sequence DATAlength data crc=true postscript
+			# cmd = 'aa0201012A0055'
 			print(cmd)
 
 			ser.write(bytes(bytearray.fromhex(cmd)))
@@ -53,3 +54,5 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 
 		except KeyboardInterrupt:
 			break
+		except Exception as ex:
+			print(ex)

@@ -27,6 +27,7 @@ void InitChemsense()
 	// power on the device --> LOW means power on
 	// chemense power pin = 47
 	digitalWrite(47, LOW);
+	delay(500);
 	ChemFWConfig();
 }
 
@@ -56,18 +57,65 @@ void ChemFWConfig() // read one time, at setup
 		}
 		delay(1);
 	}
+
+	for (int i = 0; i < 512; i++)
+		SerialUSB.print(totalReading[i]);
+
+	SerialUSB.println("");
 }
 
-void InitAlphasensor()
-{
-	// begin SPI
-	SPI.begin();
-	delay(10);
+// #define PIN_ALPHASENSE_SLAVE 33
+// SPIsettings set1;
+// void InitAlphasensor()
+// {
+// 	// begin SPI
+// 	set1 = SPISettings(5000000, MSBFIRST, mode1);
+// 	pinMode(33, OUTPUT);
 
-	// need to think about time interval
-	// alphasense_on();
-	// delay(10000);
-}
+// 	// SPI begin
+// 	SPI.begin();
+// 	delay(15000);
+
+//     alphasense_on();
+//     byte fanval = alpha_status();
+
+//     SerialUSB.print(fanval);
+//     SerialUSB.print("Alphasensor");
+//     // fanval = 0x01; // This is when alpha sensor is off
+//     while (fanval != 0x00)
+//     {
+//         alphasense_on();
+//         fanval = alpha_status();
+//         SerialUSB.println(fanval);
+//         SerialUSB.println("Alphasensor");
+//         delay(5000);
+//     }
+//     SerialUSB.print("on");
+//     delay(1000);
+// }
+
+// void alphasense_on()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
+
+// 	val1 = SPI.transfer(0x03);
+// 	delay(10);
+// 	val2 = SPI.transfer(0x00);
+
+// 	digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
+// 	SPI.endTransaction();
+// }
+
+// void alpha_status()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
+
+// 	byte returnbyte;
+// 	val1 = SPI.transfer(0xCF);
+// 	SPI.endTransaction();
+// }
 
 void InitInterrupt()
 {
