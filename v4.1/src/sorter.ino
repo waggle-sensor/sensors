@@ -51,8 +51,6 @@ void SortReading(byte *dataReading, int packetLength)
 			subpacket += paramlength + 1;
 		}
 	}
-	else
-		ReturnFalse();
 
     PacketSender();
 }
