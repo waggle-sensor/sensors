@@ -138,18 +138,17 @@ void ReadRS232(byte* reading, int* NumVal, int port)
 	*NumVal = len;
 }
 
-void ReadRS232(byte* reading, int sumlen)
+void ReadRS232(byte* reading, int *sumlen)
 {
 	byte inputbyte;
 	while (Serial3.available() > 0)
 		inputbyte = Serial3.read();
 
 	int len = 0;
-	sumlen = 0;
 	for (int i = 0; i < 3; i++)
 	{
 		len = Serial3.readBytesUntil('\n', reading, 256);
-		sumlen += len;
+		*sumlen += len;
 	}
 }
 

@@ -16,8 +16,7 @@ const FunctionType functype[] = {
 const int numtype = sizeof(functype)/sizeof(functype[0]);
 
 void SortReading(byte *dataReading, int packetLength)
-{
-	
+{	
 	int request = dataReading[1] & 0xF0;
 	int protocol = dataReading[1] & 0x0F;
 	int datalength = dataReading[3];
@@ -31,7 +30,7 @@ void SortReading(byte *dataReading, int packetLength)
 
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
-		SerialUSB.println("crc okay, packet data type okay, protocol version okay");
+        PacketInit();
 
 		byte *subpacket = dataReading + 4;
 		// while (datalength != 0)
@@ -45,7 +44,6 @@ void SortReading(byte *dataReading, int packetLength)
 				const FunctionType *ft = functype + i;
 				if (ft->funcid == typebyte)
 				{
-					SerialUSB.println("found matching function");
 					ft->func(subpacket + 1, paramlength);
 					break;
 				}
@@ -56,7 +54,7 @@ void SortReading(byte *dataReading, int packetLength)
 	else
 		ReturnFalse();
 
-	SerialUSB.println("end sorting");
+    PacketSender();
 }
 
 void ReturnFalse()
@@ -118,40 +116,34 @@ EnabledSensorTable sensortable[] = {
 
 const int numEnable = sizeof(sensortable)/sizeof(sensortable[0]);
 
-void CallEnableCore(byte *enablingthisids, int length)
+void CallEnableCore(byte *thisid, int length)
 {
-	byte thisid;
-	for (int i = 0; i < length; i++)
+	for (int j = 0; j < numEnable; j++)
 	{
-		thisid = enablingthisids[i];
-		for (int j = 0; j < numEnable; j++)
+		EnabledSensorTable *est = sensortable + j;
+		if (est->enabledsensorid == thisid[0])
 		{
-			EnabledSensorTable *est = sensortable + j;
-			if (est->enabledsensorid == thisid)
-			{
-				est->enabled = true;
-				break;
-			}
+			est->enabled = true;
+            Packetization(thisid[0], 0);
+			break;
 		}
 	}
+    Packetization(thisid[0], 1);
 }
 
-void CallDisableCore(byte *disablethisids, int length)
+void CallDisableCore(byte *thisid, int length)
 {
-	byte thisid;
-	for (int i = 0; i < length; i++)
+	for (int j = 0; j < numEnable; j++)
 	{
-		thisid = disablethisids[i];
-		for (int j = 0; j < numEnable; j++)
+		EnabledSensorTable *est = sensortable + j;
+		if (est->enabledsensorid == thisid[0])
 		{
-			EnabledSensorTable *est = sensortable + j;
-			if (est->enabledsensorid == thisid)
-			{
-				est->enabled = false;
-				break;
-			}
+			est->enabled = false;
+            Packetization(thisid[0], 1);
+			break;
 		}
 	}
+    Packetization(thisid[0], 1);
 }
 
 bool GetEnable(byte id)
@@ -171,7 +163,7 @@ void CallInitCore(byte *data, int length)
 	if (data[0] == 0x2A)
 		InitChemsense();
 	// else if (data[0] == 0x30)
-	// 	InitAlphasensor();
+	// InitAlphasensor();
 	else
 		ReturnFalse();
 }
@@ -179,7 +171,7 @@ void CallInitCore(byte *data, int length)
 struct ReadCoresense
 {
 	const byte sensorid;
-	void (*func)(byte*, int);
+	void (*func)(byte*, int*);
 };
 
 const ReadCoresense readcore[] = {
@@ -220,28 +212,26 @@ int numCoreRead = sizeof(readcore)/sizeof(readcore[0]);
 
 void CallReadCore(byte *data, int length)
 {
-	SerialUSB.println("to call one of core reading function");
-	SerialUSB.println(data[0], HEX);
-
 	byte thisid;
 	byte sensorReading[1024];
-	int readinglength = 0;
+	int readingLength = 0;
 
 	bool enable = GetEnable(data[0]);
-	SerialUSB.println("get enable");
-	SerialUSB.println(enable);
 
 	if (!enable)
-		return;
+    {
+		Packetization(data[0], 0xFF);
+        return;
+    }
 
 	for (int i = 0; i < numCoreRead; i++)
 	{
 		const ReadCoresense *rc = readcore + i;
 		if (rc->sensorid == data[0])
 		{
-			SerialUSB.println("found matching core reading function");
-			rc->func(sensorReading, readinglength);
+			rc->func(sensorReading, &readingLength);
 			break;
 		}
 	}
+    Packetization(sensorReading, readingLength, data[0]);
 }
