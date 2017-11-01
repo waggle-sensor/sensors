@@ -2,6 +2,7 @@
 // Metsense
 void ReadMacAdd(byte *sensorReading, int readinglength)
 {
+	SerialUSB.print("printing mac address");;
 	byte id[8];
 
 	if (!ds2401.reset()) 
@@ -27,9 +28,8 @@ void ReadMacAdd(byte *sensorReading, int readinglength)
 	{
 		byte h = (id[i] >> 4) & 0x0f;
 		byte l = (id[i] >> 0) & 0x0f;
-		SerialUSB.print(h, HEX);
-		SerialUSB.print(" and ");
-		SerialUSB.print(l, HEX);
+		SerialUSB.println(h, HEX);
+		SerialUSB.println(l, HEX);
 
 		sensorReading[i] = (id[i] >> 4) & 0x0f;
 		sensorReading[i + 1] = (id[i] >> 0) & 0x0f;

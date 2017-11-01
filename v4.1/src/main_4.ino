@@ -21,7 +21,7 @@ void setup()
 void loop()
 {
 	bool postscript = false;
-	int length = 0;
+	int packetLength = 0;
 
 	// Read data until it gets a postscript
 	while (!postscript)
@@ -31,30 +31,30 @@ void loop()
 		// If input is preamble, then store bytes from now
 		if (input == 0xaa)
 		{
-			inputarray[length] = input;
-			inputarray[++length] = '\0';
+			inputarray[packetLength] = input;
+			inputarray[++packetLength] = '\0';
 
 			// And keep reading until it gets a postscript
 			while (!postscript)
 			{
 				input = SerialUSB.read();
-				inputarray[length] = input;
+				inputarray[packetLength] = input;
 
 				// If it gets a postscript, break loops
-				// If length of the input is 260, break loops
+				// If packetLength of the input is 260, break loops
 				if (input == 0x55)
 					postscript = true;
-				if (length == MaxInputLength)
+				if (packetLength == MaxInputLength)
 					break;
 
-				inputarray[++length] = '\0';
+				inputarray[++packetLength] = '\0';
 
 			}
-			if (length == MaxInputLength)
+			if (packetLength == MaxInputLength)
 				break;
 		}
 	}
 
 	if (postscript)
-		SortReading(inputarray, length);
+		SortReading(inputarray, packetLength);
 }

@@ -13,10 +13,11 @@ const FunctionType functype[] = {
 	{0x04, CallDisableCore},
 };
 
-int numtype = 4;
+const int numtype = sizeof(functype)/sizeof(functype[0]);
 
-void SortReading(byte *dataReading, int length)
+void SortReading(byte *dataReading, int packetLength)
 {
+	
 	int request = dataReading[1] & 0xF0;
 	int protocol = dataReading[1] & 0x0F;
 	int datalength = dataReading[3];
@@ -28,41 +29,34 @@ void SortReading(byte *dataReading, int length)
 	byte paramlength = 0;
 	byte sending[3];
 
-	if (checkcrc && (request == 0) && (protocol == 2))
+	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
-		byte data[datalength];
-		for (int i = 0; i < datalength; i++)
-			data[i] = dataReading[4 + i];
+		SerialUSB.println("crc okay, packet data type okay, protocol version okay");
 
-		SerialUSB.print("datalength ");
-		SerialUSB.print(datalength);
-		SerialUSB.print(" ");
-			
-		while (datalength != 0)
+		byte *subpacket = dataReading + 4;
+		// while (datalength != 0)
+		while (subpacket < &dataReading[datalength + 4])
 		{
-			typebyte = (data[0] >> 4) & 0x0F;
-			paramlength = data[0] & 0x0F;
+			typebyte = (subpacket[0] >> 4) & 0x0F;
+			paramlength = subpacket[0] & 0x0F;
 
-			for (int i = 0; i < paramlength; i++)
-				sending[i] = dataReading[i + 1];
-
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < numtype; i++)
 			{
 				const FunctionType *ft = functype + i;
 				if (ft->funcid == typebyte)
-					ft->func(sending, paramlength);
+				{
+					SerialUSB.println("found matching function");
+					ft->func(subpacket + 1, paramlength);
+					break;
+				}
 			}
-
-			decrease = paramlength + 1;
-			datalength -= decrease;
-			for (int i = 0; i < datalength; i++)
-				dataReading[i] = dataReading[i + decrease];
+			subpacket += paramlength + 1;
 		}
 	}
 	else
 		ReturnFalse();
-	
-	SerialUSB.println("data ");
+
+	SerialUSB.println("end sorting");
 }
 
 void ReturnFalse()
@@ -122,17 +116,22 @@ EnabledSensorTable sensortable[] = {
 	{0x38, false},  // Soil moisture
 };
 
+const int numEnable = sizeof(sensortable)/sizeof(sensortable[0]);
+
 void CallEnableCore(byte *enablingthisids, int length)
 {
 	byte thisid;
 	for (int i = 0; i < length; i++)
 	{
 		thisid = enablingthisids[i];
-		for (int j = 0; j < 34; j++)
+		for (int j = 0; j < numEnable; j++)
 		{
 			EnabledSensorTable *est = sensortable + j;
 			if (est->enabledsensorid == thisid)
-				est->enabled = true;	
+			{
+				est->enabled = true;
+				break;
+			}
 		}
 	}
 }
@@ -143,13 +142,28 @@ void CallDisableCore(byte *disablethisids, int length)
 	for (int i = 0; i < length; i++)
 	{
 		thisid = disablethisids[i];
-		for (int j = 0; j < 34; j++)
+		for (int j = 0; j < numEnable; j++)
 		{
 			EnabledSensorTable *est = sensortable + j;
 			if (est->enabledsensorid == thisid)
-				est->enabled = false;	
+			{
+				est->enabled = false;
+				break;
+			}
 		}
 	}
+}
+
+bool GetEnable(byte id)
+{
+	for (int j = 0; j < numEnable; j++)
+	{
+		EnabledSensorTable *est = sensortable + j;
+		if (est->enabledsensorid == id)
+			return est->enabled;
+	}
+
+	return false;
 }
 
 void CallInitCore(byte *data, int length)
@@ -202,23 +216,32 @@ const ReadCoresense readcore[] = {
 	// {0x38, ReadDecagon}, // soil temperature, soil electric conductivity, soil volumetric water content
 };
 
-int numCoresensors = 25;
+int numCoreRead = sizeof(readcore)/sizeof(readcore[0]);
 
 void CallReadCore(byte *data, int length)
 {
+	SerialUSB.println("to call one of core reading function");
+	SerialUSB.println(data[0], HEX);
+
 	byte thisid;
 	byte sensorReading[1024];
 	int readinglength = 0;
 
-	for (int i = 0; i < 34; i++)
+	bool enable = GetEnable(data[0]);
+	SerialUSB.println("get enable");
+	SerialUSB.println(enable);
+
+	if (!enable)
+		return;
+
+	for (int i = 0; i < numCoreRead; i++)
 	{
 		const ReadCoresense *rc = readcore + i;
-		if (rc->sensorid == data[1])
+		if (rc->sensorid == data[0])
 		{
+			SerialUSB.println("found matching core reading function");
 			rc->func(sensorReading, readinglength);
 			break;
 		}
 	}
-
-	Packetization(sensorReading, readinglength);
 }
