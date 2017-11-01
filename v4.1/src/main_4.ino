@@ -1,21 +1,14 @@
-#include <Arduino.h>
-#include <Wire.h>
-#include <SPI.h>
-#include <OneWire.h>
 
 // lib for sensors on lightsense
-#include "./MCP342X/MCP342X.h"
-MCP342X mcp3428_1;
-MCP342X mcp3428_2;
+#include "variables.h"
 
-OneWire ds2401(48);
-
-char dataReading[256];
+byte inputarray[MaxInputLength];
+byte input = '\0';
 
 void setup()
 {
 	// serial between cs and np
-	SerialUSB.begin(9600);
+	SerialUSB.begin(115200);
 	delay(10);
 
 	// wire for sensors on met/lightsense boards
@@ -27,9 +20,6 @@ void setup()
 
 void loop()
 {
-	int MaxInputLength = 260;
-	byte inputarray[MaxInputLength];
-	byte input = '\0';
 	bool postscript = false;
 	int length = 0;
 
@@ -66,5 +56,5 @@ void loop()
 	}
 
 	if (postscript)
-		SortReading(inputarray, length-1);
+		SortReading(inputarray, length);
 }

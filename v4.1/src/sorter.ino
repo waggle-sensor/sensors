@@ -17,26 +17,46 @@ int numtype = 4;
 
 void SortReading(byte *dataReading, int length)
 {
-
+	int request = dataReading[1] & 0xF0;
+	int protocol = dataReading[1] & 0x0F;
 	int datalength = dataReading[3];
-	bool checkcrc = CheckCRC(dataReading[datalength + 4]);
-	int protocol = dataReading[1] & 0x0f;
-	if (checkcrc && (protocol == 2))
-	{
-		byte typebyte = (dataReading[1] >> 4) & 0x0f;
+	int decrease = 0;
 
+	bool checkcrc = CheckCRC(dataReading[datalength + 4]);
+
+	byte typebyte = 0;
+	byte paramlength = 0;
+	byte sending[3];
+
+	if (checkcrc && (request == 0) && (protocol == 2))
+	{
 		byte data[datalength];
 		for (int i = 0; i < datalength; i++)
 			data[i] = dataReading[4 + i];
 
-		for (int i = 0; i < numtype; i++)
+		SerialUSB.print("datalength ");
+		SerialUSB.print(datalength);
+		SerialUSB.print(" ");
+			
+		while (datalength != 0)
 		{
-			const FunctionType *ft = functype + i;
-			if (ft->funcid == typebyte)
+			typebyte = (data[0] >> 4) & 0x0F;
+			paramlength = data[0] & 0x0F;
+
+			for (int i = 0; i < paramlength; i++)
+				sending[i] = dataReading[i + 1];
+
+			for (int i = 0; i < 4; i++)
 			{
-				ft->func(data, datalength);
-				break;
+				const FunctionType *ft = functype + i;
+				if (ft->funcid == typebyte)
+					ft->func(sending, paramlength);
 			}
+
+			decrease = paramlength + 1;
+			datalength -= decrease;
+			for (int i = 0; i < datalength; i++)
+				dataReading[i] = dataReading[i + decrease];
 		}
 	}
 	else
@@ -59,6 +79,79 @@ bool CheckCRC(byte crc)
 }
 
 
+struct EnabledSensorTable
+{
+	const byte enabledsensorid;
+	bool enabled;
+};
+
+EnabledSensorTable sensortable[] = {
+	{0xFF, true},  // Firmware HW/SW version, build git, build time
+	{0x00, true},  // Metsense MAC
+	{0x01, true},  // TMP112
+	{0x02, true},  // HTU21D temperature, HTU21D humidity
+	{0x03, true},  // HIH4030 humidity
+	{0x04, true},  // BMP180 temperature, BMP180 pressure
+	{0x05, true},  // PR103J2 temperature
+	{0x06, true},  // TSL250RD
+	{0x07, true},  // MMA8452Q AccX,Y,Z,Magnitude
+	{0x08, true},  // SPV1840LR5H-B
+	{0x09, true},  // TSYS01 temperature
+	{0x0A, true},  // HMC5883L Strength Hx,y,z,Change
+	{0x0B, true},  // HIH6130 temperature, humidity
+	{0x0C, true},  // APDS-9006-020
+	{0x0D, true},  // TSL260
+	{0x0E, true},  // TSL250
+	{0x0F, true},  // MLX75305
+	{0x10, true},  // ML8511
+	{0x13, true},  // TMP421
+	{0x14, true},  // SPV1840LR5H-B
+	{0x2A, true},  // All Chemsense
+	{0x28, true},  // Alphasensor Histogram
+	{0x29, true},  // Alphasensor Serial
+	{0x30, true},  // Alphasensor Firmware
+	{0x31, true},  // Configuration
+	{0x2B, false},  // YL-69
+	{0x2C, false},  // YHDC SCT-013-030
+	{0x2D, false},  // CR3110-3000
+	{0x2E, false},  // Water Level (Black)
+	{0x2F, false},  // Water Level (Red)
+	{0x35, false},  // PMS3003
+	{0x36, false},  // PMS7003
+	{0x37, false},  // Rain gauge
+	{0x38, false},  // Soil moisture
+};
+
+void CallEnableCore(byte *enablingthisids, int length)
+{
+	byte thisid;
+	for (int i = 0; i < length; i++)
+	{
+		thisid = enablingthisids[i];
+		for (int j = 0; j < 34; j++)
+		{
+			EnabledSensorTable *est = sensortable + j;
+			if (est->enabledsensorid == thisid)
+				est->enabled = true;	
+		}
+	}
+}
+
+void CallDisableCore(byte *disablethisids, int length)
+{
+	byte thisid;
+	for (int i = 0; i < length; i++)
+	{
+		thisid = disablethisids[i];
+		for (int j = 0; j < 34; j++)
+		{
+			EnabledSensorTable *est = sensortable + j;
+			if (est->enabledsensorid == thisid)
+				est->enabled = false;	
+		}
+	}
+}
+
 void CallInitCore(byte *data, int length)
 {
 	if (data[0] == 0x2A)
@@ -72,7 +165,7 @@ void CallInitCore(byte *data, int length)
 struct ReadCoresense
 {
 	const byte sensorid;
-	void (*func)();
+	void (*func)(byte*, int);
 };
 
 const ReadCoresense readcore[] = {
@@ -86,8 +179,8 @@ const ReadCoresense readcore[] = {
 	{0x06, ReadTSL250ms}, // light
 	{0x07, ReadMMA}, // acceleration force
 	{0x08, ReadSPV}, // sound level
-	// Lightsense
 	{0x09, ReadTSYS01}, // temperature
+	// Lightsense
 	{0x0A, ReadHMC}, // magnetic field
 	{0x0B, ReadHIH6130}, // temperature, humidity
 	{0x0C, ReadAPDS}, // light
@@ -113,37 +206,19 @@ int numCoresensors = 25;
 
 void CallReadCore(byte *data, int length)
 {
-	for (int i = 0; i < length; i++)
+	byte thisid;
+	byte sensorReading[1024];
+	int readinglength = 0;
+
+	for (int i = 0; i < 34; i++)
 	{
-		SerialUSB.print("data ");
-		SerialUSB.print(data[i]);
-
-		for (int j = 0; j < numCoresensors; j++)
+		const ReadCoresense *rc = readcore + i;
+		if (rc->sensorid == data[1])
 		{
-			const ReadCoresense *fn = readcore + j;
-
-			SerialUSB.print(" sensorid from struct ");
-			SerialUSB.print(fn->sensorid);
-			//if (strcmp(fn->sensorid, data) == 0)
-			if (fn->sensorid == data[i])
-			{
-				SerialUSB.print(" data ");
-				SerialUSB.print(" RIGHT ");
-				fn->func();
-				break;
-			}
+			rc->func(sensorReading, readinglength);
+			break;
 		}
 	}
 
-	SerialUSB.println(" ");
-}
-
-void CallEnableCore(byte *data, int length)
-{
-	// put the sensor id in to enable table
-}
-
-void CallDisableCore(byte *data, int length)
-{
-	// get the sensor id out from enable table
+	Packetization(sensorReading, readinglength);
 }

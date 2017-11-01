@@ -1,4 +1,5 @@
 
+
 void InitSensors()
 {
 	// Metsense
@@ -15,139 +16,27 @@ void InitSensors()
 
 }
 
-void InitChemsense()
-{
-	// begin serial3
-	Serial3.begin(115200);
-	// set timeout of serial3 as 4 sec
-	Serial3.setTimeout(4000);
-	// set chemsense power power pin
-	// pin for chemsense power is 47
-	pinMode(47, OUTPUT);
-	// power on the device --> LOW means power on
-	// chemense power pin = 47
-	digitalWrite(47, LOW);
-	delay(500);
-	ChemFWConfig();
-}
-
-void ChemFWConfig() // read one time, at setup
-{
-	byte totalReading[512];
-	byte configReading[128];
-	int numConfig = 0; // 0 - 9
-	int readingLength = 0;
-	int cum = 0;
-
-	for (int i = 0; i < 65535; i++)
-	{
-		if (Serial3.available() > 2)
-		{
-			numConfig++;
-
-			readingLength = Serial3.readBytesUntil('\n', configReading, 128);
-			cum += readingLength;
-
-			for (int j = 0; j < readingLength; j++)
-				totalReading[cum + j] = configReading[j];
-
-			// 47 times
-			if (numConfig == 47)
-				break;
-		}
-		delay(1);
-	}
-
-	for (int i = 0; i < 512; i++)
-		SerialUSB.print(totalReading[i]);
-
-	SerialUSB.println("");
-}
-
-// #define PIN_ALPHASENSE_SLAVE 33
-// SPIsettings set1;
-// void InitAlphasensor()
-// {
-// 	// begin SPI
-// 	set1 = SPISettings(5000000, MSBFIRST, mode1);
-// 	pinMode(33, OUTPUT);
-
-// 	// SPI begin
-// 	SPI.begin();
-// 	delay(15000);
-
-//     alphasense_on();
-//     byte fanval = alpha_status();
-
-//     SerialUSB.print(fanval);
-//     SerialUSB.print("Alphasensor");
-//     // fanval = 0x01; // This is when alpha sensor is off
-//     while (fanval != 0x00)
-//     {
-//         alphasense_on();
-//         fanval = alpha_status();
-//         SerialUSB.println(fanval);
-//         SerialUSB.println("Alphasensor");
-//         delay(5000);
-//     }
-//     SerialUSB.print("on");
-//     delay(1000);
-// }
-
-// void alphasense_on()
-// {
-// 	SPI.beginTransaction(set1);
-// 	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
-
-// 	val1 = SPI.transfer(0x03);
-// 	delay(10);
-// 	val2 = SPI.transfer(0x00);
-
-// 	digitalWrite(PIN_ALPHASENSE_SLAVE, HIGH);
-// 	SPI.endTransaction();
-// }
-
-// void alpha_status()
-// {
-// 	SPI.beginTransaction(set1);
-// 	digitalWrite(PIN_ALPHASENSE_SLAVE, LOW);
-
-// 	byte returnbyte;
-// 	val1 = SPI.transfer(0xCF);
-// 	SPI.endTransaction();
-// }
-
-void InitInterrupt()
-{
-	// pinMode(RAIN_INTERRUPT_PIN, INPUT_PULLUP);
-	// attachInterrupt(digitalPinToInterrupt(RAIN_INTERRUPT_PIN), blink, RISING);
-	// delay(5);
-	// pin_signal = 0;
-}
-
 //** Metsense
 void InitTMP112()
 {
-	byte I2C_TMP112 = 0x48;
-	byte TMP112_CONFIG_REG = 0x01;
-	byte TMP112_TEMP_REG = 0x00;
+	const byte TMP112_CONFIG_REG = 0x01;
+	const byte TMP112_TEMP_REG = 0x00;
 
 	byte writearray[3] = {TMP112_CONFIG_REG, 0x60, 0xB0};
-	WriteI2C(I2C_TMP112, 3, writearray);
+	WriteI2C(TMP112_ADDRESS, 3, writearray);
 	delay(100);
 
 	byte writebyte[1] = {TMP112_CONFIG_REG};
-	WriteI2C(I2C_TMP112, 1, writebyte);
+	WriteI2C(TMP112_ADDRESS, 1, writebyte);
 	delay(100);
 
 	byte readarray[2];
-	ReadI2C(I2C_TMP112, 2, readarray);
+	ReadI2C(TMP112_ADDRESS, 2, readarray);
 }
 
 void InitBMP180()
 {
 	byte BMP180_REGISTER_CHIPID = 0xD0;
-	byte BMP180_ADDRESS = 0x77;
 	byte writebyte[1] = {BMP180_REGISTER_CHIPID};
 	//** ultra high resolution
 	int _bmp180Mode = 3;
@@ -197,11 +86,10 @@ void InitBMP180()
 
 void InitMMA()
 {
-	byte MMA8452_ADDRESS = 0x1C;
-	byte XYZ_DATA_CFG = 0x0E;
-	byte CTRL_REG1 = 0x2A;
-	byte WHO_AM_I = 0x0D;
-	byte GSCALE = 2;
+	const byte XYZ_DATA_CFG = 0x0E;
+	const byte CTRL_REG1 = 0x2A;
+	const byte WHO_AM_I = 0x0D;
+	const byte GSCALE = 2;
 	// Sets full-scale range to +/-2, 4, or 8g
 
 	//** check if the sensor is correct
@@ -239,12 +127,10 @@ void InitMMA()
 	WriteI2C(MMA8452_ADDRESS, 2, writearray);
 }
 
-//** Lightsense
 void InitTSYS01()
 {
-	byte TSYS01Address = 0x76;
 	byte writebyte[1] = {0x1E};
-	WriteI2C(TSYS01Address, 1, writebyte);
+	WriteI2C(TSYS01_ADDRESS, 1, writebyte);
 	delay(50);
 
 	//gathers calibration coefficients to array
@@ -253,28 +139,27 @@ void InitTSYS01()
 	for (int i = 0; i < 5; i++)
 	{
 		writebyte[0] = 0xA2 + (i * 2);
-		WriteReadI2C(TSYS01Address, 1, writebyte, 2, readarray);
+		WriteReadI2C(TSYS01_ADDRESS, 1, writebyte, 2, readarray);
 		TSYScoefficents[i] = ((uint16_t)readarray[0] << 8) + readarray[1];
 	}
 
 }
 
+//** Lightsense
 void InitHMC()
 {
-	byte HMC5883_ADDRESS_MAG = 0x3C >> 1;  // 0011110x
-
-	byte HMC5883_REGISTER_MAG_CRB_REG_M = 0x01;
-	byte HMC5883_REGISTER_MAG_MR_REG_M = 0x02;
+	const byte HMC5883_REGISTER_MAG_CRB_REG_M = 0x01;
+	const byte HMC5883_REGISTER_MAG_MR_REG_M = 0x02;
 
 	// Enable the magnetometer
 	byte testarray[2] = {HMC5883_REGISTER_MAG_MR_REG_M, 0x00};
-	WriteI2C(HMC5883_ADDRESS_MAG, 2, testarray);
+	WriteI2C(HMC5883_ADDESS, 2, testarray);
 
 	//** Set the gain to a known level
 	byte gain = 0x20;
 	testarray[0] = HMC5883_REGISTER_MAG_CRB_REG_M;
 	testarray[1] = gain;
-	WriteI2C(HMC5883_ADDRESS_MAG, 2, testarray);
+	WriteI2C(HMC5883_ADDESS, 2, testarray);
 	// _magGain = gain;
 
 	//** TODO: Where to store, how to send, sensor ID?????
@@ -285,7 +170,10 @@ void InitHMC()
 void InitMCPmux()
 {
 	mcp3428_1.init(MCP342X::L, MCP342X::L);
+	MCP3428_1_ADDRESS = mcp3428_1.returnAddress();
+
 	mcp3428_2.init(MCP342X::L, MCP342X::F);
+	MCP3428_2_ADDRESS = mcp3428_2.returnAddress();
 }
 
 void blink()
@@ -296,4 +184,114 @@ void blink()
 	// 	count_num++;
 	// 	pin_signal = 0;
 	// }
+}
+
+// Chemsense
+void InitChemsense()
+{
+	// begin serial3
+	Serial3.begin(115200);
+	// set timeout of serial3 as 4 sec
+	Serial3.setTimeout(4000);
+	// set chemsense power power pin
+	// pin for chemsense power is 47
+	pinMode(CHEM_POWER_PIN, OUTPUT);
+	// power on the device --> LOW means power on
+	// chemense power pin = 47
+	digitalWrite(CHEM_POWER_PIN, LOW);
+	delay(500);
+	ChemFWConfig();
+}
+
+void ChemFWConfig() // read one time, at setup
+{
+	byte totalReading[512];
+	byte configReading[128];
+	int numConfig = 0; // 0 - 9
+	int readingLength = 0;
+	int cum = 0;
+
+	for (int i = 0; i < 65535; i++)
+	{
+		if (Serial3.available() > 2)
+		{
+			numConfig++;
+
+			readingLength = Serial3.readBytesUntil('\n', configReading, 128);
+			cum += readingLength;
+
+			for (int j = 0; j < readingLength; j++)
+				totalReading[cum + j] = configReading[j];
+
+			// 47 times
+			if (numConfig == 47)
+				break;
+		}
+		delay(1);
+	}
+
+	for (int i = 0; i < 512; i++)
+		SerialUSB.print(totalReading[i]);
+
+	SerialUSB.println("");
+}
+
+// SPIsettings set1;
+// void InitAlphasensor()
+// {
+// 	// begin SPI
+// 	set1 = SPISettings(5000000, MSBFIRST, mode1);
+// 	pinMode(ALPHA_SLAVE_PIN, OUTPUT);
+
+// 	// SPI begin
+// 	SPI.begin();
+// 	delay(15000);
+
+//     alphasense_on();
+//     byte fanval = alpha_status();
+
+//     SerialUSB.print(fanval);
+//     SerialUSB.print("Alphasensor");
+//     // fanval = 0x01; // This is when alpha sensor is off
+//     while (fanval != 0x00)
+//     {
+//         alphasense_on();
+//         fanval = alpha_status();
+//         SerialUSB.println(fanval);
+//         SerialUSB.println("Alphasensor");
+//         delay(5000);
+//     }
+//     SerialUSB.print("on");
+//     delay(1000);
+// }
+
+// void alphasense_on()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+
+// 	val1 = SPI.transfer(0x03);
+// 	delay(10);
+// 	val2 = SPI.transfer(0x00);
+
+// 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+// 	SPI.endTransaction();
+// }
+
+// void alpha_status()
+// {
+// 	SPI.beginTransaction(set1);
+// 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+
+// 	byte returnbyte;
+// 	val1 = SPI.transfer(0xCF);
+// 	SPI.endTransaction();
+// }
+
+void InitInterrupt()
+{
+	// pinMode(RAIN_INTERRUPT_PIN, INPUT_PULLUP);
+	// attachInterrupt(digitalPinToInterrupt(RAIN_INTERRUPT_PIN), blink, RISING);
+	// delay(5);
+	// pin_signal = 0;
 }

@@ -31,7 +31,7 @@ parser.add_argument('-s', dest='serial_device', help='Path to serial port')
 args = parser.parse_args()
 print(args)
 
-with Serial(args.serial_device, baudrate=9600, timeout=4) as ser:
+with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 	while True:
 		try:
 			cmd = input('$ ')

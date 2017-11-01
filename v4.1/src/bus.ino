@@ -106,10 +106,10 @@ void InitRS232(int port, int powerPin, long datarate, long timeout)
 	}
 }
 
-void ReadRS232(char* reading, int* NumVal, int port)
+void ReadRS232(byte* reading, int* NumVal, int port)
 {
 	int len = 0;
-	char inputbyte;
+	byte inputbyte;
 
 	if (port == 3)
 	{
@@ -138,9 +138,9 @@ void ReadRS232(char* reading, int* NumVal, int port)
 	*NumVal = len;
 }
 
-void ReadRS232(char* reading, int sumlen)
+void ReadRS232(byte* reading, int sumlen)
 {
-	char inputbyte;
+	byte inputbyte;
 	while (Serial3.available() > 0)
 		inputbyte = Serial3.read();
 
@@ -153,7 +153,7 @@ void ReadRS232(char* reading, int sumlen)
 	}
 }
 
-void WriteRS232(char* writing, int length, int port)
+void WriteRS232(byte* writing, int length, int port)
 {
 	if (port == 3)
 		Serial3.write(writing, length);
