@@ -6,32 +6,28 @@ void ReadMacAdd(byte *sensorReading, int *readingLength)
 
 	if (!ds2401.reset()) 
 	{
-		SerialUSB.print("device is not ready");
-		// return any sign that this device is not ready!!!
-		return;
+		sensorReading[0] = 0xFF;
+		*readingLength += 1;
+		// SerialUSB.print("device is not ready");
+		// return any sign that this device is not ready!!
 	}
 
 	ds2401.write(0x33);
 
 	for (int i = 0; i < 8; i++)
-    {
+	{
 		id[i] = ds2401.read();
-        sensorReading[i] = id[i];
-        *readingLength += 1;
-    }
+		sensorReading[i] = id[i];
+		*readingLength += 1;
+	}
 
 	if (OneWire::crc8(id, 8) != 0)
 	{
-		SerialUSB.print("failed to pass crc check");
+		sensorReading[0] = 0xFF;
+		*readingLength += 1;
+		// SerialUSB.print("failed to pass crc check");
 		// return any sign that it is failed to checi crc
-		return;
 	}
-
-	// for (int i = 0; i < 8; i++) 
-	// {
-	// 	byte h = (id[i] >> 4) & 0x0f;
-	// 	byte l = (id[i] >> 0) & 0x0f;
-	// }
 }
 
 void ReadTMP112(byte *sensorReading, int *readingLength)
@@ -60,20 +56,20 @@ void ReadHTU21D(byte *sensorReading, int *readingLength)
 	WriteReadI2C(HTDU21D_ADDRESS, 1, writebyte, 3, readarray, 55);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-        *readingLength += 1;
-    }
-	
+		*readingLength += 1;
+	}
+
 	//Request a humidity reading
 	writebyte[0] = TRIGGER_HUMD_MEASURE_NOHOLD;
 	WriteReadI2C(HTDU21D_ADDRESS, 1, writebyte, 3, readarray, 55);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i + 3] = readarray[i];
-        *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 }
 
 void ReadHIH4030(byte *sensorReading, int *readingLength)
@@ -103,10 +99,10 @@ void ReadBMP180(byte *sensorReading, int *readingLength)
 	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, readarray);
 
 	for (int i = 0; i < 2; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-        *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
 	// Read pressure
 	byte _bmp180Mode = 3;
@@ -121,20 +117,20 @@ void ReadBMP180(byte *sensorReading, int *readingLength)
 	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, readbyte);
 
 	for (int i = 0; i < 2; i++)
-    {
+	{
 		sensorReading[i + 2] = readarray[i];
-        *readingLength += 1;
-    }
-	sensorReading[4] = readbyte[0];
-    *readingLength += 1;
+		*readingLength += 1;
+	}
+	sensorReading[*readingLength] = readbyte[0];
+	*readingLength += 1;
 
-    int a = sizeof(BMP180_COEFFICIENTS);
-    for (int i = 0; i < a; i++)
-    {
-    	sensorReading[3 + i] = BMP180_COEFFICIENTS[i];
-    	*readingLength += 1;
-    }
-
+	int startCoeff = *readingLength;
+	int a = sizeof(BMP180_COEFFICIENTS);
+	for (int i = 0; i < a; i++)
+	{
+		sensorReading[startCoeff + i] = BMP180_COEFFICIENTS[i];
+		*readingLength += 1;
+	}
 }
 
 void ReadPR103J2(byte *sensorReading, int *readingLength)
@@ -168,10 +164,10 @@ void ReadMMA(byte *sensorReading, int *readingLength)
 	WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 6, readarray, false);
 
 	for (int i = 0; i < 6; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-        *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 }
 
 void ReadSPV(byte *sensorReading, int *readingLength)
@@ -201,17 +197,18 @@ void ReadTSYS01(byte *sensorReading, int *readingLength)
 	// the last read is not used
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
-    int a = sizeof(TSYS01_COEFFICIENTS);
-    for (int i = 0; i < a; i++)
-    {
-    	sensorReading[3 + i] = TSYS01_COEFFICIENTS[i];
-    	*readingLength += 1;
-    }
+	int startCoeff = *readingLength;
+	int a = sizeof(TSYS01_COEFFICIENTS);
+	for (int i = 0; i < a; i++)
+	{
+		sensorReading[startCoeff + i] = TSYS01_COEFFICIENTS[i];
+		*readingLength += 1;
+	}
 }
 
 // Lightsense
@@ -224,18 +221,18 @@ void ReadHMC(byte *sensorReading, int *readingLength)
 	WriteReadI2C(HMC5883_ADDESS, 1, writebyte, 6, readarray);
 
 	for (int i = 0; i < 6; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
-
-    int a = sizeof(HMC5883_COEFFICIENTS);
-    for (int i = 0; i < a; i++)
-    {
-    	sensorReading[6 + i] = HMC5883_COEFFICIENTS[i];
-    	*readingLength += 1;
-    }
+	int startCoeff = *readingLength;
+	int a = sizeof(HMC5883_COEFFICIENTS);
+	for (int i = 0; i < a; i++)
+	{
+		sensorReading[startCoeff + i] = HMC5883_COEFFICIENTS[i];
+		*readingLength += 1;
+	}
 }
 
 void ReadHIH6130(byte *sensorReading, int *readingLength)
@@ -244,9 +241,9 @@ void ReadHIH6130(byte *sensorReading, int *readingLength)
 	WriteReadI2C(HIH6130_ADDRESS, 4, readarray, 100);
 
 	for (int i = 0; i < 4; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
+		*readingLength += 1;
 	}
 	// Temp_byte[0] = (Temp_byte[1] >> 6) & 0x03;
 
@@ -268,10 +265,10 @@ void ReadAPDS(byte *sensorReading, int *readingLength)
 	WriteReadI2C(MCP3428_2_ADDRESS, 1, writebyte, 3, readarray);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
 	// the last read is not used
 
@@ -287,10 +284,10 @@ void ReadTSL260RD(byte *sensorReading, int *readingLength)
 	WriteReadI2C(MCP3428_1_ADDRESS, 1, writebyte, 3, readarray);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
 	// the last read is not used
 
@@ -306,10 +303,10 @@ void ReadTSL250RDls(byte *sensorReading, int *readingLength)
 	WriteReadI2C(MCP3428_1_ADDRESS, 1, writebyte, 3, readarray);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    readingLength += 1;
-    }
+		readingLength += 1;
+	}
 
 	// the last read is not used
 
@@ -325,10 +322,10 @@ void ReadMLX(byte *sensorReading, int *readingLength)
 	WriteReadI2C(MCP3428_1_ADDRESS, 1, writebyte, 3, readarray);
 
 	for (int i = 0; i < 3; i++)
-    {
+	{
 		sensorReading[i] = readarray[i];
-	    *readingLength += 1;
-    }
+		*readingLength += 1;
+	}
 
 	// the last read is not used
 

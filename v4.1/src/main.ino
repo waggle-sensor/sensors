@@ -2,8 +2,12 @@
 // lib for sensors on lightsense
 #include "variables.h"
 
-byte inputarray[MaxInputLength];
+int MaxInputLength = 262;  // possible data bytes 256, 4 headers, 2 footers
+byte inputarray[262];  // Length of this byte array has to be the same with MaxInputLength
 byte input = '\0';
+
+bool postscript = false;
+int packetLength = 0;
 
 void setup()
 {
@@ -17,13 +21,11 @@ void setup()
 	delay(10);
 	InitSensors();
 	InitChemsense();
+	PacketInit();
 }
 
 void loop()
 {
-	bool postscript = false;
-	int packetLength = 0;
-
 	// Read data until it gets a postscript
 	while (!postscript)
 	{
@@ -58,4 +60,8 @@ void loop()
 
 	if (postscript)
 		SortReading(inputarray, packetLength);
+
+	SerialUSB.println("end!!");
+	postscript = false;
+	packetLength = 0;
 }

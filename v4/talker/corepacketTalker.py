@@ -36,32 +36,33 @@ print(args)
 with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 	while True:
 		try:
-# 			cmd = input('$ ')
+			cmd = input('$ ')
 
-# 			if cmd == 'exit':
-# 				break
+			if cmd == 'exit':
+				break
 
-# 			print (str(datetime.datetime.now()).strip().split('.')[0])
-# 			print(cmd)
+			print (str(datetime.datetime.now()).strip().split('.')[0])
+			print(cmd)
 
-# #			if '1' in cmd:
-# #				cmd = '022100'
-# #			elif '2' in cmd:
-# #				cmd = '024100'
-# #			elif '3' in cmd:
-# #				cmd = '023100'
+			# if '1' in cmd:
+			# 	cmd = '022104'
+			# elif '2' in cmd:
+			# 	cmd = '022101'
+#			elif '3' in cmd:
+#				cmd = '023100'
 
-# 			cmd = 'aa0201%s0055' % (cmd,)  # preamble(aa) type|protocel(02) sequence(01) DATAlength(%s) data(%s) crc=true(00) postscript(55)
-# 			# cmd = 'aa0201012A0055'
-# 			print(cmd)
+			cmd = 'aa020102%s0055' % (cmd,)  # preamble(aa) type|protocel(02) sequence(01) DATAlength(%s) data(%s) crc=true(00) postscript(55)
+			# cmd = 'aa0201012A0055'
+			print(cmd)
 
-# 			ser.write(bytes(bytearray.fromhex(cmd)))
-# 			ser.write(b'\n')
+			ser.write(bytes(bytearray.fromhex(cmd)))
+			ser.write(b'\n')
 
 			while True:
-				line = ser.readline()
-				decodeline = line.decode()
-				print(len(line), " ", decodeline, " ", len(decodeline))
+				line = ser.readline().decode()
+				print(line)
+				if 'end' in line:
+					break
 
 		except KeyboardInterrupt:
 			break

@@ -10,11 +10,14 @@ void Packetization(byte *sensorReading, int readingLength, byte sensorid)
     packet[outLength++] = sensorid;
     packet[outLength++] = (1 << 7) | readingLength;   // valid data
 
-	for (int i = 0; i < readingLength; i++)
-		packet[outLength++] = sensorReading[i];
+    for (int i = 0; i < readingLength; i++)
+        packet[outLength++] = sensorReading[i];
+
+    // for (int i = 0; i < readingLength; i++)
+    //     SerialUSB.println(sensorReading[i]);
 }
 
-void Packetization(byte sensorid, byte returnCode)
+void Packetization(byte returnCode, byte sensorid)
 {
     int validity = 1;
 
@@ -27,22 +30,30 @@ void Packetization(byte sensorid, byte returnCode)
 }
 
 void PacketSender()
-{
-    if (outLength < 256)
-    {   
-        packet[3] = outLength - 4;  // data length
-        byte crc = CRCcalc(outLength - 4, packet);
-        packet[outLength++] = crc;  // Append CRC8
-        packet[outLength++] = 0x55;  // postscript
+{   
+    packet[3] = outLength - 4;  // data length
+    byte crc = CRCcalc(outLength - 4, packet);
+    packet[outLength++] = crc;  // Append CRC8
+    packet[outLength++] = 0x55;  // postscript
 
-        for (int i = 0; i < outLength; i++)
-            SerialUSB.print(packet[i],HEX);
-    }
-    else
-    {
-        int sequence = ceil(outLength / 256);
-        packet[2] = sequence;
-    }
+    for (int i = 0; i < outLength; i++)
+        SerialUSB.print(packet[i],HEX);
+
+    // if (outLength < 256)
+    // {   
+    //     packet[3] = outLength - 4;  // data length
+    //     byte crc = CRCcalc(outLength - 4, packet);
+    //     packet[outLength++] = crc;  // Append CRC8
+    //     packet[outLength++] = 0x55;  // postscript
+
+    //     for (int i = 0; i < outLength; i++)
+    //         SerialUSB.print(packet[i],HEX);
+    // }
+    // else
+    // {
+    //     int sequence = ceil(outLength / 256);
+    //     packet[2] = sequence;
+    // }
     SerialUSB.println("");
 }
 

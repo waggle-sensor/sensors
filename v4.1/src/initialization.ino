@@ -11,8 +11,18 @@ void InitSensors()
 	InitHMC();
 	InitMCPmux();
 
+	InitAnalogSensors();
 	// initialize libraries
 	// pinMode(PIN_RAW_MIC,INPUT); SPV sound level
+
+}
+
+void InitAnalogSensors()
+{
+	pinMode(HBT_PIN, OUTPUT);
+	pinMode(SPV_AMP_PIN,INPUT);         // MODE ON?????????? WHERE????????????? HOW???????????? WHEN???????????
+	pinMode(SPV_SPL_PIN,INPUT);
+	pinMode(SPV_RAW_MIC_PIN,INPUT);
 
 }
 
@@ -203,51 +213,21 @@ void InitChemsense()
 	digitalWrite(CHEM_POWER_PIN, LOW); 	// power on the device --> LOW means power on
 	delay(1000);
 
-	int readingLength = 0;
 	if (Serial3.available() > 0)
 	{
-		int readingLength = Serial3.readBytesUntil(36, chemConfigReading, 2048);
+		int chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 2048);
 
-		for (int i = 0; i < readingLength; i++)
+		for (int i = 0; i < chemConfigLength; i++)
 			SerialUSB.print(chemConfigReading[i]);
 	}
-	SerialUSB.println("");
-
-	if (readingLength < 100)
+	else
 	{
 		Serial3.end();
 		CallDisableCore(0x2A);
 	}
+	SerialUSB.println("");
 }
 
-
-void InitAlphasensor()
-{
-	// begin SPI
-	setAlpha = SPISettings(5000000, MSBFIRST, SPI_MODE1);
-	pinMode(ALPHA_SLAVE_PIN, OUTPUT);
-
-	// SPI begin
-	SPI.begin();
-	delay(15000);
-
-    alphasense_on();
-    // byte fanval = alpha_status();
-
-    // SerialUSB.print(fanval);
-    // SerialUSB.print("Alphasensor");
-    // // fanval = 0x01; // This is when alpha sensor is off
-    // while (fanval != 0x00)
-    // {
-    //     alphasense_on();
-    //     fanval = alpha_status();
-    //     SerialUSB.println(fanval);
-    //     SerialUSB.println("Alphasensor");
-    //     delay(5000);
-    // }
-    // SerialUSB.print("on");
-    // delay(1000);
-}
 
 
 void InitInterrupt()

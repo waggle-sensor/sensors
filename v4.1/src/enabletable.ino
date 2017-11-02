@@ -96,6 +96,5 @@ bool GetEnable(byte id)
 		if (est->enabledsensorid == id)
 			return est->enabled;
 	}
-
 	return false;
 }

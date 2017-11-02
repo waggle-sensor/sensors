@@ -58,20 +58,10 @@ void ReturnFalse()
 	SerialUSB.print("WRONG");
 }
 
-bool CheckCRC(byte crc)
-{
-	if (crc == 0)
-		return true;
-	else
-		return false;
-}
-
 void CallInitCore(byte *data, int length)
 {
-	if (data[0] == 0x2A)
-		InitChemsense();
-	// else if (data[0] == 0x30)
-	// InitAlphasensor();
+	if (data[0] == 0x30)
+		InitAlphasensor();
 	else
 		ReturnFalse();
 }
@@ -106,10 +96,10 @@ const ReadCoresense readcore[] = {
 	// Chem
 	{0x2A, ReadChem}, // chemical sensors, temperature, humidity, pressure
 	// Alpha
-	// {0x28, ReadAlphaHisto}, // particle histogram
-	// {0x29, ReadAlphaSerial}, // serial number of alpha sensor
-	// {0x30, ReadAlphaFWver}, // FW version of alpha sesnor
-	// {0x31, ReadAlphaConfig}, // configuration of alpha sensor
+	{0x28, ReadAlphaHisto}, // particle histogram
+	{0x29, ReadAlphaSerial}, // serial number of alpha sensor
+	{0x30, ReadAlphaFWver}, // FW version of alpha sesnor
+	{0x31, ReadAlphaConfig}, // configuration of alpha sensor
 	// // Rain gauge OnSet
 	// {0x37, ReadOnSet}, // rain gauge
 	// // Soil moisture Decagon
@@ -126,11 +116,14 @@ void CallReadCore(byte *data, int length)
 
 	bool enable = GetEnable(thisid);
 
+	// SerialUSB.print("GetEnable ");
+	// SerialUSB.println(enable);
+
 	if (!enable)
-    {
+	{
 		Packetization(thisid, 0xFF);
-        return;
-    }
+		return;
+	}
 
 	for (int i = 0; i < numCoreRead; i++)
 	{
@@ -138,8 +131,8 @@ void CallReadCore(byte *data, int length)
 		if (rc->sensorid == thisid)
 		{
 			rc->func(sensorReading, &readingLength);
+			Packetization(sensorReading, readingLength, thisid);
 			break;
 		}
 	}
-    Packetization(sensorReading, readingLength, thisid);
 }

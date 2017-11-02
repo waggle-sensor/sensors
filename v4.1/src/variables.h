@@ -10,9 +10,8 @@ MCP342X mcp3428_2;
 
 OneWire ds2401(48);
 
-#define MaxInputLength 256
-
 /* bus ADDRESSES of sensors, PIN configuration for analog/sensor power */
+#define HBT_PIN 8  // HBEAT PIN (ON/OFF)
 // Metsense
 #define TMP112_ADDRESS 0x48
 #define HTDU21D_ADDRESS 0x40
@@ -39,7 +38,7 @@ byte MCP3428_2_ADDRESS = 0;
 #define CHEM_POWER_PIN 47
 
 // Alphasensor
-#define ALPHA_SLAVE_PIN 33
+#define ALPHA_SLAVE_PIN 40
 
 /* COEFFICIENTS */
 byte BMP180_COEFFICIENTS[22];

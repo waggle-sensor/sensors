@@ -28,3 +28,12 @@ byte CRC8Waggle(byte data, byte crc)
     return(crc);
 }
 /**************************************************************************************/
+
+
+bool CheckCRC(byte crc)
+{
+    if (crc == 0)
+        return true;
+    else
+        return false;
+}

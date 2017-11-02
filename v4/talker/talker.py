@@ -7,8 +7,8 @@ import datetime
 import argparse
 
 from core import *
-from serialread import *
-from alpha import *
+from readchem import *
+from readalpha import *
 from cmd import *
 
 coresense = Coresense()
