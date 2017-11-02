@@ -45,3 +45,9 @@ byte MCP3428_2_ADDRESS = 0;
 byte BMP180_COEFFICIENTS[22];
 byte TSYS01_COEFFICIENTS[10];
 byte HMC5883_COEFFICIENTS[4];
+
+/* store configuration info of Chemsense */
+byte chemConfigReading[2048];
+
+/* SPI setting for alpha sensor */
+SPISettings setAlpha; //(SPI_MAX_speed, MSBFIRST, SPI_MODE1);

@@ -31,7 +31,8 @@ void PacketSender()
     if (outLength < 256)
     {   
         packet[3] = outLength - 4;  // data length
-        packet[outLength++] = 0x00;  //CRC_calc(outLength - 4);  // Append CRC8
+        byte crc = CRCcalc(outLength - 4, packet);
+        packet[outLength++] = crc;  // Append CRC8
         packet[outLength++] = 0x55;  // postscript
 
         for (int i = 0; i < outLength; i++)

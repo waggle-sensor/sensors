@@ -16,6 +16,7 @@ void setup()
 	Wire.begin();
 	delay(10);
 	InitSensors();
+	InitChemsense();
 }
 
 void loop()
