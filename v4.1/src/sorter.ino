@@ -20,13 +20,11 @@ void SortReading(byte *dataReading, int packetLength)
 	int request = dataReading[1] & 0xF0;
 	int protocol = dataReading[1] & 0x0F;
 	int datalength = dataReading[3];
-	int decrease = 0;
 
 	bool checkcrc = CheckCRC(dataReading[datalength + 4]);
 
 	byte typebyte = 0;
 	byte paramlength = 0;
-	byte sending[3];
 
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
@@ -210,26 +208,26 @@ int numCoreRead = sizeof(readcore)/sizeof(readcore[0]);
 
 void CallReadCore(byte *data, int length)
 {
-	byte thisid;
+	byte thisid = data[0];
 	byte sensorReading[1024];
 	int readingLength = 0;
 
-	bool enable = GetEnable(data[0]);
+	bool enable = GetEnable(thisid);
 
 	if (!enable)
     {
-		Packetization(data[0], 0xFF);
+		Packetization(thisid, 0xFF);
         return;
     }
 
 	for (int i = 0; i < numCoreRead; i++)
 	{
 		const ReadCoresense *rc = readcore + i;
-		if (rc->sensorid == data[0])
+		if (rc->sensorid == thisid)
 		{
 			rc->func(sensorReading, &readingLength);
 			break;
 		}
 	}
-    Packetization(sensorReading, readingLength, data[0]);
+    Packetization(sensorReading, readingLength, thisid);
 }

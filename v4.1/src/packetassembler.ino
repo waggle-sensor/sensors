@@ -40,6 +40,7 @@ void PacketSender()
     else
     {
         int sequence = ceil(outLength / 256);
+        packet[2] = sequence;
     }
     SerialUSB.println("");
 }

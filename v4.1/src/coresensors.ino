@@ -27,14 +27,14 @@ void ReadMacAdd(byte *sensorReading, int *readingLength)
 		return;
 	}
 
-	for (int i = 0; i < 8; i++) 
-	{
-		byte h = (id[i] >> 4) & 0x0f;
-		byte l = (id[i] >> 0) & 0x0f;
-	}
+	// for (int i = 0; i < 8; i++) 
+	// {
+	// 	byte h = (id[i] >> 4) & 0x0f;
+	// 	byte l = (id[i] >> 0) & 0x0f;
+	// }
 }
 
-void ReadTMP112(byte *sensorReading, int *readinglength)
+void ReadTMP112(byte *sensorReading, int *readingLength)
 {
 	const byte TMP112_TEMP_REG = 0x00;
 
@@ -46,10 +46,10 @@ void ReadTMP112(byte *sensorReading, int *readinglength)
 
 	sensorReading[0] = readarray[0];
 	sensorReading[1] = readarray[1];
-	*readinglength = 2;
+	*readingLength = 2;
 }
 
-void ReadHTU21D(byte *sensorReading, int *readinglength)
+void ReadHTU21D(byte *sensorReading, int *readingLength)
 {
 	const byte TRIGGER_TEMP_MEASURE_NOHOLD = 0xF3;
 	const byte TRIGGER_HUMD_MEASURE_NOHOLD = 0xF5;
@@ -62,7 +62,7 @@ void ReadHTU21D(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-        *readinglength += 1;
+        *readingLength += 1;
     }
 	
 	//Request a humidity reading
@@ -72,21 +72,21 @@ void ReadHTU21D(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i + 3] = readarray[i];
-        *readinglength += 1;
+        *readingLength += 1;
     }
 }
 
-void ReadHIH4030(byte *sensorReading, int *readinglength)
+void ReadHIH4030(byte *sensorReading, int *readingLength)
 {
 	int value = analogRead(HIH4030_PIN);
 
 	sensorReading[0] = (value >> 8) & 0xFF;
 	sensorReading[1] = value & 0xFF;
 
-	*readinglength = 2;
+	*readingLength = 2;
 }
 
-void ReadBMP180(byte *sensorReading, int *readinglength)
+void ReadBMP180(byte *sensorReading, int *readingLength)
 {
 	const byte BMP180_REGISTER_CONTROL = 0xF4;
 	const byte BMP180_REGISTER_TEMPDATA = 0xF6;
@@ -105,7 +105,7 @@ void ReadBMP180(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 2; i++)
     {
 		sensorReading[i] = readarray[i];
-        *readinglength += 1;
+        *readingLength += 1;
     }
 
 	// Read pressure
@@ -123,38 +123,45 @@ void ReadBMP180(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 2; i++)
     {
 		sensorReading[i + 2] = readarray[i];
-        *readinglength += 1;
+        *readingLength += 1;
     }
 	sensorReading[4] = readbyte[0];
-    *readinglength += 1;
+    *readingLength += 1;
+
+    int a = sizeof(BMP180_COEFFICIENTS);
+    for (int i = 0; i < a; i++)
+    {
+    	sensorReading[3 + i] = BMP180_COEFFICIENTS[i];
+    	*readingLength += 1;
+    }
 
 }
 
-void ReadPR103J2(byte *sensorReading, int *readinglength)
+void ReadPR103J2(byte *sensorReading, int *readingLength)
 {
 	int PR = analogRead(PRJ103J2_PIN);
 
 	sensorReading[0] = (PR >> 8) & 0xFF;
 	sensorReading[1] = PR & 0xFF;
 
-	*readinglength = 2;
+	*readingLength = 2;
 }
 
-void ReadTSL250ms(byte *sensorReading, int *readinglength)
+void ReadTSL250ms(byte *sensorReading, int *readingLength)
 {
 	int TSL250_1 = analogRead(TSL250RDms_PIN);
 
 	sensorReading[0] = (TSL250_1 >> 8) & 0xFF;
 	sensorReading[1] = TSL250_1 & 0xFF;
 
-	*readinglength = 2;
+	*readingLength = 2;
 }
 
-void ReadMMA(byte *sensorReading, int *readinglength)
+void ReadMMA(byte *sensorReading, int *readingLength)
 {
 	const byte OUT_X_MSB = 0x01;
-	const byte XYZ_DATA_CFG = 0x0E;
-	const byte CTRL_REG1 = 0x2A;
+	// const byte XYZ_DATA_CFG = 0x0E;
+	// const byte CTRL_REG1 = 0x2A;
 
 	byte readarray[6];  // x/y/z accel register data stored here
 	byte writebyte[1] = {OUT_X_MSB};
@@ -163,24 +170,24 @@ void ReadMMA(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 6; i++)
     {
 		sensorReading[i] = readarray[i];
-        *readinglength += 1;
+        *readingLength += 1;
     }
 }
 
-void ReadSPV(byte *sensorReading, int *readinglength)
+void ReadSPV(byte *sensorReading, int *readingLength)
 {
 	// long buff[128];
 	int buff = 0;
 	for (int i = 0; i < 128; i++)
 	{
 		buff = analogRead(SPV_RAW_MIC_PIN);
-		sensorReading[i] = (buff >> 8) & 0xFF;
-		sensorReading[i + 1] = buff & 0xFF;
-		*readinglength += 2;
+		sensorReading[i * 2] = (buff >> 8) & 0xFF;
+		sensorReading[i * 2 + 1] = buff & 0xFF;
+		*readingLength += 2;
 	}
 }
 
-void ReadTSYS01(byte *sensorReading, int *readinglength)
+void ReadTSYS01(byte *sensorReading, int *readingLength)
 {
 	const byte TSYS01StartReg = 0x48; //commands sensor to begin measurement / output calculation
 	const byte TSYS01TempReg = 0x00; //requests most recent output from measurement
@@ -196,12 +203,19 @@ void ReadTSYS01(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
+    }
+
+    int a = sizeof(TSYS01_COEFFICIENTS);
+    for (int i = 0; i < a; i++)
+    {
+    	sensorReading[3 + i] = TSYS01_COEFFICIENTS[i];
+    	*readingLength += 1;
     }
 }
 
 // Lightsense
-void ReadHMC(byte *sensorReading, int *readinglength)
+void ReadHMC(byte *sensorReading, int *readingLength)
 {
 	const byte HMC5883_REGISTER_MAG_OUT_X_H_M = 0x03;
 
@@ -212,11 +226,19 @@ void ReadHMC(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 6; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
+    }
+
+
+    int a = sizeof(HMC5883_COEFFICIENTS);
+    for (int i = 0; i < a; i++)
+    {
+    	sensorReading[6 + i] = HMC5883_COEFFICIENTS[i];
+    	*readingLength += 1;
     }
 }
 
-void ReadHIH6130(byte *sensorReading, int *readinglength)
+void ReadHIH6130(byte *sensorReading, int *readingLength)
 {
 	byte readarray[4];
 	WriteReadI2C(HIH6130_ADDRESS, 4, readarray, 100);
@@ -224,7 +246,7 @@ void ReadHIH6130(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 4; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
 	}
 	// Temp_byte[0] = (Temp_byte[1] >> 6) & 0x03;
 
@@ -238,7 +260,7 @@ void ReadHIH6130(byte *sensorReading, int *readinglength)
 	// Temp_float[0] = (float) Temp_int[1] * 1.007e-2 - 40.0;
 }
 
-void ReadAPDS(byte *sensorReading, int *readinglength)
+void ReadAPDS(byte *sensorReading, int *readingLength)
 {
 	// byte address = mcp3428_2.returnAddress();
 	byte writebyte[1] = {mcp3428_2.returnRegister(MCP342X::CHANNEL_0)};
@@ -248,7 +270,7 @@ void ReadAPDS(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
     }
 
 	// the last read is not used
@@ -257,7 +279,7 @@ void ReadAPDS(byte *sensorReading, int *readinglength)
 	// int APDS = mcp3428_2.readADC();
 }
 
-void ReadTSL260RD(byte *sensorReading, int *readinglength)
+void ReadTSL260RD(byte *sensorReading, int *readingLength)
 {
 	// byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_1)};
@@ -267,7 +289,7 @@ void ReadTSL260RD(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
     }
 
 	// the last read is not used
@@ -276,7 +298,7 @@ void ReadTSL260RD(byte *sensorReading, int *readinglength)
 	// int TSL260 = mcp3428_1.readADC();
 }
 
-void ReadTSL250RDls(byte *sensorReading, int *readinglength)
+void ReadTSL250RDls(byte *sensorReading, int *readingLength)
 {
 	// byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_3)};
@@ -286,7 +308,7 @@ void ReadTSL250RDls(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    readinglength += 1;
+	    readingLength += 1;
     }
 
 	// the last read is not used
@@ -295,7 +317,7 @@ void ReadTSL250RDls(byte *sensorReading, int *readinglength)
 	// int TSL250_2 = mcp3428_1.readADC();
 }
 
-void ReadMLX(byte *sensorReading, int *readinglength)
+void ReadMLX(byte *sensorReading, int *readingLength)
 {
 	// byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_0)};
@@ -305,7 +327,7 @@ void ReadMLX(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
     }
 
 	// the last read is not used
@@ -314,7 +336,7 @@ void ReadMLX(byte *sensorReading, int *readinglength)
 	// int MLX = mcp3428_1.readADC();
 }
 
-void ReadML8511(byte *sensorReading, int *readinglength)
+void ReadML8511(byte *sensorReading, int *readingLength)
 {
 	// byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_2)};
@@ -324,7 +346,7 @@ void ReadML8511(byte *sensorReading, int *readinglength)
 	for (int i = 0; i < 3; i++)
     {
 		sensorReading[i] = readarray[i];
-	    *readinglength += 1;
+	    *readingLength += 1;
     }
 
 	// the last read is not used
@@ -333,7 +355,7 @@ void ReadML8511(byte *sensorReading, int *readinglength)
 	// int ML8511 = mcp3428_1.readADC();
 }
 
-void ReadTMP421(byte *sensorReading, int *readinglength)
+void ReadTMP421(byte *sensorReading, int *readingLength)
 {
 	byte readbyte[1];
 	
@@ -342,14 +364,14 @@ void ReadTMP421(byte *sensorReading, int *readinglength)
 	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte);
 
 	sensorReading[0] = readbyte[0];
-	*readinglength += 1;
+	*readingLength += 1;
 
 	// low-byte
 	writebyte[0] = 0x10;
 	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte);
 
 	sensorReading[1] = readbyte[0];
-	*readinglength += 1;
+	*readingLength += 1;
 
 	// byte testdata[2];
 	// WriteI2C(TMP421_ADDRESS, char(0x00));
@@ -361,9 +383,9 @@ void ReadTMP421(byte *sensorReading, int *readinglength)
 
 
 // Chemsense
-void ReadChem(byte *sensorReading, int *readinglength)
+void ReadChem(byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readinglength);
+	ReadRS232(sensorReading, readingLength);
 }
 
 

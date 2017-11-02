@@ -20,7 +20,7 @@ void InitSensors()
 void InitTMP112()
 {
 	const byte TMP112_CONFIG_REG = 0x01;
-	const byte TMP112_TEMP_REG = 0x00;
+	// const byte TMP112_TEMP_REG = 0x00;
 
 	byte writearray[3] = {TMP112_CONFIG_REG, 0x60, 0xB0};
 	WriteI2C(TMP112_ADDRESS, 3, writearray);
@@ -39,24 +39,25 @@ void InitBMP180()
 	byte BMP180_REGISTER_CHIPID = 0xD0;
 	byte writebyte[1] = {BMP180_REGISTER_CHIPID};
 	//** ultra high resolution
-	int _bmp180Mode = 3;
+	// int _bmp180Mode = 3;
 
-	// make sure we have the right device
-	byte id[1];
-	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, id);
-	if (id[1] != 0x55)
-		byte BMP180_validity = 0;
+	// // make sure we have the right device
+	// byte id[1];
+	// WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 1, id);
+	// if (id[1] != 0x55)
+	// 	byte BMP180_validity = 0;
 
 	// read coefficients
 	byte BMP180register[11] = {0xAA, 0xAC, 0xAE, 0xB0, 0xB2, 0xB4, 0xB6, 0xB8, 0xBA, 0xBC, 0xBE};
-	byte BMP180coeff[11];
 
 	byte temp_coeff[2];
 	for (int i = 0; i < 11; i++)
 	{
 		writebyte[0] = BMP180register[i];
 		WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, temp_coeff);
-		BMP180coeff[i] = (temp_coeff[0] << 8) | temp_coeff[1];
+		BMP180_COEFFICIENTS[i * 2] = temp_coeff[0];
+		BMP180_COEFFICIENTS[i * 2 + 1] = temp_coeff[1];
+		// BMP180_COEFFICIENTS[i] = (temp_coeff[0] << 8) | temp_coeff[1];
 	}
 	// read coefficients, R   Calibration data (16 bits)
 	// byte BMP085_REGISTER_CAL_AC1 = 0xAA;
@@ -88,20 +89,21 @@ void InitMMA()
 {
 	const byte XYZ_DATA_CFG = 0x0E;
 	const byte CTRL_REG1 = 0x2A;
-	const byte WHO_AM_I = 0x0D;
+	// const byte WHO_AM_I = 0x0D;
 	const byte GSCALE = 2;
 	// Sets full-scale range to +/-2, 4, or 8g
 
-	//** check if the sensor is correct
-	byte writebyte[1] = {WHO_AM_I};
-	byte id[1];
-	WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 1, id, false);
-	if (id[0] != 0x2A) // WHO_AM_I should always be 0x2A
-		byte MMA8452_validity = 0;
+
+	// //** check if the sensor is correct
+	// byte writebyte[1] = {WHO_AM_I};
+	// byte id[1];
+	// WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 1, id, false);
+	// if (id[0] != 0x2A) // WHO_AM_I should always be 0x2A
+	// 	byte MMA8452_validity = 0;
 
 	//*** sensor stand by
 	byte readbyte[1];
-	writebyte[0] = CTRL_REG1;
+	byte writebyte[1] = {CTRL_REG1};
 	WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 1, readbyte, false);
 	// Clear the active bit to go into standby 
 	byte writearray[2] = {CTRL_REG1, readbyte[0] & ~(0x01)};
@@ -135,12 +137,13 @@ void InitTSYS01()
 
 	//gathers calibration coefficients to array
 	byte readarray[2];
-	int TSYScoefficents[5];
 	for (int i = 0; i < 5; i++)
 	{
 		writebyte[0] = 0xA2 + (i * 2);
 		WriteReadI2C(TSYS01_ADDRESS, 1, writebyte, 2, readarray);
-		TSYScoefficents[i] = ((uint16_t)readarray[0] << 8) + readarray[1];
+		TSYS01_COEFFICIENTS[i * 2] = readarray[0];
+		TSYS01_COEFFICIENTS[i * 2 + 1] = readarray[1];
+		// TSYS01_COEFFICIENTS[i] = ((uint16_t)readarray[0] << 8) + readarray[1];
 	}
 
 }
@@ -165,6 +168,11 @@ void InitHMC()
 	//** TODO: Where to store, how to send, sensor ID?????
 	int coefficient_Gauss_LSB_XY = 1100;
 	int coefficient_Gauss_LSB_Z  = 980;
+
+	HMC5883_COEFFICIENTS[0] = (coefficient_Gauss_LSB_XY >> 8) & 0xFF;
+	HMC5883_COEFFICIENTS[1] = coefficient_Gauss_LSB_XY & 0xFF;
+	HMC5883_COEFFICIENTS[2] = (coefficient_Gauss_LSB_Z >> 8) & 0xFF;
+	HMC5883_COEFFICIENTS[3] = coefficient_Gauss_LSB_Z & 0xFF;
 }
 
 void InitMCPmux()
