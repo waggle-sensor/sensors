@@ -28,10 +28,7 @@ EnabledSensorTable sensortable[] = {
 	{0x13, true},  // TMP421
 	{0x14, true},  // SPV1840LR5H-B
 	{0x2A, true},  // All Chemsense
-	{0x28, true},  // Alphasensor Histogram
-	{0x29, true},  // Alphasensor Serial
-	{0x30, true},  // Alphasensor Firmware
-	{0x31, true},  // Configuration
+	{0x30, true},  // Alphasensor Histogram,Serial,Firmware,Configuration
 	{0x2B, false},  // YL-69
 	{0x2C, false},  // YHDC SCT-013-030
 	{0x2D, false},  // CR3110-3000
@@ -47,32 +44,46 @@ const int numEnable = sizeof(sensortable)/sizeof(sensortable[0]);
 
 void CallEnableCore(byte *thisid, int length)
 {
+	if (0x28 <= thisid[0] && thisid[0] <= 0x31)
+		thisid[0] = 0x30;
+
 	for (int j = 0; j < numEnable; j++)
 	{
 		EnabledSensorTable *est = sensortable + j;
 		if (est->enabledsensorid == thisid[0])
 		{
 			est->enabled = true;
-			Packetization(thisid[0], 0);
+			Packetization(0, thisid[0]);
+
+			if (thisid[0] == 0x30)
+				alpha_onagain();
+
 			break;
 		}
 	}
-	Packetization(thisid[0], 1);
+	Packetization(1, thisid[0]);
 }
 
 void CallDisableCore(byte *thisid, int length)
 {
+	if (0x28 <= thisid[0] && thisid[0] <= 0x31)
+		thisid[0] = 0x30;
+
 	for (int j = 0; j < numEnable; j++)
 	{
 		EnabledSensorTable *est = sensortable + j;
 		if (est->enabledsensorid == thisid[0])
 		{
 			est->enabled = false;
-			Packetization(thisid[0], 1);
+			Packetization(0, thisid[0]);
+
+			if (thisid[0] == 0x30)
+				alphasense_off();
+
 			break;
 		}
 	}
-	Packetization(thisid[0], 1);
+	Packetization(1, thisid[0]);
 }
 
 void CallDisableCore(byte thisid)

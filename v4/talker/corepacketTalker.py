@@ -47,7 +47,7 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			# if '1' in cmd:
 			# 	cmd = '022104'
 			# elif '2' in cmd:
-			# 	cmd = '022101'
+			# 	cmd = '024101'
 #			elif '3' in cmd:
 #				cmd = '023100'
 
@@ -59,9 +59,11 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			ser.write(b'\n')
 
 			while True:
-				line = ser.readline().decode()
+				line = ser.readline()
 				print(line)
-				if 'end' in line:
+				deline = line.decode('ascii')
+				print(deline)
+				if 'end' in deline:
 					break
 
 		except KeyboardInterrupt:

@@ -10,18 +10,21 @@ void InitAlphasensor()
 	SPI.begin();
 	delay(1000);
 
-	alphasense_on();
-	byte returnbyte = alpha_status();
+ 	alpha_onagain();
+}
 
-	// SerialUSB.print(returnbyte);
-	// SerialUSB.print("Alphasensor");
-	// returnbyte = 0x01; // This is when alpha sensor is off
+byte returnbyte;
+void alpha_onagain()
+{
+	alphasense_on();
+	alpha_status();
+
 	int repeat = 0;
 	while ((returnbyte != 0x31) && (repeat < 10))
 	{
 		repeat++;
 		alphasense_on();
-		// returnbyte = alpha_status();
+		alpha_status();
 		// SerialUSB.println(returnbyte);
 		// SerialUSB.println("Alphasensor");
 		delay(5000);
@@ -34,23 +37,21 @@ void InitAlphasensor()
 		Packetization(0x00, 0x30);
 }
 
-
 // Alphasense
 void alphasense_on()   // initialization
 {
-	byte val;
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
-	val = SPI.transfer(0x03);
+	returnbyte = SPI.transfer(0x03);
 	delay(10);
-	val = SPI.transfer(0x00);
+	returnbyte = SPI.transfer(0x00);
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
 }
 
-byte alpha_status()   // initialization
+void alpha_status()   // initialization
 {
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
@@ -59,8 +60,19 @@ byte alpha_status()   // initialization
 	returnbyte = SPI.transfer(0xCF);
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
+}
 
-	return returnbyte;
+void alphasense_off()   // disenable
+{
+	SPI.beginTransaction(setAlpha);
+	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+
+	returnbyte = SPI.transfer(0x03);
+	delay(10);
+	returnbyte = SPI.transfer(0x01);
+
+	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+	SPI.endTransaction();
 }
 
 void ReadAlphaHisto(byte *sensorReading, int *readingLength)

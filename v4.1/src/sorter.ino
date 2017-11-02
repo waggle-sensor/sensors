@@ -114,7 +114,11 @@ void CallReadCore(byte *data, int length)
 	byte sensorReading[1024];
 	int readingLength = 0;
 
-	bool enable = GetEnable(thisid);
+	bool enable;
+	if (0x28 <= thisid && thisid <= 0x31)
+		enable = GetEnable(0x30);
+	else
+		enable = GetEnable(thisid);
 
 	// SerialUSB.print("GetEnable ");
 	// SerialUSB.println(enable);
