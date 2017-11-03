@@ -37,7 +37,7 @@ void PacketSender()
     packet[outLength++] = 0x55;  // postscript
 
     for (int i = 0; i < outLength; i++)
-        SerialUSB.print(packet[i]);
+        SerialUSB.write(packet[i]);
 
     // if (outLength < 256)
     // {   
