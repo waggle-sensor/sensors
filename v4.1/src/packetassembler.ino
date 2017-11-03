@@ -54,7 +54,7 @@ void PacketSender()
     //     int sequence = ceil(outLength / 256);
     //     packet[2] = sequence;
     // }
-    SerialUSB.println("");
+    // SerialUSB.println("");
 }
 
 void PacketInit()

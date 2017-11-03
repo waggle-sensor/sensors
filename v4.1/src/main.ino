@@ -61,7 +61,7 @@ void loop()
 	if (postscript)
 		SortReading(inputarray, packetLength);
 
-	SerialUSB.println("end!!");
+	// SerialUSB.println("end!!");
 	postscript = false;
 	packetLength = 0;
 }
