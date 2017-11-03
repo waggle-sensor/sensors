@@ -38,7 +38,7 @@ void ReadTMP112(byte *sensorReading, int *readingLength)
 	byte readarray[2];
 	WriteI2C(TMP112_ADDRESS, 1, writebyte);
 	delay(100);
-	ReadI2C(TMP112_ADDRESS, 2, sensorReading);
+	ReadI2C(TMP112_ADDRESS, 2, readarray);
 
 	sensorReading[0] = readarray[0];
 	sensorReading[1] = readarray[1];
