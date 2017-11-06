@@ -4,6 +4,7 @@ void InitSensors()
 {
 	// Metsense
 	InitTMP112();
+	delay(10000);
 	InitBMP180();
 	InitMMA();
 	//Lightsense
@@ -67,20 +68,8 @@ void InitBMP180()
 		WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, temp_coeff);
 		BMP180_COEFFICIENTS[i * 2] = temp_coeff[0];
 		BMP180_COEFFICIENTS[i * 2 + 1] = temp_coeff[1];
-		// BMP180_COEFFICIENTS[i] = (temp_coeff[0] << 8) | temp_coeff[1];
+		// int co = (temp_coeff[0] << 8) | temp_coeff[1];
 	}
-	// read coefficients, R   Calibration data (16 bits)
-	// byte BMP085_REGISTER_CAL_AC1 = 0xAA;
-	// byte BMP085_REGISTER_CAL_AC2 = 0xAC;
-	// byte BMP085_REGISTER_CAL_AC3 = 0xAE;
-	// byte BMP085_REGISTER_CAL_AC4 = 0xB0;
-	// byte BMP085_REGISTER_CAL_AC5 = 0xB2;
-	// byte BMP085_REGISTER_CAL_AC6 = 0xB4;
-	// byte BMP085_REGISTER_CAL_B1 = 0xB6;
-	// byte BMP085_REGISTER_CAL_B2 = 0xB8;
-	// byte BMP085_REGISTER_CAL_MB = 0xBA;
-	// byte BMP085_REGISTER_CAL_MC = 0xBC;
-	// byte BMP085_REGISTER_CAL_MD = 0xBE;
 
 	// byte bmp085_coeffs_ac1;
 	// byte bmp085_coeffs_ac2;
@@ -153,7 +142,10 @@ void InitTSYS01()
 		WriteReadI2C(TSYS01_ADDRESS, 1, writebyte, 2, readarray);
 		TSYS01_COEFFICIENTS[i * 2] = readarray[0];
 		TSYS01_COEFFICIENTS[i * 2 + 1] = readarray[1];
-		// TSYS01_COEFFICIENTS[i] = ((uint16_t)readarray[0] << 8) + readarray[1];
+		int co = ((uint16_t)readarray[0] << 8) + readarray[1];
+		SerialUSB.print(i);
+		SerialUSB.println("th");
+		SerialUSB.println(co);
 	}
 
 }

@@ -5,14 +5,15 @@ void ReadI2C(byte address, int length, byte *out)
 	Wire.beginTransmission(address);
 	Wire.requestFrom(address, (byte)length);
 
-	if (Wire.available() > 0) {
-		for (int i = 0; i < length; i++) {
+	if (Wire.available() > 0) 
+	{
+		for (int i = 0; i < length; i++)
 			out[i] = Wire.read();
-		}
-	} else {
-		for (int i = 0; i < length; i++) {
+	} 
+	else 
+	{
+		for (int i = 0; i < length; i++) 
 			out[i] = 0xff;
-		}
 	}
 	Wire.endTransmission();
 }
@@ -21,9 +22,8 @@ void WriteI2C(byte address, int length, byte *in)
 {
 	Wire.beginTransmission(address);
 
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < length; i++)
 		Wire.write(in[i]);
-	}
 
 	Wire.endTransmission();
 }
@@ -58,7 +58,7 @@ void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out
 	else
 		for (int i = 0; i < outlength; i++)
 			out[i] = 0xff;
-	Wire.endTransmission();
+	// Wire.endTransmission();
 }
 
 void WriteReadI2C(byte address, int outlength, byte *out, int time)
