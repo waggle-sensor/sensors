@@ -59,10 +59,8 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			ser.write(b'\n')
 
 			while True:
-				line = ser.readline()
+				line = ser.readline().decode()
 				print(line)
-				deline = line.decode('ascii')
-				print(deline)
 				if 'end' in deline:
 					break
 
