@@ -5,7 +5,7 @@ int protocolver = 0x02;
 byte packet[1030];
 int outLength = 4; // start at 4 to account for header
 
-void Packetization(byte *sensorReading, int readingLength, byte sensorid)
+void Packetization(byte sensorid, byte *sensorReading, int readingLength)
 {
     packet[outLength++] = sensorid;
     packet[outLength++] = (1 << 7) | readingLength;   // valid data
@@ -17,7 +17,7 @@ void Packetization(byte *sensorReading, int readingLength, byte sensorid)
     //     SerialUSB.println(sensorReading[i]);
 }
 
-void Packetization(byte returnCode, byte sensorid)
+void Packetization(byte sensorid, byte returnCode)
 {
     int validity = 1;
 

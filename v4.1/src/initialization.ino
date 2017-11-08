@@ -104,8 +104,9 @@ void InitMMA()
 	byte readbyte[1];
 	byte writebyte[1] = {CTRL_REG1};
 	WriteReadI2C(MMA8452_ADDRESS, 1, writebyte, 1, readbyte, false);
-	// Clear the active bit to go into standby 
-	byte writearray[2] = {CTRL_REG1, readbyte[0] & ~(0x01)};
+	// Clear the active bit to go into standby
+	int a = int(readbyte[0]) & ~(0x01);
+	byte writearray[2] = {CTRL_REG1, byte(a)};
 	WriteI2C(MMA8452_ADDRESS, 2, writearray);
 
 	//** Set up the full scale range to 2, 4, or 8g.
@@ -142,10 +143,7 @@ void InitTSYS01()
 		WriteReadI2C(TSYS01_ADDRESS, 1, writebyte, 2, readarray);
 		TSYS01_COEFFICIENTS[i * 2] = readarray[0];
 		TSYS01_COEFFICIENTS[i * 2 + 1] = readarray[1];
-		int co = ((uint16_t)readarray[0] << 8) + readarray[1];
-		SerialUSB.print(i);
-		SerialUSB.println("th");
-		SerialUSB.println(co);
+		// int co = ((uint16_t)readarray[0] << 8) + readarray[1];
 	}
 
 }

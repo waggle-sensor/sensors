@@ -135,7 +135,7 @@ void CallReadCore(byte *data, int length)
 		if (rc->sensorid == thisid)
 		{
 			rc->func(sensorReading, &readingLength);
-			Packetization(sensorReading, readingLength, thisid);
+			Packetization(thisid, sensorReading, readingLength);
 			break;
 		}
 	}

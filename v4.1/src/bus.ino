@@ -2,8 +2,14 @@
 //** I2C
 void ReadI2C(byte address, int length, byte *out)
 {
+	ReadI2C(address, length, out, 0);
+}
+
+void ReadI2C(byte address, int length, byte *out, int time)
+{
 	Wire.beginTransmission(address);
 	Wire.requestFrom(address, (byte)length);
+	delay(time);
 
 	if (Wire.available() > 0) 
 	{
@@ -18,6 +24,23 @@ void ReadI2C(byte address, int length, byte *out)
 	Wire.endTransmission();
 }
 
+void DirectReadI2C(byte address, int length, byte *out, int time)
+{
+	Wire.requestFrom(address, (byte)length);
+	delay(time);
+
+	if (Wire.available() > 0) 
+	{
+		for (int i = 0; i < length; i++)
+			out[i] = Wire.read();
+	} 
+	else 
+	{
+		for (int i = 0; i < length; i++) 
+			out[i] = 0xff;
+	}
+}
+
 void WriteI2C(byte address, int length, byte *in)
 {
 	Wire.beginTransmission(address);
@@ -30,25 +53,15 @@ void WriteI2C(byte address, int length, byte *in)
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out)
 {
-	WriteReadI2C(address, inlength, in, outlength, out, 0, true);
+	WriteReadI2C(address, inlength, in, outlength, out, 0);
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
 {
-	WriteReadI2C(address, inlength, in, outlength, out, time, true);
-}
-
-void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, bool end)
-{
-	WriteReadI2C(address, inlength, in, outlength, out, 0, end);
-}
-
-void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time, bool end)
-{
 	Wire.beginTransmission(address);
 	for (int i = 0; i < inlength; i++)
 		Wire.write(in[i]);
-	Wire.endTransmission(end);
+	Wire.endTransmission();
 	delay(time);
 
 	Wire.requestFrom(address, (byte)outlength);
@@ -61,21 +74,6 @@ void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out
 	// Wire.endTransmission();
 }
 
-void WriteReadI2C(byte address, int outlength, byte *out, int time)
-{
-	Wire.beginTransmission(address);
-	Wire.endTransmission();
-	delay(time);
-
-	Wire.requestFrom(address, (byte)outlength);
-	if (Wire.available() > 0)
-		for (int i = 0; i < outlength; i++)
-			out[i] = Wire.read();
-	else
-		for (int i = 0; i < outlength; i++)
-			out[i] = 0xff;
-	Wire.endTransmission();
-}
 
 //** RS232
 void InitRS232(int port, int powerPin, long datarate, long timeout)

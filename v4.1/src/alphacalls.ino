@@ -56,7 +56,6 @@ void alpha_status()   // initialization
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
-	byte returnbyte;
 	returnbyte = SPI.transfer(0xCF);
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
