@@ -142,7 +142,7 @@ void ReadBMP180(byte *sensorReading, int *readingLength)
 	byte _bmp180Mode = 3;
 	writearray[0] = BMP180_REGISTER_CONTROL;
 	writearray[1] = BMP180_REGISTER_READPRESSURECMD + (_bmp180Mode << 6);
-	WriteI2C(BMP180_ADDRESS, 2, writebyte);
+	WriteI2C(BMP180_ADDRESS, 2, writearray);
 	delay(26);
 	writebyte[0] = BMP180_REGISTER_PRESSUREDATA;
 	WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, readarray);
@@ -256,6 +256,18 @@ void ReadHMC(byte *sensorReading, int *readingLength)
 		sensorReading[i] = readarray[i];
 		*readingLength += 1;
 	}
+
+	int a = (sensorReading[0] << 8) | sensorReading[1];
+	int b = (sensorReading[2] << 8) | sensorReading[3];
+	int c = (sensorReading[4] << 8) | sensorReading[5];
+
+
+	SerialUSB.print("HMCx ");
+	SerialUSB.println(a);
+	SerialUSB.print("HMCy ");
+	SerialUSB.println(b);
+	SerialUSB.print("HMCz ");
+	SerialUSB.println(c);
 
 	// int startCoeff = *readingLength;
 	// int a = sizeof(HMC5883_COEFFICIENTS);

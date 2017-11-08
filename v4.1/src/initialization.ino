@@ -4,7 +4,6 @@ void InitSensors()
 {
 	// Metsense
 	InitTMP112();
-	delay(10000);
 	InitBMP180();
 	InitMMA();
 	//Lightsense
@@ -58,7 +57,7 @@ void InitBMP180()
 	// if (id[1] != 0x55)
 	// 	byte BMP180_validity = 0;
 
-	// read coefficients
+	//** read coefficients
 	byte BMP180register[11] = {0xAA, 0xAC, 0xAE, 0xB0, 0xB2, 0xB4, 0xB6, 0xB8, 0xBA, 0xBC, 0xBE};
 
 	byte temp_coeff[2];
@@ -68,20 +67,8 @@ void InitBMP180()
 		WriteReadI2C(BMP180_ADDRESS, 1, writebyte, 2, temp_coeff);
 		BMP180_COEFFICIENTS[i * 2] = temp_coeff[0];
 		BMP180_COEFFICIENTS[i * 2 + 1] = temp_coeff[1];
-		// int co = (temp_coeff[0] << 8) | temp_coeff[1];
+		// uint16_t uco = (temp_coeff[0] << 8) | temp_coeff[1];
 	}
-
-	// byte bmp085_coeffs_ac1;
-	// byte bmp085_coeffs_ac2;
-	// byte bmp085_coeffs_ac3;
-	// byte bmp085_coeffs_ac4;
-	// byte bmp085_coeffs_ac5;
-	// byte bmp085_coeffs_ac6;
-	// byte bmp085_coeffs_b1;
-	// byte bmp085_coeffs_b2;
-	// byte bmp085_coeffs_mb;
-	// byte bmp085_coeffs_mc;
-	// byte bmp085_coeffs_md;
 }
 
 void InitMMA()
@@ -144,6 +131,9 @@ void InitTSYS01()
 		TSYS01_COEFFICIENTS[i * 2] = readarray[0];
 		TSYS01_COEFFICIENTS[i * 2 + 1] = readarray[1];
 		// int co = ((uint16_t)readarray[0] << 8) + readarray[1];
+
+		// SerialUSB.print("TSYS ");
+		// SerialUSB.println(co);
 	}
 
 }
@@ -153,26 +143,26 @@ void InitHMC()
 {
 	const byte HMC5883_REGISTER_MAG_CRB_REG_M = 0x01;
 	const byte HMC5883_REGISTER_MAG_MR_REG_M = 0x02;
+	const byte HMC5883_MAGGAIN_1_3 = 0x20;
 
 	// Enable the magnetometer
-	byte testarray[2] = {HMC5883_REGISTER_MAG_MR_REG_M, 0x00};
-	WriteI2C(HMC5883_ADDESS, 2, testarray);
+	byte writearray[2] = {HMC5883_REGISTER_MAG_MR_REG_M, 0x00};
+	WriteI2C(HMC5883_ADDESS, 2, writearray);
 
 	//** Set the gain to a known level
-	byte gain = 0x20;
-	testarray[0] = HMC5883_REGISTER_MAG_CRB_REG_M;
-	testarray[1] = gain;
-	WriteI2C(HMC5883_ADDESS, 2, testarray);
+	writearray[0] = HMC5883_REGISTER_MAG_CRB_REG_M;
+	writearray[1] = HMC5883_MAGGAIN_1_3;
+	WriteI2C(HMC5883_ADDESS, 2, writearray);
 	// _magGain = gain;
 
-	//** TODO: Where to store, how to send, sensor ID?????
-	int coefficient_Gauss_LSB_XY = 1100;
-	int coefficient_Gauss_LSB_Z  = 980;
+	// //** TODO: Where to store, how to send, sensor ID?????
+	// int coefficient_Gauss_LSB_XY = 1100;
+	// int coefficient_Gauss_LSB_Z  = 980;
 
-	HMC5883_COEFFICIENTS[0] = (coefficient_Gauss_LSB_XY >> 8) & 0xFF;
-	HMC5883_COEFFICIENTS[1] = coefficient_Gauss_LSB_XY & 0xFF;
-	HMC5883_COEFFICIENTS[2] = (coefficient_Gauss_LSB_Z >> 8) & 0xFF;
-	HMC5883_COEFFICIENTS[3] = coefficient_Gauss_LSB_Z & 0xFF;
+	// HMC5883_COEFFICIENTS[0] = (coefficient_Gauss_LSB_XY >> 8) & 0xFF;
+	// HMC5883_COEFFICIENTS[1] = coefficient_Gauss_LSB_XY & 0xFF;
+	// HMC5883_COEFFICIENTS[2] = (coefficient_Gauss_LSB_Z >> 8) & 0xFF;
+	// HMC5883_COEFFICIENTS[3] = coefficient_Gauss_LSB_Z & 0xFF;
 }
 
 void InitMCPmux()
@@ -205,17 +195,16 @@ void InitChemsense()
 
 	if (Serial3.available() > 0)
 	{
-		int chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 2048);
+		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 2048);
 
-		for (int i = 0; i < chemConfigLength; i++)
-			SerialUSB.print(chemConfigReading[i]);
+		// for (int i = 0; i < chemConfigLength; i++)
+		// 	SerialUSB.print(chemConfigReading[i]);
 	}
 	else
 	{
 		Serial3.end();
 		CallDisableCore(0x2A);
 	}
-	SerialUSB.println("");
 }
 
 

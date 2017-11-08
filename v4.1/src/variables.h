@@ -43,10 +43,13 @@ byte MCP3428_2_ADDRESS = 0;
 /* COEFFICIENTS */
 byte BMP180_COEFFICIENTS[22];
 byte TSYS01_COEFFICIENTS[10];
-byte HMC5883_COEFFICIENTS[4];
+// byte HMC5883_COEFFICIENTS[4];  
+//** coefficient for MHC is fixed as 1100 for x and y and 980 for z 
+//** with regard to gain, which is also fixed as 0x20
 
 /* store configuration info of Chemsense */
 byte chemConfigReading[2048];
+int chemConfigLength;
 
 /* SPI setting for alpha sensor */
 SPISettings setAlpha; //(SPI_MAX_speed, MSBFIRST, SPI_MODE1);

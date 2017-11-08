@@ -141,20 +141,24 @@ void ReadRS232(byte* reading, int *sumlen)
 {
 	while (Serial3.available() > 0)
 		inputbyte = Serial3.read();
-
+	
 	int len = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		len = Serial3.readBytesUntil('\n', reading, 256);
-		*sumlen += len;
+	len = Serial3.readBytesUntil('\n', reading, 256);
+	*sumlen = len;
 
-		// SerialUSB.print("this is :");
-		// SerialUSB.print(i);
-		// SerialUSB.print("th reading, with length ");
-		// SerialUSB.println(len);
-		// for (int i = 0; i < len; i++)
-		// 	SerialUSB.println(reading[i]);
-	}
+	// int len = 0;
+	// for (int i = 0; i < 3; i++)
+	// {
+	// 	len = Serial3.readBytesUntil('\n', reading, 256);
+	// 	*sumlen += len;
+
+	// 	SerialUSB.print("this is :");
+	// 	SerialUSB.print(i);
+	// 	SerialUSB.print("th reading, with length ");
+	// 	SerialUSB.println(len);
+	// 	for (int i = 0; i < len; i++)
+	// 		SerialUSB.println(reading[i]);
+	// }
 	// SerialUSB.println("EEENNNNNDDDDD");
 }
 

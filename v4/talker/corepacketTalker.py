@@ -59,7 +59,8 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			ser.write(b'\n')
 
 			while True:
-				line = ser.readline().decode()
+				line = ser.readline()
+				# 				.decode()
 				print(line)
 				# if 'end' in line:
 				# 	break
