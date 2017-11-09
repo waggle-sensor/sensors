@@ -26,10 +26,9 @@ void SortReading(byte *dataReading, int packetLength)
 	byte typebyte = 0;
 	byte paramlength = 0;
 
+	PacketInit();
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
-        PacketInit();
-
 		byte *subpacket = dataReading + 4;
 		// while (datalength != 0)
 		while (subpacket < &dataReading[datalength + 4])
@@ -49,8 +48,7 @@ void SortReading(byte *dataReading, int packetLength)
 			subpacket += paramlength + 1;
 		}
 	}
-
-    PacketSender();
+	PacketSender();
 }
 
 void ReturnFalse()
@@ -60,7 +58,7 @@ void ReturnFalse()
 
 void CallInitCore(byte *data, int length)
 {
-	if (data[0] == 0x30)
+	if (data[0] == 0x2B)
 		InitAlphasensor();
 	else
 		ReturnFalse();
@@ -115,8 +113,8 @@ void CallReadCore(byte *data, int length)
 	int readingLength = 0;
 
 	bool enable;
-	if (0x28 <= thisid && thisid <= 0x31)
-		enable = GetEnable(0x30);
+	if (thisid == 0x28 || thisid == 0x29 || thisid == 0x30 || thisid == 0x31)
+		enable = GetEnable(0x2B);
 	else
 		enable = GetEnable(thisid);
 

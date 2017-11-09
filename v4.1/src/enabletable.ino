@@ -28,16 +28,7 @@ EnabledSensorTable sensortable[] = {
 	{0x13, true},  // TMP421
 	{0x14, true},  // SPV1840LR5H-B
 	{0x2A, true},  // All Chemsense
-	{0x30, true},  // Alphasensor Histogram,Serial,Firmware,Configuration
-	{0x2B, false},  // YL-69
-	{0x2C, false},  // YHDC SCT-013-030
-	{0x2D, false},  // CR3110-3000
-	{0x2E, false},  // Water Level (Black)
-	{0x2F, false},  // Water Level (Red)
-	{0x35, false},  // PMS3003
-	{0x36, false},  // PMS7003
-	{0x37, false},  // Rain gauge
-	{0x38, false},  // Soil moisture
+	{0x2B, true},  // Alphasensor Histogram,Serial,Firmware,Configuration
 };
 
 const int numEnable = sizeof(sensortable)/sizeof(sensortable[0]);

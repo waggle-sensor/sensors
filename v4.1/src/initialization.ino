@@ -3,6 +3,7 @@
 void InitSensors()
 {
 	// Metsense
+	delay(10000);
 	InitTMP112();
 	InitBMP180();
 	InitMMA();

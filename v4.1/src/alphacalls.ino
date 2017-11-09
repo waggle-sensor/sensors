@@ -19,6 +19,8 @@ void alpha_onagain()
 	alphasense_on();
 	alpha_status();
 
+	byte alphaStatusid = 0x2B;
+
 	int repeat = 0;
 	while ((returnbyte != 0x31) && (repeat < 10))
 	{
@@ -32,9 +34,15 @@ void alpha_onagain()
 	delay(1000);
 
 	if (returnbyte == 0x31)
-		Packetization(0x01, 0x30);
+	{
+		// byte sensorReading[2];
+		// int readingLength;
+		// ReadAlphaFWver(sensorReading, &readingLength);
+		// Packetization(0x30, sensorReading, readingLength);
+		Packetization(alphaStatusid, 0x01);
+	}
 	else
-		Packetization(0x00, 0x30);
+		Packetization(alphaStatusid, 0x00);
 }
 
 // Alphasense
@@ -69,6 +77,25 @@ void alphasense_off()   // disenable
 	returnbyte = SPI.transfer(0x03);
 	delay(10);
 	returnbyte = SPI.transfer(0x01);
+
+	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+	SPI.endTransaction();
+}
+
+void ReadAlphaFWver(byte *sensorReading, int *readingLength)
+{
+	SPI.beginTransaction(setAlpha);
+	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+
+	// SPI.transfer(0x12);    // 0xF3
+	// delay(10);
+
+	for (int i = 0; i < 3; i++)
+	{
+		sensorReading[i] = SPI.transfer(0x12);
+		delay(10);
+		*readingLength += 1;
+	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
@@ -112,25 +139,6 @@ void ReadAlphaSerial(byte *sensorReading, int *readingLength)
 	SPI.endTransaction();
 }
 
-void ReadAlphaFWver(byte *sensorReading, int *readingLength)
-{
-	SPI.beginTransaction(setAlpha);
-	digitalWrite(ALPHA_SLAVE_PIN, LOW);
-	delay(100);
-
-	SPI.transfer(0x12);    // 0xF3
-	delay(10);
-
-	for (int i = 0; i < 2; i++)
-	{
-		sensorReading[i] = SPI.transfer(0x12);
-		delay(10);
-		*readingLength += 1;
-	}
-
-	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
-	SPI.endTransaction();
-}
 
 void ReadAlphaConfig(byte *sensorReading, int *readingLength)
 {
