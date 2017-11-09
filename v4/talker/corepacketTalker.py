@@ -61,9 +61,9 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 			while True:
 				line = ser.readline()
 				# 				.decode()
-				print(line)
-				# if 'end' in line:
-				# 	break
+				print(str(line))
+				if 'aa' in str(line):
+					break
 
 		except KeyboardInterrupt:
 			break

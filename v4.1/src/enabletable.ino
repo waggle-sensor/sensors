@@ -7,6 +7,7 @@ struct EnabledSensorTable
 };
 
 EnabledSensorTable sensortable[] = {
+	// Metsense
 	{0xFF, true},  // Firmware HW/SW version, build git, build time
 	{0x00, true},  // Metsense MAC
 	{0x01, true},  // TMP112
@@ -18,6 +19,7 @@ EnabledSensorTable sensortable[] = {
 	{0x07, true},  // MMA8452Q AccX,Y,Z,Magnitude
 	{0x08, true},  // SPV1840LR5H-B
 	{0x09, true},  // TSYS01 temperature
+	// Lightsense
 	{0x0A, true},  // HMC5883L Strength Hx,y,z,Change
 	{0x0B, true},  // HIH6130 temperature, humidity
 	{0x0C, true},  // APDS-9006-020
@@ -27,8 +29,10 @@ EnabledSensorTable sensortable[] = {
 	{0x10, true},  // ML8511
 	{0x13, true},  // TMP421
 	{0x14, true},  // SPV1840LR5H-B
+	// Chem
 	{0x2A, true},  // All Chemsense
-	{0x2B, true},  // Alphasensor Histogram,Serial,Firmware,Configuration
+	// Alpha
+	{0x2B, true},  // Alpha sensor status
 };
 
 const int numEnable = sizeof(sensortable)/sizeof(sensortable[0]);

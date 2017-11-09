@@ -26,9 +26,9 @@ void SortReading(byte *dataReading, int packetLength)
 	byte typebyte = 0;
 	byte paramlength = 0;
 
-	PacketInit();
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
+		PacketInit();
 		byte *subpacket = dataReading + 4;
 		// while (datalength != 0)
 		while (subpacket < &dataReading[datalength + 4])
@@ -47,8 +47,8 @@ void SortReading(byte *dataReading, int packetLength)
 			}
 			subpacket += paramlength + 1;
 		}
+		PacketSender();
 	}
-	PacketSender();
 }
 
 void ReturnFalse()

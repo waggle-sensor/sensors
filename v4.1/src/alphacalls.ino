@@ -87,14 +87,14 @@ void ReadAlphaFWver(byte *sensorReading, int *readingLength)
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
-	// SPI.transfer(0x12);    // 0xF3
-	// delay(10);
+	returnbyte = SPI.transfer(0x12);    // 0xF3
+	delay(10);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sensorReading[i] = SPI.transfer(0x12);
-		delay(10);
 		*readingLength += 1;
+		delay(10);
 	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
@@ -133,6 +133,7 @@ void ReadAlphaSerial(byte *sensorReading, int *readingLength)
 	{
 		sensorReading[i] = SPI.transfer(0x10);
 		*readingLength += 1;
+		delay(10);
 	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
