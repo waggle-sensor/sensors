@@ -26,6 +26,9 @@ void SortReading(byte *dataReading, int packetLength)
 	byte typebyte = 0;
 	byte paramlength = 0;
 
+    // for (int i = 0; i < packetLength; i++)
+    //     SerialUSB.write(dataReading[i]);
+
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
 		PacketInit();

@@ -38,23 +38,7 @@ void PacketSender()
 
     for (int i = 0; i < outLength; i++)
         SerialUSB.write(packet[i]);
-
-    // if (outLength < 256)
-    // {   
-    //     packet[3] = outLength - 4;  // data length
-    //     byte crc = CRCcalc(outLength - 4, packet);
-    //     packet[outLength++] = crc;  // Append CRC8
-    //     packet[outLength++] = 0x55;  // postscript
-
-    //     for (int i = 0; i < outLength; i++)
-    //         SerialUSB.print(packet[i],HEX);
-    // }
-    // else
-    // {
-    //     int sequence = ceil(outLength / 256);
-    //     packet[2] = sequence;
-    // }
-    // SerialUSB.println("");
+    SerialUSB.println("");
 }
 
 void PacketInit()
