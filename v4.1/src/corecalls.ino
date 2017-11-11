@@ -257,17 +257,17 @@ void ReadHMC(byte *sensorReading, int *readingLength)
 		*readingLength += 1;
 	}
 
-	int a = (sensorReading[0] << 8) | sensorReading[1];
-	int b = (sensorReading[2] << 8) | sensorReading[3];
-	int c = (sensorReading[4] << 8) | sensorReading[5];
+	// int a = (sensorReading[0] << 8) | sensorReading[1];
+	// int b = (sensorReading[2] << 8) | sensorReading[3];
+	// int c = (sensorReading[4] << 8) | sensorReading[5];
 
 
-	SerialUSB.print("HMCx ");
-	SerialUSB.println(a);
-	SerialUSB.print("HMCy ");
-	SerialUSB.println(b);
-	SerialUSB.print("HMCz ");
-	SerialUSB.println(c);
+	// SerialUSB.print("HMCx ");
+	// SerialUSB.println(a);
+	// SerialUSB.print("HMCy ");
+	// SerialUSB.println(b);
+	// SerialUSB.print("HMCz ");
+	// SerialUSB.println(c);
 
 	// int startCoeff = *readingLength;
 	// int a = sizeof(HMC5883_COEFFICIENTS);
@@ -418,3 +418,9 @@ void ReadChem(byte *sensorReading, int *readingLength)
 	ReadRS232(sensorReading, readingLength);
 }
 
+void ReadChemconfig(byte *sensorReading, int *readingLength)
+{
+	for (int i = 0; i < chemConfigLength; i++)
+		sensorReading[i] = chemConfigReading[i];
+	*readingLength = chemConfigLength;
+}

@@ -54,17 +54,12 @@ void SortReading(byte *dataReading, int packetLength)
 	}
 }
 
-void ReturnFalse()
-{
-	SerialUSB.print("WRONG");
-}
-
 void CallInitCore(byte *data, int length)
 {
 	if (data[0] == 0x2B)
 		InitAlphasensor();
 	else
-		ReturnFalse();
+		Packetization(data[0], 0xFF);
 }
 
 struct ReadCoresense
@@ -95,6 +90,7 @@ const ReadCoresense readcore[] = {
 	{0x10, ReadML8511}, // UV index
 	{0x13, ReadTMP421}, // temperature
 	// Chem
+	{0x16, ReadChemconfig},
 	{0x2A, ReadChem}, // chemical sensors, temperature, humidity, pressure
 	// Alpha
 	{0x28, ReadAlphaHisto}, // particle histogram
@@ -118,6 +114,8 @@ void CallReadCore(byte *data, int length)
 	bool enable;
 	if (thisid == 0x28 || thisid == 0x29 || thisid == 0x30 || thisid == 0x31)
 		enable = GetEnable(0x2B);
+	else if (thisid == 0x16 || thisid == 0x2A)
+		enable = GetEnable(0x2A);
 	else
 		enable = GetEnable(thisid);
 

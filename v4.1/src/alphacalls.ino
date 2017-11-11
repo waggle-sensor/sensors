@@ -86,6 +86,7 @@ void ReadAlphaFWver(byte *sensorReading, int *readingLength)
 {
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+	delay(100);
 
 	returnbyte = SPI.transfer(0x12);    // 0xF3
 	delay(10);
@@ -93,6 +94,26 @@ void ReadAlphaFWver(byte *sensorReading, int *readingLength)
 	for (int i = 0; i < 2; i++)
 	{
 		sensorReading[i] = SPI.transfer(0x12);
+		*readingLength += 1;
+		delay(10);
+	}
+
+	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+	SPI.endTransaction();
+}
+
+void ReadAlphaSerial(byte *sensorReading, int *readingLength)
+{
+	SPI.beginTransaction(setAlpha);
+	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+	delay(100);
+
+	SPI.transfer(0x10);    // 0xF3
+	delay(10);
+
+	for (int i = 0; i < 20; i++)
+	{
+		sensorReading[i] = SPI.transfer(0x10);
 		*readingLength += 1;
 		delay(10);
 	}
@@ -114,26 +135,7 @@ void ReadAlphaHisto(byte *sensorReading, int *readingLength)
 	{
 		sensorReading[i] = SPI.transfer(0x30);
 		*readingLength += 1;
-	}
-
-	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
-	SPI.endTransaction();
-}
-
-void ReadAlphaSerial(byte *sensorReading, int *readingLength)
-{
-	SPI.beginTransaction(setAlpha);
-	digitalWrite(ALPHA_SLAVE_PIN, LOW);
-	delay(100);
-
-	SPI.transfer(0x10);    // 0xF3
-	delay(10);
-
-	for (int i = 0; i < 20; i++)
-	{
-		sensorReading[i] = SPI.transfer(0x10);
-		*readingLength += 1;
-		delay(10);
+		delay(1);
 	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);

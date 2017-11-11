@@ -10,7 +10,6 @@ void InitSensors()
 	InitTSYS01();
 	InitHMC();
 	InitMCPmux();
-
 	InitAnalogSensors();
 	// initialize libraries
 	// pinMode(PIN_RAW_MIC,INPUT); SPV sound level
@@ -195,7 +194,7 @@ void InitChemsense()
 
 	if (Serial3.available() > 0)
 	{
-		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 2048);
+		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 1516);
 
 		// for (int i = 0; i < chemConfigLength; i++)
 		// 	SerialUSB.print(chemConfigReading[i]);

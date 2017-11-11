@@ -48,7 +48,7 @@ byte TSYS01_COEFFICIENTS[10];
 //** with regard to gain, which is also fixed as 0x20
 
 /* store configuration info of Chemsense */
-byte chemConfigReading[2048];
+byte chemConfigReading[1516];
 int chemConfigLength;
 
 /* SPI setting for alpha sensor */
