@@ -418,9 +418,11 @@ void ReadChem(byte *sensorReading, int *readingLength)
 	ReadRS232(sensorReading, readingLength);
 }
 
-void ReadChemconfig(byte *sensorReading, int *readingLength)
+void ReadChemconfig()
 {
+	SerialUSB.print("Start sending Chemsense FW configuration");
 	for (int i = 0; i < chemConfigLength; i++)
-		sensorReading[i] = chemConfigReading[i];
-	*readingLength = chemConfigLength;
+		SerialUSB.write(chemConfigReading[i]);
+	SerialUSB.print("End sending Chemsense FW configuration");
+	SerialUSB.println("");
 }

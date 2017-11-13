@@ -193,12 +193,7 @@ void InitChemsense()
 	delay(1000);
 
 	if (Serial3.available() > 0)
-	{
 		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 1516);
-
-		// for (int i = 0; i < chemConfigLength; i++)
-		// 	SerialUSB.print(chemConfigReading[i]);
-	}
 	else
 	{
 		Serial3.end();

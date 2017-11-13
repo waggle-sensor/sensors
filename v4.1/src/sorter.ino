@@ -26,12 +26,15 @@ void SortReading(byte *dataReading, int packetLength)
 	byte typebyte = 0;
 	byte paramlength = 0;
 
-    // for (int i = 0; i < packetLength; i++)
-    //     SerialUSB.write(dataReading[i]);
+	bool exceptionCheck = false;
+	int totalSubpacket = 0;
+
+	// for (int i = 0; i < packetLength; i++)
+	//     SerialUSB.write(dataReading[i]);
 
 	if (checkcrc && (request == 0) && (protocol == 2) && (datalength + 6 == packetLength))
 	{
-		PacketInit();
+		PacketInit(); 
 		byte *subpacket = dataReading + 4;
 		// while (datalength != 0)
 		while (subpacket < &dataReading[datalength + 4])
@@ -44,13 +47,31 @@ void SortReading(byte *dataReading, int packetLength)
 				const FunctionType *ft = functype + i;
 				if (ft->funcid == typebyte)
 				{
+					if (subpacket[1] == 0x16)
+					{
+						totalSubpacket--;
+						exceptionCheck = true;
+						ReadChemconfig();
+						break;
+					}
+					else if (subpacket[1] == 0x31)
+					{
+						totalSubpacket--;
+						exceptionCheck = true;
+						ReadAlphaConfig();
+						break;
+					}
+
+					exceptionCheck = false;
 					ft->func(subpacket + 1, paramlength);
 					break;
 				}
 			}
 			subpacket += paramlength + 1;
+			totalSubpacket++;
 		}
-		PacketSender();
+		if (!exceptionCheck || totalSubpacket > 0)
+			PacketSender(0x01);  // last packet of this request
 	}
 }
 
@@ -90,13 +111,13 @@ const ReadCoresense readcore[] = {
 	{0x10, ReadML8511}, // UV index
 	{0x13, ReadTMP421}, // temperature
 	// Chem
-	{0x16, ReadChemconfig},
+	// {0x16, ReadChemconfig},  // NOT CORESENSE PACKET!!! INDEPENDENT DIFFERENT PACKET!!! DIFFERENT FORM!!!
 	{0x2A, ReadChem}, // chemical sensors, temperature, humidity, pressure
 	// Alpha
 	{0x28, ReadAlphaHisto}, // particle histogram
 	{0x29, ReadAlphaSerial}, // serial number of alpha sensor
 	{0x30, ReadAlphaFWver}, // FW version of alpha sesnor
-	{0x31, ReadAlphaConfig}, // configuration of alpha sensor
+	// {0x31, ReadAlphaConfig}, // configuration of alpha sensor, NOT CORESENSE PACKET!!! INDEPENDENT DIFFERENT PACKET!!! DIFFERENT FORM!!!
 	// // Rain gauge OnSet
 	// {0x37, ReadOnSet}, // rain gauge
 	// // Soil moisture Decagon
@@ -133,6 +154,17 @@ void CallReadCore(byte *data, int length)
 		const ReadCoresense *rc = readcore + i;
 		if (rc->sensorid == thisid)
 		{
+			if (thisid == 0x2A)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					rc->func(sensorReading, &readingLength);
+					Packetization(thisid, sensorReading, readingLength);
+				}
+				break;
+
+			}
+			
 			rc->func(sensorReading, &readingLength);
 			Packetization(thisid, sensorReading, readingLength);
 			break;

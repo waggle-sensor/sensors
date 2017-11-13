@@ -20,7 +20,6 @@ void setup()
 	Wire.begin();
 	delay(10);
 	InitSensors();
-	delay(1000);
 	InitChemsense();
 	PacketInit();
 }

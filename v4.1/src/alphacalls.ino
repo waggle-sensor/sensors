@@ -143,8 +143,9 @@ void ReadAlphaHisto(byte *sensorReading, int *readingLength)
 }
 
 
-void ReadAlphaConfig(byte *sensorReading, int *readingLength)
+void ReadAlphaConfig()
 {
+	SerialUSB.print("Start sending Alpha sensor configuration");
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 	delay(100);
@@ -154,12 +155,13 @@ void ReadAlphaConfig(byte *sensorReading, int *readingLength)
 
 	for (int i = 0; i < 256; i++)
 	{
-		sensorReading[i] = SPI.transfer(0x3C);
+		returnbyte = SPI.transfer(0x3C);
 		delay(10);
-		*readingLength += 1;
+		SerialUSB.write(returnbyte);
 	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
-
+	SerialUSB.print("End sending Alpha sensor configuration");
+	SerialUSB.println("");
 }
