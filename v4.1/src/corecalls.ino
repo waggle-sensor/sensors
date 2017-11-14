@@ -201,11 +201,10 @@ void ReadMMA(byte *sensorReading, int *readingLength)
 	}
 }
 
-void ReadSPV(byte *sensorReading, int *readingLength) /////////////////////////
+void ReadSPV(byte *sensorReading, int *readingLength)
 {
-	// long buff[128];
 	int buff = 0;
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < 64; i++)
 	{
 		buff = analogRead(SPV_RAW_MIC_PIN);
 		sensorReading[i * 2] = (buff >> 8) & 0xFF;

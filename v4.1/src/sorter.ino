@@ -90,6 +90,8 @@ struct ReadCoresense
 };
 
 const ReadCoresense readcore[] = {
+	// FW version
+	{0xFF, ReadVersion},  // Firmware version
 	// Metsense
 	{0x00, ReadMacAdd}, // Mac address of Met/Lightsense board
 	{0x01, ReadTMP112}, // temperature

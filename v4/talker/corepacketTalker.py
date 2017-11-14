@@ -64,7 +64,11 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 
 				print(len(line))
 				print(str(line))
-				if 'aa' in str(line):
+
+				if (line[2] == 0x16):
+					print(line.decode("utf-8"))
+					
+				if 'U' in str(line):
 					if (len(line) > 0):
 						check = line[2] & 0x80
 					else:

@@ -3,12 +3,23 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <OneWire.h>
+#include "./buildinfo.h"
 
 #include "./MCP342X/MCP342X.h"
 MCP342X mcp3428_1;
 MCP342X mcp3428_2;
 
 OneWire ds2401(48);
+
+/* Firmware version */
+// 4.1 1.00 initial version of v4.1
+#define CORESENSE_HW_VER_MAJ 3 // 4 bits
+#define CORESENSE_HW_VER_MIN 1 // 4 bits
+
+#define CORESENSE_KERNEL_MAJ 4 // 8 bits
+#define CORESENSE_KERNEL_MIN 1 // 4 bits
+#define CORESENSE_KERNEL_SUB 0 // 4 bits
+
 
 /* bus ADDRESSES of sensors, PIN configuration for analog/sensor power */
 #define HBT_PIN 8  // HBEAT PIN (ON/OFF)
