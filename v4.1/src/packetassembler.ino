@@ -10,8 +10,10 @@ void Packetization(byte sensorid, byte *sensorReading, int readingLength)
 {
     PacketLengthCheck(readingLength);
 
+    int sensorReadingValidity = 1;
+
     packet[outLength++] = sensorid;
-    packet[outLength++] = (sequenceValidity << 7) | readingLength;   // valid data
+    packet[outLength++] = (sensorReadingValidity << 7) | readingLength;   // valid data
 
     for (int i = 0; i < readingLength; i++)
         packet[outLength++] = sensorReading[i];
@@ -36,9 +38,9 @@ void PacketLengthCheck(int readingLength)
     if ((outLength - 2 + readingLength) > 128)
     {
         PacketSender(0x00);  // not the last packet for this request
-        PacketInit();  // for the last packet of this request
+        packetseq++;
+        MultiPacketInit();  // for the last packet of this request
     }
-    packetseq++;
 }
 
 void PacketSender(byte sequenceValidity)
@@ -54,7 +56,7 @@ void PacketSender(byte sequenceValidity)
     SerialUSB.println("");
 }
 
-void PacketInit()
+void MultiPacketInit()
 {
     byte lastPacket = 0x01;
     packet[0] = 0xAA;  // preamble
@@ -63,3 +65,16 @@ void PacketInit()
 
     outLength = 4;
 }
+
+void PacketInit()
+{
+    byte lastPacket = 0x01;
+    packetseq = 0;
+
+    packet[0] = 0xAA;  // preamble
+    packet[1] = (0x01 << 4) | protocolver;  // data type --> sensor reading = 0x01 | protocol
+    packet[2] = (lastPacket << 7) | packetseq;  // seq, MSB of first sequence is 1
+
+    outLength = 4;
+}
+

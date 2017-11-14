@@ -146,6 +146,8 @@ void ReadRS232(byte* reading, int *sumlen)
 	len = Serial3.readBytesUntil('\n', reading, 256);
 	*sumlen = len;
 
+	reading[len - 1] = ' ';
+
 	// int len = 0;
 	// for (int i = 0; i < 3; i++)
 	// {
