@@ -1,0 +1,41 @@
+
+\subsubsection{Chemsense:}
+
+Chemsense board sends data through Serial3 communication line in metsense board.
+All sensor values from chemsense board are caluated in its own firmware.
+The raw serial readings from the board are packetized as the raw value as they are collected, and the reading will be sorted out in database.
+
+\paragraph{$\bullet$ Chemsense reading:}
+To fully collect all the data from chemsense board, the firmware collect data three times in a row, so that coresense firmware sends three packets when it gets request of reading of chemsense board.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a chemsense board}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x2A} & \textbf{Varies} & \textbf{Raw reading}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[Vareis] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ Chemsense firmware configuration:}
+\textbf{THIS DATA DO NOT FOLLOW CORESENSE PACKET FORMAT, NO FORMAT AT ALL}
+Chemsense Fiwmware configuration is one-time collectable charactor data, when the board is powered on.
+The coresense firmware collectes data when the board is powered on, and store the data into an array.
+The user can call this data with their own plugin (request and answer collecting functions).
+
+
+\newcolumntype{a}{>{\columncolor{black!8}}c}
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of chemsense firmware configuration}
+    \begin{tabular}{|a|c|}
+        \hline
+        \textbf{1st line} & "Start sending Chemsense FW configuration" \\ \hline
+        \textbf{2nd -- 48th line} & Each raw reading line \\ \hline
+        \textbf{last line} & "End sending Chemsense FW configuration" \\ \hline
+    \end{tabular}
+\end{table}

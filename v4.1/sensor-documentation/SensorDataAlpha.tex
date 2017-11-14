@@ -1,0 +1,132 @@
+
+\subsubsection{Alpha Sensor:}
+In this document, concise Alpha sensor information is provided. For more information, refer to `Firmware commands version 18.xls' and `OPC-N2 Manual Issue December 2015.pdf' at `waggle/docs/alphasense-opc-n2'.
+
+Coresense firmware communicates with alpha sensor through SPI.
+The raw SPI readings from the board are packetized as the raw value as they are collected, and the reading will be sorted out in database.
+
+\paragraph{$\bullet$ Histogram}
+Histogram of alpha sensor is 62 bytes of reading. This parameter provides various information as listed below. \textbf{All data from the alpha sensor is LSB first}.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet Alpha sensor histogram}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x28} & \textbf{0xBE} & \textbf{Various sensor information as listed above}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 63] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{itemize}
+\setlength\itemsep{0em}
+\item[$\circ$] Bin Counts (Bin0 - Bin15) are unsinged 16 bit integer variables (Bytes[2 -- 33]).
+\item[$\circ$] An unsigned 8-bit integer represents the average amount of time that particles sized in the stated bin took cross the laser beam of the sensor. Value 10 represents 3.33 $\mu$s (Bytes[34 -- 37]).
+\item[$\circ$] The sample flow rate in ml/s is provided as a float variable (Bytes[38 -- 41]).
+\item[$\circ$] Temperature and Pressure alternating. Temperature is an unsigned 32-bit integer that represents temperature in Celsious multiplied by 10. Pressure is an unsigned 32-bit integer that represents pressure in pascals (Bytes[42 -- 45]).
+\item[$\circ$] Actual sampling period of a measure of the historgam in seconds provided as 4 bytes of float variables (Bytes[46 -- 49]).
+\item[$\circ$] The least significat 16-bit of the sum of the counts in all the histogram bins is provided by unsigned 16bit integers (Bytes[50 -- 51]).
+\item[$\circ$] A float variable occupying 4 bytes for PM1. Unit is $\mu$g/m$^3$ (Bytes[52 -- 55]).
+\item[$\circ$] A float variable occupying 4 bytes for PM2.5. Unit is $\mu$g/m$^3$ (Bytes[56 -- 59]).
+\item[$\circ$] A float variable occupying 4 bytes for PM10. Unit is $\mu$g/m$^3$ (Bytes[60 -- 63]).
+\end{itemize}
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Detail sub-packet of Alpha sensor histogram}
+    \begin{tabular}{|>{\centering\arraybackslash}p{0.3\textwidth}|>{\centering\arraybackslash}p{0.2\textwidth}|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Parameter} & \textbf{Data location}\\ \hline
+        Bin Count (32 Bytes) & Bytes[2 - 33] \\ \hline
+        Average Time (4 Bytes) & Bytes[34 -- 37] \\ \hline
+        Sample flow rate (4 Bytes) & Bytes[38 -- 41] \\ \hline
+        Temp/Pressure(alter) (4 Bytes) & Bytes[42 -- 45] \\ \hline
+        Sampling period (4 Bytes) & Bytes[46 -- 49] \\ \hline
+        Sum of the counts (2 Bytes) & Bytes[50 -- 51] \\ \hline
+        PM1 (4 Bytes) & Bytes[51 -- 55] \\ \hline
+        PM2.5 (4 Bytes) & Bytes[56 -- 59] \\ \hline
+        PM10 (4 Bytes) & Bytes[60 -- 63] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+
+\paragraph{$\bullet$ Serial}
+Serial of alpha sensor is 20 bytes of reading. This parameter provides the serial number of the alpha sensor by character.\\
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of Alpha sensor serial number}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x29} & \textbf{0x94} & \textbf{Raw values}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 21] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ Firmware}
+Firmware of alpha sensor is 2 bytes of reading. This parameter provides the Firmware version of the alpha sensor by two unsigned 8-bit integer.\\
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of Alpha sensor firmware}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x30} & \textbf{0x82} & \textbf{Raw values}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ Configuration}
+\textbf{THIS DATA DO NOT FOLLOW CORESENSE PACKET FORMAT, NO FORMAT AT ALL}
+Configuration of alpha sensor is 256 bytes of reading. 
+This parameter provides various information as listed below.
+Since this configuration data is too long to fit into a sub-packet, the data are not packed into coresense packet.
+
+
+\newcolumntype{a}{>{\columncolor{black!8}}c}
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of alpha sensor configuration}
+    \begin{tabular}{|a|c|}
+        \hline
+        \textbf{1st line} & "Start sending alpha sensor configuration" \\ \hline
+        \textbf{2nd line} & 256 bytes of raw reading \\ \hline
+        \textbf{last line} & "End sending alpha sensor configuration" \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{itemize}
+\setlength\itemsep{0em}
+\item[$\circ$] Bin Boundaries (BB0 - BB14) are unsinged 16 bit integer variables, and two spare bytes.
+\item[$\circ$] Bin Particle Volumes (BPV0 - BPV15) are float variables occupyting 4 bytes each.
+\item[$\circ$] Bin Particle Densities (BPD0 -- BPD15) are float variables occupying 4 bytes each.
+\item[$\circ$] Bin Sample Volume Weightings (BSVW0 -- BSVW15) are float variables occupying 4 bytes each.
+\item[$\circ$] Gain Scaling Coefficient (GSC) is float variable occupying 4 bytes.
+\item[$\circ$] Sample flow rate is a float variable occupying 4 bytes.
+\item[$\circ$] Laser DAC value is unsigned 8bit interger variable.
+\item[$\circ$] Fan DAC value is unsigned 8bit integer variable.
+\item[$\circ$] Time of Flight to Sample Flow Rate conversion factor is unsigned 8bit integer variable.
+\item[$\circ$] 21 spare bytes follow Configuration variables.
+\end{itemize}
+
+
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
+\clearpage

@@ -1,0 +1,193 @@
+
+\subsubsection{Metsense}
+
+\paragraph{$\bullet$ Metsense/Lightsense MAC address: }
+
+This is a 6-byte ID that uniquely identifies each Airsense board. This MAC address is also applied to each Lightsense board which has the same board number. The ID is provided by a DS2401 1-Wire DSN chip. The 1-byte family ID and CRC provided by the DSN chip are omitted, and the rest 6 bytes are used as the Unique ID.
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of met/lightsense board MAC address}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x00} & \textbf{0x86} & \textbf{MAC address} \\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 7]\\ \hline
+    \end{tabular}
+\end{table}
+\par
+
+\paragraph{$\bullet$ TMP112, HIH4030, PR103J2, TSL250RD, TSYS01:}
+
+TMP112, PR103J2, and TSYS01 are temperature sensors, HIH4030 is a humidity sensor, and TSL250RD is a light sensor.
+The coresense firmware collectes data from TMP112 through I2C, and from other sensors using analog read.
+All the reading values from the sensors are packetized as the raw value as they are collected.
+The raw reading will be converted relatively to temperature in centigrade, humidity in \%RH, and light in lux.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet for the sensor listed above}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Sensor ID} & \textbf{0x82} & \textbf{Raw sensor reading} \\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3]\\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ HTU21D:}
+HTU21D is a temperature and relative humidity sensor.
+The coresense firmware collects data from HTU21D through I2C and the readings are packetized as the raw value as they are collected.
+The raw readings will be converted to temperature in centigrate, humidity in \%RH.
+\\
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a temperature and relative humidity sensor, HTU21D}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x02} & \textbf{0x84} & \textbf{Raw temperature reading} & \textbf{Raw humidity reading}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 5] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ BMP180:}
+
+BMP180 is a temperature and barometric pressure sensor.
+The coresense firmware collects data from BMP180 through I2C and the readings are packetized as the raw value as they are collected. 
+The raw readings will be converted to temperature in centigrade and barometric pressure in hPa.
+\\
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a temperature and barometric pressure sensor, BMP180}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x04} & \textbf{0x84} & \textbf{Raw temperature reading} & \textbf{Raw pressure reading}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 5] \\ \hline
+    \end{tabular}
+\end{table}
+
+\paragraph{$\bullet$ MMA8452Q:}
+
+MMA8452Q is a three-axis accelerometer. The accelerations in three orthogonal directions, x, y and z, as a multiple of acceleration due to gravity (g) are obtained from the sensor. The coresense firmware collects data from this sensor through I2C and the readings are packetized as the raw value as they are collected.
+The raw reading will be converted to a vibration value (represented as multiple of g) and three directional acceleration in g.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a three-axis accelerometer, MMA8452Q}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x07} & \textbf{0x86} & \textbf{Raw Ax reading} & \textbf{Raw Ay reading} & \textbf{Raw Az reading}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 5] & Bytes[6 -- 7] \\ \hline
+    \end{tabular}
+\end{table}
+
+\paragraph{$\bullet$ SPV1840LR5H-B:}
+
+SPV1840LR5H is a MEMS microphone that is sampled at high frequency to obtain the peaks and calculate the sound intensity for a time window.
+The coresense firmware collects data from this sensor through analog read and the readings are packetized as the raw value as they are collected.
+The raw readings will be converted to sound level in dB.
+\\
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a sound level sensor, SPV1840LR5H-B}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x08} & \textbf{0xFF} & \textbf{64 times of Raw reading} \\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 129]\\ \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{Lightsense}
+
+\paragraph{$\bullet$ HMC5883L:}
+HMC5883L is a three-axis magnetometer. The magnetic field strengths in three orthogonal directions, x, y and z are obtained from the sensor.
+The coresense firmware collects data from this sensor through I2C and the readings are packetized as the raw value as they are collected.
+The raw readings will be converted to three directional magnetic field in G.
+\\
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a three-axis magnetometer, HMC5883L}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x0A} & \textbf{0x86} & \textbf{Raw Hx reading} & \textbf{Raw Hy reading} & \textbf{Raw Hz reading}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 5] & Bytes[6 -- 7] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+
+\paragraph{$\bullet$ HIH6130:}
+HIH6130 is a temperature and relative humidity sensor.
+The coresense firmware collects data from HIH6130 through I2C and the readings are packetized as the raw value as they are collected.
+The raw readings will be converted to temperature in centigrate, humidity in \%RH.
+\\
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a temperature and relative humidity sensor, HIH6130}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x0B} & \textbf{0x84} & \textbf{Relative Humidity in Format 6} & \textbf{Temperature in Format 6} \\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 5] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ APDS-9006-020, TSL260, TSL250, MLX75305, and ML8511:}
+APDS-9006-020, TSL260, TSL250, MLX75305, and ML8511 are light sensors that produce the analog voltage 
+representing in general luminance, irradiance measured in $\mu$W/cm$^2$, or UV index. 
+The coresense firmware collects data from sensors listing above through I2C and the reading is packetized as the raw value as it is collected.
+The raw reading will be converted to temperature in centigrate, humidity in \%RH.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of light intensity sensors, APDS-9006-020, TSL260, TSL250, MLX75305, and ML8511}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Sensor ID} (0x0C $\sim$ 0x10) & \textbf{0x82} & \textbf{Voltage output in Format 1}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\paragraph{$\bullet$ TMP421:}
+TMP421 is a temperature sensor.
+The coresense firmware collects data from TMP421 through I2C and the reading is packetized as the raw value as it is collected.
+The raw reading will be converted to temperature in centigrate.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of a temperature sensor, TMP421}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x13} & \textbf{0x82} & \textbf{Temperature in Format 6}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] \\ \hline
+    \end{tabular}
+\end{table}
