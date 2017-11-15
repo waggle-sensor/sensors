@@ -15,12 +15,12 @@ below lists the various parameters produced by the sensor boards, the unique sou
 \begin{longtable}{|l|c|>{\centering}p{0.3\textwidth}|c|}
 \caption{Data sub-packet structure (each row is a "chunk")} \label{tab:dataChunk} \\
 
-\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Length}} \\ \hline
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Data Length}} \\ \hline
 \endfirsthead
 
 \multicolumn{4}{c}%
 {{\bfseries \tablename \thetable{} -- continued from previous page}} \\
-\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Length}} \\ \hline 
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Data Length}} \\ \hline 
 \endhead
 
 \rowcolor{black!8} \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
@@ -29,7 +29,7 @@ below lists the various parameters produced by the sensor boards, the unique sou
 \hline
 \endlastfoot
 
-        \multirow{3}{*}{Firmware version} & \multirow{3}{*}{0xFf} & Firmware version (HW/SW) & 2 bytes \\ \cline{3-4}
+        \multirow{3}{*}{Firmware version} & \multirow{3}{*}{0xFF} & Version (HW/SW) & 2 bytes \\ \cline{3-4}
         & & Build time & 4 bytes \\ \cline{3-4}
         & & Build git & 2 bytes \\ \hline
 
@@ -37,15 +37,15 @@ below lists the various parameters produced by the sensor boards, the unique sou
         Metsense/Lightsense MAC address & 0x00 & MAC Address & 6 bytes \\ \hline
         TMP112 & 0x01 & Temperature & 2 bytes \\ \hline
         \multirow{2}{*}{HTU21D} & \multirow{2}{*}{0x02} & Temperature & 2 bytes \\ \cline{3-4}
-        & & relative humidity & 2 bytes \\ \hline
-        hih4030 & 0x03 & Humidity & 2 bytes \\ \hline
+        & & Relative humidity & 2 bytes \\ \hline
+        HIH4030 & 0x03 & Relative humidity & 2 bytes \\ \hline
         \multirow{2}{*}{BMP180} & \multirow{2}{*}{0x04} & Temperature & 2 bytes \\ \cline{3-4}
         & & Pressure & 3 bytes  \\ \hline
         PR103J2 & 0x05 & Temperature & 2 bytes \\ \hline
         TSL250RD & 0x06 & Visible Light & 2 bytes \\ \hline
         \multirow{4}{*}{MMA8452Q} & \multirow{4}{*}{0x07} & Acceleration in X & 2 bytes \\ \cline{3-4}
         & & Acceleration in Y & 2 bytes \\ \cline{3-4}
-        & & Acceleration in Z & 2 bytes \\ \cline{3-4}
+        & & Acceleration in Z & 2 bytes \\ \hline
         SPV1840LR5H-B & 0x08 & RMS Sound Level & 128 bytes \\ \hline
         TSYS01 & 0x09 & Temperature & 2 bytes \\ \hline
         
@@ -54,7 +54,7 @@ below lists the various parameters produced by the sensor boards, the unique sou
         & & Magnetic Field in Y & 2 bytes \\ \cline{3-4}
         & & Magnetic Field in Z & 2 bytes \\ \hline
         \multirow{2}{*}{HIH6130} & \multirow{2}{*}{0x0B} & Temperature & 2 bytes \\ \cline{3-4}
-        & & relative humidity & 2 bytes \\ \hline
+        & & Relative humidity & 2 bytes \\ \hline
         APDS-9006-020 & 0x0C & Ambient light intensity & 3 bytes \\ \hline
         TSL260RD & 0x0D & IR intensity & 3 bytes \\ \hline
         TSL250RD & 0x0E & Visible light intensity & 3 bytes \\ \hline
@@ -64,11 +64,11 @@ below lists the various parameters produced by the sensor boards, the unique sou
 
     \rowcolor{black!8} \multicolumn{4}{|c|}{{Chemsense board}} \\ \hline
         Chemsense configuration & 0x16 & Chemsense FW config & 1514 bytes \\ \hline
-        Chemsense reading & 0x2A & Raw Reading & Varies \\ \hline
+        Chemsense reading & 0x2A & Raw reading & Varies \\ \hline
 
      \rowcolor{black!8} \multicolumn{4}{|c|}{{Alpha Sensor}} \\ \hline
         \multirow{9}{*}{Histogram} & \multirow{9}{*}{0x28} & Bin count & 32 bytes \\ \cline{3-4}
-        & & Average Time & 4 bytes \\ \cline{3-4}
+        & & Average time & 4 bytes \\ \cline{3-4}
         & & Sample flow rate & 4 bytes \\ \cline{3-4}
         & & Temp/Pressure(alter) & 4 bytes\\ \cline{3-4}
         & & Sampling period & 4 bytes \\ \cline{3-4}
@@ -76,18 +76,18 @@ below lists the various parameters produced by the sensor boards, the unique sou
         & & PM 1 & 4 bytes \\ \cline{3-4}
         & & PM 2.5 & 4 bytes \\ \cline{3-4}
         & & PM 10 & 4 bytes \\ \hline
-        Serial & 0x29 & Serial Number & 20 bytes \\ \hline
+        Serial & 0x29 & Serial number & 20 bytes \\ \hline
         Firmware & 0x30 & Firmware version & 2 bytes \\ \hline
-        \multirow{9}{*}{Configuration} & \multirow{9}{*}{0x31} & Bin Boundaries & 32 bytes \\ \cline{3-4}
-        & & Bin Particle Volumes & 64 bytes \\ \cline{3-4}
-        & & Bin Particle Densities & 64 bytes \\ \cline{3-4}
-        & & Bin Sample Volume Weightings & 64 bytes \\ \cline{3-4}
-        & & Gain Scaling Coefficient & 4 bytes \\ \cline{3-4}
-        & & Sample Flow Rate & 4 bytes \\ \cline{3-4}
+        \multirow{5}{*}{Configuration} & \multirow{5}{*}{0x31} & Bin Boundaries & 32 bytes \\ \cline{3-4}
+        & & Bin particle volumes & 64 bytes \\ \cline{3-4}
+        & & Bin particle densities & 64 bytes \\ \cline{3-4}
+        & & Bin sample volume weightings & 64 bytes \\ \cline{3-4}
+        & & Gain scaling coefficient & 4 bytes \\ \hline
+        \multirow{5}{*}{continued} & \multirow{5}{*}{continued} & Sample flow rate & 4 bytes \\ \cline{3-4}
         & & Laser DAC & 1 byte \\ \cline{3-4}
         & & Fan DAC & 1 byte \\ \cline{3-4}
         & & Conversion factor & 1 byte \\ \cline{3-4}
-        & & Space Bytes & \\ 
+        & & Spare bytes & 21 bytes \\ 
 
 \end{longtable}
 \end{center}

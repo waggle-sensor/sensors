@@ -11,26 +11,22 @@ Table 1 below illustrates how the segments are organized in a transmission packe
 \\
 
 \begin{table}[h!]
+\begin{minipage}{\textwidth}
     \centering
     \caption{Transmission Packet structure}
     \label{table:tran}
     \begin{tabular}{|c|c|c|c|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Preamble} & \textbf{Packet Type | Prot. Ver.} & \textbf{Last Packet Flag | Sequence} & \textbf{Data Length} & \textbf{Data} & \textbf{CRC} & \textbf{Postscript}\\
+        \textbf{Preamble} & \textbf{a~\footnote{Packet Type | Protocol Version}} & \textbf{b~\footnote{Last Packet Flag | Sequence}} & \textbf{Data Length} & \textbf{Data} & \textbf{CRC} & \textbf{Postscript}\\
         \hline
         \multirow{2}{*}{1st Byte} & \multirow{2}{*}{2nd Byte} & \multirow{2}{*}{3rd Byte} & \multirow{2}{*}{4th Byte} & next Bytes & \multirow{2}{*}{Penultimate Byte} & \multirow{2}{*}{Final Byte} \\ 
-        & & & up to 256 Bytes & & \\ \hline
+        & & & & up to 256 Bytes & & \\ \hline
     \end{tabular}
+\end{minipage}
 \end{table}
 
-
-The first segment is the start byte, or the preamble. The preamble is followed by the packet type and protocol version, each of which are 4 bits long and are together packed into a single byte.
-Next, one byte field that reports the first 1 bit of last packet flag and 7 bit sequence number. Following byte reports length of the data which comes along until its
-immediately. The data segment is followed by a single CRC byte, and finally the packet ends with a one byte
-crc and postscript. Table \ref{table:seg} lists the packet and the static values, if any, for each of the segments.
-\\
-
+A description how the segments are organized in a transmission packet is shown in table 2 below.
 
 \begin{table}[H]
     \centering
@@ -41,9 +37,11 @@ crc and postscript. Table \ref{table:seg} lists the packet and the static values
         \textbf{Field} & \textbf{Value} & \textbf{Segment} & \textbf{Length}\\
         \hline
         Preamble & 0xAA & 1 & 1 Byte\\ \hline
-        Packet Type & Variable & \multirow{2}{*}{2} & 1 Nibble\\ \cline{1-2} \cline{4-4}
-        Protocol version & 0x01 &  & 1 Nibble\\ \hline
-        Packet sequence flag & Variable & \multirow{2}{*}{3} & 1 bit \\ \cline{1-2} \cline{4-4}
+        \multirow{2}{*}{Packet Type} & 0x00: request & \multirow{3}{*}{2} & \multirow{2}{*}{1 Nibble} \\
+         & 0x01: sensor reading & & \\ \cline{1-2} \cline{4-4}
+        Protocol version & 0x02 &  & 1 Nibble\\ \hline
+        \multirow{2}{*}{Last Packet flag} & 0x01: last packet for one request & \multirow{3}{*}{3} & \multirow{2}{*}{1 bit} \\
+         & 0x00: not last packet & & \\ \cline{1-2} \cline{4-4}
         Packet sequence & Variable &  & 7 bits \\ \hline
         Length of data & Variable & 4 & 1 Byte\\ \hline
         Data & Variable & 5 & Variable \\ \hline
@@ -54,6 +52,13 @@ crc and postscript. Table \ref{table:seg} lists the packet and the static values
     \caption{Transmission Packet Segments}
     \label{table:seg}
 \end{table}
+
+
+The first segment is the start byte, or the preamble. The preamble is followed by the packet type and protocol version, each of which are 4 bits long and are together packed into a single byte.
+Next, one byte field that reports the first 1 bit of last packet flag and 7 bit sequence number. Following byte reports length of the data which comes along until its
+immediately. The data segment is followed by a single CRC byte, and finally the packet ends with a one byte
+crc and postscript. Table \ref{table:seg} lists the packet and the static values, if any, for each of the segments.
+\\
 
 
 \subsection{Data Sub-packets} \label{ssec:sub-pack}
@@ -94,7 +99,7 @@ from the sensor in the time window. The size of the sub-packet is restricted to 
     \begin{tabular}{|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Source ID} & \bf{1-bit Validity [0: invalid, 1: valid]| 7-bits Data Length} & \textbf{Data} \\ \hline
+        \textbf{Source ID} & \bf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data} \\ \hline
         1 Byte & 1 Byte & up to 128 Bytes \\
         \hline
     \end{tabular}
