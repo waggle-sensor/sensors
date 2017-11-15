@@ -134,6 +134,16 @@ void CallReadCore(byte *data, int length)
 	byte sensorReading[1024];
 	int readingLength = 0;
 
+	int repeat = 0;
+	int interval = 0;
+	if (length == 2)
+		repeat = data[1];
+	else if (length == 3)
+	{
+		repeat = data[1];
+		interval = data[2];
+	}
+
 	bool enable;
 	if (thisid == 0x28 || thisid == 0x29 || thisid == 0x30 || thisid == 0x31)
 		enable = GetEnable(0x2B);
@@ -157,18 +167,29 @@ void CallReadCore(byte *data, int length)
 		if (rc->sensorid == thisid)
 		{
 			if (thisid == 0x2A)
+				repeat = 3;
+			// 	for (int i = 0; i < 3; i++)
+			// 	{
+			// 		rc->func(sensorReading, &readingLength);
+			// 		Packetization(thisid, sensorReading, readingLength);
+			// 	}
+			// 	break;
+
+			// }
+			
+			if (length > 1 || thisid == 0x2A)
 			{
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < repeat; i++)
 				{
 					rc->func(sensorReading, &readingLength);
 					Packetization(thisid, sensorReading, readingLength);
+					delay(interval);
 				}
-				break;
-
 			}
-			
+
 			rc->func(sensorReading, &readingLength);
 			Packetization(thisid, sensorReading, readingLength);
+					
 			break;
 		}
 	}

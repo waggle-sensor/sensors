@@ -5,9 +5,6 @@ int outLength = 4; // start at 4 to account for header
 int protocolver = 0x02;
 int packetType = 0x01;
 
-byte preamble = 0xAA;
-byte postscript = 0x55;
-
 byte sequenceValidity = 0x00;
 
 byte packet[2048];
@@ -56,7 +53,7 @@ void PacketSender(byte sequenceValidity)
     packet[3] = outLength - 4;  // data length
     byte crc = CRCcalc(outLength - 4, packet);
     packet[outLength++] = crc;  // Append CRC8
-    packet[outLength++] = postscript;  // postscript
+    packet[outLength++] = 0x55;  // postscript
 
     for (int i = 0; i < outLength; i++)
         SerialUSB.write(packet[i]);
@@ -66,7 +63,7 @@ void PacketSender(byte sequenceValidity)
 void MultiPacketInit()
 {
     byte lastPacket = 0x01;
-    packet[0] = preamble;  // preamble
+    packet[0] = 0xAA;  // preamble
     packet[1] = (packetType << 4) | protocolver;  // data type --> sensor reading = 0x01 | protocol
     packet[2] = (lastPacket << 7) | packetseq;  // seq, MSB of first sequence is 1
 
@@ -78,7 +75,7 @@ void PacketInit()
     byte lastPacket = 0x01;
     packetseq = 0;
 
-    packet[0] = preamble;  // preamble
+    packet[0] = 0xAA;  // preamble
     packet[1] = (packetType << 4) | protocolver;  // data type --> sensor reading = 0x01 | protocol
     packet[2] = (lastPacket << 7) | packetseq;  // seq, MSB of first sequence is 1
 
