@@ -52,27 +52,7 @@ The table below lists the various units for each sensor values.
 
   \rowcolor{black!5} \multicolumn{4}{|c|}{{Chemsense board}} \\ \hline
     Chemsense configuration & No unit & No unit & Don't need conversions \\ \hline
-    Chemsense reading & Raw reading* & See following section & \\ \hline
-
-
-    Total reducing gases & \multirow{2}{*}{No unit/Raw reading} & & \multirow{2}{*}{Raw ADC reading} \\  \cline{1-1}
-    Nitrogen dioxide & & & \\  \hline
-    Ozone & \multirow{5}{*}{AFE ADC counts} & & \multirow{5}{*}{Raw ADC reading} \\  \cline{1-1}
-    Hydrogen sulphide & & & \\  \cline{1-1}
-    Total oxidizing gases & & & \\  \cline{1-1}
-    Carbon monoxide & & & \\  \cline{1-1}
-    Sulfur dioxide & & & \\  \hline
-    SHT25 & 100ths of \degree C / \%RH & \degree C, \%RH & \\ \hline
-    LPS25H & 100ths of \degree C, Pa & \degree C, Pa & \\ \hline
-    Si1145 & Three fixed dummy value & & Uncompleted FW\\ \hline
-    Intel MAC address & No Units & No Units & \\  \hline
-    CO ADC temp & \multirow{5}{*}{100ths of \degree C} & \multirow{5}{*}{\degree C} & \\ \cline{1-1} \cline{4-4}
-    IAQ IRR ADC temp & & & \\ \cline{1-1} \cline{4-4}
-    O3 NO2 ADC temp & & & \\ \cline{1-1} \cline{4-4}
-    SO2 H2S ADC temp & & & \\ \cline{1-1} \cline{4-4}
-    CO LMP temp & & & \\ \hline
-    Accelerometer & \multirow{2}{*}{raw register} & & \multirow{2}{*}{Raw reading} \\ \cline{1-1}
-    Gyro & & &\\ \hline
+    Chemsense reading & Raw reading* & See Table \ref{table:tran} & \\ \hline
 
  \rowcolor{black!5} \multicolumn{4}{|c|}{{Alpha sensor}} \\ \hline 
 
@@ -115,3 +95,37 @@ The table below lists the various units for each sensor values.
 
 \end{center}
 
+
+
+
+\begin{table}[h!]
+\begin{minipage}{\textwidth}
+    \centering
+    \caption{Transmission packet structure of chemsense board reading}
+    \label{table:tran}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Source ID} & \textbf{Parameter} & \textbf{Current Units} & \textbf{Processed Units} & \textbf{Comments} \\ \hline
+        0x15 & Total reducing gases & \multirow{7}{*}{Raw reading*} & \multirow{7}{*}{ppm} & \\ \cline{1-2} \cline{5-5}
+        0x17 & Nitrogen dioxide & & & \\ \cline{1-2} \cline{5-5}
+        0x18 & Ozone & & & \\ \cline{1-2} \cline{5-5}
+        0x19 & Hydrogen sulphide & & & \\ \cline{1-2} \cline{5-5}
+        0x1A & Total oxidizing gases & & & \\ \cline{1-2} \cline{5-5}
+        0x1B & Carbon monoxide & & & \\ \cline{1-2} \cline{5-5}
+        0x1C & Sulfur dioxide &  & & \\ \hline
+        0x1D & SHT25 & 100ths of \degree C / \%RH & \degree C, \%RH & \\ \hline
+        0x1E & LPS25H & 100ths of \degree C, Pa & \degree C, Pa & \\ \hline
+        0x1F & Si1145 & Raw reading* & & Uncompleted FW\\ \hline
+        0x20 & Intel MAC address & No Units & No Units & \\  \hline
+        0x21 & CO ADC temp & \multirow{5}{*}{100ths of \degree C} & \multirow{5}{*}{\degree C} & \\ \cline{1-2} \cline{5-5}
+        0x22 & IAQ IRR ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x23 & O3 NO2 ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x24 & SO2 H2S ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x25 & CO LMP temp & & & \\ \hline
+        0x26 & Accelerometer & Raw reading* & & Not in Chem v2 \\ \cline{1-4}
+        0x27 & Gyro & Raw reading* & & Uncompleted for v1\&2\\ \hline
+    \end{tabular}
+    \footnotetext{\footnotesize *Raw reading means the reading has no unit currently, and conversion equation for the sensor is not implemented in database. The data stored in database for this sensor is just integer form of raw reading.}
+\end{minipage}
+\end{table}

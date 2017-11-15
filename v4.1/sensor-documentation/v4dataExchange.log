@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.31)  15 NOV 2017 14:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.31)  15 NOV 2017 14:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1300,7 +1300,11 @@ LaTeX Font Info:    Try loading font information for T1+cmss on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-) (./v4dataExchange.aux)
+) (./v4dataExchange.aux
+
+LaTeX Warning: Label `table:tran' multiply defined.
+
+)
 \openout1 = `v4dataExchange.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
@@ -1315,6 +1319,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
 LaTeX Font Info:    ... okay on input line 69.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
 LaTeX Font Info:    ... okay on input line 69.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1591,9 +1596,16 @@ Package array Warning: Column a is already defined on input line 99.
 
 [14]) (./DataUnits.tex [15
 
-] [16]) [17] (./v4dataExchange.aux)
+]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [16] [17] (./v4dataExchange.aux)
 
 LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
@@ -1619,9 +1631,9 @@ msfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 r7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on v4dataExchange.pdf (18 pages, 1196073 bytes).
+Output written on v4dataExchange.pdf (18 pages, 1196896 bytes).
 PDF statistics:
- 507 PDF objects out of 1000 (max. 8388607)
+ 508 PDF objects out of 1000 (max. 8388607)
  108 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
