@@ -1,4 +1,3 @@
-
 // lib for sensors on lightsense
 #include "variables.h"
 
@@ -11,17 +10,29 @@ int packetLength = 0;
 
 void setup()
 {
+        delay(5000);
 	// serial between cs and np
 	SerialUSB.begin(115200);
-	delay(10);
-
+	delay(100);
+        PacketInit();
+        
+        
 	// wire for sensors on met/lightsense boards
 	// AND initialization for sensors on met/lightsense boards
 	Wire.begin();
-	delay(10);
-	InitSensors();
+	delay(1000);
+	
+        // What sensors does this initialize? 
+        InitSensors();
+        
 	InitChemsense();
-	PacketInit();
+	
+        // Do we need one for Alphasense too? 
+        // InitAlphasense();
+        
+        
+        
+        
 }
 
 void loop()
@@ -59,8 +70,9 @@ void loop()
 	}
 
 	if (postscript)
+        {
 		SortReading(inputarray, packetLength);
-
+        }
 	// SerialUSB.println("end!!");
 	postscript = false;
 	packetLength = 0;

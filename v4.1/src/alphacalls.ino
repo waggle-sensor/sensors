@@ -1,5 +1,3 @@
-
-
 void InitAlphasensor()
 {
 	// begin SPI

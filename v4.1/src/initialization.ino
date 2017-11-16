@@ -1,5 +1,3 @@
-
-
 void InitSensors()
 {
 	// Metsense
@@ -187,7 +185,7 @@ void blink()
 void InitChemsense()
 {
 	Serial3.begin(115200);	// begin serial3
-	Serial3.setTimeout(5000);	// set timeout of serial3 as 4 sec
+	Serial3.setTimeout(5000);	// set timeout of serial3 as 5 sec
 	pinMode(CHEM_POWER_PIN, OUTPUT);  // pin for chemsense power is 47
 	digitalWrite(CHEM_POWER_PIN, LOW); 	// power on the device --> LOW means power on
 	delay(1000);

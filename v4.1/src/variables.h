@@ -51,6 +51,8 @@ byte MCP3428_2_ADDRESS = 0;
 // Alphasensor
 #define ALPHA_SLAVE_PIN 40
 
+#define SerialDebug 0x01
+
 /* COEFFICIENTS */
 byte BMP180_COEFFICIENTS[22];
 byte TSYS01_COEFFICIENTS[10];
