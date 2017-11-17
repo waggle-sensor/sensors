@@ -1,9 +1,0 @@
-// void ReadOnSet()
-// {
-
-// }
-
-// void ReadDecagon()
-// {
-
-// }

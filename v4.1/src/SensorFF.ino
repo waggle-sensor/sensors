@@ -1,5 +1,26 @@
+// Coresense firmware version
 
-void ReadVersion(byte *sensorReading, int *readingLength)
+void InitSensorFF(byte *sensorReading, int *readingLength)
+{
+	return;
+}
+
+void ConfigSensorFF(byte *sensorReading, int *readingLength)
+{
+	return;
+}
+
+void EnableSensorFF(byte *sensorReading, int *readingLength)
+{
+	EnableSensor(0xFF);
+}
+
+void DisableSensorFF(byte *sensorReading, int *readingLength)
+{
+	DisableSensor(0xFF);
+}
+
+void ReadSensorFF(byte *sensorReading, int *readingLength)
 {
 	int first_byte = (CORESENSE_HW_VER_MAJ << 5) | ((CORESENSE_HW_VER_MIN & 0x07) << 2) | ((CORESENSE_KERNEL_MAJ & 0x0F) >> 2);
 	int second_byte = ((CORESENSE_KERNEL_MAJ & 0x0F) << 6) | ((CORESENSE_KERNEL_MIN * 10 + CORESENSE_KERNEL_SUB) & 0x3F);
@@ -16,4 +37,9 @@ void ReadVersion(byte *sensorReading, int *readingLength)
 	sensorReading[7] = buildinfo_git & 0xFF;
 
 	*readingLength = 8;
+}
+
+void WriteSensorFF(byte *sensorReading, int *readingLength)
+{
+	return;
 }

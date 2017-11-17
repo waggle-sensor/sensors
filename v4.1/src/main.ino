@@ -1,8 +1,11 @@
 // lib for sensors on lightsense
 #include "variables.h"
+#include "SensorStruct.h"
+#include "BusStruct.h"
+#include "EnabledTable.h"
 
 int MaxInputLength = 262;  // possible data bytes 256, 4 headers, 2 footers
-byte inputarray[262];  // Length of this byte array has to be the same with MaxInputLength
+byte inputarray[1024];  // Length of this byte array has to be the same with MaxInputLength
 byte input = '\0';
 
 bool postscript = false;
@@ -10,29 +13,18 @@ int packetLength = 0;
 
 void setup()
 {
-        delay(5000);
-	// serial between cs and np
+	delay(2000);
 	SerialUSB.begin(115200);
 	delay(100);
-        PacketInit();
-        
-        
+
 	// wire for sensors on met/lightsense boards
 	// AND initialization for sensors on met/lightsense boards
 	Wire.begin();
-	delay(1000);
+	delay(100);
 	
-        // What sensors does this initialize? 
-        InitSensors();
-        
-	InitChemsense();
-	
-        // Do we need one for Alphasense too? 
-        // InitAlphasense();
-        
-        
-        
-        
+	// What sensors does this initialize? 
+	SensorInit();
+	PacketInit();
 }
 
 void loop()
@@ -49,7 +41,7 @@ void loop()
 			inputarray[++packetLength] = '\0';
 
 			// And keep reading until it gets a postscript
-			while (!postscript)
+			while (SerialUSB.available())
 			{
 				input = SerialUSB.read();
 				inputarray[packetLength] = input;
@@ -70,9 +62,8 @@ void loop()
 	}
 
 	if (postscript)
-        {
 		SortReading(inputarray, packetLength);
-        }
+
 	// SerialUSB.println("end!!");
 	postscript = false;
 	packetLength = 0;
