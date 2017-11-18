@@ -1,6 +1,6 @@
 // Alpha sensor histogram
 
-void InitSensor28(byte *sensorReading, int *readingLength)
+void InitSensor28()
 {
 	// begin SPI
 	setAlpha = SPISettings(5000000, MSBFIRST, SPI_MODE1);
@@ -13,17 +13,17 @@ void InitSensor28(byte *sensorReading, int *readingLength)
  	alpha_onagain();
 }
 
-void ConfigSensor28(byte *sensorReading, int *readingLength)
+void ConfigSensor28()
 {
 	return;
 }
 
-void EnableSensor28(byte *sensorReading, int *readingLength)
+void EnableSensor28()
 {
 	EnableSensor(0x28);
 }
 
-void DisableSensor28(byte *sensorReading, int *readingLength)
+void DisableSensor28()
 {
 	DisableSensor(0x28);
 }
@@ -59,30 +59,24 @@ void alpha_onagain()
 	alphasense_on();
 	alpha_status();
 
-	byte alphaStatusid = 0x2B;
+	// byte alphaStatusid = 0x2B;
 
 	int repeat = 0;
 	while ((returnbyte != 0x31) && (repeat < 10))
 	{
+		if (repeat != 0)
+			delay(5000);
 		repeat++;
 		alphasense_on();
+		delay(100);
 		alpha_status();
-		// SerialUSB.println(returnbyte);
-		// SerialUSB.println("Alphasensor");
-		delay(5000);
 	}
-	delay(1000);
+	// delay(1000);
 
-	if (returnbyte == 0x31)
-	{
-		// byte sensorReading[2];
-		// int readingLength;
-		// ReadAlphaFWver(sensorReading, &readingLength);
-		// Packetization(0x30, sensorReading, readingLength);
-		Packetization(alphaStatusid, 0x01);
-	}
-	else
-		Packetization(alphaStatusid, 0x00);
+	// if (returnbyte == 0x31)
+	// 	Packetization(alphaStatusid, 0x01);
+	// else
+	// 	Packetization(alphaStatusid, 0x00);
 }
 
 // Alphasense

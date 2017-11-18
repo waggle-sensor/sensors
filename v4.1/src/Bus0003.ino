@@ -1,6 +1,6 @@
-// Chem sensor reading
+// Chem sensor reading through bus functions
 
-void InitSensor2A()
+void InitBusSerial3()
 {
 	Serial3.begin(115200);	// begin serial3
 	Serial3.setTimeout(5000);	// set timeout of serial3 as 5 sec
@@ -17,27 +17,27 @@ void InitSensor2A()
 	}
 }
 
-void ConfigSensor2A()
+void ConfigBusSerial3()
 {
 	return;
 }
 
-void EnableSensor2A()
+void EnableBusSerial3()
 {
 	EnableSensor(0x2A);
 }
 
-void DisableSensor2A()
+void DisableBusSerial3()
 {
 	DisableSensor(0x2A);
 }
 
-void ReadSensor2A(byte *sensorReading, int *readingLength)
+void ReadBusSerial3(byte *sensorReading, int *readingLength)
 {
 	ReadRS232(sensorReading, readingLength);
 }
 
-void WriteSensor2A(byte *sensorReading, int *readingLength)
+void WriteBusSerial3(byte *sensorReading, int *readingLength)
 {
 	return;
 }

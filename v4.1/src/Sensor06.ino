@@ -1,21 +1,21 @@
 // TSL250 Light sensor
 
-void InitSensor06(byte *sensorReading, int *readingLength)
+void InitSensor06()
 {
 	return;
 }
 
-void ConfigSensor06(byte *sensorReading, int *readingLength)
+void ConfigSensor06()
 {
 	return;
 }
 
-void EnableSensor06(byte *sensorReading, int *readingLength)
+void EnableSensor06()
 {
 	EnableSensor(0x06);
 }
 
-void DisableSensor06(byte *sensorReading, int *readingLength)
+void DisableSensor06()
 {
 	DisableSensor(0x06);
 }

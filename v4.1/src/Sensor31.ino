@@ -1,21 +1,21 @@
 // Alpha sensor configuration
 
-void InitSensor31(byte *sensorReading, int *readingLength)
+void InitSensor31()
+{
+	InitSensor28();
+}
+
+void ConfigSensor31()
 {
 	return;
 }
 
-void ConfigSensor31(byte *sensorReading, int *readingLength)
-{
-	return;
-}
-
-void EnableSensor31(byte *sensorReading, int *readingLength)
+void EnableSensor31()
 {
 	EnableSensor(0x31);
 }
 
-void DisableSensor31(byte *sensorReading, int *readingLength)
+void DisableSensor31()
 {
 	DisableSensor(0x31);
 }

@@ -1,21 +1,21 @@
 // Alpha sensor serial
 
-void InitSensor29(byte *sensorReading, int *readingLength)
+void InitSensor29()
+{
+	InitSensor28();
+}
+
+void ConfigSensor29()
 {
 	return;
 }
 
-void ConfigSensor29(byte *sensorReading, int *readingLength)
-{
-	return;
-}
-
-void EnableSensor29(byte *sensorReading, int *readingLength)
+void EnableSensor29()
 {
 	EnableSensor(0x29);
 }
 
-void DisableSensor29(byte *sensorReading, int *readingLength)
+void DisableSensor29()
 {
 	DisableSensor(0x29);
 }

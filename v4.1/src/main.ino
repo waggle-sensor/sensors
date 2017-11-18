@@ -1,15 +1,14 @@
-// lib for sensors on lightsense
+// variables for firmware
 #include "variables.h"
-#include "SensorStruct.h"
-#include "BusStruct.h"
-#include "EnabledTable.h"
 
-int MaxInputLength = 262;  // possible data bytes 256, 4 headers, 2 footers
-byte inputarray[1024];  // Length of this byte array has to be the same with MaxInputLength
+/* for main loop */
+#define HEADERSIZE 3
+#define FOOTERSIZE 2
+#define maxInputLength 1024  // possible data bytes 256, 4 headers, 2 footers
+
+int bufferIndex = 0;
+byte inputarray[maxInputLength];  // Length of this byte array has to be the same with MaxInputLength
 byte input = '\0';
-
-bool postscript = false;
-int packetLength = 0;
 
 void setup()
 {
@@ -28,43 +27,49 @@ void setup()
 }
 
 void loop()
-{
-	// Read data until it gets a postscript
-	while (!postscript)
+{	
+	while (SerialUSB.available())
 	{
-		input = SerialUSB.read();
+		inputarray[bufferIndex] = SerialUSB.read();
+		if (bufferIndex == maxInputLength)
+			break;
+		bufferIndex++;
+	}
 
-		// If input is preamble, then store bytes from now
-		if (input == 0xaa)
+	for (int i = 0; i < bufferIndex; i++)
+	{
+		if (inputarray[i] == 0xAA)
 		{
-			inputarray[packetLength] = input;
-			inputarray[++packetLength] = '\0';
-
-			// And keep reading until it gets a postscript
-			while (SerialUSB.available())
+			for (int j = i; j < bufferIndex; j++)
 			{
-				input = SerialUSB.read();
-				inputarray[packetLength] = input;
-
-				// If it gets a postscript, break loops
-				// If packetLength of the input is 260, break loops
-				if (input == 0x55)
-					postscript = true;
-				if (packetLength == MaxInputLength)
-					break;
-
-				inputarray[++packetLength] = '\0';
-
+				inputarray[j - i] = inputarray[j];
+				bufferIndex -= i;
 			}
-			if (packetLength == MaxInputLength)
-				break;
+			break;
 		}
 	}
 
-	if (postscript)
-		SortReading(inputarray, packetLength);
+	if (bufferIndex > 4)
+	{
+		int dataLength = inputarray[2];
+		int packetLength = dataLength + HEADERSIZE + FOOTERSIZE;
+		if (bufferIndex >= packetLength)
+		{
+			byte packet[packetLength];
+			for (int i = 0; i < bufferIndex; i++)
+			{
+				if (i < packetLength)
+					packet[i] = inputarray[i];
+				else
+					inputarray[i - packetLength] = inputarray[i];
+				bufferIndex -= packetLength;
+			}
 
-	// SerialUSB.println("end!!");
-	postscript = false;
-	packetLength = 0;
+			byte checkcrc = CRCcalc(dataLength, packet);
+			int request = packet[1] & 0xF0;
+			int protocol = packet[1] & 0x0F;
+			if ((checkcrc == packet[dataLength + HEADERSIZE]) && (request == 0) && (protocol == 2))
+				SortReading(packet, dataLength);
+		}
+	}
 }

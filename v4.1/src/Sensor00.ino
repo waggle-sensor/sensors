@@ -1,21 +1,21 @@
 // Met and Light macaddress
 
-void InitSensor00(byte *sensorReading, int *readingLength)
+void InitSensor00()
 {
 	return;
 }
 
-void ConfigSensor00(byte *sensorReading, int *readingLength)
+void ConfigSensor00()
 {
 	return;
 }
 
-void EnableSensor00(byte *sensorReading, int *readingLength)
+void EnableSensor00()
 {
 	EnableSensor(0x00);
 }
 
-void DisableSensor00(byte *sensorReading, int *readingLength)
+void DisableSensor00()
 {
 	DisableSensor(0x00);
 }
@@ -24,7 +24,7 @@ void ReadSensor00(byte *sensorReading, int *readingLength)
 {
 	byte id[8];
 
-	if (!ds2400.reset()) 
+	if (!ds2401.reset()) 
 	{
 		sensorReading[0] = 0xFF;
 		*readingLength += 1;
@@ -32,11 +32,11 @@ void ReadSensor00(byte *sensorReading, int *readingLength)
 		// return any sign that this device is not ready!!
 	}
 
-	ds2400.write(0x33);
+	ds2401.write(0x33);
 
 	for (int i = 0; i < 8; i++)
 	{
-		id[i] = ds2400.read();
+		id[i] = ds2401.read();
 		sensorReading[i] = id[i];
 		*readingLength += 1;
 	}

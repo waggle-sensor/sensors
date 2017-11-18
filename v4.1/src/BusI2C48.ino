@@ -1,6 +1,6 @@
-// TMP112 Temperature sensor
+// TMP112 Temperature sensor through bus function
 
-void InitSensor01()
+void InitBusI2C48()
 {
 	const byte TMP112_CONFIG_REG = 0x01;
 	// const byte TMP112_TEMP_REG = 0x00;
@@ -17,22 +17,22 @@ void InitSensor01()
 	ReadI2C(TMP112_ADDRESS, 2, readarray);
 }
 
-void ConfigSensor01()
+void ConfigBusI2C48()
 {
 	return;
 }
 
-void EnableSensor01()
+void EnableBusI2C48()
 {
 	EnableSensor(0x01);
 }
 
-void DisableSensor01()
+void DisableBusI2C48()
 {
 	DisableSensor(0x01);
 }
 
-void ReadSensor01(byte *sensorReading, int *readingLength)
+void ReadBusI2C48(byte *sensorReading, int *readingLength)
 {
 	const byte TMP112_TEMP_REG = 0x00;
 

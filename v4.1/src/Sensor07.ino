@@ -1,6 +1,6 @@
 // MMA accelerometer
 
-void InitSensor07(byte *sensorReading, int *readingLength)
+void InitSensor07()
 {
 	const byte XYZ_DATA_CFG = 0x0E;
 	const byte CTRL_REG1 = 0x2A;
@@ -45,17 +45,17 @@ void InitSensor07(byte *sensorReading, int *readingLength)
 	WriteI2C(MMA8452_ADDRESS, 2, writearray);
 }
 
-void ConfigSensor07(byte *sensorReading, int *readingLength)
+void ConfigSensor07()
 {
 	return;
 }
 
-void EnableSensor07(byte *sensorReading, int *readingLength)
+void EnableSensor07()
 {
 	EnableSensor(0x07);
 }
 
-void DisableSensor07(byte *sensorReading, int *readingLength)
+void DisableSensor07()
 {
 	DisableSensor(0x07);
 }

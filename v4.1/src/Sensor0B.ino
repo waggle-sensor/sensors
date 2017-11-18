@@ -1,21 +1,22 @@
+
 // HIH6130 Temperature and relative humidity sensor
 
-void InitSensor0B(byte *sensorReading, int *readingLength)
+void InitSensor0B()
 {
 	return;
 }
 
-void ConfigSensor0B(byte *sensorReading, int *readingLength)
+void ConfigSensor0B()
 {
 	return;
 }
 
-void EnableSensor0B(byte *sensorReading, int *readingLength)
+void EnableSensor0B()
 {
 	EnableSensor(0x0B);
 }
 
-void DisableSensor0B(byte *sensorReading, int *readingLength)
+void DisableSensor0B()
 {
 	DisableSensor(0x0B);
 }
@@ -23,7 +24,7 @@ void DisableSensor0B(byte *sensorReading, int *readingLength)
 void ReadSensor0B(byte *sensorReading, int *readingLength)
 {
 	byte readarray[4];
-	DirectReadI2C(HIH6130_ADDRESS, 4, readarray, 10B);
+	DirectReadI2C(HIH6130_ADDRESS, 4, readarray, 10);
 
 	for (int i = 0; i < 4; i++)
 	{

@@ -1,22 +1,22 @@
 // APDS Light sensor
 
-void InitSensor0C(byte *sensorReading, int *readingLength)
+void InitSensor0C()
 {
 	mcp3428_2.init(MCP342X::L, MCP342X::F);
 	MCP3428_2_ADDRESS = mcp3428_2.returnAddress();
 }
 
-void ConfigSensor0C(byte *sensorReading, int *readingLength)
+void ConfigSensor0C()
 {
 	return;
 }
 
-void EnableSensor0C(byte *sensorReading, int *readingLength)
+void EnableSensor0C()
 {
 	EnableSensor(0x0C);
 }
 
-void DisableSensor0C(byte *sensorReading, int *readingLength)
+void DisableSensor0C()
 {
 	DisableSensor(0x0C);
 }

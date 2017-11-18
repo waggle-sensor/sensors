@@ -1,21 +1,21 @@
 // HTU21D Temperature and relative humidity sensor
 
-void InitSensor02(byte *sensorReading, int *readingLength)
+void InitSensor02()
 {
 	return;
 }
 
-void ConfigSensor02(byte *sensorReading, int *readingLength)
+void ConfigSensor02()
 {
 	return;
 }
 
-void EnableSensor02(byte *sensorReading, int *readingLength)
+void EnableSensor02()
 {
 	EnableSensor(0x02);
 }
 
-void DisableSensor02(byte *sensorReading, int *readingLength)
+void DisableSensor02()
 {
 	DisableSensor(0x02);
 }

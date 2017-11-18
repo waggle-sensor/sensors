@@ -5,10 +5,13 @@
 #include <OneWire.h>
 #include "./buildinfo.h"
 
+/* Only library among sensors */
 #include "./MCP342X/MCP342X.h"
 MCP342X mcp3428_1;
 MCP342X mcp3428_2;
+bool flagMCP1 = false;
 
+// Wire
 OneWire ds2401(48);
 
 /* Firmware version */

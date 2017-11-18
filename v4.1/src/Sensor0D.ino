@@ -1,22 +1,26 @@
 // TSL260RD Light sensor
 
-void InitSensor0D(byte *sensorReading, int *readingLength)
+void InitSensor0D()
 {
-	mcp3428_1.init(MCP342X::L, MCP342X::L);
-	MCP3428_1_ADDRESS = mcp3428_1.returnAddress();
+	if (flagMCP1 == false)
+	{
+		mcp3428_1.init(MCP342X::L, MCP342X::L);
+		MCP3428_1_ADDRESS = mcp3428_1.returnAddress();
+		flagMCP1 = true;
+	}
 }
 
-void ConfigSensor0D(byte *sensorReading, int *readingLength)
+void ConfigSensor0D()
 {
 	return;
 }
 
-void EnableSensor0D(byte *sensorReading, int *readingLength)
+void EnableSensor0D()
 {
 	EnableSensor(0x0D);
 }
 
-void DisableSensor0D(byte *sensorReading, int *readingLength)
+void DisableSensor0D()
 {
 	DisableSensor(0x0D);
 }
@@ -26,7 +30,7 @@ void ReadSensor0D(byte *sensorReading, int *readingLength)
 	// byte address = mcp3428_1.returnAddress();
 	byte writebyte[1] = {mcp3428_1.returnRegister(MCP342X::CHANNEL_1)};
 	byte readarray[3];
-	WriteReadI2C(MCP3428_1_ADDRESS, 1, writebyte, 3, readarray, 10D);
+	WriteReadI2C(MCP3428_1_ADDRESS, 1, writebyte, 3, readarray, 10);
 
 	for (int i = 0; i < 2; i++)
 	{

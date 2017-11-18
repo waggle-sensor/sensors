@@ -1,6 +1,6 @@
 // Rain gauge
 
-void InitSensor2C(byte *sensorReading, int *readingLength)
+void InitSensor2C()
 {
 	// pinMode(RAIN_INTERRUPT_PIN, INPUT_PULLUP);
 	// attachInterrupt(digitalPinToInterrupt(RAIN_INTERRUPT_PIN), blink, RISING);
@@ -9,17 +9,17 @@ void InitSensor2C(byte *sensorReading, int *readingLength)
 	return;
 }
 
-void ConfigSensor2C(byte *sensorReading, int *readingLength)
+void ConfigSensor2C()
 {
 	return;
 }
 
-void EnableSensor2C(byte *sensorReading, int *readingLength)
+void EnableSensor2C()
 {
 	EnableSensor(0x2C);
 }
 
-void DisableSensor2C(byte *sensorReading, int *readingLength)
+void DisableSensor2C()
 {
 	DisableSensor(0x2C);
 }

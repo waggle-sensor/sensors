@@ -1,21 +1,21 @@
 // Coresense firmware version
 
-void InitSensorFF(byte *sensorReading, int *readingLength)
+void InitSensorFF()
 {
 	return;
 }
 
-void ConfigSensorFF(byte *sensorReading, int *readingLength)
+void ConfigSensorFF()
 {
 	return;
 }
 
-void EnableSensorFF(byte *sensorReading, int *readingLength)
+void EnableSensorFF()
 {
 	EnableSensor(0xFF);
 }
 
-void DisableSensorFF(byte *sensorReading, int *readingLength)
+void DisableSensorFF()
 {
 	DisableSensor(0xFF);
 }

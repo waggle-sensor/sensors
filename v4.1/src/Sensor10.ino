@@ -1,21 +1,26 @@
 // ML8511 Light sensor -- UV
 
-void InitSensor10(byte *sensorReading, int *readingLength)
+void InitSensor10()
+{
+	if (flagMCP1 == false)
+	{
+		mcp3428_1.init(MCP342X::L, MCP342X::L);
+		MCP3428_1_ADDRESS = mcp3428_1.returnAddress();
+		flagMCP1 = true;
+	}
+}
+
+void ConfigSensor10()
 {
 	return;
 }
 
-void ConfigSensor10(byte *sensorReading, int *readingLength)
-{
-	return;
-}
-
-void EnableSensor10(byte *sensorReading, int *readingLength)
+void EnableSensor10()
 {
 	EnableSensor(0x10);
 }
 
-void DisableSensor10(byte *sensorReading, int *readingLength)
+void DisableSensor10()
 {
 	DisableSensor(0x10);
 }

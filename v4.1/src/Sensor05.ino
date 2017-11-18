@@ -1,21 +1,21 @@
 // PR103J2 Temperature sensor
 
-void InitSensor05(byte *sensorReading, int *readingLength)
+void InitSensor05()
 {
 	return;
 }
 
-void ConfigSensor05(byte *sensorReading, int *readingLength)
+void ConfigSensor05()
 {
 	return;
 }
 
-void EnableSensor05(byte *sensorReading, int *readingLength)
+void EnableSensor05()
 {
 	EnableSensor(0x05);
 }
 
-void DisableSensor05(byte *sensorReading, int *readingLength)
+void DisableSensor05()
 {
 	DisableSensor(0x05);
 }

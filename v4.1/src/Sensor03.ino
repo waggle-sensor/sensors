@@ -1,22 +1,22 @@
 // HIH4030 Relative Humidity sensor
 
-void InitSensor03(byte *sensorReading, int *readingLength)
+void InitSensor03()
 {
 	return;
 }
 
-void ConfigSensor03(byte *sensorReading, int *readingLength)
+void ConfigSensor03()
 {
 	return;
 }
 
-void EnableSensor03(byte *sensorReading, int *readingLength)
+void EnableSensor03()
 {
 	
 	EnableSensor(0x03);
 }
 
-void DisableSensor03(byte *sensorReading, int *readingLength)
+void DisableSensor03()
 {
 	
 	DisableSensor(0x03);

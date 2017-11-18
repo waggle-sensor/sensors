@@ -3,7 +3,7 @@ byte CRCcalc(byte dataLength, byte *packet)
 {
     byte crc = 0x00;
     
-    for (int i = 0x04; i < (dataLength + 0x04); i++) // 0x03 accounts for header
+    for (int i = 0x03; i < (dataLength + 0x03); i++) // 0x03 accounts for header
         crc = CRC8Waggle(packet[i], crc);
 
     return crc;
@@ -28,12 +28,3 @@ byte CRC8Waggle(byte data, byte crc)
     return(crc);
 }
 /**************************************************************************************/
-
-
-bool CheckCRC(byte crc)
-{
-    if (crc == 0)
-        return true;
-    else
-        return false;
-}

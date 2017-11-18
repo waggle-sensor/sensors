@@ -1,21 +1,26 @@
 // MLX Light sensor
 
-void InitSensor0F(byte *sensorReading, int *readingLength)
+void InitSensor0F()
+{
+	if (flagMCP1 == false)
+	{
+		mcp3428_1.init(MCP342X::L, MCP342X::L);
+		MCP3428_1_ADDRESS = mcp3428_1.returnAddress();
+		flagMCP1 = true;
+	}
+}
+
+void ConfigSensor0F()
 {
 	return;
 }
 
-void ConfigSensor0F(byte *sensorReading, int *readingLength)
-{
-	return;
-}
-
-void EnableSensor0F(byte *sensorReading, int *readingLength)
+void EnableSensor0F()
 {
 	EnableSensor(0x0F);
 }
 
-void DisableSensor0F(byte *sensorReading, int *readingLength)
+void DisableSensor0F()
 {
 	DisableSensor(0x0F);
 }

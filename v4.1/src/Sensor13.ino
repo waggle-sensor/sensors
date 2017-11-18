@@ -1,21 +1,21 @@
 // TMP421 Temperature sensor
 
-void InitSensor13(byte *sensorReading, int *readingLength)
+void InitSensor13()
 {
 	return;
 }
 
-void ConfigSensor13(byte *sensorReading, int *readingLength)
+void ConfigSensor13()
 {
 	return;
 }
 
-void EnableSensor13(byte *sensorReading, int *readingLength)
+void EnableSensor13()
 {
 	EnableSensor(0x13);
 }
 
-void DisableSensor13(byte *sensorReading, int *readingLength)
+void DisableSensor13()
 {
 	DisableSensor(0x13);
 }

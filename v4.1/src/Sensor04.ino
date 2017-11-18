@@ -1,6 +1,6 @@
 // BMP180 Temperature and Barometric Pressure sensor
 
-void InitSensor04(byte *sensorReading, int *readingLength)
+void InitSensor04()
 {
 	byte BMP180_REGISTER_CHIPID = 0xD0;
 	byte writebyte[1] = {BMP180_REGISTER_CHIPID};
@@ -27,17 +27,17 @@ void InitSensor04(byte *sensorReading, int *readingLength)
 	}
 }
 
-void ConfigSensor04(byte *sensorReading, int *readingLength)
+void ConfigSensor04()
 {
 	return;
 }
 
-void EnableSensor04(byte *sensorReading, int *readingLength)
+void EnableSensor04()
 {
 	EnableSensor(0x04);
 }
 
-void DisableSensor04(byte *sensorReading, int *readingLength)
+void DisableSensor04()
 {
 	DisableSensor(0x04);
 }

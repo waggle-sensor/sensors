@@ -1,21 +1,21 @@
 // Chemconfig
 
-void InitSensor16(byte *sensorReading, int *readingLength)
+void InitSensor16()
 {
 	return;
 }
 
-void ConfigSensor16(byte *sensorReading, int *readingLength)
+void ConfigSensor16()
 {
 	return;
 }
 
-void EnableSensor16(byte *sensorReading, int *readingLength)
+void EnableSensor16()
 {
 	EnableSensor(0x16);
 }
 
-void DisableSensor16(byte *sensorReading, int *readingLength)
+void DisableSensor16()
 {
 	DisableSensor(0x16);
 }

@@ -1,21 +1,21 @@
 // Alpha sensor firmware version
 
-void InitSensor30(byte *sensorReading, int *readingLength)
+void InitSensor30()
 {
-	return;
+	InitSensor28();
 }
 
-void ConfigSensor30(byte *sensorReading, int *readingLength)
+void ConfigSensor30()
 {
 	EnableSensor(0x30);
 }
 
-void EnableSensor30(byte *sensorReading, int *readingLength)
+void EnableSensor30()
 {
 	DisableSensor(0x30);
 }
 
-void DisableSensor30(byte *sensorReading, int *readingLength)
+void DisableSensor30()
 {
 	return;
 }

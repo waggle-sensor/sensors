@@ -1,6 +1,6 @@
 // HMC Magnetometer
 
-void InitSensor0A(byte *sensorReading, int *readingLength)
+void InitSensor0A()
 {
 	const byte HMC5883_REGISTER_MAG_CRB_REG_M = 0x01;
 	const byte HMC5883_REGISTER_MAG_MR_REG_M = 0x02;
@@ -26,17 +26,17 @@ void InitSensor0A(byte *sensorReading, int *readingLength)
 	// HMC5883_COEFFICIENTS[3] = coefficient_Gauss_LSB_Z & 0xFF;
 }
 
-void ConfigSensor0A(byte *sensorReading, int *readingLength)
+void ConfigSensor0A()
 {
 	return;
 }
 
-void EnableSensor0A(byte *sensorReading, int *readingLength)
+void EnableSensor0A()
 {
 	EnableSensor(0x0A);
 }
 
-void DisableSensor0A(byte *sensorReading, int *readingLength)
+void DisableSensor0A()
 {
 	DisableSensor(0x0A);
 }

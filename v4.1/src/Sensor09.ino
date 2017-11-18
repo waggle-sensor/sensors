@@ -1,6 +1,6 @@
 // TSYS01 Temperature sensor
 
-void InitSensor09(byte *sensorReading, int *readingLength)
+void InitSensor09()
 {
 	byte writebyte[1] = {0x1E};
 	WriteI2C(TSYS01_ADDRESS, 1, writebyte);
@@ -21,17 +21,17 @@ void InitSensor09(byte *sensorReading, int *readingLength)
 	}
 }
 
-void ConfigSensor09(byte *sensorReading, int *readingLength)
+void ConfigSensor09()
 {
 	return;
 }
 
-void EnableSensor09(byte *sensorReading, int *readingLength)
+void EnableSensor09()
 {
 	EnableSensor(0x09);
 }
 
-void DisableSensor09(byte *sensorReading, int *readingLength)
+void DisableSensor09()
 {
 	DisableSensor(0x09);
 }

@@ -1,23 +1,23 @@
 // SPV sound level sensor
 
-void InitSensor08(byte *sensorReading, int *readingLength)
+void InitSensor08()
 {
 	pinMode(SPV_AMP_PIN,INPUT);  // Does this pin really work?
 	pinMode(SPV_SPL_PIN,INPUT);  // Does this pin really work?
 	pinMode(SPV_RAW_MIC_PIN,INPUT);
 }
 
-void ConfigSensor08(byte *sensorReading, int *readingLength)
+void ConfigSensor08()
 {
 	return;
 }
 
-void EnableSensor08(byte *sensorReading, int *readingLength)
+void EnableSensor08()
 {
 	EnableSensor(0x08);
 }
 
-void DisableSensor08(byte *sensorReading, int *readingLength)
+void DisableSensor08()
 {
 	DisableSensor(0x08);
 }
