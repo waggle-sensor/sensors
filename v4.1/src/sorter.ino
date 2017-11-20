@@ -4,7 +4,7 @@ void SortReading(byte *packet, int dataLength)
 {
 	PacketInit(); 
 	byte *subpacket = packet + 4;  // put subpacket value as address of last packet byte
-	while (subpacket < &packet[dataLength + 4])
+	while (subpacket < &packet[dataLength + 3])
 	{
 		byte type = subpacket[0];
 		// byte ack = subpacket[1] & 0x80;
@@ -20,7 +20,7 @@ void SortReading(byte *packet, int dataLength)
 				break;
 			}
 		}
-		subpacket += paramLength + 1;
+		subpacket += paramLength + 2;
 	}
 	PacketSender(0x01);
 }

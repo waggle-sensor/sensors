@@ -51,7 +51,8 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 #			elif '3' in cmd:
 #				cmd = '023100'
 
-			cmd = 'aa020102%s0055' % (cmd,)  # preamble(aa) type|protocel(02) sequence(01) DATAlength(%s) data(%s) crc=true(00) postscript(55)
+			cmd = 'aa02%s0055' % (cmd,)
+			# cmd = 'aa02 04 01 0501%s 0055' % (cmd,)
 			# cmd = 'aa0201012A0055'
 			print(cmd)
 
@@ -62,11 +63,11 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 				line = ser.readline()
 				# 				.decode()
 
-				print(len(line))
+				# print(len(line))
 				print(str(line))
 
-				if (line[2] == 0x16):
-					print(line.decode("utf-8"))
+				# if (line[2] == 0x16):
+				# 	print(line.decode("utf-8"))
 					
 				if 'U' in str(line):
 					if (len(line) > 0):

@@ -53,6 +53,7 @@ byte MCP3428_2_ADDRESS = 0;
 
 // Alphasensor
 #define ALPHA_SLAVE_PIN 40
+bool flagON = true;
 
 /* COEFFICIENTS */
 byte BMP180_COEFFICIENTS[22];

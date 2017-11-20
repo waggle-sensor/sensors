@@ -2,15 +2,19 @@
 
 void InitSensor28()
 {
-	// begin SPI
-	setAlpha = SPISettings(5000000, MSBFIRST, SPI_MODE1);
-	pinMode(ALPHA_SLAVE_PIN, OUTPUT);
+	if (!flagON)
+	{
+		// begin SPI
+		setAlpha = SPISettings(5000000, MSBFIRST, SPI_MODE1);
+		pinMode(ALPHA_SLAVE_PIN, OUTPUT);
 
-	// SPI begin
-	SPI.begin();
-	delay(1000);
+		// SPI begin
+		SPI.begin();
+		delay(1000);
 
- 	alpha_onagain();
+		alpha_onagain();
+	}
+	flagON = true;
 }
 
 void ConfigSensor28()
@@ -62,7 +66,7 @@ void alpha_onagain()
 	// byte alphaStatusid = 0x2B;
 
 	int repeat = 0;
-	while ((returnbyte != 0x31) && (repeat < 10))
+	while ((returnbyte != 0x31) && (repeat < 5))
 	{
 		if (repeat != 0)
 			delay(5000);
@@ -93,6 +97,18 @@ void alphasense_on()   // initialization
 	SPI.endTransaction();
 }
 
+byte alphastatus()   // initialization
+{
+	SPI.beginTransaction(setAlpha);
+	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+
+	returnbyte = SPI.transfer(0xCF);
+	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+	SPI.endTransaction();
+
+	return returnbyte;
+}
+
 void alpha_status()   // initialization
 {
 	SPI.beginTransaction(setAlpha);
@@ -115,3 +131,4 @@ void alphasense_off()   // disenable
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
 }
+

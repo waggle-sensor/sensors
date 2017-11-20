@@ -25,6 +25,7 @@ void ReadSensor13(byte *sensorReading, int *readingLength)
 	byte readbyte[1];
 	
 	// high-byte
+	setPtrLoc(0x00);
 	byte writebyte[1] = {0x13};
 	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte);
 
@@ -32,6 +33,7 @@ void ReadSensor13(byte *sensorReading, int *readingLength)
 	*readingLength += 1;
 
 	// low-byte
+	setPtrLoc(0x10);
 	writebyte[0] = 0x10;
 	WriteReadI2C(TMP421_ADDRESS, 1, writebyte, 1, readbyte);
 
@@ -49,4 +51,13 @@ void ReadSensor13(byte *sensorReading, int *readingLength)
 void WriteSensor13(byte *sensorReading, int *readingLength)
 {
 	return;
+}
+
+void setPtrLoc(uint8_t ptrLoc) {
+
+    //Set the pointer location
+    Wire.beginTransmission(TMP421_ADDRESS);   //begin
+    Wire.write(ptrLoc);             //send the pointer location
+    Wire.endTransmission();         //end
+    delay(8);
 }

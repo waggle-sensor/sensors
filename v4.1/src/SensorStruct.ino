@@ -32,6 +32,7 @@ const Sensor sensor[] = {
     {0x28, InitSensor28, ConfigSensor28, EnableSensor28, DisableSensor28, ReadSensor28, WriteSensor28},
     {0x29, InitSensor29, ConfigSensor29, EnableSensor29, DisableSensor29, ReadSensor29, WriteSensor29},
     {0x2A, InitSensor2A, ConfigSensor2A, EnableSensor2A, DisableSensor2A, ReadSensor2A, WriteSensor2A},
+    {0x2B, InitSensor2B, ConfigSensor2B, EnableSensor2B, DisableSensor2B, ReadSensor2B, WriteSensor2B},
     {0x2C, InitSensor2C, ConfigSensor2C, EnableSensor2C, DisableSensor2C, ReadSensor2C, WriteSensor2C},
     {0x30, InitSensor30, ConfigSensor30, EnableSensor30, DisableSensor30, ReadSensor30, WriteSensor30},
     {0x31, InitSensor31, ConfigSensor31, EnableSensor31, DisableSensor31, ReadSensor31, WriteSensor31},

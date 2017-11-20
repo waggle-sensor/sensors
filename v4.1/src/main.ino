@@ -24,10 +24,11 @@ void setup()
 	// What sensors does this initialize? 
 	SensorInit();
 	PacketInit();
+	flagON = false;
 }
 
 void loop()
-{	
+{
 	while (SerialUSB.available())
 	{
 		inputarray[bufferIndex] = SerialUSB.read();
@@ -36,18 +37,19 @@ void loop()
 		bufferIndex++;
 	}
 
+	int startByteIndex = 0;
 	for (int i = 0; i < bufferIndex; i++)
 	{
 		if (inputarray[i] == 0xAA)
 		{
-			for (int j = i; j < bufferIndex; j++)
-			{
-				inputarray[j - i] = inputarray[j];
-				bufferIndex -= i;
-			}
+			startByteIndex = i;
 			break;
 		}
 	}
+
+	for (int i = startByteIndex; i < bufferIndex; i++)
+		inputarray[i - startByteIndex] = inputarray[i];
+	bufferIndex -= startByteIndex;
 
 	if (bufferIndex > 4)
 	{
@@ -62,13 +64,14 @@ void loop()
 					packet[i] = inputarray[i];
 				else
 					inputarray[i - packetLength] = inputarray[i];
-				bufferIndex -= packetLength;
 			}
+			bufferIndex -= packetLength;
 
 			byte checkcrc = CRCcalc(dataLength, packet);
-			int request = packet[1] & 0xF0;
+			int request = (packet[1] >> 4) & 0x0F;
 			int protocol = packet[1] & 0x0F;
-			if ((checkcrc == packet[dataLength + HEADERSIZE]) && (request == 0) && (protocol == 2))
+			// if ((checkcrc == packet[dataLength + HEADERSIZE]) && (request == 0) && (protocol == 2))
+			if ((request == 0) && (protocol == 2))
 				SortReading(packet, dataLength);
 		}
 	}
