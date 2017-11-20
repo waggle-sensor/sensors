@@ -83,3 +83,7 @@ void PacketInit()
     packet[3] = (lastPacket << 7) | packetseq;  // seq, MSB of first sequence is 1
 }
 
+int ReturnPacketLength()
+{
+    return outLength;
+}

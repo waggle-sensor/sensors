@@ -22,7 +22,9 @@ void SortReading(byte *packet, int dataLength)
 		}
 		subpacket += paramLength + 2;
 	}
-	PacketSender(0x01);
+	int length = ReturnPacketLength();
+	if (length > 4)
+		PacketSender(0x01);
 }
 
 void SensorInit()

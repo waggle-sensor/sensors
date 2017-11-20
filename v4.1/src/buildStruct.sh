@@ -22,10 +22,10 @@ echo 'struct Bus' > BusStruct.ino
 echo '{' >> BusStruct.ino
 echo '    const byte bustype;' >> BusStruct.ino
 echo '    const byte busid;' >> BusStruct.ino
-echo '    void (*initFunc)(byte*, int*);' >> BusStruct.ino
-echo '    void (*configFunc)(byte*, int*);' >> BusStruct.ino
-echo '    void (*enableFunc)(byte*, int*);' >> BusStruct.ino
-echo '    void (*disableFunc)(byte*, int*);' >> BusStruct.ino
+echo '    void (*initFunc)(byte*);' >> BusStruct.ino
+echo '    void (*configFunc)(byte*);' >> BusStruct.ino
+echo '    void (*enableFunc)();' >> BusStruct.ino
+echo '    void (*disableFunc)();' >> BusStruct.ino
 echo '    void (*readFunc)(byte*, int*);' >> BusStruct.ino
 echo '    void (*writeFunc)(byte*, int*);' >> BusStruct.ino
 echo '};' >> BusStruct.ino
@@ -65,7 +65,7 @@ do
         elif [[ $t == 'SPI' ]]; then
             b=02
         fi
-        echo '    {0x'$b', 0x'$n', InitBus'$n$f', ConfigBus'$n$f', EnableBus'$n$f', DisableBus'$n$f', ReadBus'$n$f', WriteBus'$n$f'},' >> BusStruct.ino
+        echo '    {0x'$b', 0x'$n', InitBus'$t$n', ConfigBus'$t$n', EnableBus'$t$n', DisableBus'$t$n', ReadBus'$t$n', WriteBus'$t$n'},' >> BusStruct.ino
 done
 
 echo '};' >> SensorStruct.ino

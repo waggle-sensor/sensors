@@ -62,7 +62,7 @@ void DisableSensor07()
 
 void ReadSensor07(byte *sensorReading, int *readingLength)
 {
-	const byte OUT_X_MSB = 0x07;
+	const byte OUT_X_MSB = 0x01;
 	// const byte XYZ_DATA_CFG = 0x0E;
 	// const byte CTRL_REG1 = 0x2A;
 

@@ -15,14 +15,12 @@ void EnableSensor(byte thisid)
 }
 void DisableSensor(byte thisid)
 {
-	thisid = Checkid(thisid);
-
 	for (int i = 0; i < numEnabled; i++)
 	{
 		EnabledTable *et = enabledtable + i;
 		if (et->enabledsensorid == thisid)
 		{
-			et->enabled = true;
+			et->enabled = false;
 			break;
 		}
 	}
