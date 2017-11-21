@@ -1,5 +1,12 @@
 // Coresense firmware version
 
+#define CORESENSE_HW_VER_MAJ 3 // 4 bits
+#define CORESENSE_HW_VER_MIN 1 // 4 bits
+
+#define CORESENSE_KERNEL_MAJ 4 // 8 bits
+#define CORESENSE_KERNEL_MIN 1 // 4 bits
+#define CORESENSE_KERNEL_SUB 0 // 4 bits
+
 void InitSensorFF()
 {
 	return;

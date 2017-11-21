@@ -1,5 +1,8 @@
 // TSYS01 Temperature sensor
 
+#define TSYS01_ADDRESS 0x76
+byte TSYS01_COEFFICIENTS[10];
+
 void InitSensor09()
 {
 	byte writebyte[1] = {0x1E};

@@ -1,5 +1,7 @@
 // HTU21D Temperature and relative humidity sensor
 
+#define HTDU21D_ADDRESS 0x40
+
 void InitSensor02()
 {
 	return;

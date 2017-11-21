@@ -1,5 +1,7 @@
 // TMP421 Temperature sensor
 
+#define TMP421_ADDRESS 0x4C
+
 void InitSensor13()
 {
 	return;

@@ -1,5 +1,7 @@
 // HIH4030 Relative Humidity sensor
 
+#define HIH4030_PIN A10
+
 void InitSensor03()
 {
 	return;

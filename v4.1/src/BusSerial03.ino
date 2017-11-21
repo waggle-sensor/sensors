@@ -1,5 +1,8 @@
 // Chem sensor reading through bus functions
 
+int ConfigLength;
+byte ConfigReading[1516];
+
 void InitBusSerial03(byte *parameters)
 {
 	byte powerPin = parameters[0];
@@ -14,7 +17,7 @@ void InitBusSerial03(byte *parameters)
 	delay(1000);
 
 	if (Serial3.available() > 0)
-		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 1516);
+		ConfigLength = Serial3.readBytesUntil(36, ConfigReading, 1516);
 	else
 		Serial3.end();
 }

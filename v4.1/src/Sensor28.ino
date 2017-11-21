@@ -1,5 +1,8 @@
 // Alpha sensor histogram
 
+// Alphasensor
+#define ALPHA_SLAVE_PIN 40
+
 void InitSensor28()
 {
 	if (!flagON)

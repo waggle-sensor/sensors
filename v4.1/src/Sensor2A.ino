@@ -1,5 +1,7 @@
 // Chem sensor reading
 
+#define CHEM_POWER_PIN 47
+
 void InitSensor2A()
 {
 	Serial3.begin(115200);	// begin serial3

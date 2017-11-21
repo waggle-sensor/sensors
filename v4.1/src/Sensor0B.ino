@@ -1,6 +1,8 @@
 
 // HIH6130 Temperature and relative humidity sensor
 
+#define HIH6130_ADDRESS 0x27
+
 void InitSensor0B()
 {
 	return;

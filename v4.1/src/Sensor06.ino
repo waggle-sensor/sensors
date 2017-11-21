@@ -1,5 +1,7 @@
 // TSL250 Light sensor
 
+#define TSL250RDms_PIN 1
+
 void InitSensor06()
 {
 	return;

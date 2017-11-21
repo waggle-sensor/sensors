@@ -1,5 +1,7 @@
 // TMP112 Temperature sensor
 
+#define TMP112_ADDRESS 0x48
+
 void InitSensor01()
 {
 	const byte TMP112_CONFIG_REG = 0x01;

@@ -1,5 +1,8 @@
 // BMP180 Temperature and Barometric Pressure sensor
 
+#define BMP180_ADDRESS 0x77
+byte BMP180_COEFFICIENTS[22];
+
 void InitSensor04()
 {
 	byte BMP180_REGISTER_CHIPID = 0xD0;

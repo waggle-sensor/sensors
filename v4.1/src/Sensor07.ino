@@ -1,5 +1,7 @@
 // MMA accelerometer
 
+#define MMA8452_ADDRESS 0x1C
+
 void InitSensor07()
 {
 	const byte XYZ_DATA_CFG = 0x0E;

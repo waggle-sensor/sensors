@@ -1,5 +1,7 @@
 // PR103J2 Temperature sensor
 
+#define PRJ103J2_PIN 0
+
 void InitSensor05()
 {
 	return;

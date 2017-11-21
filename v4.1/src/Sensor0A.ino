@@ -1,5 +1,7 @@
 // HMC Magnetometer
 
+#define HMC5883_ADDESS 0x1E //byte HMC5883_ADDRESS_MAG = 0x3C >> 1;  // 0011110x
+
 void InitSensor0A()
 {
 	const byte HMC5883_REGISTER_MAG_CRB_REG_M = 0x01;
