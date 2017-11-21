@@ -10,7 +10,7 @@ const FunctionType functype[] = {
 	{0x01, SensorInit},
 	{0x02, SensorConfig},
 	{0x03, SensorEnable},
-	{0x04, SensorDiable},
+	{0x04, SensorDisable},
 	{0x05, SensorRead},
 	// {0x06, SensorWrite},
 

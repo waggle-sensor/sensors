@@ -56,7 +56,7 @@ void SensorInit(byte *data, byte id)
 	}
 }
 
-void SensorConfig (byte *data, byte id)
+void SensorConfig(byte *data, byte id)
 {
 	for (int i = 0; i < numSensor; i++)
 	{
@@ -69,8 +69,7 @@ void SensorConfig (byte *data, byte id)
 	}
 }
 
-
-void SensorEnable (byte *data, byte id)
+void SensorEnable(byte id)
 {
 	for (int i = 0; i < numSensor; i++)
 	{
@@ -83,7 +82,12 @@ void SensorEnable (byte *data, byte id)
 	}
 }
 
-void SensorDiable(byte *data, byte id)
+void SensorEnable(byte *data, byte id)
+{
+	SensorEnable(id);
+}
+
+void SensorDisable(byte id)
 {
 	for (int i = 0; i < numSensor; i++)
 	{
@@ -94,6 +98,11 @@ void SensorDiable(byte *data, byte id)
 			break;
 		}
 	}
+}
+
+void SensorDisable(byte *data, byte id)
+{
+	SensorDisable(id);
 }
 
 void SensorRead(byte *data, byte id)

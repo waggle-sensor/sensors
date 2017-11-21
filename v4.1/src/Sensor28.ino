@@ -77,10 +77,11 @@ void alpha_onagain()
 	}
 	// delay(1000);
 
-	// if (returnbyte == 0x31)
-	// 	Packetization(alphaStatusid, 0x01);
-	// else
-	// 	Packetization(alphaStatusid, 0x00);
+	byte thisid = 0x28;
+	if (returnbyte == 0x31)
+		SensorEnable(thisid);
+	else
+		SensorDisable(thisid);
 }
 
 // Alphasense

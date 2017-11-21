@@ -24,8 +24,8 @@ const MandatorySensor mandsensor[] = {
 	{0x0F, EnableSensor0F},
 	{0x10, EnableSensor10},
 	{0x13, EnableSensor13},
-	{0x2A, EnableSensor2A},
-	{0x30, EnableSensor28},
+	{0x2A, EnableSensor2A},  // Chem
+	{0x30, EnableSensor28},  // Alpha
 	{0xFF, EnableSensorFF},
 };
 
