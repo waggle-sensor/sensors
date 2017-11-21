@@ -2,21 +2,19 @@
 
 void InitBusSerial02(byte *parameters)
 {
-	byte powerPin = parameters[0];
+	byte serial02powerPin = parameters[0];
 	int baudrate = (parameters[1] << 16) | (parameters[2] << 8) | parameters[3];
 	int timeout = (parameters[4] << 8) | parameters[5];
 
 
-	Serial3.begin(baudrate);	// begin serial3
-	Serial3.setTimeout(timeout);	// set timeout of serial3 as 5 sec
-	pinMode(powerPin, OUTPUT);  // pin for chemsense power is 47
-	digitalWrite(powerPin, LOW); 	// power on the device --> LOW means power on
+	Serial2.begin(baudrate);	// begin serial3
+	Serial2.setTimeout(timeout);	// set timeout of serial3 as 5 sec
+	pinMode(serial02powerPin, OUTPUT);  // pin for chemsense power is 47
+	digitalWrite(serial02powerPin, LOW); 	// power on the device --> LOW means power on
 	delay(1000);
 
-	if (Serial3.available() > 0)
-		chemConfigLength = Serial3.readBytesUntil(36, chemConfigReading, 1516);
-	else
-		Serial3.end();
+	if (Serial2.available() <= 0)
+		Serial2.end();
 }
 
 void ConfigBusSerial02(byte *parameters)
@@ -34,9 +32,10 @@ void DisableBusSerial02()
 	return;
 }
 
-void ReadBusSerial02(byte *sensorReading, int *readingLength)
+void ReadBusSerial02(byte *parameters, byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength, 2);
+	byte serialNum = parameters[1];
+	ReadRS232(sensorReading, readingLength, serialNum);
 }
 
 void WriteBusSerial02(byte *sensorReading)

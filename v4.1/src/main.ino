@@ -71,7 +71,8 @@ void loop()
 			byte checkcrc = CRCcalc(dataLength, packet);
 			int request = (packet[1] >> 4) & 0x0F;
 			int protocol = packet[1] & 0x0F;
-			if ((checkcrc == packet[dataLength + HEADERSIZE]) && (request == 0) && (protocol == 2))
+			// if ((checkcrc == packet[dataLength + HEADERSIZE]) && (request == 0) && (protocol == 2))
+			if ((request == 0) && (protocol == 2))
 				SortReading(packet, dataLength);
 		}
 	}

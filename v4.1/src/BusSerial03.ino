@@ -4,7 +4,7 @@ void InitBusSerial03(byte *parameters)
 {
 	byte powerPin = parameters[0];
 	int baudrate = (parameters[1] << 16) | (parameters[2] << 8) | parameters[3];
-	int timeout = (parameters[4] << 8) | parameters[5];
+	int timeout = parameters[4] * 1000;
 
 
 	Serial3.begin(baudrate);	// begin serial3
@@ -34,9 +34,10 @@ void DisableBusSerial03()
 	return;
 }
 
-void ReadBusSerial03(byte *sensorReading, int *readingLength)
+void ReadBusSerial03(byte *parameters, byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength, 3);
+	byte serialNum = parameters[1];
+	ReadRS232(sensorReading, readingLength, serialNum);
 }
 
 void WriteBusSerial03(byte *sensorReading)

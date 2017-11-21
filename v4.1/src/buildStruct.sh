@@ -26,7 +26,7 @@ echo '    void (*initFunc)(byte*);' >> BusStruct.ino
 echo '    void (*configFunc)(byte*);' >> BusStruct.ino
 echo '    void (*enableFunc)();' >> BusStruct.ino
 echo '    void (*disableFunc)();' >> BusStruct.ino
-echo '    void (*readFunc)(byte*, int*);' >> BusStruct.ino
+echo '    void (*readFunc)(byte*, byte*, int*);' >> BusStruct.ino
 echo '    void (*writeFunc)(byte*);' >> BusStruct.ino
 echo '};' >> BusStruct.ino
 echo ' ' >> BusStruct.ino

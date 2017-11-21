@@ -90,16 +90,16 @@ void BusPacketization(byte thisid, byte *sensorReading, int readingLength)
 
     int BusSensorReadingValidity = 1;
 
-    busPacket[BusOutLength++] = thisid;
-    busPacket[BusOutLength++] = (BusSensorReadingValidity << 7) | readingLength;   // valid data
+    busPacket[busOutLength++] = thisid;
+    busPacket[busOutLength++] = (BusSensorReadingValidity << 7) | readingLength;   // valid data
 
     for (int i = 0; i < readingLength; i++)
-        busPacket[BusOutLength++] = sensorReading[i];
+        busPacket[busOutLength++] = sensorReading[i];
 }
 
 void BusPacketLengthCheck(int readingLength)
 {
-    if ((BusOutLength - 1 + readingLength) > 128)
+    if ((busOutLength - 1 + readingLength) > 128)
     {
         BusPacketSender(0x00);  // not the last busPacket for this request
         busPacketSeq++;
@@ -109,41 +109,41 @@ void BusPacketLengthCheck(int readingLength)
 
 void BusPacketSender(byte sequenceValidity)
 {
-    busPacket[2] = BusOutLength - 3;  // data length - header (means including seq byte)
+    busPacket[2] = busOutLength - 3;  // data length - header (means including seq byte)
     busPacket[3] = (sequenceValidity << 7) | busPacketSeq;
-    byte crc = CRCcalc(BusOutLength - 3, busPacket);
-    busPacket[BusOutLength++] = crc;  // Append CRC8
-    busPacket[BusOutLength++] = 0x55;  // postscript
+    byte crc = CRCcalc(busOutLength - 3, busPacket);
+    busPacket[busOutLength++] = crc;  // Append CRC8
+    busPacket[busOutLength++] = 0x55;  // postscript
 
-    for (int i = 0; i < BusOutLength; i++)
+    for (int i = 0; i < busOutLength; i++)
         SerialUSB.write(busPacket[i]);
     SerialUSB.println("");
 }
 
 void BusMultiPacketInit()
 {
-    BusOutLength = 4;
+    busOutLength = 4;
     byte lastPacket = 0x01;
 
     busPacket[0] = 0xAA;  // preamble
     busPacket[1] = (busPacketType << 4) | protocolver;  // data type --> sensor reading = 0x01 | protocol
-    busPacket[2] = BusOutLength;  // data length
+    busPacket[2] = busOutLength;  // data length
     busPacket[3] = (lastPacket << 7) | busPacketSeq;  // seq, MSB of first sequence is 1
 }
 
 void BusPacketInit()
 {
-    BusOutLength = 4;
+    busOutLength = 4;
     busPacketSeq = 0;
     byte lastPacket = 0x01;
 
     busPacket[0] = 0xAA;  // preamble
     busPacket[1] = (busPacketType << 4) | protocolver;  // data type --> sensor reading = 0x01 | protocol
-    busPacket[2] = BusOutLength;  // data length
+    busPacket[2] = busOutLength;  // data length
     busPacket[3] = (lastPacket << 7) | busPacketSeq;  // seq, MSB of first sequence is 1
 }
 
 int BusReturnPacketLength()
 {
-    return BusOutLength;
+    return busOutLength;
 }

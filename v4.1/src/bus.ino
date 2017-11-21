@@ -176,32 +176,47 @@ void WriteRS232(byte* writing, int length, int port)
 
 //** SPI
 
-int PIN_SLAVE;
-SPISettings set;
 
-void InitSPI(int slavePin, long maxSpeed, int bitOrder, int dataMode)
+SPISettings SetSPI(long maxSpeed, byte bitOrder, byte dataMode, byte pin)
 {
+	SPISettings set;
 	if (bitOrder == 1)
-		set = SPISettings(maxSpeed, MSBFIRST, dataMode);
-	else
-		set = SPISettings(maxSpeed, LSBFIRST, dataMode);
+	{
+		if (dataMode == 0)
+			set = SPISettings(maxSpeed, MSBFIRST, SPI_MODE0);
+		else if (dataMode == 1)
+			set = SPISettings(maxSpeed, MSBFIRST, SPI_MODE1);
+		else if (dataMode == 2)
+			set = SPISettings(maxSpeed, MSBFIRST, SPI_MODE2);
+		else if (dataMode == 3)
+			set = SPISettings(maxSpeed, MSBFIRST, SPI_MODE3);
+	}
+	else if (bitOrder == 0)
+	{
+		if (dataMode == 0)
+			set = SPISettings(maxSpeed, LSBFIRST, SPI_MODE0);
+		else if (dataMode == 1)
+			set = SPISettings(maxSpeed, LSBFIRST, SPI_MODE1);
+		else if (dataMode == 2)
+			set = SPISettings(maxSpeed, LSBFIRST, SPI_MODE2);
+		else if (dataMode == 3)
+			set = SPISettings(maxSpeed, LSBFIRST, SPI_MODE3);
+	}
+	pinMode(pin, OUTPUT);
 
-	PIN_SLAVE = slavePin;
-	pinMode(slavePin, OUTPUT);
-
-	// SPI begin
-	SPI.begin();
+	return set;
 }
 
-void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
+void ReadSPI(byte* buff, int bufflen, byte pin, SPISettings set)
 {
-	*pin = PIN_SLAVE;
-	
-	// get set with regard to pin_slave#
+	ReadSPI(buff, bufflen, pin, set, 0, 0);
+}
 
+void ReadSPI(byte* buff, int bufflen, byte pin, SPISettings set, int msdelay, int delayiter)
+{
 	SPI.beginTransaction(set);
 	delay(400);
-	digitalWrite(PIN_SLAVE, LOW);
+	digitalWrite(pin, LOW);
 
 	for (int i = 0; i < bufflen; i++)
 	{
@@ -211,30 +226,32 @@ void ReadSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
 			delay(msdelay);
 	}
 
-	digitalWrite(PIN_SLAVE, HIGH);
+	digitalWrite(pin, HIGH);
 	SPI.endTransaction();
 }
 
+void WriteSPI(byte* buff, int bufflen, byte pin, SPISettings set)
+{
+	WriteSPI(buff, bufflen, pin, set, 0, 0);
+}
 
-// void WriteSPI(char* buff, int bufflen, int msdelay, int delayiter, int* pin)
-// {
-// 	*pin = PIN_SLAVE;
-	
-// 	SPI.beginTransaction(set);
-// 	delay(400);
-// 	digitalWrite(PIN_SLAVE, LOW);
+void WriteSPI(byte* buff, int bufflen, byte pin, SPISettings set, int msdelay, int delayiter)
+{
+	SPI.beginTransaction(set);
+	delay(400);
+	digitalWrite(pin, LOW);
 
-// 	for (int i = 0; i < bufflen; i++)
-// 	{
-// 		buff[i] = SPI.transfer(buff[i]);
+	for (int i = 0; i < bufflen; i++)
+	{
+		buff[i] = SPI.transfer(buff[i]);
 
-// 		if (i < delayiter)
-// 			delay(msdelay);
-// 	}
+		if (i < delayiter)
+			delay(msdelay);
+	}
 
-// 	digitalWrite(PIN_SLAVE, HIGH);
-// 	SPI.endTransaction();
-// }
+	digitalWrite(pin, HIGH);
+	SPI.endTransaction();
+}
 
 
 

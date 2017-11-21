@@ -14,12 +14,19 @@ void SortReading(byte *packet, int dataLength)
 		byte paramLength = subpacket[1] & 0x7F;
 		byte id = subpacket[2];
 
+		SerialUSB.print("parameter length   ");
+		SerialUSB.println(paramLength);
+
+		byte Asubpacket[paramLength + 1];
+		for (int i = 0; i < paramLength + 1; i++)
+			Asubpacket[i] = subpacket[i + 1];
+
 		for (int i = 0; i < numType; i++)
 		{
 			const FunctionType *ft = functype + i;
 			if (ft->funcid == type)
 			{
-				ft->func(subpacket + 1, id);
+				ft->func(Asubpacket, id);
 				break;
 			}
 		}
@@ -229,8 +236,8 @@ void BusRead(byte *data, byte id)
 	{
 		const Bus *b = bus + i;
 		if (b->busid == id)
-		{
-			b->readFunc(sensorReading, &readingLength);
+		{			
+			b->readFunc(data, sensorReading, &readingLength);
 			BusPacketization(id, sensorReading, readingLength);
 			break;
 		}
