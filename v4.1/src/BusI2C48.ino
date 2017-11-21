@@ -50,7 +50,7 @@ void ReadBusI2C48(byte *sensorReading, int *readingLength)
 	return;
 }
 
-void WriteBusI2C48(byte *sensorReading, int *readingLength)
+void WriteBusI2C48(byte *sensorReading)
 {
 	return;
 }

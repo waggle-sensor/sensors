@@ -39,7 +39,7 @@ void ReadSensorFF(byte *sensorReading, int *readingLength)
 	*readingLength = 8;
 }
 
-void WriteSensorFF(byte *sensorReading, int *readingLength)
+void WriteSensorFF(byte *packet)
 {
 	return;
 }

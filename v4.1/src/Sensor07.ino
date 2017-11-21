@@ -74,7 +74,7 @@ void ReadSensor07(byte *sensorReading, int *readingLength)
 	}
 }
 
-void WriteSensor07(byte *sensorReading, int *readingLength)
+void WriteSensor07(byte *packet)
 {
 	return;
 }

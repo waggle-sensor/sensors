@@ -40,7 +40,7 @@ void ReadSensor0C(byte *sensorReading, int *readingLength)
 	// int APDS = mcp3428_2.readADC();
 }
 
-void WriteSensor0C(byte *sensorReading, int *readingLength)
+void WriteSensor0C(byte *packet)
 {
 	return;
 }

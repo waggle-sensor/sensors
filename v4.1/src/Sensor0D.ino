@@ -44,7 +44,7 @@ void ReadSensor0D(byte *sensorReading, int *readingLength)
 	// int TSL260 = mcp3428_1.readADC();
 }
 
-void WriteSensor0D(byte *sensorReading, int *readingLength)
+void WriteSensor0D(byte *packet)
 {
 	return;
 }

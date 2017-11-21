@@ -10,7 +10,7 @@ echo '    void (*configFunc)();' >> SensorStruct.ino
 echo '    void (*enableFunc)();' >> SensorStruct.ino
 echo '    void (*disableFunc)();' >> SensorStruct.ino
 echo '    void (*readFunc)(byte*, int*);' >> SensorStruct.ino
-echo '    void (*writeFunc)(byte*, int*);' >> SensorStruct.ino
+echo '    void (*writeFunc)(byte*);' >> SensorStruct.ino
 echo '};' >> SensorStruct.ino
 echo ' ' >> SensorStruct.ino
 echo 'const Sensor sensor[] = {' >> SensorStruct.ino
@@ -27,7 +27,7 @@ echo '    void (*configFunc)(byte*);' >> BusStruct.ino
 echo '    void (*enableFunc)();' >> BusStruct.ino
 echo '    void (*disableFunc)();' >> BusStruct.ino
 echo '    void (*readFunc)(byte*, int*);' >> BusStruct.ino
-echo '    void (*writeFunc)(byte*, int*);' >> BusStruct.ino
+echo '    void (*writeFunc)(byte*);' >> BusStruct.ino
 echo '};' >> BusStruct.ino
 echo ' ' >> BusStruct.ino
 echo 'const Bus bus[] = {' >> BusStruct.ino

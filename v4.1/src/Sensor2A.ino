@@ -37,7 +37,7 @@ void ReadSensor2A(byte *sensorReading, int *readingLength)
 	ReadRS232(sensorReading, readingLength);
 }
 
-void WriteSensor2A(byte *sensorReading, int *readingLength)
+void WriteSensor2A(byte *packet)
 {
 	return;
 }

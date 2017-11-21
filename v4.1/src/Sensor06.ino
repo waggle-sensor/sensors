@@ -30,7 +30,7 @@ void ReadSensor06(byte *sensorReading, int *readingLength)
 	*readingLength = 2;
 }
 
-void WriteSensor06(byte *sensorReading, int *readingLength)
+void WriteSensor06(byte *packet)
 {
 	return;
 }

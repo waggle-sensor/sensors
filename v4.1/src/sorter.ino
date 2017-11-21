@@ -1,8 +1,11 @@
 
+byte sensorReading[1024];
+int readingLength = 0;
 
 void SortReading(byte *packet, int dataLength)
 {
-	PacketInit(); 
+	PacketInit();
+	BusPacketInit();
 	byte *subpacket = packet + 4;  // put subpacket value as address of last packet byte
 	while (subpacket < &packet[dataLength + 3])
 	{
@@ -22,9 +25,13 @@ void SortReading(byte *packet, int dataLength)
 		}
 		subpacket += paramLength + 2;
 	}
-	int length = ReturnPacketLength();
-	if (length > 4)
+	int SensorReadingLength = ReturnPacketLength();
+	int BusReadingLength = BusReturnPacketLength();
+	if (SensorReadingLength > 4)
 		PacketSender(0x01);
+	if (BusReadingLength > 4)
+		BusPacketSender(0x01);
+
 }
 
 void SensorInit()
@@ -123,8 +130,6 @@ void SensorRead(byte *data, byte id)
 		interval = 1000 / data[2];
 	}
 
-	byte sensorReading[1024];
-	int readingLength = 0;
 	for (int i = 0; i < numSensor; i++)
 	{
 		const Sensor *s = sensor + i;
@@ -152,77 +157,95 @@ void SensorRead(byte *data, byte id)
 }
 
 
-// void SensorWrite(byte *data, byte id)
-// {
-// 	for (int i = 0; i < numSensor; i++)
-// 	{
-// 		const Sensor *s = sensor + i;
-// 		if (s->funcid == id)
-// 		{
-// 			s->writeFunc(writearray, writeLength);
-// 			break;
-// 		}
-// 	}
-// }
+void SensorWrite(byte *data, byte id)
+{
+	for (int i = 0; i < numSensor; i++)
+	{
+		const Sensor *s = sensor + i;
+		if (s->sensorid == id)
+		{
+			s->writeFunc(data);
+			break;
+		}
+	}
+}
 
 
 
 
 
-// void BusInit(byte *data, byte id)
-// {
-// 	return;
-// }
-// void BusConfig(byte *data, int length)
-// {
-// 	for (int i = 0; i < numBus; i++)
-// 	{
-// 		const Bus *b = bus + i;
-// 		if (b->busid == id)
-// 		{
-// 			b->configFunc();
-// 			break;
-// 		}
-// 	}
-// }
-// void BusEnable(byte *data, byte id)
-// {
-// 	for (int i = 0; i < numBus; i++)
-// 	{
-// 		const Bus *b = bus + i;
-// 		if (b->busid == id)
-// 		{
-// 			b->enableFunc();
-// 			break;
-// 		}
-// 	}
-// }
-// void BusDisable(byte *data, byte id)
-// {
-// 	for (int i = 0; i < numBus; i++)
-// 	{
-// 		const Bus *b = bus + i;
-// 		if (b->busid == id)
-// 		{
-// 			b->disableFunc();
-// 			break;
-// 		}
-// 	}
-// }
-// void BusRead(byte *data, byte id)
-// {
-// 	PacketSender(0x01);
-// }
-// void BusWrite(byte *data, byte id)
-// {
-// 	for (int i = 0; i < numSensor; i++)
-// 	{
-// 		const Sensor *s = sensor + i;
-// 		if (s->funcid == id)
-// 		{
-// 			s->writeFunc();
-// 			break;
-// 		}
-// 	}
-// }
+void BusInit(byte *data, byte id)
+{
+	for (int i = 0; i < numBus; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->initFunc(data);
+			break;
+		}
+	}
+}
+
+void BusConfig(byte *data, byte id)
+{
+	for (int i = 0; i < numBus; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->configFunc(data);
+			break;
+		}
+	}
+}
+void BusEnable(byte *data, byte id)
+{
+	for (int i = 0; i < numBus; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->enableFunc();
+			break;
+		}
+	}
+}
+void BusDisable(byte *data, byte id)
+{
+	for (int i = 0; i < numBus; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->disableFunc();
+			break;
+		}
+	}
+}
+void BusRead(byte *data, byte id)
+{
+	for (int i = 0; i < numBus; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->readFunc(sensorReading, &readingLength);
+			BusPacketization(id, sensorReading, readingLength);
+			break;
+		}
+	}
+}
+void BusWrite(byte *data, byte id)
+{
+	for (int i = 0; i < numSensor; i++)
+	{
+		const Bus *b = bus + i;
+		if (b->busid == id)
+		{
+			b->writeFunc(data);
+			break;
+		}
+	}
+}
 

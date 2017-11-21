@@ -27,7 +27,7 @@ void ReadSensor2B(byte *sensorReading, int *readingLength)
 	*readingLength = 1;
 }
 
-void WriteSensor2B(byte *sensorReading, int *readingLength)
+void WriteSensor2B(byte *packet)
 {
 	return;
 }

@@ -29,7 +29,7 @@ void ReadSensor16(byte *sensorReading, int *readingLength)
 	SerialUSB.println("");
 }
 
-void WriteSensor16(byte *sensorReading, int *readingLength)
+void WriteSensor16(byte *packet)
 {
 	return;
 }

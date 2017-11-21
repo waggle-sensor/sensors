@@ -40,7 +40,7 @@ void ReadSensor29(byte *sensorReading, int *readingLength)
 	SPI.endTransaction();
 }
 
-void WriteSensor29(byte *sensorReading, int *readingLength)
+void WriteSensor29(byte *packet)
 {
 	return;
 }

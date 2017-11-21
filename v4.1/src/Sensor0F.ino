@@ -44,7 +44,7 @@ void ReadSensor0F(byte *sensorReading, int *readingLength)
 	// int MLX = mcp3428_1.readADC();
 }
 
-void WriteSensor0F(byte *sensorReading, int *readingLength)
+void WriteSensor0F(byte *packet)
 {
 	return;
 }

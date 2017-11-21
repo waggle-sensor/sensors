@@ -6,7 +6,7 @@ struct Sensor
     void (*enableFunc)();
     void (*disableFunc)();
     void (*readFunc)(byte*, int*);
-    void (*writeFunc)(byte*, int*);
+    void (*writeFunc)(byte*);
 };
  
 const Sensor sensor[] = {

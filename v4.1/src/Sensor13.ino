@@ -46,15 +46,7 @@ void ReadSensor13(byte *sensorReading, int *readingLength)
 	// ReadI2C(TMP421_ADDRESS, testdata[1]); // low-byte
 }
 
-void WriteSensor13(byte *sensorReading, int *readingLength)
+void WriteSensor13(byte *packet)
 {
 	return;
-}
-
-void setPtrLoc(uint8_t ptrLoc) {
-
-    //Set the pointer location
-    byte write[1];
-    WriteI2C(TMP421_ADDRESS, 1, write);
-    delay(8);
 }
