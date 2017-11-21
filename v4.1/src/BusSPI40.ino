@@ -32,17 +32,11 @@ void DisableBusSPI40()
 void ReadBusSPI40(byte *parameters, byte *sensorReading, int *readingLength)
 {
 	int paramLength = parameters[0] & 0x7F;
+
 	byte writearray[paramLength];
-	if (int(sizeof(parameters)) > paramLength)
-	{
-		for (int i = 0; i < paramLength; i++)
-			writearray[i] = parameters[i + 2];
-	}
-	else
-	{
-		for (int i = 0; i < paramLength; i++)
-			writearray[i] = parameters[2];
-	}
+	for (int i = 0; i < paramLength; i++)
+		writearray[i] = parameters[2];
+
 	ReadSPI(writearray, paramLength, spi40SlavePin, setSPI40, 10, 1);
 
 	for (int i = 0; i < paramLength; i++)

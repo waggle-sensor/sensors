@@ -14,9 +14,6 @@ void SortReading(byte *packet, int dataLength)
 		byte paramLength = subpacket[1] & 0x7F;
 		byte id = subpacket[2];
 
-		SerialUSB.print("parameter length   ");
-		SerialUSB.println(paramLength);
-
 		byte Asubpacket[paramLength + 1];
 		for (int i = 0; i < paramLength + 1; i++)
 			Asubpacket[i] = subpacket[i + 1];
@@ -161,6 +158,7 @@ void SensorRead(byte *data, byte id)
 			break;
 		}
 	}
+	readingLength = 0;
 }
 
 

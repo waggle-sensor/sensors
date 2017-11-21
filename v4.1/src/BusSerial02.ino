@@ -4,7 +4,7 @@ void InitBusSerial02(byte *parameters)
 {
 	byte serial02powerPin = parameters[0];
 	int baudrate = (parameters[1] << 16) | (parameters[2] << 8) | parameters[3];
-	int timeout = (parameters[4] << 8) | parameters[5];
+	int timeout = parameters[4] * 1000; // parameter[4] in sec
 
 
 	Serial2.begin(baudrate);	// begin serial3

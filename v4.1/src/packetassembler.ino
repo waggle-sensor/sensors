@@ -25,7 +25,7 @@ void Packetization(byte thisid, byte *sensorReading, int readingLength)
 
 void PacketLengthCheck(int readingLength)
 {
-    if ((outLength - 1 + readingLength) > 128)
+    if (((outLength - 1 + readingLength) > 128) && (outLength > 4))
     {
         PacketSender(0x00);  // not the last packet for this request
         packetseq++;
@@ -41,9 +41,9 @@ void PacketSender(byte sequenceValidity)
     packet[outLength++] = crc;  // Append CRC8
     packet[outLength++] = 0x55;  // postscript
 
-    for (int i = 0; i < outLength; i++)
-        SerialUSB.write(packet[i]);
+    SerialUSB.write(packet, outLength);
     SerialUSB.println("");
+    // SerialUSB.flush();
 }
 
 void MultiPacketInit()
