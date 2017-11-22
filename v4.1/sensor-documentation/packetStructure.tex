@@ -18,10 +18,10 @@ Table 1 below illustrates how the segments are organized in a transmission packe
     \begin{tabular}{|c|c|c|c|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Preamble} & \textbf{a~\footnote{Packet Type | Protocol Version}} & \textbf{b~\footnote{Last Packet Flag | Sequence}} & \textbf{Data Length} & \textbf{Data} & \textbf{CRC} & \textbf{Postscript}\\
+        \textbf{Preamble} & \textbf{a~\footnote{Packet Type | Protocol Version}} & \textbf{Data Length} & \textbf{b~\footnote{Last Packet Flag | Sequence}} & \textbf{Data} & \textbf{CRC} & \textbf{Postscript}\\
         \hline
         \multirow{2}{*}{1st Byte} & \multirow{2}{*}{2nd Byte} & \multirow{2}{*}{3rd Byte} & \multirow{2}{*}{4th Byte} & next Bytes & \multirow{2}{*}{Penultimate Byte} & \multirow{2}{*}{Final Byte} \\ 
-        & & & & up to 256 Bytes & & \\ \hline
+        & & & & up to 255 Bytes & & \\ \hline
     \end{tabular}
 \end{minipage}
 \end{table}
@@ -37,13 +37,14 @@ A description how the segments are organized in a transmission packet is shown i
         \textbf{Field} & \textbf{Value} & \textbf{Segment} & \textbf{Length}\\
         \hline
         Preamble & 0xAA & 1 & 1 Byte\\ \hline
-        \multirow{2}{*}{Packet Type} & 0x00: request & \multirow{3}{*}{2} & \multirow{2}{*}{1 Nibble} \\
-         & 0x01: sensor reading & & \\ \cline{1-2} \cline{4-4}
+        \multirow{3}{*}{Packet Type} & 0x00: request & \multirow{4}{*}{2} & \multirow{3}{*}{1 Nibble} \\
+         & 0x01: sensor reading & & \\ 
+         & 0x02: bus reading & & \\ \cline{1-2} \cline{4-4}
         Protocol version & 0x02 &  & 1 Nibble\\ \hline
-        \multirow{2}{*}{Last Packet flag} & 0x01: last packet for one request & \multirow{3}{*}{3} & \multirow{2}{*}{1 bit} \\
+        Length of data & Variable & 3 & 1 Byte\\ \hline
+        \multirow{2}{*}{Last Packet flag} & 0x01: last packet for one request & \multirow{3}{*}{4} & \multirow{2}{*}{1 bit} \\
          & 0x00: not last packet & & \\ \cline{1-2} \cline{4-4}
         Packet sequence & Variable &  & 7 bits \\ \hline
-        Length of data & Variable & 4 & 1 Byte\\ \hline
         Data & Variable & 5 & Variable \\ \hline
         CRC of data & Variable & 6 & 1 Byte\\ \hline
         Postscript & 0x55 & 7 & 1 Byte\\ \hline
@@ -78,34 +79,38 @@ from the sensor in the time window. The size of the sub-packet is restricted to 
 
 
 \begin{table}[H]
+\begin{minipage}{\textwidth}
     \centering
     {
     \begin{tabular}{|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Call Function ID | Parameter Length including sensor ID} & \bf{Source ID} & \textbf{Parameters} \\ \hline
-        4 bits | 4 bits & 1 Byte & up to 15 Bytes \\
+        \textbf{Call Function ID} & \textbf{1-bit Acknowledge | Parameter Length} & \textbf{Parameters~\footnote{For sensors have sensor id, 1st Byte is sensor id; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is bus address}} \\ \hline
+        1 byte & 1 Byte & up to 252 Bytes \\
         \hline
     \end{tabular}
     }
     \caption{Transmission Packet Segments from plugin to firmware}
     \label{table:toFW}
+\end{minipage}
 \end{table}
 
 
 \begin{table}[H]
+\begin{minipage}{\textwidth}
     \centering
     {
     \begin{tabular}{|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Source ID} & \bf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data} \\ \hline
-        1 Byte & 1 Byte & up to 128 Bytes \\
+        \textbf{Source ID} & \textbf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data~\footnote{For sensors have sensor id, 1st Byte is sensor id}} \\ \hline
+        1 Byte & 1 Byte & up to 127 Bytes \\
         \hline
     \end{tabular}
     }
     \caption{Transmission Packet Segments}
     \label{table:toPlugin}
+\end{minipage}
 \end{table}
 
 

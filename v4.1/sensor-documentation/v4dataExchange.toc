@@ -2,30 +2,30 @@
 \contentsline {section}{\numberline {2}Data Transmission}{3}
 \contentsline {subsection}{\numberline {2.1}Transmission Packet}{3}
 \contentsline {subsection}{\numberline {2.2}Data Sub-packets}{4}
-\contentsline {subsection}{\numberline {2.3}Data Packer CRC}{4}
-\contentsline {section}{\numberline {3}Sub-packets from Coresense}{6}
-\contentsline {subsection}{\numberline {3.1}Parameters}{6}
-\contentsline {subsection}{\numberline {3.2}Data packets}{9}
-\contentsline {subsubsection}{\numberline {3.2.1}Firmware Version}{9}
-\contentsline {subsubsection}{\numberline {3.2.2}Metsense}{9}
-\contentsline {paragraph}{$\bullet $ Metsense/Lightsense MAC address: }{9}
-\contentsline {paragraph}{$\bullet $ TMP112, HIH4030, PR103J2, TSL250RD, TSYS01:}{9}
-\contentsline {paragraph}{$\bullet $ HTU21D:}{10}
-\contentsline {paragraph}{$\bullet $ BMP180:}{10}
-\contentsline {paragraph}{$\bullet $ MMA8452Q:}{10}
-\contentsline {paragraph}{$\bullet $ SPV1840LR5H-B:}{10}
-\contentsline {subsubsection}{\numberline {3.2.3}Lightsense}{11}
-\contentsline {paragraph}{$\bullet $ HMC5883L:}{11}
-\contentsline {paragraph}{$\bullet $ HIH6130:}{11}
-\contentsline {paragraph}{$\bullet $ APDS-9006-020, TSL260, TSL250, MLX75305, and ML8511:}{11}
-\contentsline {paragraph}{$\bullet $ TMP421:}{12}
-\contentsline {subsubsection}{\numberline {3.2.4}Chemsense:}{12}
-\contentsline {paragraph}{$\bullet $ Chemsense reading:}{12}
-\contentsline {paragraph}{$\bullet $ Chemsense firmware configuration:}{12}
-\contentsline {subsubsection}{\numberline {3.2.5}Alpha Sensor:}{12}
-\contentsline {paragraph}{$\bullet $ Histogram}{13}
-\contentsline {paragraph}{$\bullet $ Serial}{13}
-\contentsline {paragraph}{$\bullet $ Firmware}{14}
-\contentsline {paragraph}{$\bullet $ Configuration}{14}
-\contentsline {section}{\numberline {4}Sensor Data Units}{15}
-\contentsline {subsection}{\numberline {4.1} Raw and Processed}{15}
+\contentsline {subsection}{\numberline {2.3}Data Packer CRC}{5}
+\contentsline {section}{\numberline {3}Sub-packets from Coresense}{7}
+\contentsline {subsection}{\numberline {3.1}Parameters}{7}
+\contentsline {subsection}{\numberline {3.2}Data packets}{10}
+\contentsline {subsubsection}{\numberline {3.2.1}Firmware Version}{10}
+\contentsline {subsubsection}{\numberline {3.2.2}Metsense}{10}
+\contentsline {paragraph}{$\bullet $ Metsense/Lightsense MAC address: }{10}
+\contentsline {paragraph}{$\bullet $ TMP112, HIH4030, PR103J2, TSL250RD, TSYS01:}{10}
+\contentsline {paragraph}{$\bullet $ HTU21D:}{11}
+\contentsline {paragraph}{$\bullet $ BMP180:}{11}
+\contentsline {paragraph}{$\bullet $ MMA8452Q:}{11}
+\contentsline {paragraph}{$\bullet $ SPV1840LR5H-B:}{11}
+\contentsline {subsubsection}{\numberline {3.2.3}Lightsense}{12}
+\contentsline {paragraph}{$\bullet $ HMC5883L:}{12}
+\contentsline {paragraph}{$\bullet $ HIH6130:}{12}
+\contentsline {paragraph}{$\bullet $ APDS-9006-020, TSL260, TSL250, MLX75305, and ML8511:}{12}
+\contentsline {paragraph}{$\bullet $ TMP421:}{13}
+\contentsline {subsubsection}{\numberline {3.2.4}Chemsense:}{13}
+\contentsline {paragraph}{$\bullet $ Chemsense reading:}{13}
+\contentsline {paragraph}{$\bullet $ Chemsense firmware configuration:}{13}
+\contentsline {subsubsection}{\numberline {3.2.5}Alpha Sensor:}{13}
+\contentsline {paragraph}{$\bullet $ Histogram}{14}
+\contentsline {paragraph}{$\bullet $ Serial}{14}
+\contentsline {paragraph}{$\bullet $ Firmware}{15}
+\contentsline {paragraph}{$\bullet $ Configuration}{15}
+\contentsline {section}{\numberline {4}Sensor Data Units}{16}
+\contentsline {subsection}{\numberline {4.1} Raw and Processed}{16}

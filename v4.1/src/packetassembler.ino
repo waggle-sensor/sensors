@@ -84,13 +84,14 @@ int busPacketType = 0x02;
 byte busSequenceValidity = 0x00;
 
 byte busPacket[2048];
-void BusPacketization(byte thisid, byte *sensorReading, int readingLength)
+void BusPacketization(byte thisid, byte address, byte *sensorReading, int readingLength)
 {
     BusPacketLengthCheck(readingLength);
 
     int BusSensorReadingValidity = 1;
 
     busPacket[busOutLength++] = thisid;
+    busPacket[busOutLength++] = address;
     busPacket[busOutLength++] = (BusSensorReadingValidity << 7) | readingLength;   // valid data
 
     for (int i = 0; i < readingLength; i++)
