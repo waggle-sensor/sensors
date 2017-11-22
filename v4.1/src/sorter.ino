@@ -230,14 +230,43 @@ void BusDisable(byte *data, byte id)
 }
 void BusRead(byte *data, byte id)
 {
-	for (int i = 0; i < numBus; i++)
+	byte subLength = data[0] & 0x7F;
+	// byte busType = data[1];  // receives as "id"
+	byte busAddressId = data[2];
+
+	byte params[subLength];
+	for (int i = 0; i < subLength - 2; i++)
+		params[i] = data[i + 3];
+
+	if (id < 0x02)
 	{
-		const Bus *b = bus + i;
-		if (b->busid == id)
-		{			
-			b->readFunc(data, sensorReading, &readingLength);
-			BusPacketization(id, sensorReading, readingLength);
-			break;
+		for (int i = 0; i < numParamBus; i++)
+		{
+			const paramBus *pb = parambus + i;
+			if (pb->bustype == id)
+			{
+				if (pb->busid == busAddressId)
+				{
+					pb->readFunc(params, sensorReading, &readingLength);
+					BusPacketization(id, sensorReading, readingLength);
+				}
+			}
+		}
+	}
+	else if (id >= 0x02)
+	{
+		for (int i = 0; i < numBus; i++)
+		{
+			const Bus *b = bus + i;
+			if (b->bustype == id)
+			{
+				if (b->busid == busAddressId)
+				{			
+					b->readFunc(sensorReading, &readingLength);
+					BusPacketization(id, sensorReading, readingLength);
+					break;
+				}
+			}
 		}
 	}
 }

@@ -51,7 +51,7 @@ with Serial(args.serial_device, baudrate=115200, timeout=4) as ser:
 #			elif '3' in cmd:
 #				cmd = '023100'
 
-			cmd = 'aa02%s0055' % (cmd,)
+			# cmd = 'aa02%s0055' % (cmd,)
 			# cmd = 'aa02 04 01 0501%s 0055' % (cmd,)
 			# cmd = 'aa0201012A0055'
 			print(cmd)

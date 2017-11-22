@@ -1,19 +1,20 @@
 // TMP112 Temperature sensor through bus function
 
+const byte i2c48address = 0x48;
+
 void InitBusI2C48(byte *parameters)
 {
-	byte address = parameters[1];
-	byte writearray[3] = {parameters[2], parameters[3], parameters[4]};
+	byte writearray[3] = {parameters[0], parameters[1], parameters[2]};
 
-	WriteI2C(address, 3, writearray);
+	WriteI2C(i2c48address, 3, writearray);
 	delay(100);
 
-	byte writebyte[1] = {parameters[1]};
-	WriteI2C(address, 1, writebyte);
+	byte writebyte[1] = {parameters[0]};
+	WriteI2C(i2c48address, 1, writebyte);
 	delay(100);
 
 	byte readarray[2];
-	ReadI2C(address, 2, readarray);	
+	ReadI2C(i2c48address, 2, readarray);	
 }
 
 void ConfigBusI2C48(byte *parameters)
@@ -33,13 +34,12 @@ void DisableBusI2C48()
 
 void ReadBusI2C48(byte *parameters, byte *sensorReading, int *readingLength)
 {
-	byte address = parameters[1];
-	byte writebyte[1] = {parameters[2]};
+	byte writebyte[1] = {parameters[0]};
 	byte readarray[2];
 
-	WriteI2C(address, 1, writebyte);
+	WriteI2C(i2c48address, 1, writebyte);
 	delay(100);
-	ReadI2C(address, 2, readarray);
+	ReadI2C(i2c48address, 2, readarray);
 
 	int length = 2;
 	for (int i = 0; i < length; i++)

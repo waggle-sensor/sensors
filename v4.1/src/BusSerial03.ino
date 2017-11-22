@@ -37,10 +37,9 @@ void DisableBusSerial03()
 	return;
 }
 
-void ReadBusSerial03(byte *parameters, byte *sensorReading, int *readingLength)
+void ReadBusSerial03(byte *sensorReading, int *readingLength)
 {
-	byte serialNum = parameters[1];
-	ReadRS232(sensorReading, readingLength, serialNum);
+	ReadRS232(sensorReading, readingLength, 3);
 }
 
 void WriteBusSerial03(byte *sensorReading)

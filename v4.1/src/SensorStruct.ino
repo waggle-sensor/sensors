@@ -1,3 +1,4 @@
+ 
 struct Sensor
 {
     const byte sensorid;

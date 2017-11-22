@@ -1,17 +1,16 @@
-// Chem sensor reading through bus functions
+// Alpha sensor reading through bus functions
 
 SPISettings setSPI40;
-byte spi40SlavePin;
+byte spi40slavePin = 0x40;
 
 void InitBusSPI40(byte *parameters)
 {
-	spi40SlavePin = parameters[0];
 	long maxCommunicationSpeed = (parameters[0] << 16) | (parameters[1] << 8) | parameters[2];
 	byte type = parameters[3];
 	byte mode = parameters[4];
 
 	// set SPI params, begin device
-	setSPI40 = SetSPI(maxCommunicationSpeed, type, mode, spi40SlavePin);
+	setSPI40 = SetSPI(maxCommunicationSpeed, type, mode, spi40slavePin);
 }
 
 void ConfigBusSPI40(byte *parameters)
@@ -31,21 +30,21 @@ void DisableBusSPI40()
 
 void ReadBusSPI40(byte *parameters, byte *sensorReading, int *readingLength)
 {
-	int paramLength = parameters[0] & 0x7F;
+	int callLength = parameters[0];
 
-	byte writearray[paramLength];
-	for (int i = 0; i < paramLength; i++)
-		writearray[i] = parameters[2];
+	byte writearray[callLength];
+	for (int i = 0; i < callLength; i++)
+		writearray[i] = parameters[1];
 
-	ReadSPI(writearray, paramLength, spi40SlavePin, setSPI40, 10, 1);
+	ReadSPI(writearray, callLength, spi40slavePin, setSPI40, 10, 1);
 
-	for (int i = 0; i < paramLength; i++)
+	for (int i = 0; i < callLength; i++)
 		sensorReading[i] = writearray[i];
-	*readingLength = paramLength;
+	*readingLength = callLength;
 }
 
 void WriteBusSPI40(byte *parameters)
 {
-	// WriteSPI(readarray, paramLength, spi40SlavePin, setSPI40, 10, 1);
+	// WriteSPI(readarray, callLength, spi40slavePin, setSPI40, 10, 1);
 	return;
 }

@@ -1,4 +1,4 @@
-// Chem sensor reading through bus functions
+// Bus function for Serial2 reading
 
 void InitBusSerial02(byte *parameters)
 {
@@ -32,10 +32,9 @@ void DisableBusSerial02()
 	return;
 }
 
-void ReadBusSerial02(byte *parameters, byte *sensorReading, int *readingLength)
+void ReadBusSerial02(byte *sensorReading, int *readingLength)
 {
-	byte serialNum = parameters[1];
-	ReadRS232(sensorReading, readingLength, serialNum);
+	ReadRS232(sensorReading, readingLength, 2);
 }
 
 void WriteBusSerial02(byte *sensorReading)

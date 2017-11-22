@@ -1,3 +1,4 @@
+ 
 struct EnabledTable
 {
     const byte enabledsensorid;
