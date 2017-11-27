@@ -26,6 +26,7 @@
 \contentsline {paragraph}{$\bullet $ Histogram}{14}
 \contentsline {paragraph}{$\bullet $ Serial}{14}
 \contentsline {paragraph}{$\bullet $ Firmware}{15}
+\contentsline {paragraph}{$\bullet $ Status}{15}
 \contentsline {paragraph}{$\bullet $ Configuration}{15}
-\contentsline {section}{\numberline {4}Sensor Data Units}{16}
-\contentsline {subsection}{\numberline {4.1} Raw and Processed}{16}
+\contentsline {section}{\numberline {4}Sensor Data Units}{17}
+\contentsline {subsection}{\numberline {4.1} Raw and Processed}{17}

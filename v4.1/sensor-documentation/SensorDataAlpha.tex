@@ -88,6 +88,36 @@ Firmware of alpha sensor is 2 bytes of reading. This parameter provides the Firm
     \end{tabular}
 \end{table}
 
+\paragraph{$\bullet$ Status}
+Status of alpha sensor is 4 bytes of reading. This parameter provides status of the alpha sensor in terms of if fan and laser are on/off and DAC value of the fan and laser.\\
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of Alpha sensor firmware}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0x2B} & \textbf{0x84} & \textbf{Raw values}\\
+        \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 5] \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Detail sub-packet of Alpha sensor histogram}
+    \begin{tabular}{|>{\centering\arraybackslash}p{0.3\textwidth}|>{\centering\arraybackslash}p{0.2\textwidth}|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Parameter} & \textbf{Data location}\\ \hline
+        Fan on/off (1 Byte, 0 or 1) & Bytes[2] \\ \hline
+        Laser on/off (1 Byte, 0 or 1) & Bytes[3] \\ \hline
+        Fan DAC value (1 Byte) & Bytes[4] \\ \hline
+        Laser DAC value (1 Byte) & Bytes[5] \\ \hline
+    \end{tabular}
+\end{table}
+
 
 \paragraph{$\bullet$ Configuration}
 \textbf{THIS DATA DO NOT FOLLOW CORESENSE PACKET FORMAT, NO FORMAT AT ALL}
@@ -102,9 +132,9 @@ Since this configuration data is too long to fit into a sub-packet, the data are
     \caption{Sub-packet of alpha sensor configuration}
     \begin{tabular}{|a|c|}
         \hline
-        \textbf{1st line} & "Start sending alpha sensor configuration" \\ \hline
-        \textbf{2nd line} & 256 bytes of raw reading \\ \hline
-        \textbf{last line} & "End sending alpha sensor configuration" \\ \hline
+        \textbf{1st line} & ``Start sending alpha sensor configuration'' \\ \hline
+        \textbf{2nd line} & 256 bytes of raw reading (Binary) \\ \hline
+        \textbf{last line} & ``End sending alpha sensor configuration'' \\ \hline
     \end{tabular}
 \end{table}
 
@@ -127,5 +157,26 @@ Since this configuration data is too long to fit into a sub-packet, the data are
 \makeatletter
 \setlength{\@fptop}{0pt}
 \makeatother
+
+\begin{table}[h!]
+    \centering
+    \caption{Detail second lind of Alpha sensor configuration}
+    \begin{tabular}{|>{\centering\arraybackslash}p{0.5\textwidth}|>{\centering\arraybackslash}p{0.2\textwidth}|}
+    % \begin{tabular}{|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Parameter} & \textbf{Data location}\\ \hline
+        Bin Boundaries (32 Bytes) & Bytes[0 -- 31] \\ \hline
+        Bin Particle Volumes (64 Bytes) & Bytes[32 -- 95] \\ \hline
+        Bin Particle Densities (64 Bytes) & Bytes[96 -- 159] \\ \hline
+        Bin Sample Volume Weightings (64 Bytes) & Bytes[160 -- 223] \\ \hline
+        Gain Scaling Coefficient (4 Bytes) & Bytes[224 -- 227] \\ \hline
+        Sample Flow Rate (4 Bytes) & Bytes[228 -- 231] \\ \hline
+        Laser DAC (1 Byte) & Byte[232] \\ \hline
+        Fan DAC (1 Byte) & Byte[233] \\ \hline
+        Conversion factor (1 Byte) & Byte[244] \\ \hline
+        Spare Bytes (21 Bytes) & Bytes[245 -- 255] \\ \hline
+    \end{tabular}
+\end{table}
 
 \clearpage

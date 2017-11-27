@@ -1,7 +1,7 @@
 \newpage
 \section{Sub-packets from Coresense}
 
-As shortly explained in document section \ref{ssec:sub-pack}, data sub-packets from coresense are generated depending on its data reading from each sensor if valid. The first byte of the sub-packet from coresense is sensor ID for each parameter, and the second byte means validity of the packet and length of the sensor data as shown in Table \ref{table:packsegments}. Detail of sub-packet and sensor data will be explined in this section.
+As shortly explained in document section \ref{ssec:sub-pack}, data sub-packets from metsense board, lightsense board, chemsense board, and alpha sensor are generated depending on its data reading from each sensor if valid. The first byte of the sub-packets from those sensor boards/sensor is sensor ID, and the first bit of second byte means validity of the packet and next 7 bits of the second byte is length of the sensor data. Data length and type of sensor reading are shown in Table \ref{table:dataChunk}. Detail of sub-packet and sensor data will be explined following sections.
 
 
 \subsection{Parameters}
@@ -13,7 +13,7 @@ below lists the various parameters produced by the sensor boards, the unique sou
 
 \begin{center}
 \begin{longtable}{|l|c|>{\centering}p{0.3\textwidth}|c|}
-\caption{Data sub-packet structure (each row is a "chunk")} \label{tab:dataChunk} \\
+\caption{Data sub-packet structure (each row is a ``chunk'')} \label{table:dataChunk} \\
 
 \hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Data Length}} \\ \hline
 \endfirsthead
@@ -77,13 +77,17 @@ below lists the various parameters produced by the sensor boards, the unique sou
         & & PM 2.5 & 4 bytes \\ \cline{3-4}
         & & PM 10 & 4 bytes \\ \hline
         Serial & 0x29 & Serial number & 20 bytes \\ \hline
+        \multirow{4}{*}{Status} & \multirow{4}{*}{0x2B} & FanON & 1 byte \\ \cline{3-4}
+        & & LaserON & 1 byte \\ \cline{3-4}
+        & & FanDACVal & 1 byte \\ \cline{3-4}
+        & & LaserDACVal & 1 byte \\ \hline
         Firmware & 0x30 & Firmware version & 2 bytes \\ \hline
-        \multirow{5}{*}{Configuration} & \multirow{5}{*}{0x31} & Bin Boundaries & 32 bytes \\ \cline{3-4}
+        \multirow{10}{*}{Configuration} & \multirow{5}{*}{0x31} & Bin Boundaries & 32 bytes \\ \cline{3-4}
         & & Bin particle volumes & 64 bytes \\ \cline{3-4}
         & & Bin particle densities & 64 bytes \\ \cline{3-4}
         & & Bin sample volume weightings & 64 bytes \\ \cline{3-4}
-        & & Gain scaling coefficient & 4 bytes \\ \hline
-        \multirow{5}{*}{continued} & \multirow{5}{*}{continued} & Sample flow rate & 4 bytes \\ \cline{3-4}
+        & & Gain scaling coefficient & 4 bytes \\ \cline{3-4}
+        & & Sample flow rate & 4 bytes \\ \cline{3-4}
         & & Laser DAC & 1 byte \\ \cline{3-4}
         & & Fan DAC & 1 byte \\ \cline{3-4}
         & & Conversion factor & 1 byte \\ \cline{3-4}

@@ -101,18 +101,6 @@ void alphasense_on()   // initialization
 	SPI.endTransaction();
 }
 
-byte alphastatus()   // initialization
-{
-	SPI.beginTransaction(setAlpha);
-	digitalWrite(ALPHA_SLAVE_PIN, LOW);
-
-	returnbyte = SPI.transfer(0xCF);
-	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
-	SPI.endTransaction();
-
-	return returnbyte;
-}
-
 void alpha_status()   // initialization
 {
 	SPI.beginTransaction(setAlpha);

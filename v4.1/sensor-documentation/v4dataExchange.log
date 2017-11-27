@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.31)  22 NOV 2017 17:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.31)  27 NOV 2017 11:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1535,16 +1535,7 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 138.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-Package mdframed Info: Box was splittet wrong
- starting loop to iterate the splitting point
-(mdframed)              on input line 166.
- [5]) (./SensorData.tex [6]
-
-LaTeX Warning: Reference `table:packsegments' on page 7 undefined on input line
- 4.
-
-[7] [8] [9]) (./SensorDataMetLight.tex
+) [5]) (./SensorData.tex [6] [7] [8] [9]) (./SensorDataMetLight.tex
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -1594,28 +1585,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 76--77
  []
 
 [14]
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
 
-Package array Warning: Column a is already defined on input line 99.
+ []
 
-[15]) (./DataUnits.tex [16
+
+Package array Warning: Column a is already defined on input line 129.
+
+[15] [16]) (./DataUnits.tex [17
 
 ]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) [17] [18] (./v4dataExchange.aux)
-
-LaTeX Warning: There were undefined references.
-
+) [18] [19] (./v4dataExchange.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 26571 strings out of 494953
- 528236 string characters out of 6180977
- 582333 words of memory out of 5000000
- 29404 multiletter control sequences out of 15000+600000
+ 26572 strings out of 494953
+ 528270 string characters out of 6180977
+ 576333 words of memory out of 5000000
+ 29405 multiletter control sequences out of 15000+600000
  21765 words of font info for 50 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  67i,19n,77p,10386b,1339s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1634,10 +1626,10 @@ msfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 r7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on v4dataExchange.pdf (19 pages, 1198609 bytes).
+Output written on v4dataExchange.pdf (20 pages, 1203299 bytes).
 PDF statistics:
- 515 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 523 PDF objects out of 1000 (max. 8388607)
+ 113 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 

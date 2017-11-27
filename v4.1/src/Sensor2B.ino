@@ -1,5 +1,7 @@
 // Alpha sensor serial
 
+#define ALPHA_SLAVE_PIN 40
+
 void InitSensor2B()
 {
 	InitSensor28();
@@ -22,9 +24,21 @@ void DisableSensor2B()
 
 void ReadSensor2B(byte *sensorReading, int *readingLength)
 {
-	byte alphaStatus = alphastatus();
-	sensorReading[0] = alphaStatus;
-	*readingLength = 1;
+	SPI.beginTransaction(setAlpha);
+	digitalWrite(ALPHA_SLAVE_PIN, LOW);
+	delay(100);
+
+	returnbyte = SPI.transfer(0xCF);
+	delay(10);
+
+	for (int i = 0; i < 5; i++)
+	{
+		sensorReading[i] = SPI.transfer(0xCF);
+		*readingLength += 1;
+	}
+
+	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
+	SPI.endTransaction();
 }
 
 void WriteSensor2B(byte *packet)

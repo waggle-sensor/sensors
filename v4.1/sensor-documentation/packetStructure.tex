@@ -55,7 +55,7 @@ A description how the segments are organized in a transmission packet is shown i
 \end{table}
 
 
-The first segment is the start byte, or the preamble. The preamble is followed by the packet type and protocol version, each of which are 4 bits long and are together packed into a single byte.
+The first segment is the start byte, or the preamble. The preamble is followed by the packet type and protocol version, each of which are 4 bits long and are together packed into a single byte. Packet type is differed with regard to the purpose of the packet. When the packet sent from plugin to firmware, the type is ``requres'', and when the packet sent from firmware, type of the packet could be ``sensor reading'' or ``bus reading''. Type ``sensor reading'' means the data packetized in the packet are readings from sensors, which are sorted with sensor id given by Waggle group, and ``bus reading'' means the data packetized in the packet are readings from sensors that do not have given sensor id but connected on metsense board so that firmware can collect data from.
 Next, one byte field that reports the first 1 bit of last packet flag and 7 bit sequence number. Following byte reports length of the data which comes along until its
 immediately. The data segment is followed by a single CRC byte, and finally the packet ends with a one byte
 crc and postscript. Table \ref{table:seg} lists the packet and the static values, if any, for each of the segments.
@@ -85,7 +85,7 @@ from the sensor in the time window. The size of the sub-packet is restricted to 
     \begin{tabular}{|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Call Function ID} & \textbf{1-bit Acknowledge | Parameter Length} & \textbf{Parameters~\footnote{For sensors have sensor id, 1st Byte is sensor id; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is bus address}} \\ \hline
+        \textbf{Call Function ID} & \textbf{1-bit Acknowledge | Parameter Length} & \textbf{Parameters~\footnote{For sensors have sensor id, 1st Byte is SENSOR ID; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is BUS ADDRESS}} \\ \hline
         1 byte & 1 Byte & up to 252 Bytes \\
         \hline
     \end{tabular}
@@ -103,7 +103,7 @@ from the sensor in the time window. The size of the sub-packet is restricted to 
     \begin{tabular}{|c|c|c|}
         \hline
         \rowcolor{black!8}
-        \textbf{Source ID} & \textbf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data~\footnote{For sensors have sensor id, 1st Byte is sensor id}} \\ \hline
+        \textbf{Source ID} & \textbf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data~\footnote{For sensors have sensor id, 1st Byte is SENSOR ID; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is BUS ADDRESS}} \\ \hline
         1 Byte & 1 Byte & up to 127 Bytes \\
         \hline
     \end{tabular}
