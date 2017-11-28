@@ -27,7 +27,17 @@ when an alpha sensor is excluded.
 ### Request, collect, and decode data
 When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value that has sensor id, 
 you need to put a new line for sensor_table with the form as following (function_call must be 5, which means read sensor).
-```'Sensor Name': { 'sensor_id': given_sensor_id_in_hex, 'function_call': 5, 'interval': time_in_second},```
+```
+'Sensor Name': { 'sensor_id': given_sensor_id_in_hex, 'function_call': given_number_for_sensor, 'interval': time_in_second},
+
+** function_call:
+  0x01 -- initialize the sensor
+  0x02 -- set configuration for the sensor
+  0x03 -- enable the sensor
+  0x04 -- disenable the sensor
+  0x05 -- read from the sensor
+  0x06 -- write on the sensor
+```
 
 If you will use your own request -- decode code, you can refer information below.
 
@@ -105,6 +115,9 @@ configuration 0x31    Configuration of the alpha sensor <<not core packet applic
 When to send a request packet to firmware, the packet will look like:
 ``` 0xAA 0x02 length(including sequence byte, which is following one byte) 0x10 subpacket crc 0x55 ```.
 
+Subpacket must start with sensor id if the sensor has given one, or it must start with bus type id and bus address or pin number:
+``` call_function_type length(first bit is acknowledge bit, and next 7 bits indicate length) parameters ```
+
 ** Below is just for example, and you must convert values to binary.
 
 For example, to request reading of chemsense:
@@ -113,6 +126,13 @@ Or for tmp112:
 ``` 0xAA 0x02 0x04 0x10 0x05 0x01 0x01 crc 0x55 ```
 Or for both chemsense and tmp112:
 ``` 0xAA 0x02 0x07 0x10 0x05 0x01 0x2A 0x05 0x01 0x01 crc 0x55 ```
+To diable tmp112:
+``` 0xAA 0x02 0x04 0x10 0x03 0x01 0x01 crc 0x55 ```
 
-For sensors that do not have sensor id:
+When you want to read data from a sensor communicating through I2C, you need to create **BusI2C<** **address id >.ino** and provide parameters that sensor request when firmware collect data from.
+As an example, for tmp112:
+``` 0xAA 0x02 0x07 0x10 0x15 0x04 0x00 0x40 0x00 0x01 crc 0x55```
+
+When you want to read data from a sensor communicating thourgh SPI, you need to create **BusSPI<** **slave select pin number >.ino** and provide slave select pin number, total number of reading (how many times you will collect data from the sensor), and a command as parameters when you send a request packet.
+For histogram reading from alpha sensor using SPI bus - arduino due pin number for slave select pin is 0x40, need to read 62 times, and command is 0x62):
 ``` 0xAA 0x02 0x07 0x10 0x15 0x04 0x01 0x40 0x3E 0x62 crc 0x55 ```
