@@ -21,12 +21,13 @@ const MandatorySensor mandsensor[] = {
 	{0x0B, EnableSensor0B},
 	{0x0C, EnableSensor0C},
 	{0x0D, EnableSensor0D},
+	{0x0E, EnableSensor0E},
 	{0x0F, EnableSensor0F},
 	{0x10, EnableSensor10},
 	{0x13, EnableSensor13},
 	{0x2A, EnableSensor2A},  // Chem
 	{0x30, EnableSensor28},  // Alpha
-	{0xFF, EnableSensorFF},
+	{0xFF, EnableSensorFF},  // FW ver
 };
 
 const int numMand = sizeof(mandsensor)/sizeof(mandsensor[0]);
