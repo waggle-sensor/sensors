@@ -269,6 +269,7 @@ void BusRead(byte *data, byte id)
 			}
 		}
 	}
+	readingLength = 0;
 }
 void BusWrite(byte *data, byte id)
 {

@@ -12,6 +12,4 @@
 // Wire
 OneWire ds2401(48);
 
-bool flagON;
-
 /* bus ADDRESSES of sensors, PIN configuration for analog/sensor power */

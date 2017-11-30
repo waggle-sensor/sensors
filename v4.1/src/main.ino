@@ -29,7 +29,6 @@ void setup()
 	SensorInit();
 	PacketInit();
 	BusPacketInit();
-	flagON = false;
 
 	Timer3.attachInterrupt(handler).setPeriod(1000000 * 1).start();  //every 1000ms
 }

@@ -10,6 +10,16 @@ byte sequenceValidity = 0x00;
 byte packet[2048];
 
 
+///////// Bus seperately --> different packet type
+int busPacketSeq = 0;
+int busOutLength = 4; // start at 4 to account for header and sequence
+int busPacketType = 0x02;
+
+byte busSequenceValidity = 0x00;
+
+byte busPacket[2048];
+
+
 void Packetization(byte thisid, byte *sensorReading, int readingLength)
 {
     PacketLengthCheck(readingLength);
@@ -35,6 +45,9 @@ void PacketLengthCheck(int readingLength)
 
 void PacketSender(byte sequenceValidity)
 {
+    if (busOutLength > 4)
+        sequenceValidity = 0x00;
+
     packet[2] = outLength - 3;  // data length - header (means including seq byte)
     packet[3] = (sequenceValidity << 7) | packetseq;
     byte crc = CRCcalc(outLength - 3, packet);
@@ -44,6 +57,8 @@ void PacketSender(byte sequenceValidity)
     SerialUSB.write(packet, outLength);
     SerialUSB.println("");
     // SerialUSB.flush();
+
+    outLength = 0;
 }
 
 void MultiPacketInit()
@@ -75,24 +90,17 @@ int ReturnPacketLength()
 }
 
 
-
-///////// Bus seperately --> different packet type
-int busPacketSeq = 0;
-int busOutLength = 4; // start at 4 to account for header and sequence
-int busPacketType = 0x02;
-
-byte busSequenceValidity = 0x00;
-
-byte busPacket[2048];
+/////////////////////////////////////////////////////////////////////////////
 void BusPacketization(byte thisid, byte address, byte *sensorReading, int readingLength)
 {
     BusPacketLengthCheck(readingLength);
 
     int BusSensorReadingValidity = 1;
 
+    busPacket[busOutLength++] = 0x11;
+    busPacket[busOutLength++] = (BusSensorReadingValidity << 7) | (readingLength + 2);   // valid data
     busPacket[busOutLength++] = thisid;
     busPacket[busOutLength++] = address;
-    busPacket[busOutLength++] = (BusSensorReadingValidity << 7) | readingLength;   // valid data
 
     for (int i = 0; i < readingLength; i++)
         busPacket[busOutLength++] = sensorReading[i];
@@ -110,6 +118,9 @@ void BusPacketLengthCheck(int readingLength)
 
 void BusPacketSender(byte sequenceValidity)
 {
+    if (outLength > 4)
+        busSequenceValidity = 0x00;
+
     busPacket[2] = busOutLength - 3;  // data length - header (means including seq byte)
     busPacket[3] = (sequenceValidity << 7) | busPacketSeq;
     byte crc = CRCcalc(busOutLength - 3, busPacket);
@@ -119,6 +130,8 @@ void BusPacketSender(byte sequenceValidity)
     for (int i = 0; i < busOutLength; i++)
         SerialUSB.write(busPacket[i]);
     SerialUSB.println("");
+
+    busOutLength = 0;
 }
 
 void BusMultiPacketInit()
