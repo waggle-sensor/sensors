@@ -17,11 +17,11 @@ Platformio is used to complie and flash the firmware to coresense boards.
 
 * To install platformio using pip: ```$ pip install -U platformio``` 
 
-* To complie firmware using platformio: ```$ ./platformio.sh --alpha_in -c```  when an alpha sensor is included, or
-```$ ./platformio.sh --alpha_ex -c``` when an alpha sensor is excluded.
+* To complie firmware using platformio: ```$ ./platformio.sh --alpha-in -c```  when an alpha sensor is included, or
+```$ ./platformio.sh --alpha-ex -c``` when an alpha sensor is excluded.
 
 * To flash new Firmware, use command this at where platformio.ini and platformio.sh exists:
-```$ ./platformio.sh --alpha_in -f``` when an alpha sensor is included, or ```$ ./platformio.sh --alpha_ex -f```
+```$ ./platformio.sh --alpha-in -f``` when an alpha sensor is included, or ```$ ./platformio.sh --alpha-ex -f```
 when an alpha sensor is excluded.
 
 ### Request, collect, and decode data
