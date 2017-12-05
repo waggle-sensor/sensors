@@ -23,6 +23,7 @@ void DisableSensor31()
 void ReadSensor31(byte *sensorReading, int *readingLength)
 {
 	SerialUSB.print("Start sending Alpha sensor configuration");
+	delay(1000);
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 	delay(100);

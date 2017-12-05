@@ -1,3 +1,3 @@
  
-bool flagON = true;
+bool flagON = false;
 SPISettings setAlpha;

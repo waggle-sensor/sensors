@@ -4,12 +4,12 @@ cd ./src
 ./buildStruct.sh
 
 echo ' ' > Sensor28-31.h
-if [[ $1 == --alpha_in ]]; then
+if [[ $1 == --alpha-in ]]; then
 	echo 'bool flagON = false;' >> Sensor28-31.h
-elif [[ $1 == --alpha_ex ]]; then
+elif [[ $1 == --alpha-ex ]]; then
 	echo 'bool flagON = true;' >> Sensor28-31.h
 else
-	echo "ERROR: first input argument --alpha_in if alpha sensor is included, --alpha_ex if not"
+	echo "ERROR: first input argument --alpha-in if alpha sensor is included, --alpha-ex if not"
 fi
 echo 'SPISettings setAlpha;' >> Sensor28-31.h
 

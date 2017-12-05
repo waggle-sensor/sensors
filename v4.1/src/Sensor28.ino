@@ -37,6 +37,7 @@ void DisableSensor28()
 
 void ReadSensor28(byte *sensorReading, int *readingLength)
 {
+	delay(1000);
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 	delay(100);
@@ -69,7 +70,7 @@ void alpha_onagain()
 	// byte alphaStatusid = 0x2B;
 
 	int repeat = 0;
-	while ((returnbyte != 0x31) && (repeat < 5))
+	while ((returnbyte != 0x31) && (repeat < 10))
 	{
 		if (repeat != 0)
 			delay(5000);
@@ -123,4 +124,3 @@ void alphasense_off()   // disenable
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
 }
-

@@ -22,6 +22,7 @@ void DisableSensor30()
 
 void ReadSensor30(byte *sensorReading, int *readingLength)
 {
+	delay(1000);
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 	delay(100);
@@ -33,7 +34,7 @@ void ReadSensor30(byte *sensorReading, int *readingLength)
 	{
 		sensorReading[i] = SPI.transfer(0x12);
 		*readingLength += 1;
-		delay(10);
+		delay(1);
 	}
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
