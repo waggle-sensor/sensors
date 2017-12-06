@@ -29,6 +29,6 @@ void ReadBusPWM07(byte *sensorReading, int *readingLength)
 
 void WriteBusPWM07(byte *parameters)
 {
-	int value = parameters[0] * 255;  // duty cycle * 255
+	int value = (parameters[0] * 255) / 100;  // duty cycle * 255
 	analogWrite(PWM07, value);
 }
