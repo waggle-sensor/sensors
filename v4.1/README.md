@@ -31,6 +31,7 @@ When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresen
 
 When the coresnese borad are powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
 
+#### Example sensor table
 ```
 s-1. Sensor table to read from a sensor that has its sensor id. Collect data every 5 seconds
 
@@ -148,7 +149,8 @@ Coreread is able to take multiple parameters, and has no limitation on the numbe
 |alpha sensor firmware ver  |0x30|    Firmware version of the alpha sensor                                      |
 |alpha sensor configuration |0x31|    Configuration of the alpha sensor <<not core packet applicable>>          |
 
-
+#### Configuration Information from chemsense and alpha sensor
+Configuration information do not follow waggle and coresense packet format. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
 
 
 
