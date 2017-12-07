@@ -8,9 +8,7 @@ separately implemented on various .ino files in the new version.
 Moreover, all conversion equations that were implemented in firmware version 2 and 3 are moved to decoder part (pywaggle).
 So all the data sent from this firmware are byte values as they are collected from a sensor directly.
 
-Initialization, configuration, read, and write functions for sensors, which have sensor id are defined in Sensor*.ino files
-with regard to its sensor id, and for sensors just added on the metsense board can use call functions in Bus*.ino.
-Bus*.ino is related to bus type and address or pin number of the sensor.
+Initialization, configuration, enable, disable, read, and write functions for sensors, which have sensor id, are defined in Sensor*.ino files with regard to its sensor id, and for sensors just added on the metsense board can use call functions in Bus*.ino. Bus*.ino is related to bus type and address or pin number of the sensor.
 
 ### Flashing firmware
 Platformio is used to complie and flash the firmware to coresense boards.
@@ -24,115 +22,133 @@ Platformio is used to complie and flash the firmware to coresense boards.
 ```$ ./platformio.sh --alpha-in -f``` when an alpha sensor is included, or ```$ ./platformio.sh --alpha-ex -f```
 when an alpha sensor is excluded.
 
-### Request, collect, and decode data
-When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value that has sensor id, 
-you need to put a new line for sensor_table with the form as following (function_call must be 5, which means read sensor).
-```
-'Sensor Name': { 'sensor_id': given_sensor_id_in_hex, 'function_call': given_number_for_sensor, 'interval': time_in_second},
+## Request, collect, and decode data
+When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value. The plugin will refer 'sensor_table.conf' in folder /wagglerw/waggle/ in nodecontroller. 
 
-** function_call:
-  0x01 -- initialize the sensor
-  0x02 -- set configuration for the sensor
-  0x03 -- enable the sensor
-  0x04 -- disenable the sensor
-  0x05 -- read from the sensor
-  0x06 -- write on the sensor
-```
-
-If you will use your own request -- decode code, you can refer information below.
-
-### Transmission Packet
-** For detailed information about packet and subpacket, see "Interface and Data Format Specification for sensors" in
+### Waggle and Coresense Packet
+** For detailed information about transmission packet and subpacket, see "Interface and Data Format Specification for sensors" in
 "waggle-sensor/sensors/v4.1/sensor-documentation" **
 
-### Subpacket
-Subpacket for requesting sensor reading must start with call function type in hex.
-Below commands are call function type for sensors, which have sensor id, from 0x01 -- 0x06,
-and call function type for new sensors, which don't have snesor id, from 0x11 -- 0x16.
-```  
-FUNCTION TYPE        ID
-initSensor          0x01
-configureSensor     0x02
-enableSensor        0x03
-disableSensor       0x04
-readSensor          0x05
-writeSensor         0x06
-initBus             0x11
-configureBus        0x12
-enableBus           0x13
-disableBus          0x14
-readBus             0x15
-writeBus            0x16
+When the coresnese borad are powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
+
 ```
-First 1 bit of the following byte is acknowledge bit, and other 7 bits are length of the parameter for the sensor reading.
-Next bytes are parameters that are needed for sensor reading, and the first byte of the parameter must be sensor id.
-If the sensor dosen't have a sensor id, then the first byte must be bus type and the second byte must be bus address or pin number.
+s-1. Sensor table to read from a sensor that has its sensor id. Collect data every 5 seconds
+
+"Given_Sensor_Name": {
+        "interval": 5,
+        "function_call": "sensor_read",
+        "sensor_id": given_id_in_integer
+}
+
+b-1.  Sensor table to read from a sensor that does not have its sensor id. Collect data every 5 seconds
+** For i2c reading, user must write related code **
+
+"Sensor_Name": {
+        "interval": 5,
+        "function_call": "bus_read",
+        "bus_type": "i2c",
+        "bus_address": 64,                 # address for the sensor is 0x40
+        "params": [                        # to collect data, this sensor 
+                243,                         requests to send two bytes
+                245                          that are 0xF3 and 0xF5
+         ]
+}
+
+b-2. Sensor table to read from a sensor that does not have its sensor id. Collect data every 5 seconds
+
+"Sensor_Name": {
+        "interval": 5,
+        "function_call": "bus_read",
+        "bus_type": "spi",
+        "bus_address": 64,                # address for the sensor is 0x40
+        "params": [                       # to collect data, this sensor requires
+                64,                         how many time it collects data from the sensor
+                100                         requesting command
+         ]
+}
+
+b-3. Sensor table to read from a sensor through analog read every 5 sec. (The same format for digial and serial)
+
+"Sensor_Name": {
+        "interval": 5,
+        "function_call": "bus_read",
+        "bus_type": "analog",
+        "bus_address": 0,                 # pin number for the sensor is A0
+        "params": []                      # no parameter is needed
+}
+
+b-4. Sensor table to read from a sensor through PWM read every 5 sec
+
+"Sensor_Name": {
+        "interval": 5,
+        "function_call": "bus_read",
+        "bus_type": "PWM",
+        "bus_address": 0,                 # pin number for the sensor is A0
+        "params": [                       # duty cycle in %
+                50
+         ]
+}
+```
+
+|FUNCTION TYPE  |  Key for sensor_table.conf |  ID for Firmware |  Description  |
+| ------------- |:-------------:|:-------------:| ----- |
+|initSensor     | Sensor_init   | 0x01 | All sensors on Met/Light/Chem/Alpha are automatically initialized  |
+|configureSensor| Sensor_config | 0x02 | All sensors on Met/Light/Chem/Alpha re configured with they are initialized  |
+|enableSensor   | Sensor_enable | 0x03 | To enable sensor on Met/Light/Chem/Alpha: All sensors on Met/Light/Chem/Alpha are enabled when they are initialized  |
+|disableSensor  | Sensor_disable| 0x04 | To disable sensor on Met/Light/Chem/Alpha --> no data will be collected from the sensor  |
+|readSensor     | Sensor_read   | 0x05 | To collecte data from sensors  |
+|writeSensor    | Sensor_write  | 0x06 | All sensors on Met/Light/Chem/Alpha are not writable  |
+|initBus        | Bus_init      | 0x11 | To initialize new implemented sensors  |
+|configureBus   | Bus_config    | 0x12 | To configure new implemented sensors  |
+|enableBus      | Bus_enable    | 0x13 | New implemented sensors cannot be enabled --> data can be collected always from new sensors  |
+|disableBus     | Bus_disable   | 0x14 | New implemented sensors cannot be disabled --> data can be collected always from new sensors  |
+|readBus        | Bus_read      | 0x15 | To collect data from new implemented sensors  |
+|writeBus       | Bus_write     | 0x16 | To write data on new implemented sensors  |
+
 Below is given identity number for each bus type.
-```
-BUS TYPE             ID
-I2C                 0x00
-SPI                 0x01
-Serial              0x02
-Analog              0x03
-Digital             0x04
-PWM                 0x05
-```
+
+| BUS TYPE |Key for sensor_table.conf |  ID for Firmware |
+|:-------------:|:-------------:|:-------------:|
+|I2C      | i2c |  0x00 |
+|SPI      | spi |  0x01 |
+|Serial   | serial |  0x02 |
+|Analog   | analog |  0x03 |
+|Digital  | digital |  0x04 |
+|PWM      | pwm |  0x05 |
 
 Sensor names as parameters for Coreread are shown below. 
 Coreread is able to take multiple parameters, and has no limitation on the number of parameters.
-```
-SENSOR         ID                      DATA
-firmware ver  0xFF    Coresense firmware version
-mac           0x00    Mac address of coresense boards 
-tmp112        0x01    Temperature sensor
-htu21d        0x02    Temperature and relative humidity sensor
-hih4030       0x03    Relative humidity sensor
-bmp180        0x04    Temperature and barometric pressure sensor
-pr103j2       0x05    Temperature sensor
-tsl250        0x06    Light sensor (300-1100 nm, high responsivity at 640 nm) 
-mma8452q      0x07    Accelerate force sensor
-spv1840       0x08    Sound sensor
-tsys01        0x09    Temperature sensor
-hmc5883l      0x0A    Magnetic field sensor
-hih6130       0x0B    Temperature and relative humidity sensor
-apds9006      0x0C    Light sensor (480-640 nm, high responsivity at ~500 nm)
-tsl260rd      0x0D    Light sensor (820-1100 nm, high responsivity at 640 nm) 
-tsl250rd      0x0E    Light sensor (300-1100 nm, high responsivity at 940 nm) 
-mlx75305      0x0F    Light sensor (400-1000 nm, high responsivity at ~700 nm) 
-ml8511        0x10    UV sensor (280-420 nm)
-tmp421        0x13    Temperature sensor
-chem config   0x16    Configuration of the chemsense firmware <<not core packet applicable>>
-chemsense     0x2A    Raw, direct reading from chemsense board
------------------------------------------ alpha sensor -----------------------------------------
-histogram     0x28    Histogram of particle count
-serial        0x29    Serial number of the alpha sensor
-status        0x2B    Status of the alpha sensor
-firmware ver  0x30    Firmware version of the alpha sensor
-configuration 0x31    Configuration of the alpha sensor <<not core packet applicable>>
-```
 
-### Examples
-When to send a request packet to firmware, the packet will look like:
-``` 0xAA 0x02 length(including sequence byte, which is following one byte) 0x10 subpacket crc 0x55 ```.
+| SENSOR        |ID             |        DATA   |
+| ------------- |:-------------:|:-------------:|
+|firmware ver  |0xFF|    Coresense firmware version                                                |
+|mac           |0x00|    Mac address of coresense boards                                           |
+|tmp112        |0x01|    Temperature sensor                                                        |
+|htu21d        |0x02|    Temperature and relative humidity sensor                                  |
+|hih4030       |0x03|    Relative humidity sensor                                                  |
+|bmp180        |0x04|    Temperature and barometric pressure sensor                                |
+|pr103j2       |0x05|    Temperature sensor                                                        |
+|tsl250        |0x06|    Light sensor (300-1100 nm, high responsivity at 640 nm)                   |
+|mma8452q      |0x07|    Accelerate force sensor                                                   |
+|spv1840       |0x08|    Sound sensor                                                              |
+|tsys01        |0x09|    Temperature sensor                                                        |
+|hmc5883l      |0x0A|    Magnetic field sensor                                                     |
+|hih6130       |0x0B|    Temperature and relative humidity sensor                                  |
+|apds9006      |0x0C|    Light sensor (480-640 nm, high responsivity at ~500 nm)                   |
+|tsl260rd      |0x0D|    Light sensor (820-1100 nm, high responsivity at 640 nm)                   |
+|tsl250rd      |0x0E|    Light sensor (300-1100 nm, high responsivity at 940 nm)                   |
+|mlx75305      |0x0F|    Light sensor (400-1000 nm, high responsivity at ~700 nm)                  |
+|ml8511        |0x10|    UV sensor (280-420 nm)                                                    |
+|tmp421        |0x13|    Temperature sensor                                                        |
+|chem config   |0x16|    Configuration of the chemsense firmware <<not core packet applicable>>    |
+|chemsense     |0x2A|    Raw, direct reading from chemsense board                                  |
+|alpha sensor histogram     |0x28|    Histogram of particle count                                               |
+|alpha sensor serial        |0x29|    Serial number of the alpha sensor                                         |
+|alpha sensor status        |0x2B|    Status of the alpha sensor                                                |
+|alpha sensor firmware ver  |0x30|    Firmware version of the alpha sensor                                      |
+|alpha sensor configuration |0x31|    Configuration of the alpha sensor <<not core packet applicable>>          |
 
-Subpacket must start with sensor id if the sensor has given one, or it must start with bus type id and bus address or pin number:
-``` call_function_type length(first bit is acknowledge bit, and next 7 bits indicate length) parameters ```
 
-** Below is just for example, and you must convert values to binary.
 
-For example, to request reading of chemsense:
-``` 0xAA 0x02 0x04 0x10 0x05 0x01 0x2A crc 0x55 ```
-Or for tmp112:
-``` 0xAA 0x02 0x04 0x10 0x05 0x01 0x01 crc 0x55 ```
-Or for both chemsense and tmp112:
-``` 0xAA 0x02 0x07 0x10 0x05 0x01 0x2A 0x05 0x01 0x01 crc 0x55 ```
-To diable tmp112:
-``` 0xAA 0x02 0x04 0x10 0x03 0x01 0x01 crc 0x55 ```
 
-When you want to read data from a sensor communicating through I2C, you need to create **BusI2C<** **address id >.ino** and provide parameters that sensor request when firmware collect data from.
-As an example, for tmp112:
-``` 0xAA 0x02 0x07 0x10 0x15 0x04 0x00 0x40 0x00 0x01 crc 0x55```
 
-When you want to read data from a sensor communicating thourgh SPI, you need to create **BusSPI<** **slave select pin number >.ino** and provide slave select pin number, total number of reading (how many times you will collect data from the sensor), and a command as parameters when you send a request packet.
-For histogram reading from alpha sensor using SPI bus - arduino due pin number for slave select pin is 0x40, need to read 62 times, and command is 0x62):
-``` 0xAA 0x02 0x07 0x10 0x15 0x04 0x01 0x40 0x3E 0x62 crc 0x55 ```
