@@ -1,0 +1,10 @@
+{
+  "builtInLibrariesFolders": "/home/sager/repos/arduino/libraries",
+  "customBuildProperties": "build.path=./build,build.warn_data_percentage=75,runtime.tools.arm-none-eabi-gcc.path=/home/sager/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1,runtime.tools.bossac.path=/home/sager/.arduino15/packages/arduino/tools/bossac/1.6.1-arduino",
+  "fqbn": "arduino:sam:arduino_due_x",
+  "hardwareFolders": "/home/sager/repos/arduino/hardware,/home/sager/.arduino15/packages",
+  "otherLibrariesFolders": "/home/sager/Arduino/libraries",
+  "runtime.ide.version": "10805",
+  "sketchLocation": "/home/sager/repos/sensors/v4.1/src/BusAnalog00.ino",
+  "toolsFolders": "/home/sager/repos/arduino/tools-builder,/home/sager/repos/arduino/hardware/tools/avr,/home/sager/.arduino15/packages"
+}
