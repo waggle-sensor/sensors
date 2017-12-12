@@ -1,5 +1,5 @@
 ARD_HOME = $(ARDUINO_DIR)
-TARGET = main
+TARGET = firmware
 PACKAGE = arduino
 ARCH = sam
 BOARD = arduino_due_x
@@ -22,6 +22,7 @@ CFLAGS  = --verbose-build --verify
 all: clean	$(TARGET)
 
 $(TARGET): $(TARGET).ino
+	./buildStruct.sh
 	./setbuildtime.sh
 	$(CC) --board $(BOARD_FLASH) $(CFLAGS) --pref build.path=$(BUILD_DIR) $(TARGET).ino
 	$(BUILD_COMPLETE)
