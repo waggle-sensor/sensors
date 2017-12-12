@@ -16,6 +16,8 @@ bool UP_DOWN;
 
 void setup()
 {
+	pinMode(HBT_PIN, OUTPUT);
+
 	delay(2000);
 	SerialUSB.begin(115200);
 	delay(100);
@@ -24,8 +26,8 @@ void setup()
 	// AND initialization for sensors on met/lightsense boards
 	Wire.begin();
 	delay(100);
-	
-	// What sensors does this initialize? 
+
+	// What sensors does this initialize?
 	SensorInit();
 	PacketInit();
 	BusPacketInit();
