@@ -10,6 +10,9 @@ So all the data sent from this firmware are byte values as they are collected fr
 
 Initialization, configuration, enable, disable, read, and write functions for sensors, which have sensor id, are defined in Sensor*.ino files with regard to its sensor id, and for sensors just added on the metsense board can use call functions in Bus*.ino. Bus*.ino is related to bus type and address or pin number of the sensor.
 
+### Configuration Information from chemsense and alpha sensor
+Configuration information **DO NOT follow waggle and coresense packet format**. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
+
 ### Flashing firmware using makefile
 Makefile in /waggle-sensor/senssros/v4.1/integrated/firmware does complie, build, and flash onto the board. Binary file of the firmware is created in bin folder in the directory.
 
@@ -164,10 +167,6 @@ Parameters for "readBus" are differed with regard to the bus type -- i2c, spi, s
 | bus_disable| i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
 | bus_read | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : n number of parameters regaring to the sensor properties <br> : each 1 byte of the number of call, command, delay time, and the number of delay <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
 | bus_write | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : 1 byte of input (0 or 1) <br> : 1 byte of pwm duty cycle in percentage |
-
-
-#### Configuration Information from chemsense and alpha sensor
-Configuration information do not follow waggle and coresense packet format. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
 
 
 
