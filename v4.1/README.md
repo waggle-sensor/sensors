@@ -29,7 +29,7 @@ When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresen
 ** For detailed information about transmission packet and subpacket, see "Interface and Data Format Specification for sensors" in
 "waggle-sensor/sensors/v4.1/sensor-documentation" **
 
-When the coresnese borad are powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
+When the coresnese borad is powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. As the firmware uses Waggle protocol v5 to send and receive packets, coresense plugin should also use the same protocol version. Coresense Plugin 4.1 (in plugin_manager repository) is the plugin that can interact with the firmware. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
 
 #### Example sensor table
 ```
@@ -151,6 +151,5 @@ Coreread is able to take multiple parameters, and has no limitation on the numbe
 
 #### Configuration Information from chemsense and alpha sensor
 Configuration information do not follow waggle and coresense packet format. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
-
 
 
