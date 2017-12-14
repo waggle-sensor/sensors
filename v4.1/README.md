@@ -10,8 +10,11 @@ So all the data sent from this firmware are byte values as they are collected fr
 
 Initialization, configuration, enable, disable, read, and write functions for sensors, which have sensor id, are defined in Sensor*.ino files with regard to its sensor id, and for sensors just added on the metsense board can use call functions in Bus*.ino. Bus*.ino is related to bus type and address or pin number of the sensor.
 
-### Flashing firmware
-Platformio is used to complie and flash the firmware to coresense boards.
+### Flashing firmware using makefile
+Makefile in /waggle-sensor/senssros/v4.1/integrated/firmware does complie, build, and flash onto the board. Binary file of the firmware is created in bin folder in the directory.
+
+### Flashing firmware using platformio
+If you would like to use platformio, you can use commands below, but the structure of the directory v4.1 needs to be re-configured. Build method is changed from platformio to use makefile because platformio does not provide a way to create binary file, which needed to flash new firmware to nodes.
 
 * To install platformio using pip: ```$ pip install -U platformio``` 
 
@@ -23,17 +26,17 @@ Platformio is used to complie and flash the firmware to coresense boards.
 when an alpha sensor is excluded.
 
 ## Request, collect, and decode data
-When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value. The plugin will refer 'sensor_table.conf' in folder /wagglerw/waggle/ in nodecontroller. 
+When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value, the plugin will refer 'sensor_table.conf' in folder /wagglerw/waggle/ in nodecontroller. 'sensor_table.conf' will be generated when coresense-plugin.py is excuted if there is no such file. If User wants to modify which sensor the user wants to collect data, how frequently the user wants to collect data, or add a new sensor that the user wants to test alone.
 
 ### Waggle and Coresense Packet
 ** For detailed information about transmission packet and subpacket, see "Interface and Data Format Specification for sensors" in
 "waggle-sensor/sensors/v4.1/sensor-documentation" **
 
-When the coresnese borad is powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. As the firmware uses Waggle protocol v5 to send and receive packets, coresense plugin should also use the same protocol version. Coresense Plugin 4.1 (in plugin_manager repository) is the plugin that can interact with the firmware. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
+When the coresnese borad are powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration of chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table, 'sensor_table.conf', follows json format, and examples are given below:
 
 #### Example sensor table
 ```
-s-1. Sensor table to read from a sensor that has its sensor id. Collect data every 5 seconds
+s-1. Sensor table to collect data every 5 seconds from a sensor that has its sensor id.
 
 "Given_Sensor_Name": {
         "interval": 5,
@@ -41,8 +44,8 @@ s-1. Sensor table to read from a sensor that has its sensor id. Collect data eve
         "sensor_id": given_id_in_integer
 }
 
-b-1.  Sensor table to read from a sensor that does not have its sensor id. Collect data every 5 seconds
-** For i2c reading, user must write related code **
+b-1.  Sensor table to collect data every 5 seconds from a new sensor that does not have its sensor id through i2c.
+** For i2c reading, user must write related code and re-flash the new firmware **
 
 "Sensor_Name": {
         "interval": 5,
@@ -55,7 +58,7 @@ b-1.  Sensor table to read from a sensor that does not have its sensor id. Colle
          ]
 }
 
-b-2. Sensor table to read from a sensor that does not have its sensor id. Collect data every 5 seconds
+b-2. Sensor table to collect data every 5 seconds from a new sensor that does not have its sensor id thorugh spi.
 
 "Sensor_Name": {
         "interval": 5,
@@ -68,7 +71,7 @@ b-2. Sensor table to read from a sensor that does not have its sensor id. Collec
          ]
 }
 
-b-3. Sensor table to read from a sensor through analog read every 5 sec. (The same format for digial and serial)
+b-3. Sensor table to collect data every 5 seconds from a new sensor through analog, digial, and serial.
 
 "Sensor_Name": {
         "interval": 5,
@@ -78,7 +81,7 @@ b-3. Sensor table to read from a sensor through analog read every 5 sec. (The sa
         "params": []                      # no parameter is needed
 }
 
-b-4. Sensor table to read from a sensor through PWM read every 5 sec
+b-4. Sensor table to collect data every 5 seconds from a new sensor through PWM.
 
 "Sensor_Name": {
         "interval": 5,
@@ -91,25 +94,27 @@ b-4. Sensor table to read from a sensor through PWM read every 5 sec
 }
 ```
 
+A table below shows types of "function_call" in the sensor table. When you do something with sensors that have sensor id, you need to use top 6 commands that with a word "Sensor". Otherwise, when you do something with new sensors that do not have sensor id, you need to use bottom 6 command that with a word "Bus".
+
 |FUNCTION TYPE  |  Key for sensor_table.conf |  ID for Firmware |  Description  |
 | ------------- |:-------------:|:-------------:| ----- |
-|initSensor     | Sensor_init   | 0x01 | All sensors on Met/Light/Chem/Alpha are automatically initialized  |
-|configureSensor| Sensor_config | 0x02 | All sensors on Met/Light/Chem/Alpha re configured with they are initialized  |
-|enableSensor   | Sensor_enable | 0x03 | To enable sensor on Met/Light/Chem/Alpha: All sensors on Met/Light/Chem/Alpha are enabled when they are initialized  |
-|disableSensor  | Sensor_disable| 0x04 | To disable sensor on Met/Light/Chem/Alpha --> no data will be collected from the sensor  |
-|readSensor     | Sensor_read   | 0x05 | To collecte data from sensors  |
-|writeSensor    | Sensor_write  | 0x06 | All sensors on Met/Light/Chem/Alpha are not writable  |
-|initBus        | Bus_init      | 0x11 | To initialize new implemented sensors  |
-|configureBus   | Bus_config    | 0x12 | To configure new implemented sensors  |
-|enableBus      | Bus_enable    | 0x13 | New implemented sensors cannot be enabled --> data can be collected always from new sensors  |
-|disableBus     | Bus_disable   | 0x14 | New implemented sensors cannot be disabled --> data can be collected always from new sensors  |
-|readBus        | Bus_read      | 0x15 | To collect data from new implemented sensors  |
-|writeBus       | Bus_write     | 0x16 | To write data on new implemented sensors  |
+|initSensor     | sensor_init   | 0x01 | All sensors on Met/Light/Chem/Alpha are automatically initialized  |
+|configureSensor| sensor_config | 0x02 | All sensors on Met/Light/Chem/Alpha re configured with they are initialized  |
+|enableSensor   | sensor_enable | 0x03 | To enable sensor on Met/Light/Chem/Alpha: All sensors on Met/Light/Chem/Alpha are enabled when they are initialized  |
+|disableSensor  | sensor_disable| 0x04 | To disable sensor on Met/Light/Chem/Alpha --> no data will be collected from the sensor  |
+|readSensor     | sensor_read   | 0x05 | To collecte data from sensors  |
+|writeSensor    | sensor_write  | 0x06 | All sensors on Met/Light/Chem/Alpha are not writable  |
+|initBus        | bus_init      | 0x11 | To initialize new implemented sensors  |
+|configureBus   | bus_config    | 0x12 | To configure new implemented sensors  |
+|enableBus      | bus_enable    | 0x13 | New implemented sensors cannot be enabled --> data can be collected always from new sensors  |
+|disableBus     | bus_disable   | 0x14 | New implemented sensors cannot be disabled --> data can be collected always from new sensors  |
+|readBus        | bus_read      | 0x15 | To collect data from new implemented sensors  |
+|writeBus       | bus_write     | 0x16 | To write data on new implemented sensors  |
 
-Below is given identity number for each bus type.
+When you try to collect data from a new sensor using "readBus", then you must provide which bus are you using, as shown in a table below.
 
 | BUS TYPE |Key for sensor_table.conf |  ID for Firmware |
-|:-------------:|:-------------:|:-------------:|
+| ------------- |:-------------:|:-------------:|
 |I2C      | i2c |  0x00 |
 |SPI      | spi |  0x01 |
 |Serial   | serial |  0x02 |
@@ -117,8 +122,8 @@ Below is given identity number for each bus type.
 |Digital  | digital |  0x04 |
 |PWM      | pwm |  0x05 |
 
-Sensor names as parameters for Coreread are shown below. 
-Coreread is able to take multiple parameters, and has no limitation on the number of parameters.
+All the sensor table provide parameters for the sensor reading, and  Sensor names are parameters for "readSensor".
+"readSensor" command is able to take multiple parameters, if the length of the parameter is less than 127.
 
 | SENSOR        |ID             |        DATA   |
 | ------------- |:-------------:|:-------------:|
@@ -149,7 +154,20 @@ Coreread is able to take multiple parameters, and has no limitation on the numbe
 |alpha sensor firmware ver  |0x30|    Firmware version of the alpha sensor                                      |
 |alpha sensor configuration |0x31|    Configuration of the alpha sensor <<not core packet applicable>>          |
 
+Parameters for "readBus" are differed with regard to the bus type -- i2c, spi, serial, and so on -- and sensor properties. Additionally, parameters for all bus related commands must be differed regarding sensor type and sensor properties. Therefore, the example paremeters cannot be given in here, and follow the datasheet for each sensor for "sensor_table.conf". Functions for bus are not fully completed, such as config, enable, disable, and write, however, the given standards are:
+
+| Function      | Bus type      | Parameter     |
+| ------------- |:-------------:|:-------------|
+| bus_init | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : 3 bytes of max speed, 1 byte of type, 1 byte of mode <br> : 1 byte of power pin, 3 bytes of baudrate, 1 byte of timeout time in second <br> : N/A <br> : 1 byte of pin mode (0: input or 1: output) <br> : N/A |
+| bus_config | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
+| bus_enable | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
+| bus_disable| i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
+| bus_read | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : n number of parameters regaring to the sensor properties <br> : each 1 byte of the number of call, command, delay time, and the number of delay <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
+| bus_write | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : 1 byte of input (0 or 1) <br> : 1 byte of pwm duty cycle in percentage |
+
+
 #### Configuration Information from chemsense and alpha sensor
 Configuration information do not follow waggle and coresense packet format. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
+
 
 
