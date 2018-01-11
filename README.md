@@ -18,7 +18,7 @@
 | PR103J2 | Temperature | -55 to +80 °C | ±0.05 °C | [Datasheet](./airsense/pr103j2.pdf)|
 | TSL250RD | Light Intensity, λp = 640nm | 0 to 124 μW/cm2 | 16 μW/cm2 | [Datasheet](./airsense/tsl250rd.pdf) |
 | MMA8452Q | 3 axis acceleration | ±8 g | ±20 mg | [Datasheet](./airsense/mma8452q.pdf) |
-| SPV1840LR5H-B | Instantaneous Sound Sample | Acoustic Overload Point <br> to 121 dB SPL | -38 dBV/Pa | [Datasheet](./airsense/spv1840lr5h-b.pdf) |
+| SPV1840LR5H-B | Instantaneous Sound Sample | Acoustic Overload Point <br> to 121 dB SPL | -38 dBV/Pa | [Datasheet](./sensors/airsense/spv1840lr5h-b.pdf) |
 | TSYS01 | Temperature | -40°C to +125 °C | 0.5 °C | [Datasheet](./airsense/tsys01.pdf) |
 
 ## Lightsense, HW Ver: 3.1
