@@ -9,6 +9,7 @@
 * CPU: Atmel SAM3X8E ARM Cortex-M3 CPU
 
 ### Parts list
+
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
 | TMP112 | Temperature |-40 to +125 °C |	±1 °C | [Datasheet](./sensors/airsense/tmp112.pdf)|
@@ -30,6 +31,7 @@
 * CPU: None
 
 ### Parts list
+
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
 | HMC5883L | 3 axis magnetic field intensity | ±8 gauss | ±0.002 gauss | [Datasheet](./sensors/lightsense/hmc5883l.pdf) |
@@ -56,14 +58,14 @@
 | SHT25 | Temperature <br> Relative Humidity | -40 to +125 °C <br> 0 to 100 %RH | ±0.04 °C <br> ±0.04 %RH | [Datasheet](./sensors/chemsense/sht25.pdf) |
 | LPS25H | Temperature <br> Atmospheric Pressure | -30 to +105°C <br> 260 to 1260  hPa | ±2 °C <br> ±0.1 hPa | [Datasheet](./sensors/chemsense/lps25h.pdf) |
 | Si1145 | Light Intensity (UV) <br> Light Intensity, λp = 760 nm <br> Light Intensity, λp = 560 nm |   |   | [Datasheet](./sensors/chemsense/si1145.pdf) |
-| Sulfur Dioxide | SO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/so2.pdf) |
-| Hydrogen Sulfide | H2S Concentration | 0 to 50 ppm | ±3% of reading | [Datasheet](./chemsesne/h2s.pdf) |
-| Ozone | O3 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/o3.pdf) |
-| Nitrous Oxide | NO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/no2.pdf) |
-| Carbon Monoxide | CO Concentration | 0 to 1,000 ppm | ±2% of reading | [Datasheet](./chemsesne/co.pdf) |
-| BMI160 | 3 axis acceleration <br> 3 axis orientation | ±16g <br> 2000°/s | 300μg/√Hz <br> 0.07°/s rms| [Datasheet](./chemsesne/ 	bmi160.pdf) |
-| Total Reducing Gases | Reducing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/) |
-| Total Oxidizing Gases | Oxidizing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./chemsesne/) |
+| Sulfur Dioxide | SO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/so2.pdf) |
+| Hydrogen Sulfide | H2S Concentration | 0 to 50 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/h2s.pdf) |
+| Ozone | O3 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/o3.pdf) |
+| Nitrous Oxide | NO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/no2.pdf) |
+| Carbon Monoxide | CO Concentration | 0 to 1,000 ppm | ±2% of reading | [Datasheet](./sensors/chemsense/co.pdf) |
+| BMI160 | 3 axis acceleration <br> 3 axis orientation | ±16g <br> 2000°/s | 300μg/√Hz <br> 0.07°/s rms| [Datasheet](./sensors/chemsense/bmi160.pdf) |
+| Total Reducing Gases | Reducing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/) |
+| Total Oxidizing Gases | Oxidizing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/) |
 
 ## Alphasense OPC-N2 (Regular-range (16 bins in 0-10 μm) and High-range/Pollen (16 bins in 0-40 μm)
 
