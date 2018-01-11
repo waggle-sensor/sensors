@@ -75,4 +75,4 @@
 ### Parts list
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
-| OPC-N2 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](./opc/opcN2.pdf) |
+| OPC-N2 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](./sensors/opc/opcN2.pdf) |
