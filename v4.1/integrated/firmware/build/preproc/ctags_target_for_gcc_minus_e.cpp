@@ -23184,7 +23184,7 @@ void ReadSensor08(byte *sensorReading, int *readingLength)
 
  for (int i = 0; i < 63; i++)
  {
-  buff = analogRead(A5);
+  buff = analogRead(A9);
   sensorReading[i * 2] = (buff >> 8) & 0xFF;
   sensorReading[i * 2 + 1] = buff & 0xFF;
   *readingLength += 2;
@@ -24180,14 +24180,14 @@ void ReadSensorFF(byte *sensorReading, int *readingLength)
  int first_byte = (3 /* 4 bits*/ << 5) | ((1 /* 4 bits*/ & 0x07) << 2) | ((4 /* 8 bits*/ & 0x0F) >> 2);
  int second_byte = ((4 /* 8 bits*/ & 0x0F) << 6) | ((1 /* 4 bits*/ * 10 + 0 /* 4 bits*/) & 0x3F);
 
- int buildinfo_git = (int) strtol("e976", 0, 16);
+ int buildinfo_git = (int) strtol("0210", 0, 16);
 
  sensorReading[0] = first_byte & 0xFF;
  sensorReading[1] = second_byte & 0xFF;
- sensorReading[2] = (1516730329 >> 24) & 0xFF;
- sensorReading[3] = (1516730329 >> 16) & 0xFF;
- sensorReading[4] = (1516730329 >> 8) & 0xFF;
- sensorReading[5] = 1516730329 & 0xFF;
+ sensorReading[2] = (1516741195 >> 24) & 0xFF;
+ sensorReading[3] = (1516741195 >> 16) & 0xFF;
+ sensorReading[4] = (1516741195 >> 8) & 0xFF;
+ sensorReading[5] = 1516741195 & 0xFF;
  sensorReading[6] = (buildinfo_git >> 8) & 0xFF;
  sensorReading[7] = buildinfo_git & 0xFF;
 

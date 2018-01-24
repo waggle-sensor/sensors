@@ -3662,7 +3662,7 @@ void ReadSensor08(byte *sensorReading, int *readingLength)
 
 	for (int i = 0; i < 63; i++)
 	{
-		buff = analogRead(SPV_AMP_PIN);
+		buff = analogRead(SPV_RAW_MIC_PIN);
 		sensorReading[i * 2] = (buff >> 8) & 0xFF;
 		sensorReading[i * 2 + 1] = buff & 0xFF;
 		*readingLength += 2;
