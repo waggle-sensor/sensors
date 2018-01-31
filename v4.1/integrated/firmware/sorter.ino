@@ -121,7 +121,13 @@ void SensorRead(byte *data, byte id)
 	bool enable = GetEnable(id);
 
 	if (!enable)
+	{
+		sensorReading[0] = 0xAB;
+		readingLength = 1;
+		Packetization(id, sensorReading, readingLength);
+		readingLength = 0;
 		return;
+	}
 
 	int paramLength = data[0] & 0x7F;
 	int repeat = 0;
@@ -141,7 +147,7 @@ void SensorRead(byte *data, byte id)
 		{
 			if (id == 0x2A)
 				repeat = 3;
-			
+
 			if (paramLength > 1 || id == 0x2A)
 			{
 				for (int i = 0; i < repeat; i++)
@@ -261,7 +267,7 @@ void BusRead(byte *data, byte id)
 			if (b->bustype == id)
 			{
 				if (b->busid == busAddressId)
-				{			
+				{
 					b->readFunc(sensorReading, &readingLength);
 					BusPacketization(id, busAddressId, sensorReading, readingLength);
 					break;
@@ -283,4 +289,3 @@ void BusWrite(byte *data, byte id)
 		}
 	}
 }
-

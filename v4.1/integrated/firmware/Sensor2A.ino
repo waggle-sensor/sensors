@@ -15,6 +15,7 @@ void InitSensor2A()
 	else
 	{
 		Serial3.end();
+		digitalWrite(CHEM_POWER_PIN, HIGH);
 		DisableSensor(0x2A);
 	}
 }
