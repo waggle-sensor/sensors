@@ -122,8 +122,10 @@ void SensorRead(byte *data, byte id)
 
 	if (!enable)
 	{
-		sensorReading[0] = 0xAB;
-		readingLength = 1;
+		sensorReading[0] = id;
+		sensorReading[1] = 0xAB;
+		readingLength = 2;
+		id = 0x12;
 		Packetization(id, sensorReading, readingLength);
 		readingLength = 0;
 		return;

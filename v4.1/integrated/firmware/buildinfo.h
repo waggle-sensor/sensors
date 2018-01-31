@@ -1,2 +1,2 @@
-#define BUILD_TIME 1517421537
-#define BUILD_GIT "1940"
+#define BUILD_TIME 1517438780
+#define BUILD_GIT "a570"
