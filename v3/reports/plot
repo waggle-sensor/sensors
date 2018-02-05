@@ -16,6 +16,10 @@ node_vsn=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloa
 node_id=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 4 | sed "s/0000001E06/001E06/g" | sed "s/\ //g")
 echo "$node_descr"
 sensor_array=$(cat  "$file_to_plot"  | cut -d ";" -f 5,6 | sort | uniq )
+
+CHEMS_MAC=$(cat sensor_data_set.csv | grep "Chemsense_ID;mac_address;" | cut -d ";" -f 7 | grep [0-9] | uniq)
+
+
 for i in $sensor_array
 do
     file_name=$(echo $i |  tr ";" "-").csv   
@@ -83,43 +87,43 @@ do
  
 
     if [[ $i == *"Chemsense;co"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
 
     if [[ $i == *"Chemsense;no2"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;h2s"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;so2"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;reducing_gases"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;oxidizing_gases"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
     
     if [[ $i == *"Chemsense;o3"* ]]; then
-        parameter_name="Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
+        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
         y_label="pA" 
         graph_sensor=true
     fi
