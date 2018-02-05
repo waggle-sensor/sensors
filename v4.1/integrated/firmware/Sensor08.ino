@@ -30,6 +30,7 @@ void DisableSensor08()
 void ReadSensor08(byte *sensorReading, int *readingLength)
 {
 	int buff = 0;
+
 	for (int i = 0; i < 63; i++)
 	{
 		buff = analogRead(SPV_RAW_MIC_PIN);
