@@ -58,7 +58,7 @@ def intensity_conv(line):
 def pick_value(line, value, first_sensor, count, xl_data):
 	write_bool = True
 	splited = line.strip().split(';')
-	if "adc_temperature" in line or 'at' in line:
+	if "adc_temperature" in line or "at" in line:
 		temperature = float(splited[-1])/100
 		line = new_line(splited, temperature)
 		value['temp'] = value['temp'] + temperature
@@ -125,7 +125,7 @@ def read_data(nodeNAME, xl_data):
 					if not first_sensor:
 						first_sensor = acquire_sensor_spec(line)
 
-					if len(chem_reading) == 8 and count != 0 and line.strip().split(';')[-3] == first_sensor:
+					if len(chem_reading) > 8 and count != 0 and line.strip().split(';')[-3] == first_sensor:
 						new_chem_value = convert(chem_reading, xl_data)
 						print(new_chem_value, chem_reading['id'])
 						for key, in_list in new_chem_value.items():
