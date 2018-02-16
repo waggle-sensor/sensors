@@ -5,17 +5,17 @@ from RTlist import getRT
 from chemsense import convert, import_data
 
 def new_line(splited, value):
-    new_row = ''
-    for i in range(len(splited) - 1):
-        new_row = new_row + splited[i] + ';'
-    new_row = new_row + str(round(value, 2)) + '\n'
-    return new_row
+	new_row = ''
+	for i in range(len(splited) - 1):
+		new_row = new_row + splited[i] + ';'
+	new_row = new_row + str(round(value, 2)) + '\n'
+	return new_row
 
 def new_line_chem(key, in_list):
-    ppm = in_list[0]
-    splited = in_list[1].strip().split(';')
-    new_row = new_line(splited, ppm)
-    return new_row
+	ppm = in_list[0]
+	splited = in_list[1].strip().split(';')
+	new_row = new_line(splited, ppm)
+	return new_row
 
 def intensity_conv(line):
 	splited = line.strip().split(';')
@@ -79,7 +79,10 @@ def pick_value(line, value, first_sensor, count, xl_data):
 		line = new_line(splited, temperature)
 	elif "PR103J2" in line:
 		pre_temperature = float(splited[-1])
-		temperature = round(getRT(pre_temperature), 2)
+		if pre_temperature > 1255:
+			temperature = round(getRT(pre_temperature), 2)
+		else:
+			temperature = pre_temperature
 		line = new_line(splited, temperature)
 	elif "LPS25H" in line:
 		temperature = float(splited[-1])/100
@@ -112,7 +115,7 @@ def acquire_sensor_spec(line):
 def read_data(nodeNAME, xl_data):
 	first_sensor = ''
 	count = 0
-	chem_reading = {'temp': 0, 'id': ''}
+	chem_reading = {'temp': 0}
 	for i in range(len(nodeNAME)):
 		outputcsv = './conv_data_set_'+nodeNAME[i]+'.csv'
 		inputcsv = './sensor_data_set_'+nodeNAME[i]+'.csv'
@@ -122,13 +125,14 @@ def read_data(nodeNAME, xl_data):
 					if not first_sensor:
 						first_sensor = acquire_sensor_spec(line)
 
-					if chem_reading['id'] != '' and count != 0 and line.strip().split(';')[-3] == first_sensor:
+					if len(chem_reading) == 8 and count != 0 and line.strip().split(';')[-3] == first_sensor:
 						new_chem_value = convert(chem_reading, xl_data)
+						print(new_chem_value, chem_reading['id'])
 						for key, in_list in new_chem_value.items():
 							if key != 'id' and key != 'temp':
 								new_line = new_line_chem(key, in_list)
 								of.write(new_line)
-						chem_reading = {'temp': 0, 'id': ''}
+						chem_reading = {'temp': 0}
 					line, value, write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)
 					if write_bool == True:
 						of.write(line)
