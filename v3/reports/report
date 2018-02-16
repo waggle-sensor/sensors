@@ -5,4 +5,5 @@ if [ "$#" -ne 3 ]; then
 fi
 ./getdatasets $1 $2 $3
 python3 beehive_csv.py
+mv sensor_data_set_converted.csv sensor_data_set.csv
 ./plot sensor_data_set.csv
