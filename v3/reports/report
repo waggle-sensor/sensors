@@ -4,4 +4,5 @@ if [ "$#" -ne 3 ]; then
     exit 1
 fi
 ./getdatasets $1 $2 $3
+python3 beehive_csv.py
 ./plot sensor_data_set.csv
