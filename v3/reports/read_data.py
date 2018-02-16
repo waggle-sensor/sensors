@@ -58,7 +58,7 @@ def intensity_conv(line):
 def pick_value(line, value, first_sensor, count, xl_data):
 	write_bool = True
 	splited = line.strip().split(';')
-	if "adc_temperature" in line:
+	if "adc_temperature" in line or 'at' in line:
 		temperature = float(splited[-1])/100
 		line = new_line(splited, temperature)
 		value['temp'] = value['temp'] + temperature
@@ -115,7 +115,7 @@ def acquire_sensor_spec(line):
 def read_data(xl_data):
 	first_sensor = ''
 	count = 0
-	chem_reading = {'temp': 0}
+	chem_reading = {'temp': 123456789}
 
 	inputcsv = './sensor_data_set.csv'
 	outputcsv = './sensor_data_set_converted.csv'
@@ -131,7 +131,7 @@ def read_data(xl_data):
 						if key != 'id' and key != 'temp':
 							new_line = new_line_chem(key, in_list)
 							of.write(new_line)
-					chem_reading = {'temp': 0}
+					chem_reading = {'temp': 123456789}
 				line, value, write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)
 				if write_bool == True:
 					of.write(line)

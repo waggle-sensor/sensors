@@ -9,7 +9,7 @@ def import_data(xl_data):
         for row in cal:
             rowValues = row.strip().split(';')
             chem_id = row[1]
-            
+
             xl_data[chem_id] = {
                 'Ireducing_gases':{'sensitivity': rowValues[-42], 'baseline40': rowValues[-21], 'Mvalue': rowValues[-7]},   # IRR = RESP, baseline = Izero@25C
                 'oxidizing_gases': {'sensitivity': rowValues[-41], 'baseline40': rowValues[-20], 'Mvalue': rowValues[-6]},
@@ -46,9 +46,10 @@ def chemical_sensor(value, xl_data):
 
 
 def convert(value, xl_data):
-    if value['temp'] == 0:
+    if value['temp'] == 123456789:
         return 0
     else:
+        print(value)
         base_temperature = round((value['temp'] / 5), 2)
         chemical_sensor(value, xl_data)
 
