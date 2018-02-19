@@ -4,6 +4,8 @@ The bash shell scripts (for Linux or Mac OS X) in this directory can be used to 
 The scripts in this directory depend on **wget**, **gunzip** and **gnuplot** for downloading, extracting and plotting data. 
 Please make sure they are installed in the system where they are intended to be used. 
 
+The python scripts for Linix and Mac in this directory can be used to convert sensor data in csv files to representative unit values. The scripts in this directory depends on **numpy** and **math** python libraries, and also the scripts requires a **sensor_data_set.csv** file which can be downloaed from beehive server and **calib_data.csv** file which is modified an xlsx file provided by spec.
+
 ### Usage: 
 
 `$./report part_of_nodeid last_day how_many_days`
