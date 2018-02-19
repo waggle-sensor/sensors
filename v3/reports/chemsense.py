@@ -49,7 +49,6 @@ def convert(value, xl_data):
     if value['temp'] == 123456789:
         return 0
     else:
-        print(value)
         base_temperature = round((value['temp'] / 5), 2)
         chemical_sensor(value, xl_data)
 

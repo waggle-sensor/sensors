@@ -127,7 +127,6 @@ def read_data(nodeNAME, xl_data):
 
 					if len(chem_reading) > 8 and count != 0 and line.strip().split(';')[-3] == first_sensor:
 						new_chem_value = convert(chem_reading, xl_data)
-						print(new_chem_value, chem_reading['id'])
 						for key, in_list in new_chem_value.items():
 							if key != 'id' and key != 'temp':
 								new_line = new_line_chem(key, in_list)
