@@ -2,9 +2,10 @@
 # chemsense version2, no data of IMU is comming from chemsense --> chemsense FW issue
 
 import math
+import os
 
-def import_data(xl_data):
-    inputcsv = './calib_data.csv'
+def import_data(xl_data, base_dir='./'):
+    inputcsv = os.path.join(base_dir, 'calib_data.csv')
     with open(inputcsv) as cal:
         for row in cal:
             rowValues = row.strip().split(';')
