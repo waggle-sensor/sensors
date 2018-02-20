@@ -34,7 +34,7 @@ def plot_pressrue(nodeNAME, nodeLoc, data_dict):
 		plt.setp(legpressurewhole_texts, fontsize='x-large')
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Pressure (hPa)', fontsize=15)
 		plt.title('node ID: '+nodeNAME[i]+', Loc: '+nodeLoc[i], fontsize=20)
 
@@ -75,7 +75,7 @@ def plot_pressrue(nodeNAME, nodeLoc, data_dict):
 		plt.setp(legpressurewhole_texts, fontsize='x-large')
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Pressure (hPa)', fontsize=15)
 		plt.title(title, fontsize=20)
 
@@ -116,7 +116,7 @@ def plot_humidity(nodeNAME, nodeLoc, data_dict):
 		plt.setp(leghumid_texts, fontsize=10)
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Relative Humidity (%RH)', fontsize=15)
 		plt.title('node ID: '+nodeNAME[i]+', Loc: '+nodeLoc[i], fontsize=20)
 
@@ -158,7 +158,7 @@ def plot_humidity(nodeNAME, nodeLoc, data_dict):
 		plt.setp(leghumid_texts, fontsize=10)
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Relative Humidity (%RH)', fontsize=15)
 		plt.title(title, fontsize=20)
 
@@ -214,7 +214,7 @@ def plot_temperature(nodeNAME, nodeLoc, data_dict):
 		plt.setp(legtemper_texts, fontsize=10)
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Temperature (°C)', fontsize=15)
 		plt.title('node ID: '+nodeNAME[i]+', Loc: '+nodeLoc[i],fontsize=20)
 
@@ -256,7 +256,7 @@ def plot_temperature(nodeNAME, nodeLoc, data_dict):
 		plt.setp(legtemper_texts, fontsize=10)
 		##****Legend
 
-		plt.xlabel('Time (EST)', fontsize=15)
+		plt.xlabel('Time (UTC)', fontsize=15)
 		plt.ylabel('Temperature (°C)', fontsize=15)
 		plt.title(title, fontsize=20)
 

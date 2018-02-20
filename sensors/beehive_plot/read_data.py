@@ -95,7 +95,7 @@ def read_data(nodeNAME):
 					time = newtime
 
 					datetime_object = datetime.strptime(time, "%Y_%m_%d_%H:%M:%S")
-					convtime = datetime_object - timedelta(hours=4)
+					convtime = datetime_object
 					data_dict[nodeNAME[i]]["time"].append(convtime)
 
 				if "temperature" in line:
