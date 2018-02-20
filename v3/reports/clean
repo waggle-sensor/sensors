@@ -2,5 +2,5 @@
 rm ./data_files/*
 rm ./plots/*
 rm sensor_data_set.csv
-rm *.csv
+rm 201*.csv
 rm *.csv.gz
