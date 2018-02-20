@@ -3,8 +3,13 @@ if [ "$#" -ne 3 ]; then
     echo "Not enough information provided..."
     exit 1
 fi
-./getdatasets $1 $2 $3
-python3 beehive_csv.py
+base_dir=$(dirname ${BASH_SOURCE[0]})
+${base_dir}/getdatasets $1 $2 $3
+
+python3 ${base_dir}/beehive_csv.py
+
 mv sensor_data_set_converted.csv sensor_data_set.csv
-./plot sensor_data_set.csv
-rm sensor_data_set.csv
+
+${base_dir}/plot sensor_data_set.csv
+
+rm ${base_dir}/sensor_data_set.csv

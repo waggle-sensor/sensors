@@ -2,16 +2,17 @@
 # chemsense version2, no data of IMU is comming from chemsense --> chemsense FW issue
 
 import math
+import os
 
-def import_data(xl_data):
-    inputcsv = './calib_data.csv'
+def import_data(xl_data, base_dir='./'):
+    inputcsv = os.path.join(base_dir, 'calib_data.csv')
     with open(inputcsv) as cal:
         for row in cal:
             rowValues = row.strip().split(';')
             chem_id = row[1]
 
             xl_data[chem_id] = {
-                'Ireducing_gases':{'sensitivity': rowValues[-42], 'baseline40': rowValues[-21], 'Mvalue': rowValues[-7]},   # IRR = RESP, baseline = Izero@25C
+                'Ireducing_gases':{'sensitivity': rowValues[-42], 'baseline40': rowValues[-21], 'Mvalue': rowValues[-7]},   # IRR = RESP, baseline = Izero@40C
                 'oxidizing_gases': {'sensitivity': rowValues[-41], 'baseline40': rowValues[-20], 'Mvalue': rowValues[-6]},
                 'so2': {'sensitivity': rowValues[-40], 'baseline40': rowValues[-19], 'Mvalue': rowValues[-5]},
                 'h2s': {'sensitivity': rowValues[-39], 'baseline40': rowValues[-18], 'Mvalue': rowValues[-4]},
@@ -49,7 +50,6 @@ def convert(value, xl_data):
     if value['temp'] == 123456789:
         return 0
     else:
-        print(value)
         base_temperature = round((value['temp'] / 5), 2)
         chemical_sensor(value, xl_data)
 
