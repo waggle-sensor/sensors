@@ -56,7 +56,6 @@ def intensity_conv(line):
 	return line
 
 def pick_value(line, value, first_sensor, count, xl_data):
-	write_bool = True
 	splited = line.strip().split(';')
 	if "adc_temperature" in line:
 		temperature = float(splited[-1])/100
@@ -72,7 +71,6 @@ def pick_value(line, value, first_sensor, count, xl_data):
 		else:
 			chem_reading = float(splited[-1])
 			value[splited[-2]] = [chem_reading, line]
-			write_bool = False
 
 	elif "pressure" in line:
 		pressure = float(splited[-1])/100
@@ -106,7 +104,7 @@ def pick_value(line, value, first_sensor, count, xl_data):
 	elif "intensity" in line:
 		line = intensity_conv(line)
 
-	return line, value, write_bool
+	return line, value
 
 def acquire_sensor_spec(line):
 	first_sensor = line.strip().split(';')[-3]
@@ -136,7 +134,6 @@ def read_data(xl_data):
 							new_line = new_line_chem(key, in_list)
 							of.write(new_line)
 					chem_reading = {'temp': 123456789}
-				line, value, write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)
-				if write_bool == True:
-					of.write(line)
+				line, value = pick_value(line, chem_reading, first_sensor, count, xl_data)
+				of.write(line)
 				count = count + 1
