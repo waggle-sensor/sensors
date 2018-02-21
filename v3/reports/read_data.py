@@ -104,7 +104,7 @@ def pick_value(line, value, first_sensor, count, xl_data):
 	elif "intensity" in line:
 		line = intensity_conv(line)
 
-	return line, value
+	return line, value, write_bool
 
 def acquire_sensor_spec(line):
 	first_sensor = line.strip().split(';')[-3]
