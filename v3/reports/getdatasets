@@ -4,7 +4,7 @@ if [ "$#" -ne 3 ]; then
     exit 1
 fi
 
-which_node=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $1' ' | tr "|" " "| tr -s " " | cut -d " " -f 4 | sed "s/0000001E061/001E061/g" |  tr '[:upper:]' '[:lower:]')
+which_node=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $1' ' | tr "|" " "| tr -s " " | cut -d " " -f 4 | sed "s/0000001E061/001E061/g" | sed "s/0000020000000/020000000/g" |  tr '[:upper:]' '[:lower:]')
 how_long_ago=$2
 how_long=$3
 
