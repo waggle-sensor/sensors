@@ -25,7 +25,7 @@ def intensity_conv(line):
 	if "APDS-9006-020" in line:
 		intensity = float(splited[-1])/ 0.001944
 		irrad = intensity / 405.1   # 405.1 unit: mA/lux
-		key = splited[-2] + '_mA/lux'
+		key = splited[-2] + '_converted'
 		line = new_line(splited, irrad, key)
 	elif "ML8511" in line:
 		intensity = float(splited[-1]) * 0.0000625 * 2.50
@@ -45,21 +45,21 @@ def intensity_conv(line):
 	elif "MLX75305" in line:
 		intensity = float(splited[-1]) * 0.0000625 * 2.50 - 0.09234
 		irrad = intensity / 0.007   #with gain 1, the factor is 7mA/(uW/cm^2)
-		key = splited[-2] + '_mA/(uW/cm2)'
+		key = splited[-2] + '_converted'
 		line = new_line(splited, irrad, key)
 	elif "TSL260RD" in line:
 		intensity = float(splited[-1]) * 0.0000625 * 2.50 - 0.006250
 		irrad = intensity / 0.058
-		key = splited[-2] + '_mA/(uW/cm)'
+		key = splited[-2] + '_converted'
 		line = new_line(splited, irrad, key)
 	elif "TSL250RD-AS" in line:
 		irrad = float(splited[-1]) * 0.0000625 * 2.5 / 0.064
-		key = splited[-2] + '_mA/(uW/cm)'
+		key = splited[-2] + '_converted'
 		line = new_line(splited, irrad, key)
 	elif "TSL250RD-LS" in line:
 		intensity = float(splited[-1]) * 0.0000625 * 2.5 - 0.005781
 		irrad = intensity / 0.064
-		key = splited[-2] + '_mA/(uW/cm)'
+		key = splited[-2] + '_converted'
 		line = new_line(splited, irrad, key)
 
 	elif "SPV1840LR5H" in line:
