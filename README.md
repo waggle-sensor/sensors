@@ -61,7 +61,7 @@
 | Sulfur Dioxide | SO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/so2.pdf) |
 | Hydrogen Sulfide | H2S Concentration | 0 to 50 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/h2s.pdf) |
 | Ozone | O3 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/o3.pdf) |
-| Nitrous Oxide | NO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/no2.pdf) |
+| Nitrogen Dioxide | NO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/no2.pdf) |
 | Carbon Monoxide | CO Concentration | 0 to 1,000 ppm | ±2% of reading | [Datasheet](./sensors/chemsense/co.pdf) |
 | BMI160 | 3 axis acceleration <br> 3 axis orientation | ±16g <br> 2000°/s | 300μg/√Hz <br> 0.07°/s rms| [Datasheet](./sensors/chemsense/bmi160.pdf) |
 | Total Reducing Gases | Reducing Gases Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](./sensors/chemsense/) |
