@@ -27,23 +27,23 @@ def import_data(xl_data, base_dir='./'):
 def chemical_sensor(value, xl_data):
     for key, in_list in value.items():
         if key != 'id' and key != 'temp':
-            IpA = value[key][0]
-
-            Tzero = 40.0
-
-            new_key = 'converted_' + key
-            sep = value[key][1].strip().split(';')
-            new_line = ''
-            for i in range(len(sep)):
-                if i == 5:
-                    new_line = new_line + new_key + ';'
-                elif i == len(sep) - 1:
-                    new_line = new_line + sep[i]
-                else:
-                    new_line = new_line + sep[i] + ';'
-            value[key][1] = new_line
-
             if value['id'] in xl_data:
+                IpA = value[key][0]
+                Tzero = 40.0
+
+                new_key = key + '_pp'
+                sep = value[key][1].strip().split(';')
+                new_line = ''
+
+                for i in range(len(sep)):
+                    if i == 5:
+                        new_line = new_line + new_key + ';'
+                    elif i == len(sep) - 1:
+                        new_line = new_line + sep[i]
+                    else:
+                        new_line = new_line + sep[i] + ';'
+                value[key][1] = new_line
+
                 Tavg = value['temp']
                 sensitivity = xl_data[value['id']][key]['sensitivity']
                 baseline = xl_data[value['id']][key]['baseline40']
@@ -52,8 +52,6 @@ def chemical_sensor(value, xl_data):
                 InA = float(IpA)/1000.0 - baseline*math.exp((Tavg - Tzero) / Minv)
                 converted = InA / sensitivity
                 value[key][0] = converted
-            else:
-                value[key][0] = IpA / 1000
 
     return value
 
