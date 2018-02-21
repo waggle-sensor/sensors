@@ -58,8 +58,12 @@ def intensity_conv(line):
 def pick_value(line, value, first_sensor, count, xl_data):
 	write_bool = True
 	splited = line.strip().split(';')
-	if "adc_temperature" in line or "at" in line:
+	if "adc_temperature" in line:
 		temperature = float(splited[-1])/100
+		line = new_line(splited, temperature)
+		value['temp'] = value['temp'] + temperature
+	elif "at" in line:
+		temperature = float(splited[-1])
 		line = new_line(splited, temperature)
 		value['temp'] = value['temp'] + temperature
 	elif "Chemsense" in line:
