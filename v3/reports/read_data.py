@@ -136,6 +136,6 @@ def read_data(xl_data):
 							of.write(new_line)
 					chem_reading = {'temp': 123456789}
 				line, value, write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)
-				if write_bool = True:
+				if write_bool == True:
 					of.write(line)
 				count = count + 1
