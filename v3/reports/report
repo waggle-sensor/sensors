@@ -10,6 +10,6 @@ python3 ${base_dir}/beehive_csv.py
 
 mv sensor_data_set_converted.csv sensor_data_set.csv
 
-${base_dir}/plot sensor_data_set.csv
+#${base_dir}/plot sensor_data_set.csv
 
-rm ${base_dir}/sensor_data_set.csv
+#rm ${base_dir}/sensor_data_set.csv

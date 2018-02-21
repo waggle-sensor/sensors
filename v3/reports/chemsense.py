@@ -31,6 +31,18 @@ def chemical_sensor(value, xl_data):
 
             Tzero = 40.0
 
+            new_key = 'converted_' + key
+            sep = value[key][1].strip().split(';')
+            new_line = ''
+            for i in range(len(sep)):
+                if i == 5:
+                    new_line = new_line + new_key + ';'
+                elif i == len(sep) - 1:
+                    new_line = new_line + sep[i]
+                else:
+                    new_line = new_line + sep[i] + ';'
+            value[key][1] = new_line
+
             if value['id'] in xl_data:
                 Tavg = value['temp']
                 sensitivity = xl_data[value['id']][key]['sensitivity']
