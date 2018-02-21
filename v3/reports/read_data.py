@@ -78,7 +78,9 @@ def pick_value(line, value, first_sensor, count, xl_data):
 		temperature = float(splited[-1])/100
 		key = splited[-2] + '_scaled'
 		line = new_line(splited, temperature, key)
-		value['temp'] = value['temp'] + temperature
+		if "LMP_Temp" not in line:
+			value['temp'] = value['temp'] + temperature
+
 	elif "Chemsense" in line:
 		if "ID" in line:
 			value['id'] = splited[-1]
@@ -149,7 +151,7 @@ def acquire_sensor_spec(line):
 def read_data(xl_data):
 	first_sensor = ''
 	count = 0
-	chem_reading = {'temp': 123456789}
+	chem_reading = {'temp': 0}
 
 	inputcsv = './sensor_data_set.csv'
 	outputcsv = './sensor_data_set_converted.csv'
@@ -165,7 +167,7 @@ def read_data(xl_data):
 						if key != 'id' and key != 'temp':
 							new_line = new_line_chem(in_list)
 							of.write(new_line)
-					chem_reading = {'temp': 123456789}
+					chem_reading = {'temp': 0}
 				line, value,write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)
 				if write_bool == True:
 					of.write(line)

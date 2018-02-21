@@ -9,10 +9,10 @@ def import_data(xl_data, base_dir='./'):
     with open(inputcsv) as cal:
         for row in cal:
             rowValues = row.strip().split(';')
-            chem_id = row[1]
+            chem_id = rowValues[1]
 
             xl_data[chem_id] = {
-                'Ireducing_gases':{'sensitivity': rowValues[-42], 'baseline40': rowValues[-21], 'Mvalue': rowValues[-7]},   # IRR = RESP, baseline = Izero@40C
+                'reducing_gases':{'sensitivity': rowValues[-42], 'baseline40': rowValues[-21], 'Mvalue': rowValues[-7]},   # IRR = RESP, baseline = Izero@40C
                 'oxidizing_gases': {'sensitivity': rowValues[-41], 'baseline40': rowValues[-20], 'Mvalue': rowValues[-6]},
                 'so2': {'sensitivity': rowValues[-40], 'baseline40': rowValues[-19], 'Mvalue': rowValues[-5]},
                 'h2s': {'sensitivity': rowValues[-39], 'baseline40': rowValues[-18], 'Mvalue': rowValues[-4]},
@@ -38,21 +38,21 @@ def chemical_sensor(value, xl_data):
     for key, in_list in value.items():
         if key != 'id' and key != 'temp':
             if value['id'] in xl_data:
-                IpA = value[key][0]
-                Tzero = 40.0
-
                 new_key = key + '_pp'
                 sep = value[key][1].strip().split(';')
 
                 line = new_line_a(sep, new_key)
                 value[key][1] = line
 
-                Tavg = value['temp']
-                sensitivity = xl_data[value['id']][key]['sensitivity']
-                baseline = xl_data[value['id']][key]['baseline40']
-                Minv = xl_data[value['id']][key]['Mvalue']
+                Tzero = 40.0
+                Tavg = value['temp']/4
+                IpA = float(value[key][0])
+                sensitivity = float(xl_data[value['id']][key]['sensitivity'])
+                baseline = float(xl_data[value['id']][key]['baseline40'])
+                Minv = float(xl_data[value['id']][key]['Mvalue'])
 
-                InA = float(IpA)/1000.0 - baseline*math.exp((Tavg - Tzero) / Minv)
+                Afactor = round(math.exp((Tavg - Tzero)/Minv), 2)
+                InA = IpA/1000.0 - baseline*Afactor
                 converted = InA / sensitivity
                 value[key][0] = converted
             else:
