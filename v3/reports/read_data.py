@@ -14,9 +14,10 @@ def new_line(splited, value, key):
 	new_row = new_row + str(round(value, 2)) + '\n'
 	return new_row
 
-def new_line_chem(key, in_list):
+def new_line_chem(in_list):
 	ppm = in_list[0]
 	splited = in_list[1].strip().split(';')
+	key = splited[-2]
 	new_row = new_line(splited, ppm, key)
 	return new_row
 
@@ -107,14 +108,14 @@ def pick_value(line, value, first_sensor, count, xl_data):
 	elif "LPS25H" in line:
 		if "temperature" in line:
 			temperature = float(splited[-1])
-			if temperature > 100:
+			if abs(temperature) > 100:
 				temperature = temperature/100
 				key = splited[-2] + '_temperature_c'
 				line = new_line(splited, temperature, key)
 	elif "SHT25" in line:
 		if "temperature" in line:
 			temperature = float(splited[-1])
-			if temperature > 100:
+			if abs(temperature) > 100:
 				temperature = temperature/100
 				key = splited[-2] + '_temperature_c'
 				line = new_line(splited, temperature, key)
@@ -162,7 +163,7 @@ def read_data(xl_data):
 					new_chem_value = convert(chem_reading, xl_data)
 					for key, in_list in new_chem_value.items():
 						if key != 'id' and key != 'temp':
-							new_line = new_line_chem(key, in_list)
+							new_line = new_line_chem(in_list)
 							of.write(new_line)
 					chem_reading = {'temp': 123456789}
 				line, value,write_bool = pick_value(line, chem_reading, first_sensor, count, xl_data)

@@ -23,6 +23,16 @@ def import_data(xl_data, base_dir='./'):
 
     return xl_data
 
+def new_line_a(sep, key):
+    new_line = ''
+    for i in range(len(sep)):
+        if i == 5:
+            new_line = new_line + key + ';'
+        elif i == len(sep) - 1:
+            new_line = new_line + sep[i]
+        else:
+            new_line = new_line + sep[i] + ';'
+    return new_line
 
 def chemical_sensor(value, xl_data):
     for key, in_list in value.items():
@@ -33,16 +43,9 @@ def chemical_sensor(value, xl_data):
 
                 new_key = key + '_pp'
                 sep = value[key][1].strip().split(';')
-                new_line = ''
 
-                for i in range(len(sep)):
-                    if i == 5:
-                        new_line = new_line + new_key + ';'
-                    elif i == len(sep) - 1:
-                        new_line = new_line + sep[i]
-                    else:
-                        new_line = new_line + sep[i] + ';'
-                value[key][1] = new_line
+                line = new_line_a(sep, new_key)
+                value[key][1] = line
 
                 Tavg = value['temp']
                 sensitivity = xl_data[value['id']][key]['sensitivity']
@@ -52,6 +55,12 @@ def chemical_sensor(value, xl_data):
                 InA = float(IpA)/1000.0 - baseline*math.exp((Tavg - Tzero) / Minv)
                 converted = InA / sensitivity
                 value[key][0] = converted
+            else:
+                new_key = key + '_not_in_spec_dataset'
+                sep = value[key][1].strip().split(';')
+
+                line = new_line_a(sep, new_key)
+                value[key][1] = line
 
     return value
 
@@ -61,6 +70,6 @@ def convert(value, xl_data):
         return 0
     else:
         base_temperature = round((value['temp'] / 5), 2)
-        chemical_sensor(value, xl_data)
+        value = chemical_sensor(value, xl_data)
 
     return value
