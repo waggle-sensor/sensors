@@ -1,7 +1,7 @@
 ## Documentation:
 
 The bash shell scripts (for Linux or Mac OS X) in this directory can be used to create [sensor reports](https://github.com/waggle-sensor/sensors/blob/develop/v3/reports/README.md#1-generating-graph-reports)  in the form of graphs in 
-PDF format for nodes. The scripts in this directory depend on **Python 3.0**, **wget**, **gunzip**, **numpy** and **math** python libraries and **gnuplot** for downloading, extracting, converting and plotting data. Please make sure they are installed in the system where they are intended to be used. 
+PDF format for nodes. The scripts in this directory depend on **Python 3.0**, **numpy** and **math** for Python, **wget**, **gunzip**, and **gnuplot** for downloading, extracting, converting and plotting data. Please make sure they are installed in the system where they are intended to be used. 
 
 The Python scripts in this directory can be used independently to [convert raw sensor data](https://github.com/waggle-sensor/sensors/blob/develop/v3/reports/README.md#2-generating-processed-sensor-csv-files) in csv files to values in parameter specific 
 units. They can take raw data CSV files available at [Beehive Portal](http://beehive1.mcs.anl.gov/) and create CSV files with converted data. The final data incorporates all conversions, scaling and other corrections (temperature, cross-sensitivity etc. if any) currently available for the set of sensors. 
