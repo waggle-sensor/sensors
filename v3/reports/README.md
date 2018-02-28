@@ -7,7 +7,7 @@ The Python scripts in this directory can be used independently to convert raw se
 units. They can take raw data CSV files available at [Beehive Portal](http://beehive1.mcs.anl.gov/) and create CSV files with converted data. The final data incorporates all conversions, scaling and other corrections (temperature, cross-sensitivity etc. if any) currently available for the set of sensors. 
 
 
-## Generating Graph Reports:
+## 1. Generating Graph Reports:
 
 ### Usage: 
 
@@ -26,7 +26,7 @@ For the same node the report for a week ending yesterday can be generated using 
 
 `$./report 30FE 1 6`
 
-## 1. Generating Processed Sensor CSV files:
+## 2. Generating Processed Sensor CSV files:
 
 ### Usage: 
 
@@ -47,7 +47,7 @@ For the same node the report for a week ending yesterday can be generated using 
 `$./create_converted_dataset.sh 30FE 1 6`
 
 
-## 2 . Cleaning Directory:
+## 3 . Cleaning Directory:
 
 To clean the directories, and start over: 
 
