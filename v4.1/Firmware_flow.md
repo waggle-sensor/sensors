@@ -1,6 +1,6 @@
 # Flowchart of Coresense Firmware Version 4.1
 
-The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.png) shows how the coresense firmware version 4.1 works and communicates with the plugin working at node controller in firmware side.
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works and communicates with the plugin working at node controller in firmware side.
 
 ### Step 1
 First, when the firmware is turned on **(start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(setup)**. After that, it calls all initialization functions (initialization) from all exising sensors and while do that, it initializes SPI, I2C, and other serial lines to collect data from the various sensors. 
