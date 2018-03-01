@@ -1,1 +1,1 @@
-<img src="./Sensor_Firmware_flow.pdf" width=400 />
+<img src="./Sensor_Firmware_flow.png" width=400 />
