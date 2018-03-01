@@ -157,7 +157,10 @@ All the sensor table provide parameters for the sensor reading, and  Sensor name
 |alpha sensor firmware ver  |0x30|    Firmware version of the alpha sensor                                      |
 |alpha sensor configuration |0x31|    Configuration of the alpha sensor <<not core packet applicable>>          |
 
+
 Parameters for "readBus" are differed with regard to the bus type -- i2c, spi, serial, and so on -- and sensor properties. Additionally, parameters for all bus related commands must be differed regarding sensor type and sensor properties. Therefore, the example paremeters cannot be given in here, and follow the datasheet for each sensor for "sensor_table.conf". Functions for bus are not fully completed, such as config, enable, disable, and write, however, the given standards are:
+
+
 
 | Function      | Bus type      | Parameter     |
 | ------------- |:-------------:|:-------------|
