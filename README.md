@@ -1,6 +1,6 @@
 # Common Waggle Sensors:
 
-## Airsense, HW Ver: 3.1
+## Metsense, HW Ver: 3.1
 
 <img src="./sensors/images/metsense.jpg" width=350 />
 
