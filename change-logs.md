@@ -5,6 +5,7 @@ It keeps track of the changes for versions.
 # Firmware Version 4.11 (in v4.1, git tag 4.11) (2018-02)
 ### New features
 * Firmware automatically sends a list of "disabled sensor" which contains sensor ids that plugin requests but FW regards the sensor is not working -- the FW does not read the sensor.
+* Add delay in Sensor2A.ino > initialization step, iterately check (5 times) if chemsense is attached on Metsense board, and alive.
 
 # Firmware Version 4.1 (v4.1, git tag 4.1) (2017-12)
 ### New features
