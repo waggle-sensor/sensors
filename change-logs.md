@@ -17,6 +17,8 @@ It keeps track of the changes for versions.
 * Data collection from soil moisture sensor and rain gauge are not tested with this version
 ### Cautions
 * Functions that initialize, configure, write, and dis/enable sensors are not fully tested.
+### Bugs
+* May need to add "delay(100);" in Sensor2A.ino > Initialization2A() > under pinMode(Chmsensepin, output);
 
 # Firmware Version 4 (v4) (2017-08)
 ### New features
