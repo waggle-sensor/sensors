@@ -2,6 +2,10 @@
 
 It keeps track of the changes for versions.
 
+# Firmware Version 4.11 (in v4.1) (2018-02)
+### New features
+* Firmware automatically sends a list of "disabled sensor" which contains sensor ids that plugin requests but FW regards the sensor is not working -- the FW does not read the sensor.
+
 # Firmware Version 4.1 (v4.1) (2017-12)
 ### New features
 * Libraries and codes to convert raw sensor data reading had been moved to plugin
@@ -11,7 +15,8 @@ It keeps track of the changes for versions.
 * Packetization in firmware and plugin for the firmware are completed
 ### Behinds
 * Data collection from soil moisture sensor and rain gauge are not tested with this version
-
+### Cautions
+* Functions that initialize, configure, write, and dis/enable sensors are not fully tested.
 
 # Firmware Version 4 (v4) (2017-08)
 ### New features
