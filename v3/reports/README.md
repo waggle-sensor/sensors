@@ -30,7 +30,7 @@ For the same node the report for a week ending yesterday can be generated using 
 
 ### Usage: 
 
-`$./create_converted_dataset.sh last_day how_many_days`
+`$./create_converted_dataset.sh part_of_nodeid last_day how_many_days`
 
 Node IDs can be obtained from the [Beehive Portal](http://beehive1.mcs.anl.gov/).
 
