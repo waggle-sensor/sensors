@@ -32,7 +32,12 @@ void ReadSensor29(byte *sensorReading, int *readingLength)
 
 	for (int i = 0; i < 20; i++)
 	{
-		sensorReading[i] = SPI.transfer(0x10);
+		byte r = SPI.transfer(0x10);
+		if (r == 0xFF)
+			sensorReading[i] = 'N';
+		else
+			sensorReading[i] = r;
+
 		*readingLength += 1;
 		delay(1);
 	}
