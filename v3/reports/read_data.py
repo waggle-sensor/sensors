@@ -103,7 +103,7 @@ def pick_value(line, value, first_sensor, count, xl_data):
 		pre_temperature = float(splited[-1])
 		if pre_temperature > 100:
 			temperature = round(getRT(pre_temperature), 2)
-			key = splited[-2] + '_temperature_c'
+			key = splited[-2] + '_degree_c'
 			line = new_line(splited, temperature, key)
 		else:
 			temperature = pre_temperature
@@ -112,14 +112,14 @@ def pick_value(line, value, first_sensor, count, xl_data):
 			temperature = float(splited[-1])
 			if abs(temperature) > 100:
 				temperature = temperature/100
-				key = splited[-2] + '_temperature_c'
+				key = splited[-2] + '_degree_c'
 				line = new_line(splited, temperature, key)
 	elif "SHT25" in line:
 		if "temperature" in line:
 			temperature = float(splited[-1])
 			if abs(temperature) > 100:
 				temperature = temperature/100
-				key = splited[-2] + '_temperature_c'
+				key = splited[-2] + '_degree_c'
 				line = new_line(splited, temperature, key)
 		elif "humidity" in line:
 			humidity = float(splited[-1])
@@ -132,7 +132,7 @@ def pick_value(line, value, first_sensor, count, xl_data):
 		if humidity > 100:
 			humidity = float(splited[-1]) * 5 / 1024
 			humidity = humidity * 30.68 + 0.95
-			key = splited[-2] + '_humidity_%RH'
+			key = splited[-2] + '_%RH'
 			line = new_line(splited, humidity, key)
 
 	elif "intensity" in line:
