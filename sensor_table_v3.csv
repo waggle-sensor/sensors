@@ -28,7 +28,7 @@
 0x0F;MLX75305 light;raw bytes;uw/m2
 0x10;ML8511 light;raw bytes;index
 0x13;TMP421 temperature;raw bytes;degree C
-0x15;Total reducing gases (TOR, IRR);raw bytes;ppm
+0x15;Total reducing gases (IRR);raw bytes;ppm
 0x16;Chem FW Config;no unit;no unit
 0x17;Nitrogen dioxide;raw bytes;ppm
 0x18;Ozone;raw bytes;ppm
