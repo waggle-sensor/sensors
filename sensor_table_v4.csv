@@ -1,3 +1,4 @@
+sensor id,contents,raw unit,processed unit
 0xFF,Firmware HW/SW version,no unit,no unit
 0xff,Build time,no unit,no unit
 0xff,Build git,no unit,no unit
