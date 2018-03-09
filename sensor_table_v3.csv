@@ -33,7 +33,7 @@
 0x17;Nitrogen dioxide;raw bytes;ppm
 0x18;Ozone;raw bytes;ppm
 0x19;Hydrogen sulphide;raw bytes;ppm
-0x1A;Total oxidizing gases (Tox, IAQ);raw bytes;ppm
+0x1A;Total oxidizing gases (IAQ);raw bytes;ppm
 0x1B;Carbon monoxide;raw bytes;ppm
 0x1C;Sulfur dioxide;raw bytes;ppm
 0x1D;SHT25 temperature;raw bytes;degree C
