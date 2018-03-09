@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from RTlist import getRT
 from chemsense import convert, import_data
 import os
