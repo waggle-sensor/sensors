@@ -15,7 +15,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x07,MMA8452Q AccY,MMA8452Q;acceleration.y,MMA8452Q;acceleration.y
 0x07,MMA8452Q AccZ,MMA8452Q;acceleration.z,MMA8452Q;acceleration.z
 0x07,MMA8452Q AccMag,n/a,n/a
-0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,SPV1840LR5H-B;intensity_dBm
+0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,SPV1840LR5H-B;intensity_dB
 0x09,TSYS01 temperature,TSYS01;temperature,TSYS01;temperature
 0x0A,HMC5883L Strength Magx,HMC5883L;magnetic_field.x,HMC5883L;magnetic_field.x
 0x0A,HMC5883L Strength Magy,HMC5883L;magnetic_field.y,HMC5883L;magnetic_field.y
@@ -23,7 +23,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x0A,HMC5883L Mag Change,n/a,n/a
 0x0B,HIH6130 temperature,HIH6130;temperature,HIH6130;temperature
 0x0B,HIH6130 humidity,HIH6130;humigity,HIH6130;humidity
-0x0C,APDS-9006-020 light,APDS-9006-020;intensity,APDS-9006-020;intensity_uwPERm2
+0x0C,APDS-9006-020 light,APDS-9006-020;intensity,APDS-9006-020;intensity_lux
 0x0D,TSL260 light,TSL260;intensity,TSL260;intensity_uwPERm2
 0x0E,TSL250 light,TSL250;intensity,TSL250;intensity_uwPERm2
 0x0F,MLX75305 light,MLX75305;intensity,MLX75305;intensity_uwPERm2
