@@ -69,7 +69,7 @@ def intensity_conv(line):
     elif "SPV1840LR5H" in line:
         db = float(splited[-1])
         if db < 200:
-            key = splited[-2] + '_dB'
+            key = splited[-2] + '_unconvertable'
             line = new_line(splited, db, key)
 
     return line
