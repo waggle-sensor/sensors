@@ -29,14 +29,14 @@ sensor id,contents,original name field (beehive1),converted name field
 0x0F,MLX75305 light,MLX75305;intensity,MLX75305;intensity_uwPERm2
 0x10,ML8511 light,ML8511;intensity,ML8511;intensity_index
 0x13,TMP421 temperature,TMP421;temperature,TMP421;temperature
-0x15,Total reducing gases (IRR),Chemsense;reducing_gases,Chemsense;reducing_gases_pp
+0x15,Total reducing gases (IRR),Chemsense;reducing_gases,Chemsense;reducing_gases_pp or Chemsense;reducing_gases_not-in-spec-dataset
 0x16,Chem FW Config,n/a,n/a
-0x17,Nitrogen dioxide,Chemsense;no2,Chemsense;no2_pp
-0x18,Ozone,Chemsense;o3,Chemsense;o3_pp
-0x19,Hydrogen sulphide,Chemsense;so2,Chemsense;h2s_pp
-0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,Chemsense;oxidizing_gases_pp
-0x1B,Carbon monoxide,Chemsense;co,Chemsense;co_pp
-0x1C,Sulfur dioxide,Chemsense;so2,Chemsense;so2_pp
+0x17,Nitrogen dioxide,Chemsense;no2,Chemsense;no2_pp or Chemsense;no2_not-in-spec-dataset
+0x18,Ozone,Chemsense;o3,Chemsense;o3_pp or Chemsense;o3_not-in-spec-dataset
+0x19,Hydrogen sulphide,Chemsense;so2,Chemsense;h2s_pp or Chemsense;h2s_not-in-spec-dataset
+0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,Chemsense;oxidizing_gases_pp or Chemsense;oxidizing_gases_not-in-spec-dataset
+0x1B,Carbon monoxide,Chemsense;co,Chemsense;co_pp or Chemsense;co_not-in-spec-dataset
+0x1C,Sulfur dioxide,Chemsense;so2,Chemsense;so2_pp or Chemsense;so2_not-in-spec-dataset
 0x1D,SHT25 temperature,SHT25;temperature,SHT25;temperature or SHT25;temperature_degree_c
 0x1D,SHT25 humidity,SHT25;humidity,SHT25;humidity or SHT25;humidity_%RH
 0x1E,LPS25H temperature,LPS25H;temperature,LPS25H;temperature or LPS25H;temperature_degree_c
@@ -45,11 +45,11 @@ sensor id,contents,original name field (beehive1),converted name field
 0x1F,Si1445 visible light intensity,Si1445;visible_light,Si1445;visible_light
 0x1F,Si1445 proximity,Si1445;ir_count,Si1445;ir_count
 0x20,Chemsense MAC,Chemsense_ID;mac_address,Chemsense_ID;mac_address
-0x21,CO ADC temperature,Chemsense;at0,Chemsense;at1 or Chemsense;at0_degree_c
-0x22,IAQ IRR ADC temperature,Chemsense;at1,Chemsense;at1 or Chemsense;at1_degree_c
-0x23,O3 NO2 ADC temperature,Chemsense;at2,Chemsense;at2 or Chemsense;at2_degree_c
-0x24,SO2 H2S ADC temperature,Chemsense;at3,Chemsense;at3 or Chemsense;at3_degree_c
-0x25,CO LMP temperature,n/a,n/a
+0x21,CO ADC temperature,Chemsense;at0 or CO_ADC_Temp;adc_temperature,Chemsense;at1 or CO_ADC_Temp;adc_temperature_scaled
+0x22,IAQ IRR ADC temperature,Chemsense;at1 or IAQ_IRR_Temp;adc_temperature,Chemsense;at1 or IAQ_IRR_Temp;adc_temperature_scaled
+0x23,O3 NO2 ADC temperature,Chemsense;at2 or O3_NO2_Temp;adc_temperature,Chemsense;at2 or O3_NO2_Temp;adc_temperature_scaled
+0x24,SO2 H2S ADC temperature,Chemsense;at3 or SO2_H2S_Temp;adc_temperature,Chemsense;at3 or SO2_H2S_Temp;adc_temperature_scaled
+0x25,CO LMP temperature,n/a or CO_LMP_Temp;adc_temperature_scaled,n/a or CO_LMP_Temp;adc_temperature_scaled
 0x26,Accelerometer X,n/a,n/a
 0x26,Accelerometer Y,n/a,n/a
 0x26,Accelerometer Z,n/a,n/a
