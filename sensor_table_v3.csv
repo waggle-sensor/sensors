@@ -34,7 +34,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x17,Nitrogen dioxide,Chemsense;no2,Chemsense;no2_pp
 0x18,Ozone,Chemsense;o3,Chemsense;o3_pp
 0x19,Hydrogen sulphide,Chemsense;so2,Chemsense;h2s_pp
-0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases_pp
+0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,Chemsense;oxidizing_gases_pp
 0x1B,Carbon monoxide,Chemsense;co,Chemsense;co_pp
 0x1C,Sulfur dioxide,Chemsense;so2,Chemsense;so2_pp
 0x1D,SHT25 temperature,SHT25;temperature,SHT25;temperature or SHT25;temperature_degree_c
