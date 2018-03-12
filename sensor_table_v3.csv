@@ -24,7 +24,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x0B,HIH6130 temperature,HIH6130;temperature,HIH6130;temperature
 0x0B,HIH6130 humidity,HIH6130;humigity,HIH6130;humidity
 0x0C,APDS-9006-020 light,APDS-9006-020;intensity,APDS-9006-020;intensity_uwPERm2
-0x0D,TSL260 light,TSL260;intensity;TSL260;intensity_uwPERm2
+0x0D,TSL260 light,TSL260;intensity,TSL260;intensity_uwPERm2
 0x0E,TSL250 light,TSL250;intensity,TSL250;intensity_uwPERm2
 0x0F,MLX75305 light,MLX75305;intensity,MLX75305;intensity_uwPERm2
 0x10,ML8511 light,ML8511;intensity,ML8511;intensity_index
