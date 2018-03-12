@@ -9,7 +9,7 @@ It keeps track of the changes for versions.
 * Change read function that if there is no Alpha sensor, then send 'N' for all bytes.
 ### Behinds
 * Data collection from soil moisture sensor and rain gauge are not tested with this version
-* Enabled and Disable function has checked.
+* Version info has not updated, so that it will also send 4.10 as it's version.
 ### Comments
 * This version will be tested in a long term period in ANL with brain.
 
