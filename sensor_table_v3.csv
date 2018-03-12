@@ -15,7 +15,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x07,MMA8452Q AccY,MMA8452Q;acceleration.y,MMA8452Q;acceleration.y
 0x07,MMA8452Q AccZ,MMA8452Q;acceleration.z,MMA8452Q;acceleration.z
 0x07,MMA8452Q AccMag,n/a,n/a
-0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,SPV1840LR5H-B;intensity or SPV1840LR5H-B;intensity_unconvertable
+0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,SPV1840LR5H-B;intensity_db or SPV1840LR5H-B;intensity_unconvertable
 0x09,TSYS01 temperature,TSYS01;temperature,TSYS01;temperature
 0x0A,HMC5883L Strength Magx,HMC5883L;magnetic_field.x,HMC5883L;magnetic_field.x
 0x0A,HMC5883L Strength Magy,HMC5883L;magnetic_field.y,HMC5883L;magnetic_field.y
