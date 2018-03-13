@@ -43,8 +43,13 @@ void DisableSensor2A()
 
 void ReadSensor2A(byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength);
+	while (Serial3.available() > 0)
+		inputbyte = Serial3.read();
 
+	int len = 0;
+	*readingLength = Serial3.readBytesUntil('\n', sensorReading, 256);
+	sensorReading[len - 1] = ' ';
+	
 	if (readingLength == 0)
 	{
 		*readingLength = 1;

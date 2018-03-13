@@ -39,7 +39,11 @@ void DisableBusSerial03()
 
 void ReadBusSerial03(byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength, 3);
+
+	while (Serial3.available() > 0)
+		inputbyte = Serial3.read();
+
+	len = Serial3.readBytesUntil('\n', sensorReading, 256);
 
 	if (readingLength == 0)
 	{

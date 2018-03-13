@@ -5,7 +5,7 @@
 
 #define CORESENSE_KERNEL_MAJ 4 // 8 bits
 #define CORESENSE_KERNEL_MIN 1 // 4 bits
-#define CORESENSE_KERNEL_SUB 0 // 4 bits
+#define CORESENSE_KERNEL_SUB 2 // 4 bits
 
 void InitSensorFF()
 {
