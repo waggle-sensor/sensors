@@ -7,6 +7,10 @@ sensor_id, sensor_name, param_name, description, type, units, data_type, max, mi
 0x02,HTU21D,temperature,,VALIDATED,deg_C,float,125,-40,0.01,0.3
 0x02,HTU21D,humidity,,RAW,%RH,float,100,0,0.04,2
 0x03,HIH4030,humidity,,CORRECTED,%RH,float,100,0,0.04,2
-0x0178, Wagman_Heartbeats,heartbeat,Aggregate Heartbeat,RAW, boolean,byte,31,0,1,1
-0x0179, NC_Heartbeat, heartbeat, NC heartbeat, RAW, boolean, byte, 1,0,1,1
-0x0179, NC_Heartbeat, heartbeat, NC heartbeat, CONVERTED, boolean, unit8, 1,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,Aggregate_Heartbeat,RAW, boolean,byte,31,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,Aggregate_Heartbeat,CONVERTED, boolean[5],byte,31,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,NC_Heartbeat,CONVERTED, boolean,byte,1,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,EP_Heartbeat,CONVERTED, boolean,byte,1,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,CS_Heartbeat,CONVERTED, boolean,byte,1,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,P4_Heartbeat,CONVERTED, boolean,byte,1,0,1,1
+0x0178, Wagman_Heartbeats,heartbeat,P5_Heartbeat,CONVERTED, boolean,byte,1,0,1,1
