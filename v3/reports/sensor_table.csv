@@ -1,85 +1,89 @@
-sensor id,contents,original name field (beehive1),converted name field
-0xFF,Firmware HW/SW version,n/a,n/a
-0xff,Build time,n/a,n/a
-0xff,Build git,n/a,n/a
-0x00,Metsense MAC,Coresense_ID;mac_address,Coresense_ID;mac_address
-0x01,TMP112 temperature,TMP112;temperature,TMP112;temperature
-0x02,HTU21D temperature,HTU21D;temperature,HTU21D;temperature
-0x02,HTU21D humidity,HTU21D;humidity,HTU21D;humidity
-0x03,HIH4030 humidity,HIH4030;himidity,HIH4030;humidity
-0x04,BMP180 temperature,BMP180;temperature,BMP180;temperature
-0x04,BMP180 pressure,BMP180;pressure,BMP180;pressure
-0x05,PR103J2 temperature,PR103J2;temperature,PR103J2;temperature or PR103J2;temperature_degree_c
-0x06,TSL250RD light,TSL250RD-AS;intensity,TSL250RD-AS;intensity_uwPERm2
-0x07,MMA8452Q AccX,MMA8452Q;acceleration.x,MMA8452Q;acceleration.x
-0x07,MMA8452Q AccY,MMA8452Q;acceleration.y,MMA8452Q;acceleration.y
-0x07,MMA8452Q AccZ,MMA8452Q;acceleration.z,MMA8452Q;acceleration.z
-0x07,MMA8452Q AccMag,n/a,n/a
-0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,SPV1840LR5H-B;intensity_db or SPV1840LR5H-B;intensity_unconvertable
-0x09,TSYS01 temperature,TSYS01;temperature,TSYS01;temperature
-0x0A,HMC5883L Strength Magx,HMC5883L;magnetic_field.x,HMC5883L;magnetic_field.x
-0x0A,HMC5883L Strength Magy,HMC5883L;magnetic_field.y,HMC5883L;magnetic_field.y
-0x0A,HMC5883L Strength Magz,HMC5883L;magnetic_field.z,HMC5883L;magnetic_field.z
-0x0A,HMC5883L Mag Change,n/a,n/a
-0x0B,HIH6130 temperature,HIH6130;temperature,HIH6130;temperature
-0x0B,HIH6130 humidity,HIH6130;humigity,HIH6130;humidity
-0x0C,APDS-9006-020 light,APDS-9006-020;intensity,APDS-9006-020;intensity_lux
-0x0D,TSL260 light,TSL260;intensity,TSL260;intensity_uwPERm2
-0x0E,TSL250 light,TSL250-LS;intensity,TSL250-LS;intensity_uwPERm2
-0x0F,MLX75305 light,MLX75305;intensity,MLX75305;intensity_uwPERm2
-0x10,ML8511 light,ML8511;intensity,ML8511;intensity_index
-0x13,TMP421 temperature,TMP421;temperature,TMP421;temperature
-0x15,Total reducing gases (IRR),Chemsense;reducing_gases,Chemsense;reducing_gases_pp or Chemsense;reducing_gases_not-in-spec-dataset
-0x16,Chem FW Config,n/a,n/a
-0x17,Nitrogen dioxide,Chemsense;no2,Chemsense;no2_pp or Chemsense;no2_not-in-spec-dataset
-0x18,Ozone,Chemsense;o3,Chemsense;o3_pp or Chemsense;o3_not-in-spec-dataset
-0x19,Hydrogen sulphide,Chemsense;so2,Chemsense;h2s_pp or Chemsense;h2s_not-in-spec-dataset
-0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,Chemsense;oxidizing_gases_pp or Chemsense;oxidizing_gases_not-in-spec-dataset
-0x1B,Carbon monoxide,Chemsense;co,Chemsense;co_pp or Chemsense;co_not-in-spec-dataset
-0x1C,Sulfur dioxide,Chemsense;so2,Chemsense;so2_pp or Chemsense;so2_not-in-spec-dataset
-0x1D,SHT25 temperature,SHT25;temperature,SHT25;temperature or SHT25;temperature_degree_c
+sensor id,contents,original name field (beehive1),unit (beehive1),converted name field, unit (converted)
+0xFF,Firmware HW/SW version,n/a,n/a,n/a,n/a
+0xff,Build time,n/a,n/a,n/a,n/a
+0xff,Build git,n/a,n/a,n/a,n/a
+0x00,Metsense MAC,Coresense_ID;mac_address,n/a,Coresense_ID;mac_address,n/a
+0x01,TMP112 temperature,TMP112;temperature,degree_c,TMP112;temperature,degree_c
+0x02,HTU21D temperature,HTU21D;temperature,degree_c,HTU21D;temperature,degree_c
+0x02,HTU21D humidity,HTU21D;humidity,%RH,HTU21D;humidity,%RH
+0x03,HIH4030 humidity,HIH4030;himidity,%RH,HIH4030;humidity,%RH
+0x04,BMP180 temperature,BMP180;temperature,degree_c,BMP180;temperature,degree_c
+0x04,BMP180 pressure,BMP180;pressure,hPa,BMP180;pressure,hPa
+0x05,PR103J2 temperature,PR103J2;temperature,register,PR103J2;temperature_degree_c,degree_c
+0x06,TSL250RD light,TSL250RD-AS;intensity,voltage,TSL250RD-AS;intensity_uwPERm2,voltage
+0x07,MMA8452Q AccX,MMA8452Q;acceleration.x,count,MMA8452Q;acceleration.x,g
+0x07,MMA8452Q AccY,MMA8452Q;acceleration.y,count,MMA8452Q;acceleration.y,g
+0x07,MMA8452Q AccZ,MMA8452Q;acceleration.z,count,MMA8452Q;acceleration.z,g
+0x07,MMA8452Q AccMag,n/a,n/a,n/a,n/a
+0x08,SPV1840LR5H-B sound level,SPV1840LR5H-B;intensity,voltage,SPV1840LR5H-B;intensity_db,dBm
+0x09,TSYS01 temperature,TSYS01;temperature,degree_c,TSYS01;temperature,degree_c
+0x0A,HMC5883L Strength Magx,HMC5883L;magnetic_field.x,register,HMC5883L;magnetic_field.x,G
+0x0A,HMC5883L Strength Magy,HMC5883L;magnetic_field.y,register,HMC5883L;magnetic_field.y,G
+0x0A,HMC5883L Strength Magz,HMC5883L;magnetic_field.z,register,HMC5883L;magnetic_field.z,G
+0x0A,HMC5883L Mag Change,n/a,n/a,n/a,n/a
+0x0B,HIH6130 temperature,HIH6130;temperature,degree_c,HIH6130;temperature,degree_c
+0x0B,HIH6130 humidity,HIH6130;humigity,%RH,HIH6130;humidity%RH
+0x0C,APDS-9006-020 light,APDS-9006-020;intensity,register,APDS-9006-020;intensity_lux,lux
+0x0D,TSL260 light,TSL260;intensity,register,TSL260;intensity_uwPERm2,uwPERm2
+0x0E,TSL250 light,TSL250-LS;intensity,register,TSL250-LS;intensity_uwPERm2,uwPERm2
+0x0F,MLX75305 light,MLX75305;intensity,register,MLX75305;intensity_uwPERm2,uwPERm2
+0x10,ML8511 light,ML8511;intensity,register,ML8511;intensity_index,index
+0x13,TMP421 temperature,TMP421;temperature,degree_c,TMP421;temperature,degree_c
+0x15,Total reducing gases (IRR),Chemsense;reducing_gases,ampare,Chemsense;reducing_gases_pp,pp
+0x16,Chem FW Config,n/a,n/a,n/a,n/a
+0x17,Nitrogen dioxide,Chemsense;no2,ampare,Chemsense;no2_pp,pp
+0x18,Ozone,Chemsense;o3,ampare,Chemsense;o3_pp,pp
+0x19,Hydrogen sulphide,Chemsense;so2,ampare,Chemsense;h2s_pp,pp
+0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,ampare,Chemsense;oxidizing_gases_pp,pp
+0x1B,Carbon monoxide,Chemsense;co,ampare,Chemsense;co_pp,pp
+0x1C,Sulfur dioxide,Chemsense;so2,ampare,Chemsense;so2_pp,pp
+0x1D,SHT25 temperature,SHT25;temperature,degree_c or 100th_of_degree_c,SHT25;temperature_degree_c,degree_c
 0x1D,SHT25 humidity,SHT25;humidity,SHT25;humidity or SHT25;humidity_%RH
-0x1E,LPS25H temperature,LPS25H;temperature,LPS25H;temperature or LPS25H;temperature_degree_c
-0x1E,LPS25H pressure,LPS25H;pressure,LPS25H;pressure or LPS25H;pressure_hPa
-0x1F,Si1445 UV intensity,Si1445;uv_count,Si1445;uv_count
-0x1F,Si1445 visible light intensity,Si1445;visible_light,Si1445;visible_light
-0x1F,Si1445 proximity,Si1445;ir_count,Si1445;ir_count
-0x20,Chemsense MAC,Chemsense_ID;mac_address,Chemsense_ID;mac_address
-0x21,CO ADC temperature,Chemsense;at0 or CO_ADC_Temp;adc_temperature,Chemsense;at1 or CO_ADC_Temp;adc_temperature_degree_c
-0x22,IAQ IRR ADC temperature,Chemsense;at1 or IAQ_IRR_Temp;adc_temperature,Chemsense;at1 or IAQ_IRR_Temp;adc_temperature_degree_c
-0x23,O3 NO2 ADC temperature,Chemsense;at2 or O3_NO2_Temp;adc_temperature,Chemsense;at2 or O3_NO2_Temp;adc_temperature_degree_c
-0x24,SO2 H2S ADC temperature,Chemsense;at3 or SO2_H2S_Temp;adc_temperature,Chemsense;at3 or SO2_H2S_Temp;adc_temperature_degree_c
-0x25,CO LMP temperature,n/a or CO_LMP_Temp;adc_temperature,n/a or CO_LMP_Temp;adc_temperature_degree_c
-0x26,Accelerometer X,BMI160;acceleration.x,BMI160;acceleration.x
-0x26,Accelerometer Y,BMI160;acceleration.y,BMI160;acceleration.y
-0x26,Accelerometer Z,BMI160;acceleration.z,BMI160;acceleration.z
-0x26,Accelerometer Vibration,n/a,n/a
-0x27,Gyro X,BMI160;orientation.x,BMI160;orientation.x
-0x27,Gyro Y,BMI160;orientation.y,BMI160;orientation.y
-0x27,Gyro Z,BMI160;orientation.z,BMI160;orientation.z
-0x27,Gyro orientation index,BMI160;index,BMI160;index
-0x28,Histogram bin count,Alphasense;bins,Alphasense;bins
-0x28,Histogram average time,n/a,n/a
-0x28,Histogram sample flow rate,Alphasense;sample_flow_rate,Alphasense;sample_flow_rate
-0x28,Histogram temp / pressure (alter),raw bytes,degree C/hPa (alter)
-0x28,Histogram sampling period,n/a,n/a
-0x28,Histogram sum of the count,n/a,n/a
-0x28,Histogram PM 1,Alphasense;pm1,Alphasense;pm1
-0x28,Histogram PM 2.5,Alphasense;pm2.5,Alphasense;pm2.5
-0x28,Histogram PM 10,Alphasense;pm10,Alphasense;pm10
-0x29,Serial,Alphasense;id,Alphasense;id
-0x30,Firmware,Alphasense;fw,Alphasense;fw
-0x31,Alpha config bin boundaries,n/a,n/a
-0x31,Alpha config bin particle volumes,n/a,n/a
-0x31,Alpha config bin particle dencities,n/a,n/a
-0x31,Alpha config bin sample volume weightings,n/a,n/a
-0x31,Alpha config gain scaling coeifficient,n/a,n/a
-0x31,Alpha config sampling flow rate,n/a,n/a
-0x31,Alpha config laser DAC,n/a,n/a
-0x31,Alpha config fan DAC,n/a,n/a
-0x31,Alpha config conversion facto,n/a,n/a
-0x31,Alpha config spare bytes,n/a,n/a
-0x2C,Rain gauge,n/a,n/a
-0x2D,Soil moisture volumetric Water Content,n/a,n/a
-0x2D,Soil moisture electric conductivity,n/a,n/a
-0x2D,Soil moisture temperature,n/a,n/a
+0x1E,LPS25H temperature,LPS25H;temperature,degree_c or 100th_of_degree_c,LPS25H;temperature_degree_c
+0x1E,LPS25H pressure,LPS25H;pressure,hPa or 100th_of_hPa,LPS25H;pressure_hPa,hPa
+0x1F,Si1445 UV intensity,Si1445;uv_count,count,Si1445;uv_count,count
+0x1F,Si1445 visible light intensity,Si1445;visible_light,count,Si1445;visible_light,count
+0x1F,Si1445 proximity,Si1445;ir_count,count,Si1445;ir_count,count
+0x20,Chemsense MAC,Chemsense_ID;mac_address,n/a,Chemsense_ID;mac_address,n/a
+0x21,CO ADC temperature,Chemsense;at0,degree_c,Chemsense;at0,degree_c
+0x21,CO ADC temperature,CO_ADC_Temp;adc_temperature,100th_of_degree_c,CO_ADC_Temp;adc_temperature_degree_c,degree_c
+0x22,IAQ IRR ADC temperature,Chemsense;at1,degree_c,Chemsense;at1,degree_c
+0x22,IAQ IRR ADC temperature,IAQ_IRR_Temp;adc_temperature,100th_of_degree_c,IAQ_IRR_Temp;adc_temperature_degree_c,degree_c
+0x23,O3 NO2 ADC temperature,Chemsense;at2,degree_c,Chemsense;at2,degree_c
+0x23,O3 NO2 ADC temperature,O3_NO2_Temp;adc_temperature,100th_of_degree_c,O3_NO2_Temp;adc_temperature_degree_c,degree_c
+0x24,SO2 H2S ADC temperature,Chemsense;at3,degree_c,Chemsense;at3,degree_c
+0x24,SO2 H2S ADC temperature,SO2_H2S_Temp;adc_temperature,100th_of_degree_c,SO2_H2S_Temp;adc_temperature_degree_c,degree_c
+0x25,CO LMP temperature,CO_LMP_Temp;adc_temperature,100th_of_degree_c,CO_LMP_Temp;adc_temperature_degree_c,degree_c
+0x26,Accelerometer X,BMI160;acceleration.x,register,BMI160;acceleration.x,register
+0x26,Accelerometer Y,BMI160;acceleration.y,register,BMI160;acceleration.y,register
+0x26,Accelerometer Z,BMI160;acceleration.z,register,BMI160;acceleration.z,register
+0x26,Accelerometer Vibration,n/a,n/a,n/a,n/a
+0x27,Gyro X,BMI160;orientation.x,register,BMI160;orientation.x,register
+0x27,Gyro Y,BMI160;orientation.y,register,BMI160;orientation.y,register
+0x27,Gyro Z,BMI160;orientation.z,register,BMI160;orientation.z,register
+0x27,Gyro orientation index,BMI160;index,,register,BMI160;index,register
+0x28,Histogram bin count,Alphasense;bins,n/a,Alphasense;bins,n/a
+0x28,Histogram average time,n/a,n/a,n/a,n/a
+0x28,Histogram sample flow rate,Alphasense;sample_flow_rate,count,Alphasense;sample_flow_rate,us
+0x28,Histogram temp / pressure (alter),n/a,n/a,n/a,n/a
+0x28,Histogram sampling period,n/a,n/a,n/a,n/a
+0x28,Histogram sum of the count,n/a,n/a,n/a,n/a
+0x28,Histogram PM 1,Alphasense;pm1,count,Alphasense;pm1,ug/m3
+0x28,Histogram PM 2.5,Alphasense;pm2.5,count,Alphasense;pm2.5,ug/m3
+0x28,Histogram PM 10,Alphasense;pm10,count,Alphasense;pm10,ug/m3
+0x29,Serial,Alphasense;id,n/a,Alphasense;id,n/a
+0x30,Firmware,Alphasense;fw,n/a,Alphasense;fw,n/a
+0x31,Alpha config bin boundaries,n/a,n/a,n/a,n/a
+0x31,Alpha config bin particle volumes,n/a,n/a,n/a,n/a
+0x31,Alpha config bin particle dencities,n/a,n/a,n/a,n/a
+0x31,Alpha config bin sample volume weightings,n/a,n/a,n/a,n/a
+0x31,Alpha config gain scaling coeifficient,n/a,n/a,n/a,n/a
+0x31,Alpha config sampling flow rate,n/a,n/a,n/a,n/a
+0x31,Alpha config laser DAC,n/a,n/a,n/a,n/a
+0x31,Alpha config fan DAC,n/a,n/a,n/a,n/a
+0x31,Alpha config conversion facto,n/a,n/a,n/a,n/a
+0x31,Alpha config spare bytes,n/a,n/a,n/a,n/a
+0x2C,Rain gauge,n/a,n/a,n/a,n/a
+0x2D,Soil moisture volumetric Water Content,n/a,n/a,n/a,n/a
+0x2D,Soil moisture electric conductivity,n/a,n/a,n/a,n/a
+0x2D,Soil moisture temperature,n/a,n/a,n/a,n/a
