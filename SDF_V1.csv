@@ -10,4 +10,4 @@ sensor_id, sensor_name, param_name, description, type, units, data_type, max, mi
 0x03,HIH4030,humidity,,TYP1,%RH,float,100,0,0.04,2
 0x0178, Wagman_Heartbeats,heartbeat,Aggregate Heartbeat,RAW, boolean,byte,31,0,1,1
 0x0179, NC_Heartbeat, heartbeat, NC heartbeat, RAW, boolean, byte, 1,0,1,1
-0x0179, NC_Heartbeat, heartbeat, NC heartbeat, CONVERTED, boolean, char, Y,N,1,1
+0x0179, NC_Heartbeat, heartbeat, NC heartbeat, CONVERTED, boolean, unit8, 1,0,1,1
