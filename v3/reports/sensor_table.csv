@@ -61,7 +61,7 @@ sensor id,contents,original name field (beehive1),unit (beehive1),converted name
 0x27,Gyro X,BMI160;orientation.x,register,BMI160;orientation.x,register
 0x27,Gyro Y,BMI160;orientation.y,register,BMI160;orientation.y,register
 0x27,Gyro Z,BMI160;orientation.z,register,BMI160;orientation.z,register
-0x27,Gyro orientation index,BMI160;index,,register,BMI160;index,register
+0x27,Gyro orientation index,BMI160;index,register,BMI160;index,register
 0x28,Histogram bin count,Alphasense;bins,n/a,Alphasense;bins,n/a
 0x28,Histogram average time,n/a,n/a,n/a,n/a
 0x28,Histogram sample flow rate,Alphasense;sample_flow_rate,count,Alphasense;sample_flow_rate,us
