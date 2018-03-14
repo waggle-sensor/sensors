@@ -65,7 +65,7 @@ sensor id,contents,original name field (beehive1),converted name field
 0x28,Histogram sampling period,n/a,n/a
 0x28,Histogram sum of the count,n/a,n/a
 0x28,Histogram PM 1,Alphasense;pm1,Alphasense;pm1
-0x28,Histogram PM 2.5,Alphasense;pm2.5,Alphasense;pm2;5
+0x28,Histogram PM 2.5,Alphasense;pm2.5,Alphasense;pm2.5
 0x28,Histogram PM 10,Alphasense;pm10,Alphasense;pm10
 0x29,Serial,Alphasense;id,Alphasense;id
 0x30,Firmware,Alphasense;fw,Alphasense;fw
