@@ -1,7 +1,7 @@
 sensor_id, sensor_name, param_name, description, type, units, data_type, max, min, resolution, accuracy
-0x03,HIH4030,humidity,10-bit ADC Value,RAW,counts,int16,1024,0,1,1
-0x02,HTU21D,temperature,register reading,RAW,counts,int24,65536,0,1,1
-0x02,HTU21D,humidity,register reading,RAW,counts,int24,65536,0,1,1
+0x03,HIH4030,humidity,10-bit ADC Value,RAW,count,int16,1024,0,1,1
+0x02,HTU21D,temperature,register reading,RAW,count,int24,65536,0,1,1
+0x02,HTU21D,humidity,register reading,RAW,count,int24,65536,0,1,1
 0x02,HTU21D,temperature,,TYP1,deg_C,float,125,-40,0.01,0.3
 0x02,HTU21D,humidity,,RAW,%RH,float,100,0,0.04,2
 
