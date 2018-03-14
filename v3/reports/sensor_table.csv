@@ -10,7 +10,7 @@ sensor id,contents,original name field (beehive1),unit (beehive1),converted name
 0x04,BMP180 temperature,BMP180;temperature,degree_c,BMP180;temperature,degree_c
 0x04,BMP180 pressure,BMP180;pressure,hPa,BMP180;pressure_hPa,hPa
 0x05,PR103J2 temperature,PR103J2;temperature,register,PR103J2;temperature_degree_c,degree_c
-0x06,TSL250RD light,TSL250RD-AS;intensity,voltage,TSL250RD-AS;intensity_uwPERm2,voltage
+0x06,TSL250RD light,TSL250RD-AS;intensity,voltage,TSL250RD-AS;intensity_uwPERm2,uw/m2
 0x07,MMA8452Q AccX,MMA8452Q;acceleration.x,count,MMA8452Q;acceleration.x,g
 0x07,MMA8452Q AccY,MMA8452Q;acceleration.y,count,MMA8452Q;acceleration.y,g
 0x07,MMA8452Q AccZ,MMA8452Q;acceleration.z,count,MMA8452Q;acceleration.z,g
