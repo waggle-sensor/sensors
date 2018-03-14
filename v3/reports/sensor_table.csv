@@ -38,7 +38,7 @@ sensor id,contents,original name field (beehive1),unit (beehive1),converted name
 0x1B,Carbon monoxide,Chemsense;co,ampare,Chemsense;co_pp,pp
 0x1C,Sulfur dioxide,Chemsense;so2,ampare,Chemsense;so2_pp,pp
 0x1D,SHT25 temperature,SHT25;temperature,degree_c or 100th_of_degree_c,SHT25;temperature_degree_c,degree_c
-0x1D,SHT25 humidity,SHT25;humidity,SHT25;humidity or SHT25;humidity_%RH
+0x1D,SHT25 humidity,SHT25;humidity,%RH or 100th_of_%RH,SHT25;humidity_%RH,%RH
 0x1E,LPS25H temperature,LPS25H;temperature,degree_c or 100th_of_degree_c,LPS25H;temperature_degree_c
 0x1E,LPS25H pressure,LPS25H;pressure,hPa or 100th_of_hPa,LPS25H;pressure_hPa,hPa
 0x1F,Si1445 UV intensity,Si1445;uv_count,count,Si1445;uv_count,count
