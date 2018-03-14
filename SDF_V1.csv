@@ -1,4 +1,3 @@
-#float - binary32
 sensor_id, sensor_name, param_name, description, type, units, data_type, max, min, resolution, accuracy
 0x03,HIH4030,humidity,,RAW,counts,int16,1024,0,1,1
 0x02,HTU21D,temperature,,RAW,register,int24,65536,0,1,1
