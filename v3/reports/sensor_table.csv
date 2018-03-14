@@ -29,14 +29,14 @@ sensor id,contents,original name field (beehive1),unit (beehive1),converted name
 0x0F,MLX75305 light,MLX75305;intensity,register,MLX75305;intensity_uwPERm2,uwPERm2
 0x10,ML8511 light,ML8511;intensity,register,ML8511;intensity_index,index
 0x13,TMP421 temperature,TMP421;temperature,degree_c,TMP421;temperature,degree_c
-0x15,Total reducing gases (IRR),Chemsense;reducing_gases,ampare,Chemsense;reducing_gases_pp,pp
+0x15,Total reducing gases (IRR),Chemsense;reducing_gases,ampare,Chemsense;reducing_gases_pp,ppm
 0x16,Chem FW Config,n/a,n/a,n/a,n/a
-0x17,Nitrogen dioxide,Chemsense;no2,ampare,Chemsense;no2_pp,pp
-0x18,Ozone,Chemsense;o3,ampare,Chemsense;o3_pp,pp
-0x19,Hydrogen sulphide,Chemsense;so2,ampare,Chemsense;h2s_pp,pp
-0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,ampare,Chemsense;oxidizing_gases_pp,pp
-0x1B,Carbon monoxide,Chemsense;co,ampare,Chemsense;co_pp,pp
-0x1C,Sulfur dioxide,Chemsense;so2,ampare,Chemsense;so2_pp,pp
+0x17,Nitrogen dioxide,Chemsense;no2,ampare,Chemsense;no2_pp,ppm
+0x18,Ozone,Chemsense;o3,ampare,Chemsense;o3_pp,ppm
+0x19,Hydrogen sulphide,Chemsense;so2,ampare,Chemsense;h2s_pp,ppm
+0x1A,Total oxidizing gases (IAQ),Chemsense;oxidizing_gases,ampare,Chemsense;oxidizing_gases_pp,ppm
+0x1B,Carbon monoxide,Chemsense;co,ampare,Chemsense;co_pp,ppm
+0x1C,Sulfur dioxide,Chemsense;so2,ampare,Chemsense;so2_pp,ppm
 0x1D,SHT25 temperature,SHT25;temperature,degree_c or 100th_of_degree_c,SHT25;temperature_degree_c,degree_c
 0x1D,SHT25 humidity,SHT25;humidity,%RH or 100th_of_%RH,SHT25;humidity_%RH,%RH
 0x1E,LPS25H temperature,LPS25H;temperature,degree_c or 100th_of_degree_c,LPS25H;temperature_degree_c,degree_c
