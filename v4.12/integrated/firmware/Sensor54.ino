@@ -35,6 +35,8 @@ void DisableSensor54()
 
 void ReadSensor54(byte *sensorReading, int *readingLength)
 {
+	SerialUSB.println("PMS7003 read start");
+
 	int delaytime = 0;
 	while (Serial1.available() < (LENG + LENG) && delaytime < 500)
 	{
