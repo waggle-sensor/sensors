@@ -49,21 +49,21 @@ def intensity_conv(line):
     elif "MLX75305" in line:
         intensity = float(splited[-1]) * 0.0000625 * 2.50 - 0.09234
         irrad = intensity / 0.007   #with gain 1, the factor is 7mA/(uW/cm^2)
-        key = splited[-2] + '_umPERm2'
+        key = splited[-2] + '_uwPERm2'
         line = new_line(splited, irrad, key)
     elif "TSL260RD" in line:
         intensity = float(splited[-1]) * 0.0000625 * 2.50 - 0.006250
         irrad = intensity / 0.058
-        key = splited[-2] + '_umPERm2'
+        key = splited[-2] + '_uwPERm2'
         line = new_line(splited, irrad, key)
     elif "TSL250RD-AS" in line:
         irrad = float(splited[-1]) * 0.0000625 * 2.5 / 0.064
-        key = splited[-2] + '_umPERm2'
+        key = splited[-2] + '_uwPERm2'
         line = new_line(splited, irrad, key)
     elif "TSL250RD-LS" in line:
         intensity = float(splited[-1]) * 0.0000625 * 2.5 - 0.005781
         irrad = intensity / 0.064
-        key = splited[-2] + '_umPERm2'
+        key = splited[-2] + '_uwPERm2'
         line = new_line(splited, irrad, key)
 
     elif "SPV1840LR5H" in line:
@@ -100,10 +100,10 @@ def pick_value(line, value, first_sensor, count, xl_data):
 
     elif "pressure" in line:
         pressure = float(splited[-1])
+        key = splited[-2] + '_hPa'
         if pressure > 10000:
             pressure = pressure/100
-            key = splited[-2] + '_scaled'
-            line = new_line(splited, pressure, key)
+        line = new_line(splited, pressure, key)
 
     elif "PR103J2" in line:
         pre_temperature = float(splited[-1])
@@ -116,23 +116,23 @@ def pick_value(line, value, first_sensor, count, xl_data):
     elif "LPS25H" in line:
         if "temperature" in line:
             temperature = float(splited[-1])
+            key = splited[-2] + '_degree_c'
             if abs(temperature) > 100:
                 temperature = temperature / 100
-                key = splited[-2] + '_degree_c'
-                line = new_line(splited, temperature, key)
+            line = new_line(splited, temperature, key)
     elif "SHT25" in line:
         if "temperature" in line:
             temperature = float(splited[-1])
+            key = splited[-2] + '_degree_c'
             if abs(temperature) > 100:
                 temperature = temperature / 100
-                key = splited[-2] + '_degree_c'
-                line = new_line(splited, temperature, key)
+            line = new_line(splited, temperature, key)
         elif "humidity" in line:
             humidity = float(splited[-1])
+            key = splited[-2] + '_%RH'
             if humidity > 100:
                 humidity = humidity / 100
-                key = splited[-2] + '_%RH'
-                line = new_line(splited, humidity, key)
+            line = new_line(splited, humidity, key)
     elif "HIH4030" in line:
         humidity = float(splited[-1])
         if humidity > 100:
