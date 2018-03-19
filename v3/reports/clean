@@ -1,6 +1,8 @@
 #!/bin/bash
-rm ./data_files/*
-rm ./plots/*
-rm sensor_data_set.csv
-rm 201*.csv
-rm *.csv.gz
+echo "Cleaning directory..."
+echo ""
+rm -f ./data_files/*
+rm -f ./plots/*.svg ./plots/*.pdf
+rm -f sensor_data_set*.csv
+rm -f 201*.csv
+rm -f *.csv.gz

@@ -31,10 +31,10 @@ def intensity_conv(line):
         irrad = intensity / 405.1
         key = splited[-2] + '_lux'
         line = new_line(splited, irrad, key)
+
     elif "ML8511" in line:
         intensity = float(splited[-1]) * 0.0000625 * 2.50
-        irrad = (intensity - 1) * 14.9916 / 0.12
-
+        irrad = round( (intensity - 1) * 14.9916 / 0.12, 2)
         if 2.5 <= irrad <= 3.0:
             irrad = irrad - 0.3
         elif 3.0 <= irrad <= 4.0:
@@ -43,9 +43,10 @@ def intensity_conv(line):
             irrad = irrad - 0.4
         elif 4.5 < irrad:
             irrad = irrad + 0.25
-
-        key = splited[-2] + '_index'
+        key = splited[-2] + '_mwPERcm2'
         line = new_line(splited, irrad, key)
+
+
     elif "MLX75305" in line:
         intensity = float(splited[-1]) * 0.0000625 * 2.50 - 0.09234
         irrad = intensity / 0.007   #with gain 1, the factor is 7mA/(uW/cm^2)
@@ -80,6 +81,7 @@ def intensity_conv(line):
 def pick_value(line, value, first_sensor, count, xl_data):
     write_bool = True
     splited = line.strip().split(';')
+
     if "adc_temperature" in line:
         temperature = float(splited[-1])/100
         key = splited[-2] + '_scaled'
@@ -98,12 +100,14 @@ def pick_value(line, value, first_sensor, count, xl_data):
             value[splited[-2]] = [chem_reading, line]
             write_bool = False
 
+
     elif "pressure" in line:
         pressure = float(splited[-1])
         key = splited[-2] + '_hPa'
         if pressure > 10000:
             pressure = pressure/100
         line = new_line(splited, pressure, key)
+
 
     elif "PR103J2" in line:
         pre_temperature = float(splited[-1])
@@ -113,6 +117,8 @@ def pick_value(line, value, first_sensor, count, xl_data):
             line = new_line(splited, temperature, key)
         else:
             temperature = pre_temperature
+
+
     elif "LPS25H" in line:
         if "temperature" in line:
             temperature = float(splited[-1])
@@ -120,6 +126,19 @@ def pick_value(line, value, first_sensor, count, xl_data):
             if abs(temperature) > 100:
                 temperature = temperature / 100
             line = new_line(splited, temperature, key)
+
+
+    elif ("BMP180" or "HIH6130" or "HTU21D" or "TMP112" or "TMP421" or "TSYS01") in line:
+        if "temperature" in line:
+            temperature = float(splited[-1])
+            key = splited[-2] + '_deg_c'
+            line = new_line(splited, temperature, key)
+        elif "humidity" in line:
+            temperature = float(splited[-1])
+            key = splited[-2] + '_RH'
+            line = new_line(splited, temperature, key)
+
+
     elif "SHT25" in line:
         if "temperature" in line:
             temperature = float(splited[-1])
@@ -129,17 +148,20 @@ def pick_value(line, value, first_sensor, count, xl_data):
             line = new_line(splited, temperature, key)
         elif "humidity" in line:
             humidity = float(splited[-1])
-            key = splited[-2] + '_%RH'
+            key = splited[-2] + '_RH'
             if humidity > 100:
                 humidity = humidity / 100
             line = new_line(splited, humidity, key)
+
+
     elif "HIH4030" in line:
         humidity = float(splited[-1])
         if humidity > 100:
             humidity = float(splited[-1]) * 5 / 1024
             humidity = humidity * 30.68 + 0.95
-            key = splited[-2] + '_%RH'
+            key = splited[-2] + '_RH'
             line = new_line(splited, humidity, key)
+
 
     elif "intensity" in line:
         line = intensity_conv(line)

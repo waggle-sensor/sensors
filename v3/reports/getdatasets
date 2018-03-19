@@ -22,14 +22,23 @@ do
     fi
     if [ $? == 0 ]; then
     if [ "$(uname)" = Linux ]; then
-        gunzip "$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz" 
+        gunzip "$(date  --date="$(($i + $how_long_ago)) days ago" +%Y-%m-%d).csv.gz"
     else
-        gunzip "$(date -v-$(($i + $how_long_ago))d +%Y-%m-%d).csv.gz" 
+        gunzip "$(date -v-$(($i + $how_long_ago))d +%Y-%m-%d).csv.gz"
     fi
-      
-    fi
-done     
 
+    fi
+done
+
+
+if [ ! -f ./201*.csv ]; then
+
+    echo "The node has no data for the requested dates, skipping."
+    echo ""
+    exit
+fi
+
+echo "Combining datasets..."
 if [ "$(uname)" = Linux ]; then
     cat $(ls 201*.csv | sort -V)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
     rm -rf 201*.csv
@@ -38,12 +47,13 @@ else
     cat $(ls 201*.csv | sort)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
     rm -rf 201*.csv
 fi
+echo "Downloaded files and created source dataset."
+echo ""
 
-echo "Downloaded files and created source dataset..."
 else
 echo "Unable to find node "$1
 fi
-else 
+else
 echo "!!! Several ports found, please be more specific with node details ..."$which_port
 fi
 

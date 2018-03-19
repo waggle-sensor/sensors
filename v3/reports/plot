@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 file_to_plot="$1"
 
 if [[ $(wc -l <$file_to_plot) -le 2 ]]; then
@@ -8,7 +8,7 @@ fi
 
 mkdir -p ./data_files
 mkdir -p ./plots
-rm ./data_files/*
+rm -f ./data_files/*
 start_date=$(head -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
 end_date=$(tail -1 "$file_to_plot" | cut -d ";" -f 2 | sed "s/\ //g")
 node_descr=$(curl --silent http://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt | grep -i $(head -1 "$file_to_plot" | cut -d ";" -f 1) | tr -s " " | cut -d '|' -f 2,5,6)
@@ -22,157 +22,218 @@ CHEMS_MAC=$(cat sensor_data_set.csv | grep "Chemsense_ID;mac_address;" | cut -d 
 
 for i in $sensor_array
 do
-    file_name=$(echo $i |  tr ";" "-").csv   
+    file_name=$(echo $i |  tr ";" "-").csv
     graph_sensor=false
-    
+
     if [[ $i == *"temperature"* ]]; then
         parameter_name="Temperature by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="deg C" 
+        y_label="deg C"
         graph_sensor=true
     fi
 
     if [[ $i == *"humidity"* ]]; then
         parameter_name="Relative Humidity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="%RH" 
+        y_label="%RH"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"intensity"* ]]; then
+
+    if [[ $i == *"intensity;"* ]]; then
         parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="ADC counts (raw)" 
+        y_label="ADC counts (raw)"
         graph_sensor=true
     fi
-    
+
+    if [[ $i == *"intensity_mwPERcm2"* ]]; then
+        parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="mW/sq. cm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"intensity_lux"* ]]; then
+        parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="lx"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"intensity_uwPERm2"* ]]; then
+        parameter_name="Intensity by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
+        y_label="µW/sq. m"
+        graph_sensor=true
+    fi
+
     if [[ $i == *"pressure"* ]]; then
         parameter_name="Atmospheric Pressure by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="Pa" 
+        y_label="hPa"
         graph_sensor=true
     fi
 
     if [[ $i == *"acceleration.x"* ]]; then
         parameter_name="X-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="g" 
+        y_label="g"
         graph_sensor=true
     fi
 
     if [[ $i == *"acceleration.y"* ]]; then
         parameter_name="Y-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="g" 
+        y_label="g"
         graph_sensor=true
     fi
-    
+
     if [[ $i == *"acceleration.z"* ]]; then
         parameter_name="Z-axis acceleration by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="g" 
+        y_label="g"
         graph_sensor=true
     fi
-    
+
     if [[ $i == *"magnetic_field.x"* ]]; then
         parameter_name="X-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="milliGauss" 
+        y_label="milliGauss"
         graph_sensor=true
     fi
 
     if [[ $i == *"magnetic_field.y"* ]]; then
         parameter_name="Y-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="milliGauss" 
+        y_label="milliGauss"
         graph_sensor=true
     fi
 
     if [[ $i == *"magnetic_field.z"* ]]; then
         parameter_name="Z-axis magnetic field by sensor "$(echo $i | cut -d ";" -f 1 | tr "_" "-")
-        y_label="milliGauss" 
-        graph_sensor=true
-    fi
- 
-
-    if [[ $i == *"Chemsense;co"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+        y_label="milliGauss"
         graph_sensor=true
     fi
 
-    if [[ $i == *"Chemsense;no2"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;co;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"Chemsense;h2s"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;no2;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"Chemsense;so2"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;h2s;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"Chemsense;reducing_gases"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;so2;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"Chemsense;oxidizing_gases"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;reducing_gases;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
-    if [[ $i == *"Chemsense;o3"* ]]; then
-        parameter_name=$CHEMS_MAC" board - Current output by sensor "$(echo $i | cut -d ";" -f 2 | tr "_" "-")
-        y_label="pA" 
+
+    if [[ $i == *"Chemsense;oxidizing_gases;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
         graph_sensor=true
     fi
-    
+
+    if [[ $i == *"Chemsense;o3;"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="pA"
+        graph_sensor=true
+    fi
+
+
+    if [[ $i == *"Chemsense;co_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;no2_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;h2_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;so2_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;reducing_gases_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;oxidizing_gases_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Chemsense;o3_pp"* ]]; then
+        parameter_name="Chemsense Board MAC:"$CHEMS_MAC", Sensor: "$(echo $i | cut -d ";" -f 2 | cut -d "_"  -f 1)
+        y_label="ppm"
+        graph_sensor=true
+    fi
+
     ############################################################################################
     #     Do not plot these sensors, the are either non-calibrated or have not been converted into HRF
-    
-    if [[ $i == *"HIH4030"* ]]; then
-        graph_sensor=false
-    fi
-    
-    if [[ $i == *"BMI160"* ]]; then
-        graph_sensor=false
-    fi
-    
-    
-    if [[ $i == *"PR103J2"* ]]; then
-        graph_sensor=false
-    fi
-    
+
+#     if [[ $i == *"HIH4030"* ]]; then
+#         graph_sensor=false
+#     fi
+#
+#     if [[ $i == *"BMI160"* ]]; then
+#         graph_sensor=false
+#     fi
+#
+#
+#     if [[ $i == *"PR103J2"* ]]; then
+#         graph_sensor=false
+#     fi
+#
     if [[ $i == *"SPV1840LR5H-B"* ]]; then
         graph_sensor=false
     fi
-    
-    if [[ $i == *"SHT25"* ]]; then
-        graph_sensor=false
-    fi
-    
-    if [[ $i == *"LPS25H;temperature"* ]]; then
-        graph_sensor=false
-    fi
-    
-#    if [[ $i == *"Chemsense"* ]]; then
-#        graph_sensor=false
-#    fi
-    
-    if [[ $i == *"Temp"* ]]; then
-        graph_sensor=false
-    fi
-    
+#
+#     if [[ $i == *"SHT25"* ]]; then
+#         graph_sensor=false
+#     fi
+#
+#     if [[ $i == *"LPS25H;temperature"* ]]; then
+#         graph_sensor=false
+#     fi
+#
+# #    if [[ $i == *"Chemsense"* ]]; then
+# #        graph_sensor=false
+# #    fi
+#
+#     if [[ $i == *"Temp"* ]]; then
+#         graph_sensor=false
+#     fi
+
     ############################################################################################
-    
+
     if [ $graph_sensor == true ]; then
         echo "Plotting parameter - "$parameter_name
         cat "$file_to_plot" | grep "$i" | cut -d ";" -f 2,7 > ./data_files/"$file_name"
 
         if [ "$(uname)" = Linux ]; then
             echo "set terminal pdf size 17in, 11in font \"Helvetica,30\"" > graph.plt
-            echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").pdf"'" >> graph.plt
+            echo "set output './plots/"$node_vsn"-"$(echo $i |  tr ";" "-")"-"$start_date"-"$end_date.pdf"'" >> graph.plt
         else
             echo "set terminal svg size 1700,1100 fixed enhanced font 'Helvetica,30'" > graph.plt
             echo "set output './plots/"$node_vsn"-"$start_date"-"$end_date"-"$(echo $i |  tr ";" "-").svg"'" >> graph.plt
