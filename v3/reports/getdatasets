@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 if [ "$#" -ne 3 ]; then
     echo "Not enough information provided..."
     exit 1
@@ -10,9 +11,9 @@ how_long=$3
 
 if [ "$(echo $which_node | tr " " "\n" | wc -l )" -eq "1" ]; then
 if [ ! -z "$which_node" ];then
-rm 201*.csv
-rm sensor_data_set.csv
-rm 201*.csv.*
+rm -f 20[0-9][0-9]*.csv
+rm -f sensor_data_set.csv
+
 for i in `seq 0 $how_long`;
 do
     if [ "$(uname)" = Linux ]; then
@@ -31,7 +32,7 @@ do
 done
 
 
-if [ ! -f ./201*.csv ]; then
+if [ $(find . -maxdepth 1 -type f -name '20[0-9][0-9]*.csv' | wc -l) -eq 0 ]; then
 
     echo "The node has no data for the requested dates, skipping."
     echo ""
@@ -41,11 +42,11 @@ fi
 echo "Combining datasets..."
 if [ "$(uname)" = Linux ]; then
     cat $(ls 201*.csv | sort -V)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
-    rm -rf 201*.csv
+#     rm -rf 201*.csv
 
 else
     cat $(ls 201*.csv | sort)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
-    rm -rf 201*.csv
+#     rm -rf 201*.csv
 fi
 echo "Downloaded files and created source dataset."
 echo ""
