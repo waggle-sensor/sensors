@@ -1,3 +1,32 @@
+## Overview:
+
+Several sensors measuring a range of values from TPH to concentrations of several gases and particulate matter are 
+installed in a Waggle/AoT node. The various details including links to the datasheets for the sensors are available in 
+the [README](https://github.com/waggle-sensor/sensors) file in the sensors repo. 
+
+### Here are some caveats while using these graphs toward understanding the environment: 
+
+1. The sensors in the [Metsense](https://github.com/waggle-sensor/sensors#metsense-hw-ver-31) are exposed 
+to the air in the external environment, and are shielded by a Stevenson shield. 
+
+2. The sensors in the [Lightsense](https://github.com/waggle-sensor/sensors#lightsense-hw-ver-31) are 
+exposed only to external light, through a glass window. They are not exposed to the external air. 
+
+3. The sensors in the [Chemsense](https://github.com/waggle-sensor/sensors#chemsense-hw-ver-passamaquoddy-bay) 
+ are exposed to the air in the external environment, and are shielded by a Stevenson shield. 
+
+4. The [OPC-N2](https://github.com/waggle-sensor/sensors#alphasense-opc-n2-regular-range-16-bins-in-0-10-%CE%BCm-and-high-rangepollen-16-bins-in-0-40-%CE%BCm) sensor is exposed to the air in the external environment, and is shielded by a Stevenson shield.
+
+
+### What sensors should I use?
+
+    - Temperature: TSYS01 or HTU21D
+    - Humidity: HTU21D
+    - Pressure: BMP180
+    - Acceleration: MMA8452Q
+    - Magnetic Field: HMC5883L
+
+
 ## Documentation:
 
 The bash shell scripts (for Linux or Mac OS X) in this directory can be used to create [sensor reports](https://github.com/waggle-sensor/sensors/blob/develop/v3/reports/README.md#1-generating-graph-reports)  in the form of graphs in
