@@ -189,6 +189,38 @@ do
         graph_sensor=true
     fi
 
+
+    if [[ $i == *"Alphasense;pm1"* ]]; then
+        parameter_name="PM 1 Concentration by OPC-N2"
+        y_label="µg/cu. m"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Alphasense;pm2.5"* ]]; then
+        parameter_name="PM 2.5 Concentration by OPC-N2"
+        y_label="µg/cu. m"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Alphasense;pm10"* ]]; then
+        parameter_name="PM 10 Concentration by OPC-N2"
+        y_label="µg/cu. m"
+        graph_sensor=true
+    fi
+
+
+    if [[ $i == *"Alphasense;sample_flow_rate"* ]]; then
+        parameter_name="OPC-N2 flow rate"
+        y_label="l/min"
+        graph_sensor=true
+    fi
+
+    if [[ $i == *"Alphasense;sampling_period"* ]]; then
+        parameter_name="OPC-N2 Sampling period"
+        y_label="sec"
+        graph_sensor=true
+    fi
+
     ############################################################################################
     #     Do not plot these sensors, the are either non-calibrated or have not been converted into HRF
 
