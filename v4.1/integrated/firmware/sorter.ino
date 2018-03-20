@@ -51,6 +51,7 @@ void SensorInit()
 	{
 		const Sensor *s = sensor + i;
 		s->initFunc();
+		s->enableFunc();
 	}
 }
 
