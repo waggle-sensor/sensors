@@ -42,11 +42,11 @@ fi
 echo "Combining datasets..."
 if [ "$(uname)" = Linux ]; then
     cat $(ls 201*.csv | sort -V)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
-#     rm -rf 201*.csv
+     rm -rf 201*.csv
 
 else
     cat $(ls 201*.csv | sort)  |  tr " " "_" | tr "\/" "_" > sensor_data_set.csv
-#     rm -rf 201*.csv
+     rm -rf 201*.csv
 fi
 echo "Downloaded files and created source dataset."
 echo ""
