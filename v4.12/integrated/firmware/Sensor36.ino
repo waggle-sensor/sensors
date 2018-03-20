@@ -1,13 +1,18 @@
 // PMS 7003 reading
 
+#define LENG 32
+
 void InitSensor36()
 {
 	Serial1.begin(9600);
 	Serial1.setTimeout(5000);
 	delay(1000);
 
-	if (Serial1.available() <= 0)
-		DisableSensor(0x36);
+	for (int i = 0; i < 10; i++)
+	{
+		if (Serial1.available() <= 0)
+			DisableSensor(0x36);
+	}
 }
 
 void ConfigSensor36()
@@ -31,28 +36,33 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 	int while_time = 0;
 	while (while_time < 5000)
 	{
-		if (Serial1.available() >= 32)
+		if (Serial1.available() >= LENG*2)
 		{
-			char header1 = Serial1.read();
-			char header2 = Serial1.read();
-			if (header1 != 0x42 || header2 != 0x4D)
+			for (int i = 0; i < LENG+1; i++)
 			{
-			    while_time += 100;
-			    continue;
-			}
-			else
-			{
-				*readingLength = 30;
-				for (int i = 0; i < 30; i++)
-					sensorReading[i] = Serial1.read();
-
-				if (readingLength == 0)
+				char header1 = Serial1.read();
+				char header2 = Serial1.read();
+				if (header1 != 0x42 || header2 != 0x4D)
 				{
-					*readingLength = 1;
-					sensorReading[0] = 0xAB;
+					delay(100);
+		    		while_time += 100;
+		    		continue;
 				}
-				break;
+				else
+				{
+					*readingLength = 30;
+					sensorReading[0] = header1;
+					sensorReading[1] = header2;
+					for (int i = 0; i < 30; i++)
+						sensorReading[i+2] = Serial1.read();
+					return;
+				}
 			}
+		}
+		else
+		{
+			delay(100);
+			while_time += 100;
 		}
 	}
 

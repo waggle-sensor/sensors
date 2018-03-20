@@ -40,14 +40,6 @@ void SortReading(byte *packet, int dataLength)
 
 void SensorInit()
 {
-	// // Enable mandatory sensors
-	// for (int i = 0; i < numMand; i++)
-	// {
-	// 	const MandatorySensor *ms = mandsensor + i;
-	// 	ms->enableFunc();
-	// 	ms->enableFunc();
-	// }
-
 	// Enable all sensors
 	for (int i = 0; i < numSensor; i++)
 	{
@@ -121,12 +113,10 @@ void SensorDisable(byte *data, byte id)
 
 void SensorRead(byte *data, byte id)
 {
-	SerialUSB.println("sensor read");
 	bool enable = GetEnable(id);
 
 	if (!enable)
 	{
-		SerialUSB.println("disabled");
 		sensorReading[0] = id;
 		sensorReading[1] = 0xAB;
 		readingLength = 2;
@@ -135,7 +125,6 @@ void SensorRead(byte *data, byte id)
 		readingLength = 0;
 		return;
 	}
-	SerialUSB.println("enabled");
 
 	int paramLength = data[0] & 0x7F;
 	int repeat = 0;
@@ -160,7 +149,6 @@ void SensorRead(byte *data, byte id)
 			{
 				for (int i = 0; i < repeat; i++)
 				{
-					SerialUSB.println("call function");
 					s->readFunc(sensorReading, &readingLength);
 					Packetization(id, sensorReading, readingLength);
 					delay(interval);

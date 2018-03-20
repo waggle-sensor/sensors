@@ -33,7 +33,6 @@ EnabledTable enabledtable[] = {
     {0x30, false},
     {0x31, false},
     {0x36, false},
-    {0x54, false},
     {0xFF, false},
 };
  
