@@ -23,7 +23,7 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x05,PR103J2,temperature,voltage,raw,counts,int24,1023,0,1,1
 0x05,PR103J2,temperature,converted,hrf,degree_c,float,80,-55,0.01,0.05
 0x06,TSL250RD,visible light,voltage,raw,counts,int16,1023,0,1,1
-0x06,TSL250RD,visible light,converted,hrf,uw/cm2,float,210,0.2,2,7.5
+0x06,TSL250RD,visible light,converted,hrf,uW/cm2,float,210,0.2,2,7.5
 0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
 0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
 0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
@@ -47,13 +47,13 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x0C,APDS-9006-020,ambient light,voltage,raw,counts,int24,16777216,0,1,1
 0x0C,APDS-9006-020,ambient light,converted,hrf,lux,float,1000,0,0.008,1
 0x0D,TSL260,light,voltage,raw,counts,int24,16777216,0,1,1
-0x0D,TSL260,light,converted,hrf,uw/cm2,float,61,0.2,0.1,4
+0x0D,TSL260,light,converted,hrf,uW/cm2,float,61,0.2,0.1,4
 0x0E,TSL250,light,voltage,raw,counts,int24,16777216,0,1,1
-0x0E,TSL250,light,converted,hrf,uw/cm2,float,210,0.2,0.1,4
+0x0E,TSL250,light,converted,hrf,uW/cm2,float,210,0.2,0.1,4
 0x0F,MLX75305,ambient light,voltage,raw,counts,int24,16777216,0,1,1
-0x0F,MLX75305,ambient light,converted,hrf,uw/cm2,float,60,0,0.86,0.86
+0x0F,MLX75305,ambient light,converted,hrf,uW/cm2,float,60,0,0.86,0.86
 0x10,ML8511,uv,voltage,raw,counts,int24,16777216,0,1,1
-0x10,ML8511,uv,converted,hrf,mw/cm2,float,15,0,1,1
+0x10,ML8511,uv,converted,hrf,mW/cm2,float,15,0,1,1
 0x13,TMP421,temperature,register,raw,counts,int16,65535,0,1,1
 0x13,TMP421,temperature,converted,hrf,degree_c,float,127,-55,0.25,2.5
 0x15,IRR,gas,ampare,raw,pA,int24,16777216,0,1,1
