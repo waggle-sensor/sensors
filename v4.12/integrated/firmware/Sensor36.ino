@@ -32,7 +32,7 @@ void DisableSensor36()
 
 void ReadSensor36(byte *sensorReading, int *readingLength)
 {
-	*readingLength = 30;
+	*readingLength = 32;
 	int while_time = 0;
 	while (while_time < 5000)
 	{
@@ -50,7 +50,6 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 				}
 				else
 				{
-					*readingLength = 30;
 					sensorReading[0] = header1;
 					sensorReading[1] = header2;
 					for (int i = 0; i < 30; i++)
@@ -66,8 +65,8 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 		}
 	}
 
-	*readingLength = 1;
-	sensorReading[0] = 0xAB;
+	for (int i = 0; i < 32; i++)
+		sensorReading[i] = 0xAB;
 }
 
 void WriteSensor36(byte *packet)
