@@ -40,18 +40,17 @@ void SortReading(byte *packet, int dataLength)
 
 void SensorInit()
 {
-	// Enable mandatory sensors
-	for (int i = 0; i < numMand; i++)
+	// Enable sensors
+	for (int i = 0; i < numSensor; i++)
 	{
-		const MandatorySensor *ms = mandsensor + i;
-		ms->enableFunc();
+		const Sensor *s = sensor + i;
+		s->enableFunc();
 	}
 
 	for (int i = 0; i < numSensor; i++)
 	{
 		const Sensor *s = sensor + i;
 		s->initFunc();
-		s->enableFunc();
 	}
 }
 
