@@ -2,7 +2,7 @@
 
 void InitSensor31()
 {
-	InitSensor28();
+	return;
 }
 
 void ConfigSensor31()
@@ -12,12 +12,12 @@ void ConfigSensor31()
 
 void EnableSensor31()
 {
-	EnableSensor(0x31);
+	return;
 }
 
 void DisableSensor31()
 {
-	DisableSensor(0x31);
+	return;
 }
 
 void ReadSensor31(byte *sensorReading, int *readingLength)

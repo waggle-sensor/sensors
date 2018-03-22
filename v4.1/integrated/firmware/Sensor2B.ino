@@ -4,7 +4,7 @@
 
 void InitSensor2B()
 {
-	InitSensor28();
+	return;
 }
 
 void ConfigSensor2B()
@@ -14,12 +14,12 @@ void ConfigSensor2B()
 
 void EnableSensor2B()
 {
-	EnableSensor(0x2B);
+	return;
 }
 
 void DisableSensor2B()
 {
-	DisableSensor(0x2B);
+	return;
 }
 
 void ReadSensor2B(byte *sensorReading, int *readingLength)

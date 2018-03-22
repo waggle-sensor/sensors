@@ -28,11 +28,19 @@ void ConfigSensor28()
 void EnableSensor28()
 {
 	EnableSensor(0x28);
+	EnableSensor(0x29);
+	EnableSensor(0x2B);
+	EnableSensor(0x30);
+	EnableSensor(0x31);
 }
 
 void DisableSensor28()
 {
 	DisableSensor(0x28);
+	DisableSensor(0x29);
+	DisableSensor(0x2B);
+	DisableSensor(0x30);
+	DisableSensor(0x31);
 }
 
 void ReadSensor28(byte *sensorReading, int *readingLength)

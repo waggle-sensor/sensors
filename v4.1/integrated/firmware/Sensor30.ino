@@ -2,17 +2,17 @@
 
 void InitSensor30()
 {
-	InitSensor28();
+	return;
 }
 
 void ConfigSensor30()
 {
-	EnableSensor(0x30);
+	return;
 }
 
 void EnableSensor30()
 {
-	DisableSensor(0x30);
+	return;
 }
 
 void DisableSensor30()
