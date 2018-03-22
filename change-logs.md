@@ -7,15 +7,14 @@ It keeps track of the changes for versions.
 * PMS7003 sensor added refering Sensor36.ino file.
 * A redundant file, Mandatory.ino, removed.
 * Calling enable function in initialization at setup step added.
+* Change read function that if there is no Alpha sensor, then send 'N' for all bytes.
 ### Comments
 * This version need to be tested in a long term period (not yet tested).
-* No plugin and pywaggle is ready.
 
 # Firmware Version 4.11 (in v4.1, git tag 4.11) (2018-02)
 ### New features
 * Firmware automatically sends a list of "disabled sensor" which contains sensor ids that plugin requests but FW regards the sensor is not working -- the FW does not read the sensor.
 * Add delay in Sensor2A.ino > initialization step, iterately check (5 times) if chemsense is attached on Metsense board, and alive.
-* Change read function that if there is no Alpha sensor, then send 'N' for all bytes.
 ### Behinds
 * Data collection from soil moisture sensor and rain gauge are not tested with this version
 * Version info has not updated, so that it will also send 4.10 as it's version.
