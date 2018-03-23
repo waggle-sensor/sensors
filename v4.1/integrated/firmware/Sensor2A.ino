@@ -32,11 +32,13 @@ void ConfigSensor2A()
 void EnableSensor2A()
 {
 	EnableSensor(0x2A);
+	digitalWrite(CHEM_POWER_PIN, LOW);
 }
 
 void DisableSensor2A()
 {
 	DisableSensor(0x2A);
+	digitalWrite(CHEM_POWER_PIN, HIGH);
 }
 
 void ReadSensor2A(byte *sensorReading, int *readingLength)
