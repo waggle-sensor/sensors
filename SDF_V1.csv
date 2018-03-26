@@ -119,7 +119,7 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x28,Alpha sensor,sample flow rate,pre-determined,raw,n/a,int32,4294967296,TBN,TBN,TBN
 0x28,Alpha sensor,temp/pressure (alter),register,raw,degree_c/hPa (alter),int32,4294967296,TBN,TBN,TBN
 0x28,Alpha sensor,sampling period,pre-determined,raw,/s,int32,4294967296,TBN,TBN,TBN
-0x28,Alpha sensor,checksum,pre-calculated,raw,n/a,int16,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,checksum,pre-calculated,raw,n/a,int16,n/a,n/a,n/a,n/a
 0x28,Alpha sensor,PM 1,register,raw,counts,int32,4294967296,TBN,TBN,TBN
 0x28,Alpha sensor,PM 2.5,register,raw,counts,int32,4294967296,TBN,TBN,TBN
 0x28,Alpha sensor,PM 10,register,raw,counts,int32,4294967296,TBN,TBN,TBN
@@ -128,7 +128,7 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x28,Alpha sensor,sample flow rate,converted,hrf,ml/s,float,TBN,TBN,TBN,TBN
 0x28,Alpha sensor,temp/pressure (alter),converted,hrf,degree_c/hPa (alter),float,TBN,TBN,TBN,TBN
 0x28,Alpha sensor,sampling period,converted,hrf,/s,int32,TBN,TBN,TBN,TBN
-0x28,Alpha sensor,checksum,converted,hrf,n/a,int16,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,checksum,converted,hrf,n/a,int16,n/a,n/a,n/a,n/a
 0x28,Alpha sensor,PM 1,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
 0x28,Alpha sensor,PM 2.5,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
 0x28,Alpha sensor,PM 10,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
