@@ -211,13 +211,13 @@ do
 
     if [[ $i == *"Alphasense;sample_flow_rate"* ]]; then
         parameter_name="OPC-N2 flow rate"
-        y_label="l/min"
+        y_label="ml/s"
         graph_sensor=true
     fi
 
     if [[ $i == *"Alphasense;sampling_period"* ]]; then
         parameter_name="OPC-N2 Sampling period"
-        y_label="sec"
+        y_label="/s"
         graph_sensor=true
     fi
 
