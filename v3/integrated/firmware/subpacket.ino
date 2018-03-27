@@ -5,7 +5,7 @@ void sensor_buff_initialization()
 	FIRMWARE_VERSION[0] = ID_FIRMWARE_VERSION;
 	FIRMWARE_VERSION[1] = (1 << 7) | (LENGTH_FORMAT1 + LENGTH_BUILD_TIME + LENGTH_BUILD_GIT);
 #endif
-	
+
 #ifdef AIRSENSE_INCLUDE
 	// initialize FIRST BYTE of the array
 	MAC_ID[0] = ID_MAC;
@@ -46,8 +46,8 @@ void sensor_buff_initialization()
 #endif
 #endif
 
-#ifdef LIGHTSENSE_INCLUDE
 #ifdef I2C_SENSORS
+#ifdef LIGHTSENSE_INCLUDE
 	// initialize FIRST BYTE of the arrays
     HMC5883L[0] = ID_HMC5883L;
     HIH6130[0] = ID_HIH6130;

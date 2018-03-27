@@ -43,11 +43,11 @@
 // Sensor boards to include
 #define VERSION_INCLUDE 0x01
 #define AIRSENSE_INCLUDE 0x01
-// #define LIGHTSENSE_INCLUDE 0x01
+#define LIGHTSENSE_INCLUDE 0x01
 // #define CHEMSENSE_INCLUDE 0x01
 // #define ALPHASENSE_INCLUDE 0x01
 
-// Sensors to include 
+// Sensors to include
 // #define I2C_SENSORS 0x01
 #define ANALOG_SENSORS 0x01
 
@@ -65,25 +65,25 @@
     #define MAC_ID_include 0x01
 
     #ifdef I2C_SENSORS
-    
+
         #define ID_TMP112  0x01
         #define ID_HTU21D  0x02
         #define ID_BMP180  0x04
         #define ID_MMA8452Q  0x07
         #define ID_TSYS01  0x09
-    
-    
+
+
         #define TMP112_include 0x01
         #define HTU21D_include 0x01
         #define BMP180_include 0x01
         #define MMA8452Q_include 0x01
         #define TSYS01_include 0x01
-        
+
     #endif
-    
+
     #ifdef ANALOG_SENSORS
-    
-        #define ID_HIH4030  0x03    
+
+        #define ID_HIH4030  0x03
         #define ID_PR103J2  0x05
         #define ID_TSL250RD_1  0x06
         #define ID_SPV1840LR5HB  0x08
@@ -93,16 +93,16 @@
         #define PR103J2_include 0x01
         #define TSL250RD_1_include 0x01
         #define SPV1840LR5HB_include 0x01
-        
+
     #endif
-    
+
 #endif
 
 
 // Lightsense board
-#ifdef LIGHTSENSE_INCLUDE
-    #ifdef I2C_SENSORS
-    
+#ifdef I2C_SENSORS
+    #ifdef LIGHTSENSE_INCLUDE
+
         #define ID_HMC5883L  0x0A
         #define ID_HIH6130  0x0B
         #define ID_APDS9006020  0x0C
@@ -112,7 +112,7 @@
         #define ID_ML8511  0x10
         #define ID_TMP421  0x13
         //#define ID_MLX90614  0x12             // NO USE NOT IN ANY
-    
+
         #define HMC5883L_include 0x01
         #define HIH6130_include 0x01
         #define APDS9006020_include 0x01
@@ -121,16 +121,15 @@
         #define MLX75305_include 0x01
         #define ML8511_include 0x01
         #define TMP421_include 0x01
-        
+
     #endif
-    
 #endif
 
 #ifdef CHEMSENSE_INCLUDE
-    
+
     #define ID_TOTAL_REDUCING_GASES  0x15
     #define ID_NITROGEN_DIOXIDE  0x17
-    #define ID_OZONE  0x18    
+    #define ID_OZONE  0x18
     #define ID_HYDROGEN_SULPHIDE  0x19
     #define ID_TOTAL_OXIDIZING_GASES  0x1A
     #define ID_CARBON_MONOXIDE  0x1B
@@ -192,7 +191,7 @@
     #define ID_ALPHA_FIRMWARE 0x30
 
     #define ID_ALPHA_CONFIG_A 0x31
-    #define ID_ALPHA_CONFIG_B 0x32 
+    #define ID_ALPHA_CONFIG_B 0x32
     #define ID_ALPHA_CONFIG_C 0x33
     #define ID_ALPHA_CONFIG_D 0x34
 #endif
@@ -209,9 +208,4 @@
     #ifdef I2C_INTERFACE_CONST_SIZE
         #define I2C_PACKET_SIZE 191
     #endif
-#endif 
-
-
-
-
-
+#endif

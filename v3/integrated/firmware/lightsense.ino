@@ -1,5 +1,5 @@
-#ifdef LIGHTSENSE_INCLUDE
 #ifdef I2C_SENSORS
+#ifdef LIGHTSENSE_INCLUDE
 
 void lightsense_initial (void)
 {
@@ -165,7 +165,7 @@ void lightsense_acquire (void)
     }
     else
         APDS9006020[1] = (1 << 7) | LENGTH_FORMAT1;
-    
+
 
     format1(APDS_uint16);
     APDS9006020[2] = formatted_data_buffer[0];
@@ -195,7 +195,7 @@ void lightsense_acquire (void)
     }
     else
         TSL260RD[1] = (1 << 7) | LENGTH_FORMAT1;
-    
+
 
     format1(TSL260_uint16);
     TSL260RD[2] = formatted_data_buffer[0];
@@ -213,7 +213,7 @@ void lightsense_acquire (void)
     Temp_uint16 = mcp3428_1.readADC();
 
     TSL250_2_uint16 = (TSL250_2_uint16 + Temp_uint16) / 2;
-    
+
     if (Temp_uint16 == 65535)
     {
         TSL250RD_2[1] = (0 << 7) | LENGTH_FORMAT1;
@@ -242,12 +242,12 @@ void lightsense_acquire (void)
     Temp_uint16 = mcp3428_1.readADC();
 
     MLX753_uint16 = (MLX753_uint16 + Temp_uint16) / 2;
-    
+
     if (Temp_uint16 == 65535)
     {
         MLX75305[1] = (0 << 7) | LENGTH_FORMAT1;
 
-        #ifdef SERIAL_DEBUG        
+        #ifdef SERIAL_DEBUG
         SerialUSB.println("MLX75305: I2C not available");
         #endif
     }
@@ -270,7 +270,7 @@ void lightsense_acquire (void)
     Temp_uint16 = mcp3428_1.readADC();
 
     ML8511_uint16 = (ML8511_uint16 + Temp_uint16) / 2;
-    
+
     if (Temp_uint16 == 65535)
     {
         ML8511[1] = (0 << 7) | LENGTH_FORMAT1;
@@ -308,7 +308,7 @@ void lightsense_acquire (void)
     }
     else
         TMP421[1] = (1 << 7) | LENGTH_FORMAT6;
-    
+
     format6(TMP421_float);
     TMP421[2] = formatted_data_buffer[0];
     TMP421[3] = formatted_data_buffer[1];
