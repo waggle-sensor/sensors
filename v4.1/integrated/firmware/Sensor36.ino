@@ -38,7 +38,7 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 	{
 		if (Serial2.available() >= LENG*2)
 		{
-			for (int i = 0; i < LENG+1; i++)
+			for (int i = 0; i < LENG*2; i++)
 			{
 				char header1 = Serial2.read();
 				char header2 = Serial2.read();
@@ -52,8 +52,8 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 				{
 					sensorReading[0] = header1;
 					sensorReading[1] = header2;
-					for (int i = 0; i < 30; i++)
-						sensorReading[i+2] = Serial2.read();
+					for (int j = 0; j < 30; j++)
+						sensorReading[j+2] = Serial2.read();
 					return;
 				}
 			}
@@ -66,7 +66,12 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 	}
 
 	for (int i = 0; i < 32; i++)
-		sensorReading[i] = 0xAB;
+	{
+		if (i == 0 || i == 1)
+			sensorReading[i] = 0xAB;
+		else
+			sensorReading[i] = 0;
+	}
 }
 
 void WriteSensor36(byte *packet)
