@@ -4,13 +4,13 @@
 
 void InitSensor36()
 {
-	Serial1.begin(9600);
-	Serial1.setTimeout(5000);
+	Serial2.begin(9600);
+	Serial2.setTimeout(5000);
 	delay(1000);
 
 	for (int i = 0; i < 10; i++)
 	{
-		if (Serial1.available() <= 0)
+		if (Serial2.available() <= 0)
 			DisableSensor(0x36);
 	}
 }
@@ -36,12 +36,12 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 	int while_time = 0;
 	while (while_time < 5000)
 	{
-		if (Serial1.available() >= LENG*2)
+		if (Serial2.available() >= LENG*2)
 		{
 			for (int i = 0; i < LENG+1; i++)
 			{
-				char header1 = Serial1.read();
-				char header2 = Serial1.read();
+				char header1 = Serial2.read();
+				char header2 = Serial2.read();
 				if (header1 != 0x42 || header2 != 0x4D)
 				{
 					delay(100);
@@ -53,7 +53,7 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 					sensorReading[0] = header1;
 					sensorReading[1] = header2;
 					for (int i = 0; i < 30; i++)
-						sensorReading[i+2] = Serial1.read();
+						sensorReading[i+2] = Serial2.read();
 					return;
 				}
 			}
