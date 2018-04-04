@@ -36,17 +36,17 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 	int while_time = 0;
 	while (while_time < 5000)
 	{
-		if (Serial2.available() >= LENG*2)
+		if (Serial2.available() >= LENG)
 		{
-			for (int i = 0; i < LENG*2; i++)
+			for (int i = 0; i < LENG*3; i++)
 			{
 				char header1 = Serial2.read();
 				char header2 = Serial2.read();
 				if (header1 != 0x42 || header2 != 0x4D)
 				{
-					delay(100);
-		    		while_time += 100;
-		    		continue;
+					delay(10);
+		    			while_time += 10;
+		    			continue;
 				}
 				else
 				{
