@@ -34,7 +34,7 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 {
 	*readingLength = 32;
 	int while_time = 0;
-	while (while_time < 5000)
+	while (while_time < 6000)
 	{
 		if (Serial2.available() >= LENG)
 		{
@@ -45,8 +45,8 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 				if (header1 != 0x42 || header2 != 0x4D)
 				{
 					delay(10);
-		    			while_time += 10;
-		    			continue;
+					while_time += 10;
+					continue;
 				}
 				else
 				{
@@ -54,7 +54,11 @@ void ReadSensor36(byte *sensorReading, int *readingLength)
 					sensorReading[1] = header2;
 					for (int j = 0; j < 30; j++)
 						sensorReading[j+2] = Serial2.read();
-					return;
+
+					if (sensorReading[29] != 0x00 || sensorReading[28] != 0x97)
+						break;
+					else
+						return;
 				}
 			}
 		}
