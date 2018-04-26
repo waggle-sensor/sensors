@@ -2,6 +2,10 @@
 
 It keeps track of the changes for versions.
 
+# Firmware Version 4.13 (in v4.13) (2018-04)
+### New fearues
+* Sensor12.ino, which is sending a list of disabled sensors
+
 # Firmware Version 4.12 (in v4.12) (2018-03)
 ### New features
 * PMS7003 sensor added refering Sensor36.ino file.
