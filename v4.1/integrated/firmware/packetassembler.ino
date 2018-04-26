@@ -55,8 +55,8 @@ void PacketSender(byte sequenceValidity)
     packet[outLength++] = 0x55;  // postscript
 
     SerialUSB.write(packet, outLength);
-    SerialUSB.println("");
-    // SerialUSB.flush();
+    // SerialUSB.println("");
+    SerialUSB.flush();
 
     outLength = 0;
 }
@@ -129,7 +129,8 @@ void BusPacketSender(byte sequenceValidity)
 
     for (int i = 0; i < busOutLength; i++)
         SerialUSB.write(busPacket[i]);
-    SerialUSB.println("");
+    // SerialUSB.println("");
+    SerialUSB.flush();
 
     busOutLength = 0;
 }
