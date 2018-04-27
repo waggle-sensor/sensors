@@ -23,7 +23,6 @@ EnabledTable enabledtable[] = {
     {0x0E, false},
     {0x0F, false},
     {0x10, false},
-    {0x12, false},
     {0x13, false},
     {0x28, false},
     {0x29, false},
@@ -32,6 +31,7 @@ EnabledTable enabledtable[] = {
     {0x2C, false},
     {0x30, false},
     {0x31, false},
+    {0x32, false},
     {0x36, false},
     {0xFF, false},
 };

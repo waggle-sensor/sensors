@@ -1,26 +1,25 @@
-// ML8511 Light sensor -- UV
 
-void InitSensor12()
+void InitSensor32()
 {
 	return;
 }
 
-void ConfigSensor12()
+void ConfigSensor32()
 {
 	return;
 }
 
-void EnableSensor12()
+void EnableSensor32()
 {
-	EnableSensor(0x12);
+	EnableSensor(0x32);
 }
 
-void DisableSensor12()
+void DisableSensor32()
 {
-	DisableSensor(0x12);
+	DisableSensor(0x32);
 }
 
-void ReadSensor12(byte *sensorReading, int *readingLength)
+void ReadSensor32(byte *sensorReading, int *readingLength)
 {
 	int j = 0;
 	for (int i = 0; i < numEnabled; i++)
@@ -33,12 +32,13 @@ void ReadSensor12(byte *sensorReading, int *readingLength)
 			itoa(a, b, 16);
 			sensorReading[j++] = b[0];
 			sensorReading[j++] = b[1];
-			*readingLength += 2;
+			sensorReading[j++] = ',';
+			*readingLength += 3;
 		}
 	}
 }
 
-void WriteSensor12(byte *packet)
+void WriteSensor32(byte *packet)
 {
 	return;
 }

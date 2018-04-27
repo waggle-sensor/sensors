@@ -28,7 +28,6 @@ const Sensor sensor[] = {
     {0x0E, InitSensor0E, ConfigSensor0E, EnableSensor0E, DisableSensor0E, ReadSensor0E, WriteSensor0E},
     {0x0F, InitSensor0F, ConfigSensor0F, EnableSensor0F, DisableSensor0F, ReadSensor0F, WriteSensor0F},
     {0x10, InitSensor10, ConfigSensor10, EnableSensor10, DisableSensor10, ReadSensor10, WriteSensor10},
-    {0x12, InitSensor12, ConfigSensor12, EnableSensor12, DisableSensor12, ReadSensor12, WriteSensor12},
     {0x13, InitSensor13, ConfigSensor13, EnableSensor13, DisableSensor13, ReadSensor13, WriteSensor13},
     {0x28, InitSensor28, ConfigSensor28, EnableSensor28, DisableSensor28, ReadSensor28, WriteSensor28},
     {0x29, InitSensor29, ConfigSensor29, EnableSensor29, DisableSensor29, ReadSensor29, WriteSensor29},
@@ -37,6 +36,7 @@ const Sensor sensor[] = {
     {0x2C, InitSensor2C, ConfigSensor2C, EnableSensor2C, DisableSensor2C, ReadSensor2C, WriteSensor2C},
     {0x30, InitSensor30, ConfigSensor30, EnableSensor30, DisableSensor30, ReadSensor30, WriteSensor30},
     {0x31, InitSensor31, ConfigSensor31, EnableSensor31, DisableSensor31, ReadSensor31, WriteSensor31},
+    {0x32, InitSensor32, ConfigSensor32, EnableSensor32, DisableSensor32, ReadSensor32, WriteSensor32},
     {0x36, InitSensor36, ConfigSensor36, EnableSensor36, DisableSensor36, ReadSensor36, WriteSensor36},
     {0xFF, InitSensorFF, ConfigSensorFF, EnableSensorFF, DisableSensorFF, ReadSensorFF, WriteSensorFF},
 };
