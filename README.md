@@ -82,7 +82,7 @@
 
 ## Plantower Particulate
 
-<img src="./sensors/images/pms7003.jpg" width=300 />
+<img src="./sensors/images/pms7003.png" width=300 />
 
 ### Parts List
 
