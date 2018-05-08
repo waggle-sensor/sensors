@@ -80,7 +80,7 @@
 | ------------- |------------- | ------------- |------------- |------------- |
 | OPC-N2 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](./sensors/opc/opcN2.pdf) |
 
-## Plantower Particulate
+## Plantower PM Sensors
 
 <img src="./sensors/images/pms7003.png" width="200" />
 
