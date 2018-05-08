@@ -75,6 +75,15 @@
 * Interface: USB Storage, SPI
 
 ### Parts list
+
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
 | OPC-N2 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](./sensors/opc/opcN2.pdf) |
+
+## Plantower Particulate
+
+### Parts List
+
+| Part Name | Measurement | Range | Accuracy | Datasheet |
+| ------------- |------------- | ------------- |------------- |------------- |
+| PMS7003 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](./sensors/plantower/pms7003.pdf) |
