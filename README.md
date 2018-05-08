@@ -82,6 +82,8 @@
 
 ## Plantower Particulate
 
+<img src="./sensors/images/pms7003.jpg" width=300 />
+
 ### Parts List
 
 | Part Name | Measurement | Range | Accuracy | Datasheet |
