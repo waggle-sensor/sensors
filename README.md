@@ -69,7 +69,7 @@
 
 ## Alphasense OPC-N2 (Regular-range (16 bins in 0-10 μm) and High-range/Pollen (16 bins in 0-40 μm)
 
-<img src="./sensors/images/opcn2.jpg" width=300 />
+<img src="./sensors/images/opcn2.jpg" width="300" />
 
 * Size: 65x75x60mm 	
 * Interface: USB Storage, SPI
@@ -82,7 +82,7 @@
 
 ## Plantower Particulate
 
-<img src="./sensors/images/pms7003.png" width=300 />
+<img src="./sensors/images/pms7003.png" width="200" />
 
 ### Parts List
 
