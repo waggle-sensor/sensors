@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 This folder contains firmware version 3 for core sensors including Intel Chemsense board and Alpha sensor with airsense and lightsense board version 3.1 (July 11, 2016).
 
 The folder "stubs" is nothing, so please ignore the folder. Someday it will be removed.
