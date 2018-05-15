@@ -1,3 +1,7 @@
+<!--
+waggle_topic=Waggle/Sensors,Overview
+-->
+
 # Common Waggle Sensors:
 
 ## Metsense, HW Ver: 3.1
