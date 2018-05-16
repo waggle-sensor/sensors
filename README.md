@@ -1,3 +1,7 @@
+<!--
+waggle_topic=Waggle
+-->
+
 # Common Waggle Sensors:
 
 ## Airsense, HW Ver: 3.1
