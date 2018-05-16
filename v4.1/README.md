@@ -1,3 +1,9 @@
+<!--
+waggle_topic=Waggle/Sensors/V4,Firmware
+-->
+
+
+
 # Firmware v4.1
 This firmware works as a form of "get request and send data". 
 Thus if a user wants some data, the user needs to send relevant commands. 
