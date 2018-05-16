@@ -1,5 +1,5 @@
 <!--
-waggle_topic=Waggle
+waggle_topic=Waggle/Sensors/,Waggle Sensor Ensemble
 -->
 
 # Common Waggle Sensors:
