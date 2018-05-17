@@ -18,7 +18,7 @@ If a new file (any of ```Sensor*.ino``` or ```Bus*.ino```) is added in this fold
 
 
 ## Request, collect, and decode data
-When you use ```plugin.py``` in [waggle-sensor/plugin_manager/plugins/coresense_4](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) to send request packets and receive collected data packets, the plugin refers **sensor_table.conf**. For more information, please refer the git repo. When this firmware and plugin communicates, the data must follow **Waggle Packet**. For detailed information about **Waggle Packet**, see [Interface and Data Format Specification for sensors](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf)**.
+When you use ```plugin.py``` in [waggle-sensor/plugin_manager/plugins/coresense_4](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) to send request packets and receive collected data packets, the plugin refers **sensor_table.conf**. For more information, please refer the git repo. When this firmware and plugin communicates, the data must follow **Waggle Packet**. For detailed information about **Waggle Packet**, see [Interface and Data Format Specification for sensors](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
 
 
 ## Flowchart of Coresense Firmware Version 4.1
