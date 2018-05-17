@@ -3,179 +3,71 @@ waggle_topic=Waggle/Sensors/V4,Firmware
 -->
 
 
-
 # Firmware v4.1
-This firmware works as a form of "get request and send data". 
-Thus if a user wants some data, the user needs to send relevant commands. 
+This firmware works as a form of "get request, perform commands, and send data". Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. 
 
-Firmware version 4.1 is not based on version 3, which means that the sensors that had been on the coresense boards are working 
-the same method, but which different structure. Libraries that have been used for version 2 and 3 are
-separately implemented on various .ino files in the new version.
-Moreover, all conversion equations that were implemented in firmware version 2 and 3 are moved to decoder part (pywaggle).
-So all the data sent from this firmware are byte values as they are collected from a sensor directly.
+Firmware version 4.1 is not based on version 3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for version 2 and 3 are separately implemented on various ```Sensor*.ino``` files in this version. Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, **pywaggle**. Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
 
-Initialization, configuration, enable, disable, read, and write functions for sensors, which have sensor id, are defined in Sensor*.ino files with regard to its sensor id, and for sensors just added on the metsense board can use call functions in Bus*.ino. Bus*.ino is related to bus type and address or pin number of the sensor.
 
-### Configuration Information from chemsense and alpha sensor
-Configuration information **DO NOT follow waggle and coresense packet format**. To collect data of configutation information, user need to send request packet to coresense firmware. User can use coresense firmware, but the plugin cannot decode the data. To decode the data, the plugin needs to be modified. The configuration data will be sent with starting statement ("Start sending Alpha sensor/Chemsense configuration") and ending statement ("End sending Alpha sensor/Chemsense configuration"). Data length between the two statements differ for each case.
+## How to Put a New Sensor
+If anyone wants to add a new sensor in the firmware/Metsense board, the user needs to add an ```Sensor*.ino``` or ```Bus*.ino``` file. The ```*``` in the file name must be the sensor id in hex or bus type and pin number in hex. If the sensor gets a sensor id such as **0xFA**, then the file name must be ```SensorFA.ino```, or if the sensor does not have sensor id but uses I2C and connected through arduino pin number **0x48**, then the file name must be ```BusI2C48.ino```.
 
-### Flashing firmware using makefile
-Makefile in /waggle-sensor/senssros/v4.1/integrated/firmware does complie, build, and flash onto the board. Binary file of the firmware is created in bin folder in the directory.
+The file must contain functions named as **initSensor-, configSensor-, enableSensor-, disableSensor-, readSensor-, and writeSensor-**. For example, if the sensor id is **0xFA**, then the functions must be **initSensorFA, configSensorFA, enableSensorFA, disableSensorFA, readSensorFA, and writeSensorFA**. Please refer one of ```.ino``` files in this folder).
 
-### Flashing firmware using platformio
-If you would like to use platformio, you can use commands below, but the structure of the directory v4.1 needs to be re-configured. Build method is changed from platformio to use makefile because platformio does not provide a way to create binary file, which needed to flash new firmware to nodes.
+If a new file (any of ```Sensor*.ino``` or ```Bus*.ino```) is added in this folder, and when the firmware is compiled by doing ```make``` (just compile) or ```make install``` (complie and install the firmware into a Metsense board), new **SensorStruct.ino, BusStruct.ino, BusParamStruct.ino, and EnabledStruct.ino** will be automatically created. Based on the files, the firmware automatically notices that a new sensor is added on and creates new sensor list.
 
-* To install platformio using pip: ```$ pip install -U platformio``` 
-
-* To complie firmware using platformio: ```$ ./platformio.sh --alpha-in -c```  when an alpha sensor is included, or
-```$ ./platformio.sh --alpha-ex -c``` when an alpha sensor is excluded.
-
-* To flash new Firmware, use command this at where platformio.ini and platformio.sh exists:
-```$ ./platformio.sh --alpha-in -f``` when an alpha sensor is included, or ```$ ./platformio.sh --alpha-ex -f```
-when an alpha sensor is excluded.
 
 ## Request, collect, and decode data
-When you use coresense-plugin.py in waggle-sensor/plugin_manager/plugins/coresense_4 to read a sensor value, the plugin will refer 'sensor_table.conf' in folder /wagglerw/waggle/ in nodecontroller. 'sensor_table.conf' will be generated when coresense-plugin.py is excuted if there is no such file. If User wants to modify which sensor the user wants to collect data, how frequently the user wants to collect data, or add a new sensor that the user wants to test alone.
-
-### Waggle and Coresense Packet
-** For detailed information about transmission packet and subpacket, see "Interface and Data Format Specification for sensors" in
-"waggle-sensor/sensors/v4.1/sensor-documentation" **
-
-When the coresnese borad is powered on, the firmware configures, initializes, and enables all sensors implemented on met/light/chemsense boards, and alpha sensor and waits data collection request sent from coresense plugin. As the firmware uses Waggle protocol v5 to send and receive packets, coresense plugin should also use the same protocol version. Coresense Plugin 4.1 (in plugin_manager repository) is the plugin that can interact with the firmware. The plugin generates request packet using "sensor_table.conf" in /wagglerw/waggle in nodecontroller. Configuration reading from chemsense and alpha sensor do not follow waggle and coresense packet. The sensor table follows json format, and examples are given below:
-
-#### Example sensor table
-```
-s-1. Sensor table to collect data every 5 seconds from a sensor that has its sensor id.
-
-"Given_Sensor_Name": {
-        "interval": 5,
-        "function_call": "sensor_read",
-        "sensor_id": given_id_in_integer
-}
-
-b-1.  Sensor table to collect data every 5 seconds from a new sensor that does not have its sensor id through i2c.
-** For i2c reading, user must write related code and re-flash the new firmware **
-
-"Sensor_Name": {
-        "interval": 5,
-        "function_call": "bus_read",
-        "bus_type": "i2c",
-        "bus_address": 64,                 # address for the sensor is 0x40
-        "params": [                        # to collect data, this sensor 
-                243,                         requests to send two bytes
-                245                          that are 0xF3 and 0xF5
-         ]
-}
-
-b-2. Sensor table to collect data every 5 seconds from a new sensor that does not have its sensor id thorugh spi.
-
-"Sensor_Name": {
-        "interval": 5,
-        "function_call": "bus_read",
-        "bus_type": "spi",
-        "bus_address": 64,                # address for the sensor is 0x40
-        "params": [                       # to collect data, this sensor requires
-                64,                         how many time it collects data from the sensor
-                100                         requesting command
-         ]
-}
-
-b-3. Sensor table to collect data every 5 seconds from a new sensor through analog, digial, and serial.
-
-"Sensor_Name": {
-        "interval": 5,
-        "function_call": "bus_read",
-        "bus_type": "analog",
-        "bus_address": 0,                 # pin number for the sensor is A0
-        "params": []                      # no parameter is needed
-}
-
-b-4. Sensor table to collect data every 5 seconds from a new sensor through PWM.
-
-"Sensor_Name": {
-        "interval": 5,
-        "function_call": "bus_read",
-        "bus_type": "PWM",
-        "bus_address": 0,                 # pin number for the sensor is A0
-        "params": [                       # duty cycle in %
-                50
-         ]
-}
-```
-
-A table below shows types of "function_call" in the sensor table. When you do something with sensors that have sensor id, you need to use top 6 commands that with a word "Sensor". Otherwise, when you do something with new sensors that do not have sensor id, you need to use bottom 6 command that with a word "Bus".
-
-|FUNCTION TYPE  |  Key for sensor_table.conf |  ID for Firmware |  Description  |
-| ------------- |:-------------:|:-------------:| ----- |
-|initSensor     | sensor_init   | 0x01 | All sensors on Met/Light/Chem/Alpha are automatically initialized  |
-|configureSensor| sensor_config | 0x02 | All sensors on Met/Light/Chem/Alpha re configured with they are initialized  |
-|enableSensor   | sensor_enable | 0x03 | To enable sensor on Met/Light/Chem/Alpha: All sensors on Met/Light/Chem/Alpha are enabled when they are initialized  |
-|disableSensor  | sensor_disable| 0x04 | To disable sensor on Met/Light/Chem/Alpha --> no data will be collected from the sensor  |
-|readSensor     | sensor_read   | 0x05 | To collecte data from sensors  |
-|writeSensor    | sensor_write  | 0x06 | All sensors on Met/Light/Chem/Alpha are not writable  |
-|initBus        | bus_init      | 0x11 | To initialize new implemented sensors  |
-|configureBus   | bus_config    | 0x12 | To configure new implemented sensors  |
-|enableBus      | bus_enable    | 0x13 | New implemented sensors cannot be enabled --> data can be collected always from new sensors  |
-|disableBus     | bus_disable   | 0x14 | New implemented sensors cannot be disabled --> data can be collected always from new sensors  |
-|readBus        | bus_read      | 0x15 | To collect data from new implemented sensors  |
-|writeBus       | bus_write     | 0x16 | To write data on new implemented sensors  |
-
-When you try to collect data from a new sensor using "readBus", then you must provide which bus are you using, as shown in a table below.
-
-| BUS TYPE |Key for sensor_table.conf |  ID for Firmware |
-| ------------- |:-------------:|:-------------:|
-|I2C      | i2c |  0x00 |
-|SPI      | spi |  0x01 |
-|Serial   | serial |  0x02 |
-|Analog   | analog |  0x03 |
-|Digital  | digital |  0x04 |
-|PWM      | pwm |  0x05 |
-
-All the sensor table provide parameters for the sensor reading, and  Sensor names are parameters for "readSensor".
-"readSensor" command is able to take multiple parameters, if the length of the parameter is less than 127.
-
-| SENSOR        |ID             |        DATA   |
-| ------------- |:-------------:|:-------------:|
-|firmware ver  |0xFF|    Coresense firmware version                                                |
-|mac           |0x00|    Mac address of coresense boards                                           |
-|tmp112        |0x01|    Temperature sensor                                                        |
-|htu21d        |0x02|    Temperature and relative humidity sensor                                  |
-|hih4030       |0x03|    Relative humidity sensor                                                  |
-|bmp180        |0x04|    Temperature and barometric pressure sensor                                |
-|pr103j2       |0x05|    Temperature sensor                                                        |
-|tsl250        |0x06|    Light sensor (300-1100 nm, high responsivity at 640 nm)                   |
-|mma8452q      |0x07|    Accelerate force sensor                                                   |
-|spv1840       |0x08|    Sound sensor                                                              |
-|tsys01        |0x09|    Temperature sensor                                                        |
-|hmc5883l      |0x0A|    Magnetic field sensor                                                     |
-|hih6130       |0x0B|    Temperature and relative humidity sensor                                  |
-|apds9006      |0x0C|    Light sensor (480-640 nm, high responsivity at ~500 nm)                   |
-|tsl260rd      |0x0D|    Light sensor (820-1100 nm, high responsivity at 640 nm)                   |
-|tsl250rd      |0x0E|    Light sensor (300-1100 nm, high responsivity at 940 nm)                   |
-|mlx75305      |0x0F|    Light sensor (400-1000 nm, high responsivity at ~700 nm)                  |
-|ml8511        |0x10|    UV sensor (280-420 nm)                                                    |
-|tmp421        |0x13|    Temperature sensor                                                        |
-|chem config   |0x16|    Configuration of the chemsense firmware <<not core packet applicable>>    |
-|chemsense     |0x2A|    Raw, direct reading from chemsense board                                  |
-|alpha sensor histogram     |0x28|    Histogram of particle count                                               |
-|alpha sensor serial        |0x29|    Serial number of the alpha sensor                                         |
-|alpha sensor status        |0x2B|    Status of the alpha sensor                                                |
-|alpha sensor firmware ver  |0x30|    Firmware version of the alpha sensor                                      |
-|alpha sensor configuration |0x31|    Configuration of the alpha sensor <<not core packet applicable>>          |
+When you use ```plugin.py``` in (waggle-sensor/plugin_manager/plugins/coresense_4)[https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4] to send request packets and receive collected data packets, the plugin refers **sensor_table.conf**. For more information, please refer the git repo. When this firmware and plugin communicates, the data must follow **Waggle Packet**. For detailed information about **Waggle Packet**, see (Interface and Data Format Specification for sensors)[https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf]**.
 
 
-Parameters for "readBus" are differed with regard to the bus type -- i2c, spi, serial, and so on -- and sensor properties. Additionally, parameters for all bus related commands must be differed regarding sensor type and sensor properties. Therefore, the example paremeters cannot be given in here, and follow the datasheet for each sensor for "sensor_table.conf". Functions for bus are not fully completed, such as config, enable, disable, and write, however, the given standards are:
+## Flowchart of Coresense Firmware Version 4.1
 
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works and communicates with the plugin working at node controller in firmware side.
 
+### Flowchart:
+<img src="./Firmware_flow.png" width=800 />
 
-| Function      | Bus type      | Parameter     |
-| ------------- |:-------------:|:-------------|
-| bus_init | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : 3 bytes of max speed, 1 byte of type, 1 byte of mode <br> : 1 byte of power pin, 3 bytes of baudrate, 1 byte of timeout time in second <br> : N/A <br> : 1 byte of pin mode (0: input or 1: output) <br> : N/A |
-| bus_config | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
-| bus_enable | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
-| bus_disable| i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
-| bus_read | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : n number of parameters regaring to the sensor properties <br> : each 1 byte of the number of call, command, delay time, and the number of delay <br> : N/A <br> : N/A <br> : N/A <br> : N/A |
-| bus_write | i2c <br> spi <br> serial <br> analog <br> digital <br> pmw | : N/A <br> : N/A <br> : N/A <br> : N/A <br> : 1 byte of input (0 or 1) <br> : 1 byte of pwm duty cycle in percentage |
+### Step 1:
+First, when the firmware is turned on **(Start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(Set up)**. After that, it calls all initialization functions **(Initialization)** for all sensors and while do that, it initializes SPI, I2C, and other serial lines communicate with sensors to collect data from them. 
 
+### Step 2:
+When it finishes initialization, the firmware waits request packets sent from plugin **(Get Packet)**. If the firmware notices that the plugin sends packet **(incoming buffer?)**, it reads buffer until the last byte 0x55 is collected **(Store Buffers until Last Byte 0x55 is collected)**. When the last byte has arrived, the firmware checks if the stored buffers matche waggle protocol by checking preamble, post script, protocol version, and packet length **(waggle protocol?)**. If all the reqirements are satisfied, it checks CRC of the packet **(CRC?)**. If the packet does not match with waggle protocol or CRC, the packet is discarded.
 
+### Step 3:
+If the packet passes the former processes, we can say it contains information to config, enable, disable, read, or write on a sensor/sensors. Until length of the packet/request becomes empty **(Request = Empty)** and if the requested sensor is availble/enabled **(Sensor available?)**, the firmware performs the commands sent through the packet **(Call Function for the Request)**. If the sensor is not available, the sensor ID is packed as *disabled sensor* **(Packetization (Current Data)**. But if the request was *read sensor data*, the firmware saves the data into buffers **(Save Data into Buffers)**. Before the firmware packes the data, it checkes if the *length of packet + currently collected data* exceeds 127 bytes **(Packet Length + Current Data Buffer) > 127)**. If it exceeds, the firmware sends one existing packet first to plugin **(Packetization (Finalize)** and **Send Packet))** and makes a new packet with the current Data Buffer **(Packetization (Current Data))**.
+
+### Step 4:
+If there is no remaining request/command, the firmware checks packet length if it is longer than 4 bytes **(Packet Length > 4)**. If the packet length is longer than 4 bytes, the firmware finalizes the packet **(Packetization (Finalize))** and send the packet to plugin **(Send Packet)**. But if it is less than 4 bytes, the firmware does nothing and waits new buffer comming from plugin **(Get Packet)**.
+
+### Detailed Processes:
+
+1. Start: Sensor boards are powered on. Mostly Metsense board, Lightsense board, Chemsense board, Alpha sensor, and Plantower sensor (it depends on nodes).
+
+2. Setup: Initialize **SerialUSB** to communicate firmware with plugin, and **I2C** to get data from I2C sensors.
+
+3. Initialization: Call all **initialization functions** implemented in all ```Sensor*.ino``` and ```Bus*.ino``` files. For example, by calling initialization function in Sensor2A.ino (function sets for Chemsense board), the firmware sets Serial3 and power on the Chemsense board. For another example, by calling initialization function in Sensor28.ino (function sets for Alpha sensor), the firmware sets SPI and power on the alpha sensor.
+
+* *For your information, Decagon Soil Moisture sensor uses Serial1, PMS7003 Plantower sensor uses Serial2, and Chemsense board uses Serial3. So for now, all Serial lines are occupied*
+
+4. Get packet: [The plugin](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) sends a packet every particular seconds that determined by users, and this firmware waits the packet. The packet must follow waggle protocol version 2.
+
+5. Waggle Protocol: Preamble of the packets must be **0xAA**, post script must be **0x55**, and protocol number must be **2**. 
+
+6. CRC: CRC must be calculated based on the length and values in the packet except 4 pre-determined bytes (preamble, post script, protocol, and sequence.
+
+7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read, and write**. The request must be with sensor id, or bus pin number. Detailed explanation about the subpacket is given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+
+8. Sensor available: When the firmware initializes all sensors, it determines if the sensor is available or not by trying to get data. If the firmware fails to get data in initialization stage, it assumes that eh sensor is not physically connected, and lists the sensor as *disabled*.
+
+9. Saving data into buffers: If the request is **read**, the collected data are stored into buffers.
+
+10. Packet Length + Current Data Buffer > 127: With regards to the waggle protocol, length of a packet and subpacket cannot exceed 127 bytes. However when the firmware collects all sensor data (Met/Light/Chem/Alpha/Plantower), the length of total packet must exceed 127 bytes. Therefore, the firmware checks length of packets and send them separately in multiple packets.
+
+11. Packetization (Finalize): Calculate CRC, add post script at the end of a packet, and make new packet.
+
+12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
+
+### Need to be added in the firmware:
+- For now, the firmware does not send any message if the request is **write, configure, enable, or disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
 
