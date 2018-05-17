@@ -4,7 +4,7 @@ waggle_topic=Waggle/Sensors/V4,Firmware
 
 
 # Firmware v4.1
-This firmware works as a form of "get request, perform commands, and send data". Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. 
+This firmware works as a form of **get request, perform commands, and send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. 
 
 Firmware version 4.1 is not based on version 3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for version 2 and 3 are separately implemented on various ```Sensor*.ino``` files in this version. Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, **pywaggle**. Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
 
