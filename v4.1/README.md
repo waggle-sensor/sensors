@@ -20,7 +20,7 @@ If a new file (any of ```Sensor*.ino``` or ```Bus*.ino```) is added in this fold
 
 
 ## Request, collect, and decode data
-When you use ```plugin.py``` in [waggle-sensor/plugin_manager/plugins/coresense_4](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) to send request packets and receive collected data packets, the plugin refers **sensor_table.conf**. For more information, please refer the git repo. When this firmware and plugin communicates, the data must follow **Waggle Packet**. For detailed information about **Waggle Packet**, see [Interface and Data Format Specification for sensors](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+When you use ```plugin.py``` in [waggle-sensor/plugin_manager/plugins/coresense_4](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) to send request packets and receive collected data packets, the plugin refers **sensor_table.conf**. For more information, please refer the git repo. When this firmware and plugin communicates, the data must follow **Waggle Packet**. For detailed information about **Waggle Packet**, see [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
 
 
 ## Flowchart of Coresense Firmware Version 4.1
@@ -62,7 +62,7 @@ If there is no remaining request/command, the firmware checks packet length if i
 
 6. CRC: CRC must be calculated based on the length and values in the packet except 4 pre-determined bytes (preamble, post script, protocol, and sequence.
 
-7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read, and write**. The request must be with sensor id, or bus pin number. Detailed explanation about the subpacket is given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read,** and ***write**. The request must be with sensor id, or bus pin number. Detailed explanation about packets are given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
 
 8. Sensor available: When the firmware initializes all sensors, it determines if the sensor is available or not by trying to get data. If the firmware fails to get data in initialization stage, it assumes that eh sensor is not physically connected, and lists the sensor as *disabled*.
 
@@ -75,5 +75,5 @@ If there is no remaining request/command, the firmware checks packet length if i
 12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
 
 ### Need to be added in the firmware:
-- For now, the firmware does not send any message if the request is **write, configure, enable, or disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
+- For now, the firmware does not send any message if the request is **write, configure, enable,** or **disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
 
