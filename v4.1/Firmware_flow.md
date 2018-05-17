@@ -2,6 +2,9 @@
 
 The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works and communicates with the plugin working at node controller in firmware side.
 
+### Flowchart:
+<img src="./Firmware_flow.png" width=800 />
+
 ### Step 1:
 First, when the firmware is turned on **(Start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(Set up)**. After that, it calls all initialization functions **(Initialization)** for all sensors and while do that, it initializes SPI, I2C, and other serial lines communicate with sensors to collect data from them. 
 
@@ -42,9 +45,7 @@ If there is no remaining request/command, the firmware checks packet length if i
 
 12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
 
-**Need to be added in the firmware**
+### Need to be added in the firmware:
 - For now, the firmware does not send any message if the request is **write, configure, enable, or disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
 
-### Flowchart
-<img src="./Firmware_flow.png" width=800 />
 
