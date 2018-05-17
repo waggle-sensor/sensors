@@ -70,7 +70,7 @@ If there is no remaining request/command, the firmware checks packet length if i
 
 10. Packet Length + Current Data Buffer > 127: With regards to the waggle protocol, length of a packet and subpacket cannot exceed 127 bytes. However when the firmware collects all sensor data (Met/Light/Chem/Alpha/Plantower), the length of total packet must exceed 127 bytes. Therefore, the firmware checks length of packets and send them separately in multiple packets.
 
-11. Packetization (Finalize): Calculate CRC, add post script at the end of a packet, and make new packet.
+11. Packetization (Finalize): Calculate CRC, add post script at the end of a packet, and make new packet. If it if the last packet for one requesting packet, first bit of 4th byte is 1. Otherwise, first bit of 4th byte is 0.
 
 12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
 
