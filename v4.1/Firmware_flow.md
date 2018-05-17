@@ -40,5 +40,5 @@ The firmware call sensor functions and do packetization until there is no more r
 - For now, the firmware does not send any message to plugin except the request is read so that users do not know if other request has happend. Thus additional messages saying something about the process relatice to other request such as write, configure, and so on.
 
 ### Flowchart
-<img src="./Firmware_flow.png" width=400 />
+<img src="./Firmware_flow.png" width=600 />
 
