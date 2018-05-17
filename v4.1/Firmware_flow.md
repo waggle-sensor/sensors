@@ -46,5 +46,5 @@ If there is no remaining request/command, the firmware checks packet length if i
 - For now, the firmware does not send any message if the request is **write, configure, enable, or disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
 
 ### Flowchart
-<img src="./Firmware_flow.png" width=600 />
+<img src="./Firmware_flow.png" width=800 />
 
