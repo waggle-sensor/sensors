@@ -4,7 +4,7 @@ waggle_topic=Waggle/Sensors/V4,Firmware
 
 
 # Firmware v4.1
-This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. 
+This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4.1*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/develop/change-logs.md) (May 2018).
 
 Firmware version 4.1 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
 
@@ -96,6 +96,10 @@ If there is no remaining request/command, the firmware checks packet length if i
 11. Packetization (Finalize): Calculate CRC, add post script at the end of a packet, and make new packet. If it if the last packet for one requesting packet, first bit of 4th byte is 1. Otherwise, first bit of 4th byte is 0.
 
 12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
+
+### Sensor definition file (SDF):
+[Sensor definition file](https://github.com/waggle-sensor/sensors/blob/develop/SDF_V1.csv) provides detail information of the sensor including *sensor id, sensor type, data type, unit of the data, and so on*. If a sensor is added on, the [SDF](https://github.com/waggle-sensor/sensors/blob/develop/SDF_V1.csv) file must be updated. Simple description of sensors are available in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+
 
 ### Need to be added in the firmware:
 - For now, the firmware does not send any message if the request is **write, configure, enable,** or **disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
