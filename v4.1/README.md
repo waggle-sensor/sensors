@@ -8,7 +8,7 @@ This firmware works as a form of **get request, perform commands,** and **send d
 
 Firmware version 4.1 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
 
-Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, [**pywaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5). Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
+Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, [**PyWaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5). Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
 
 
 ## How to Put a New Sensor
@@ -43,9 +43,9 @@ When this firmware and plugin communicates, the data must follow **Waggle Packet
 | --- | --- | --- |
 |varies|0 or 1 of 1st bit & 0x00 - 0x7F|varies, <= 127 bytes|	
 
-Basically, the [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py) provides encoding and decoding services with regard to **Waggle protocol**. Therefore if you use the *plugin*, you only need to see [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf). Moreover, the *plugin* is connected with [**pywaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5) so that the *plugin* provides converted values when an option *--hrf* is given. For more information about data convertion service, please refer [**coresense 4 plugin README**](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4).
+Basically, the [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py) provides encoding and decoding services with regard to **Waggle protocol**. Therefore if you use the *plugin*, you only need to see [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf). Moreover, the *plugin* is connected with [**PyWaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5) so that the *plugin* provides converted values when an option *--hrf* is given. For more information about data convertion service, please refer [**coresense 4 plugin README**](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4).
 
-Additionally, if a new sensor is added on and user wants to get decoded and converted values through the **plugin** and **pywaggle**, the user must update **pywaggle** by adding information of the sensor for the post-processing in [waggleprotocol spec](https://github.com/waggle-sensor/pywaggle/blob/develop/waggle/protocol/v5/waggleprotocol_spec.py) and [convertion process code](https://github.com/waggle-sensor/pywaggle/tree/develop/waggle/protocol/v5/utils). If **pywaggle** is not updated, the plugin just ignore the subpacket of the new sensor because it is not reported to be processed.
+Additionally, if a new sensor is added on and user wants to get decoded and converted values through the **plugin** and **PyWaggle**, the user must update **PyWaggle** by adding information of the sensor for the post-processing in [waggleprotocol spec](https://github.com/waggle-sensor/pywaggle/blob/develop/waggle/protocol/v5/waggleprotocol_spec.py) and [convertion process code](https://github.com/waggle-sensor/pywaggle/tree/develop/waggle/protocol/v5/utils). If **PyWaggle** is not updated, the plugin just ignore the subpacket of the new sensor because it is not reported to be processed.
 
 
 ## Flowchart of Coresense Firmware Version 4.1
