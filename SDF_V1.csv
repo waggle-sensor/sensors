@@ -177,5 +177,5 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x39,CR3110-3000,,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
 0x11,Bus reading,vareis,vareis,raw,vareis,vareis,vareis,vareis,vareis,vareis
 0x11,Bus reading,vareis,vareis,hrf,vareis,vareis,vareis,vareis,vareis,vareis
-0x12,List of disabled sensors,id,pre-determined,raw,n/a,n/a,n/a,n/a,n/a,n/a
-0x12,List of disabled sensors,id,pre-determined,hrf,n/a,n/a,n/a,n/a,n/a,n/a
+0x32,List of disabled sensors,id,pre-determined,raw,n/a,n/a,n/a,n/a,n/a,n/a
+0x32,List of disabled sensors,id,pre-determined,hrf,n/a,n/a,n/a,n/a,n/a,n/a
