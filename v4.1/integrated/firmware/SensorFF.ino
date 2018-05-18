@@ -1,11 +1,10 @@
 // Coresense firmware version
 
-#define CORESENSE_HW_VER_MAJ 3 // 4 bits
-#define CORESENSE_HW_VER_MIN 1 // 4 bits
+#define CORESENSE_HW_VER_MAJ 3
+#define CORESENSE_HW_VER_MIN 1
 
-#define CORESENSE_KERNEL_MAJ 4 // 8 bits
-#define CORESENSE_KERNEL_MIN 1 // 4 bits
-#define CORESENSE_KERNEL_SUB 3 // 4 bits
+#define CORESENSE_KERNEL_MAJ 4
+#define CORESENSE_KERNEL_MIN 13
 
 void InitSensorFF()
 {
@@ -29,21 +28,21 @@ void DisableSensorFF()
 
 void ReadSensorFF(byte *sensorReading, int *readingLength)
 {
-	int first_byte = (CORESENSE_HW_VER_MAJ << 5) | ((CORESENSE_HW_VER_MIN & 0x07) << 2) | ((CORESENSE_KERNEL_MAJ & 0x0F) >> 2);
-	int second_byte = ((CORESENSE_KERNEL_MAJ & 0x0F) << 6) | ((CORESENSE_KERNEL_MIN * 10 + CORESENSE_KERNEL_SUB) & 0x3F);
-
 	int buildinfo_git = (int) strtol(BUILD_GIT, 0, 16);
 
-	sensorReading[0] = first_byte & 0xFF;
-	sensorReading[1] = second_byte & 0xFF;
-	sensorReading[2] = (BUILD_TIME >> 24) & 0xFF;
-	sensorReading[3] = (BUILD_TIME >> 16) & 0xFF;
-	sensorReading[4] = (BUILD_TIME >> 8) & 0xFF;
-	sensorReading[5] = BUILD_TIME & 0xFF;
-	sensorReading[6] = (buildinfo_git >> 8) & 0xFF;
-	sensorReading[7] = buildinfo_git & 0xFF;
+	sensorReading[0] = CORESENSE_HW_VER_MAJ;
+	sensorReading[1] = CORESENSE_HW_VER_MIN;
+	sensorReading[2] = CORESENSE_KERNEL_MAJ;
+	sensorReading[3] = CORESENSE_KERNEL_MIN;
+	
+	sensorReading[4] = (BUILD_TIME >> 24) & 0xFF;
+	sensorReading[5] = (BUILD_TIME >> 16) & 0xFF;
+	sensorReading[6] = (BUILD_TIME >> 8) & 0xFF;
+	sensorReading[7] = BUILD_TIME & 0xFF;
+	sensorReading[8] = (buildinfo_git >> 8) & 0xFF;
+	sensorReading[9] = buildinfo_git & 0xFF;
 
-	*readingLength = 8;
+	*readingLength = 10;
 }
 
 void WriteSensorFF(byte *packet)

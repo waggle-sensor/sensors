@@ -5,6 +5,7 @@ It keeps track of the changes for versions.
 # Firmware Version 4.13 (in v4.13) (2018-04)
 ### New fearues
 * Sensor32.ino, which is sending a list of disabled sensors if it is requested.
+* With regard to waggleprotocol spec, the length of firmware version is changed: bitwise operation is removed.
 ### Comments
 * A list of disabled sensor is automatically sent by FW when a user request any data from any sensor. However, Sensor ID 32 is added for the case to request the list of disabled sensor explicitly.
 
