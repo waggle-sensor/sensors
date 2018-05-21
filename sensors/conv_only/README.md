@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # Documentation:
 
  python scripts for Linux or Mac in this directory can be used to create new sensor data csv file. 
