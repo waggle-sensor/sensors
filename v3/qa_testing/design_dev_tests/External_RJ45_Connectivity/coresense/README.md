@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 ## Testing Procedure
 *  In the coresense folder, and issue command *make run* </br>
 </br>

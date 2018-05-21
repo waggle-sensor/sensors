@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # Test Scope and Coverage
 
 This test evaluates the following aspects of Airsense design. </br>

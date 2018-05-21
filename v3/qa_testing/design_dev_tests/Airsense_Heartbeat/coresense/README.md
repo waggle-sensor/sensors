@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 ## Testing Procedure
 __Only the Coresense boards are powered by Wagman during the test.__</br>
 __The Odroids XU4 and C1P have to be powered on independently.__</br>

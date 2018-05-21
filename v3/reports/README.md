@@ -1,3 +1,7 @@
+<!--
+waggle_topic=Waggle/Sensors, Plotting Beehive Data
+-->
+
 ## Overview:
 
 Several sensors measuring a range of values from TPH to concentrations of several gases and particulate matter are 

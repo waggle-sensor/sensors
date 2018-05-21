@@ -1,3 +1,8 @@
+<!--
+waggle_topic=IGNORE
+-->
+
+
 # Firmware v4
 This firmware works as a form of "get request and send data". Thus if a user wants some data, the user needs to send relevant commands. Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
 

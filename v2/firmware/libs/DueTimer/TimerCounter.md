@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # The Timer Counter blocks of Arduino Due's AT91SAM3X8E
 
 The AT91SAM3X8E embedds nine general-purpose 32-bit timers/counters. They are organized in three blocks (`TC0`, `TC1`, `TC2`) each containing three channels (`0`, `1`, `2`).

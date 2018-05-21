@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # Change logs
 
 It keeps track of the changes for versions.

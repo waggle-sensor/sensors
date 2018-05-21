@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 ## Testing Procedure
 *   Setup 1:
     -   Complete electrical connections.
