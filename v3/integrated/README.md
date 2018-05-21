@@ -4,6 +4,8 @@ waggle_topic=Waggle/Sensors,Firmware v3
 
 # Firmware v3
 
+This is coresense firmware v3. It collects data from sensors in Metsense board, Lightsense board, and Chemsense board.
+
 ## Integrated codes
 
 This folder contains all files to test the airsense, lightsense, and chemsense board together (Jun 21, 2016). The boards need to be connected to your computer as shown in the document [link.pdf](../../../docs/sensorStreamFormat/link.pdf). 
