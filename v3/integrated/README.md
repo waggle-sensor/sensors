@@ -1,5 +1,5 @@
 <!--
-waggle_topic=Waggle/Sensors/v3,Firmware v3
+waggle_topic=Waggle/Sensors/v3,Firmware
 -->
 
 
