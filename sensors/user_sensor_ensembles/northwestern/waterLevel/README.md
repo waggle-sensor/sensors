@@ -29,13 +29,15 @@ Prototypes deployed at Tuley Park Field House, Chatham, Chicago, IL
 
 ## Build diagrams
 ### Circuit
-Figure out how to embed a pdf
+
+
+<img src="./waterLevelSensor.svg" width="800">
 
 ### Acrylic cutting
-Add dimensioning to this and upload
+`TODO: Add dimensioning to this and upload`
 
 ### Logger assembly
-Take some photos
+`TODO: Take some photos`
 
 ## Build recipe
 ### In the lab
