@@ -4,7 +4,22 @@ waggle_topic=Waggle/Sensors/V3,Firmware v3
 
 # Firmware v3
 
-This is coresense firmware v3. It collects data from sensors in Metsense board, Lightsense board, and Chemsense board.
+This is coresense firmware v3. It collects data from sensors in Metsense board, Lightsense board, and Chemsense board. Basically, this firmware automatically reads data, transforms the data to waggle packet format, and sends a packet every 25 seconds if the boards are powered on and connected to node controller.
+
+## Flowchart of Coresense Firmware Version 3
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v3/integrated/Firmware_flow.png) shows how the coresense firmware version 3 works.
+
+### Flowchart:
+<img src="./Firmware_flow.png" width=800 />
+
+### Step 1:
+First, when the firmware is turned on **(Start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(Set up)**. After that, it initializes sensors **(Initialization)**. While sensors are initialized, SPI, I2C, and other serial lines are started and configured to collect data from sensors. 
+
+### Step 2:
+When it finishes initialization, the firmware reads sensors one by one **(Collect Data)**, and trasnforms the data to match waggle packet format **(Change Data to Waggle Format)**. When the firmware reads all the sensors, it packtizes the data **(Pack Data)**, and sends the packet **(Send Packet)**. 
+
+**One cycle for reading, transforming, packing, and sending a packet takes about 25 seconds.** So this firmware sends a packet every 25 seconds.
+
 
 ## Integrated codes
 
