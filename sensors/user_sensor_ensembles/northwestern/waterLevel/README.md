@@ -52,7 +52,7 @@ Take some photos
    * '-' -> Black  
  So, nearest sensor to the floor is sensor 0, top sensor is sensor 2.
 9. Connect antenna and carefully position outside the housing; tape in place. Make sure that the wire will not be pinched when the housing is closed
-10. Tidy up wires with small cable ties
+10. Tidy up wires with small cable ties, taking care not to pinch
 11. Connect USB-B cable and flash firmware (Particle CLI recommended)
 ### In the field
 12. Mount acrylic plate to wall with masonry screws, ensuring that sensors are level; that is, parallel to the direction of gravity, not aligned with the wall or floor
