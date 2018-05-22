@@ -38,6 +38,7 @@ Add dimensioning to this and upload
 Take some photos
 
 ## Build recipe
+### In the lab
 1. Assemble circuit according to above circuit diagram
 2. Slot Particle Electron into two 18-pin connectors with black wires aligning with VIN at top and green wire aligning with A0 at bottom.
 3. Slot 3 identical resistors into 6-pin sockets, taking care to not cross or touch legs
@@ -52,6 +53,9 @@ Take some photos
  So, nearest sensor to the floor is sensor 0, top sensor is sensor 2.
 9. Connect antenna and carefully position outside the housing; tape in place. Make sure that the wire will not be pinched when the housing is closed
 10. Tidy up wires with small cable ties
-11. Mount acrylic plate to wall with masonry screws, ensuring that sensors are level; that is, parallel to the direction of gravity, not aligned with the wall or floor
-12. Connect battery and power supply
-13. Close housing, taking care not to pinch wires
+11. Connect USB-B cable and flash firmware (Particle CLI recommended)
+### In the field
+12. Mount acrylic plate to wall with masonry screws, ensuring that sensors are level; that is, parallel to the direction of gravity, not aligned with the wall or floor
+13. Connect battery and power supply
+15. Wait for internet connection
+16. Close housing, taking care not to pinch wires
