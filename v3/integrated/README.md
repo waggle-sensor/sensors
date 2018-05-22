@@ -25,12 +25,11 @@ When it finishes initialization, the firmware reads sensors one by one **(Collec
 The list below is the files/folders for this coresense firmware v3.
 
 #### Make:
+The codes below are used when compile the program:
 
-makefile
-
-buildinfo.cpp
-config.cpp
-setbuildtime.sh
+1. makefile: make the program.
+2. config.cpp: configuration of this program, such as if a Chemsense board is included in the system.
+3. setbuildtime.sh: it creates build time and build git when this program is builded.
 
 configure
 
@@ -61,6 +60,7 @@ These codes are sort of libraries to collect data from,
 3. TSYS01.ino: a sensor, TSYS01 temperature sensor.
 4. mma84521.ino: a sensor, MMA84521 accelerometer.
 5. verinfo.cpp: firmware version, a fixed value.
+6. buildinfo.cpp: build time and build git when this program is builded.
 
 #### Libraries:
 1. libs: Libraries for some sensors, because not all the sensors requires libraries.
