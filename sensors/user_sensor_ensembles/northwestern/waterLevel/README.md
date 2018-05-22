@@ -9,7 +9,7 @@ Prototypes deployed at Tuley Park Field House, Chatham, Chicago, IL
 - 2 x 18-pin header sockets, 0.1" pitch (DigiKey 1212-1206-ND or similar); for mounting Electron
 - 3 x 3-pin headers (DigiKey 732-5323-ND or similar); for connecting sensors
 - 2 x 6-pin sockets (DigiKey S7071-ND or similar); for inserting resistors
-- 22G flexible wire; red, black, green  
+- Hookup wire; red, black, green  
 ### Logger Construction
 - 1 x [Particle Electron](https://docs.particle.io/datasheets/electron-(cellular)/electron-datasheet/ "Electron datasheet")
 - 1 x Antenna ([Taoglas PC104 included](http://www.taoglas.com/wp-content/uploads/2015/06/PC104.07.0165C.pdf "PDF doc sheet") with Particle Electron; or similar GSM antenna with MHFI connector)
