@@ -10,7 +10,7 @@ This is coresense firmware v3. It collects data from sensors in Metsense board, 
 The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v3/integrated/Firmware_flow.png) shows how the coresense firmware version 3 works.
 
 ### Flowchart:
-<img src="./Firmware_flow.png" width=800 />
+<img src="./Firmware_flow.png" width=400 />
 
 ### Step 1:
 First, when the firmware is turned on **(Start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(Set up)**. After that, it initializes sensors **(Initialization)**. While sensors are initialized, SPI, I2C, and other serial lines are started and configured to collect data from sensors. 
