@@ -50,7 +50,7 @@ Additionally, if a new sensor is added on and user wants to get decoded and conv
 
 ## Flowchart of Coresense Firmware Version 4.1
 
-The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works..
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works.
 
 ### Flowchart:
 <img src="./Firmware_flow.png" width=800 />
