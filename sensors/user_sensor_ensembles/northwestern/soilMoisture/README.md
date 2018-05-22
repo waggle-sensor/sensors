@@ -9,9 +9,9 @@ Soil moisture sensor array and logger based on Particle IoT platform (Particle.i
 ### Circuit Construction
 - 1 x Solderable PCB with pads, at least 18 x 24, 0.1" pitch (http://a.co/isHuxrb or similar)
 - 2 x 18-pin header sockets, 0.1" pitch (DigiKey 1212-1206-ND or similar); for mounting Electron
-- Hookup wire; red, black, green  
+- Hookup wire
 - 3 x female barrel connectors with wire ends, 2.5mm (DigiKey 839-1303-ND or similar)
-- 6 x 22k resistor
+- 6 x 22k resistor  
 ### Logger Construction
 - 1 x [Particle Electron](https://docs.particle.io/datasheets/electron-(cellular)/electron-datasheet/ "Electron datasheet")
 - 1 x Antenna ([Taoglas PC104 included](http://www.taoglas.com/wp-content/uploads/2015/06/PC104.07.0165C.pdf "PDF doc sheet") with Particle Electron; or similar GSM antenna with MHFI connector)
