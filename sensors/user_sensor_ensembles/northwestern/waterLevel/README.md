@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # "Nano-Waggle" Water Level Probe
 Water level sensor array and logger based on Particle IoT platform (Particle.io)
 
