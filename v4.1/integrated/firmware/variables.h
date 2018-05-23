@@ -9,6 +9,7 @@
 #include "./Sensor0D-11.h"
 #include "./Sensor2A.h"
 #include "./Sensor28-31.h"
+#include "./Sensor2C.h"
 // Wire
 OneWire ds2401(48);
 
