@@ -6,14 +6,22 @@ waggle_topic=IGNORE
 
 It keeps track of the changes for versions.
 
-# Firmware Version 4.13 (in v4.13) (2018-04)
-### New fearues
+# Firmware Version 4.14 (in v4.1) (2018-05)
+### New features
+* Sensor2C.ino and Sensor 2D.ino, which are OnSet rain gauge and Dacagon rain gauge, are added on. Rain gauge has tested within v4.13, but soil moisture sensor has never tested within v4.13 (2018-05).
+### Commnets
+* Codes for enable/disable sensor and bus call functions are cleaned up.
+### Cautions
+* Rain gauge is not automatically recognized whether the sensor is connected on Metsense board or not: the firmware alway assume that rain gauge is connected from this version. It's totally user's/plugin's responsibility if the user/plugin calls the sensor or not.
+
+# Firmware Version 4.13 (in v4.1) (2018-04)
+### New features
 * Sensor32.ino, which is sending a list of disabled sensors if it is requested.
 * With regard to waggleprotocol spec, the length of firmware version is changed: bitwise operation is removed.
 ### Comments
 * A list of disabled sensor is automatically sent by FW when a user request any data from any sensor. However, Sensor ID 32 is added for the case to request the list of disabled sensor explicitly.
 
-# Firmware Version 4.12 (in v4.12) (2018-03)
+# Firmware Version 4.12 (in v4.1) (2018-03)
 ### New features
 * PMS7003 sensor added refering Sensor36.ino file.
 * A redundant file, Mandatory.ino, removed.
