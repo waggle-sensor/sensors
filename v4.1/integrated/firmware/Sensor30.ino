@@ -27,7 +27,7 @@ void ReadSensor30(byte *sensorReading, int *readingLength)
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 	delay(100);
 
-	returnbyte = SPI.transfer(0x12);    // 0xF3
+	SPI.transfer(0x12);    // 0xF3
 	delay(10);
 
 	for (int i = 0; i < 2; i++)

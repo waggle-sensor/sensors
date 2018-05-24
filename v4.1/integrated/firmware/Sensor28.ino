@@ -33,7 +33,7 @@ void EnableSensor28()
 	EnableSensor(0x30);
 	EnableSensor(0x31);
 }
-
+	
 void DisableSensor28()
 {
 	DisableSensor(0x28);
@@ -69,31 +69,30 @@ void WriteSensor28(byte *packet)
 	return;
 }
 
-byte returnbyte;
 void alpha_onagain()
 {
+	byte returnbyte;
+
 	alphasense_on();
-	alpha_status();
+	returnbyte = alpha_status();
 
 	// byte alphaStatusid = 0x2B;
 
 	int repeat = 0;
-	while ((returnbyte != 0x31) && (repeat < 10))
+	while ((returnbyte != 0x31) && (repeat < 5))
 	{
 		if (repeat != 0)
 			delay(5000);
 		repeat++;
 		alphasense_on();
 		delay(100);
-		alpha_status();
-	}
-	// delay(1000);
+		returnbyte = alpha_status();
 
-	byte thisid = 0x28;
-	if (returnbyte == 0x31)
-		SensorEnable(thisid);
-	else
-		SensorDisable(thisid);
+		if (returnbyte != 0x31)
+			DisableSensor28();
+		else
+			EnableSensor28();
+	}
 }
 
 // Alphasense
@@ -102,22 +101,26 @@ void alphasense_on()   // initialization
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
-	returnbyte = SPI.transfer(0x03);
+	SPI.transfer(0x03);
 	delay(10);
-	returnbyte = SPI.transfer(0x00);
+	SPI.transfer(0x00);
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
 }
 
-void alpha_status()   // initialization
+byte alpha_status()   // initialization
 {
+	byte returnbyte;
+
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
 	returnbyte = SPI.transfer(0xCF);
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();
+
+	return returnbyte;
 }
 
 void alphasense_off()   // disenable
@@ -125,9 +128,9 @@ void alphasense_off()   // disenable
 	SPI.beginTransaction(setAlpha);
 	digitalWrite(ALPHA_SLAVE_PIN, LOW);
 
-	returnbyte = SPI.transfer(0x03);
+	SPI.transfer(0x03);
 	delay(10);
-	returnbyte = SPI.transfer(0x01);
+	SPI.transfer(0x01);
 
 	digitalWrite(ALPHA_SLAVE_PIN, HIGH);
 	SPI.endTransaction();

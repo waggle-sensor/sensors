@@ -34,7 +34,12 @@ void DisableBusSerial02()
 
 void ReadBusSerial02(byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength, 2);
+	byte inputbyte;
+
+	while (Serial2.available() > 0)
+		inputbyte = Serial2.read();
+
+	*readingLength = Serial2.readBytesUntil('\n', sensorReading, 256);
 }
 
 void WriteBusSerial02(byte *sensorReading)

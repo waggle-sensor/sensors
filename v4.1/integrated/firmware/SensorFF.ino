@@ -4,7 +4,7 @@
 #define CORESENSE_HW_VER_MIN 1
 
 #define CORESENSE_KERNEL_MAJ 4
-#define CORESENSE_KERNEL_MIN 13
+#define CORESENSE_KERNEL_MIN 14
 
 void InitSensorFF()
 {

@@ -5,7 +5,6 @@
 
 void InitSensor2C()
 {
-	SerialUSB.println("rain gauge init");
 	pinMode(RAIN_INTERRUPT_PIN, INPUT_PULLUP);
 	attachInterrupt(digitalPinToInterrupt(RAIN_INTERRUPT_PIN), blink, RISING);
 	delay(5);
@@ -63,9 +62,8 @@ void reset()
 
 void blink()
 {
-	SerialUSB.println("rain gauge blink");
 	pin_signal++;
-	if (pin_signal == 2)
+	if (pin_signal == 3)
 	{
 		count_num++;
 		pin_signal = 0;

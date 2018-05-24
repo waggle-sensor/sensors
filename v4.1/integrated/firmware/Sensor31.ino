@@ -31,6 +31,7 @@ void ReadSensor31(byte *sensorReading, int *readingLength)
 	SPI.transfer(0x3C);   // 0xF3
 	delay(10);
 
+	byte returnbyte;
 	for (int i = 0; i < 256; i++)
 	{
 		returnbyte = SPI.transfer(0x3C);

@@ -21,7 +21,7 @@ void InitSensor2A()
 	}
 	Serial3.end();
 	digitalWrite(CHEM_POWER_PIN, HIGH);
-	DisableSensor(0x2A);
+	DisableSensor2A();
 }
 
 void ConfigSensor2A()
@@ -43,7 +43,11 @@ void DisableSensor2A()
 
 void ReadSensor2A(byte *sensorReading, int *readingLength)
 {
-	ReadRS232(sensorReading, readingLength);
+	byte inputbyte;
+	while (Serial3.available() > 0)
+		inputbyte = Serial3.read();
+
+	*readingLength = Serial3.readBytesUntil('\n', sensorReading, 256);
 }
 
 void WriteSensor2A(byte *packet)
