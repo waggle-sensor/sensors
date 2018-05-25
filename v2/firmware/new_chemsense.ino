@@ -219,6 +219,40 @@ void Carrier()
 #endif
 	}
 
+    else if (compareKey('H', 'D', 'T') == 0)
+    {
+        //Int_form2();
+        form2_int_string_to_int();
+
+        formatted_byte_temp[4] = formatted_data_buffer[0];
+        formatted_byte_temp[5] = formatted_data_buffer[1];
+
+#ifdef SERIAL_DEBUG
+        // to check output
+        for (j = 0; j < LENGTH_FORMAT2; j++)
+            SerialUSB.print(formatted_data_buffer[j],HEX);
+#endif
+    }
+
+    else if (compareKey('H', 'D', 'H') == 0)
+    {
+        //Temp_uint16 = (unsigned int)atoi(VAL);       //char to int
+        //format1(Temp_uint16);
+        form1_int_string_to_unsigned_int();
+        
+        HDC1010[0] = ID_HDC1010;
+        HDC1010[1] = (valid << 7) | (LENGTH_FORMAT2 + LENGTH_FORMAT1);
+        HDC1010[2] = formatted_byte_temp[0];
+        HDC1010[3] = formatted_byte_temp[1];
+        HDC1010[4] = formatted_data_buffer[0];
+        HDC1010[5] = formatted_data_buffer[1];
+#ifdef SERIAL_DEBUG
+        // to check output
+        for (j = 0; j < LENGTH_FORMAT2; j++)
+            SerialUSB.print(formatted_data_buffer[j],HEX);
+#endif
+    }
+
 	else if (compareKey('S', 'H', 'T') == 0)  // wait SHH
 	{
         //Int_form2();

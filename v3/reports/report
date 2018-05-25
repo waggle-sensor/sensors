@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+if [ "$#" -ne 3 ]; then
+   echo "Not enough information provided..."
+   exit 1
+fi
+base_dir=$(dirname ${BASH_SOURCE[0]})
+rm -f ${base_dir}/sensor_data_set*.csv
+${base_dir}/getdatasets $1 $2 $3
+if [ ! -f ./sensor_data_set.csv ]; then
+    exit
+fi
+
+cp sensor_data_set.csv sensor_data_set_orig.csv
+python3 ${base_dir}/beehive_csv.py
+mv sensor_data_set_converted.csv sensor_data_set.csv
+${base_dir}/plot sensor_data_set.csv
+

@@ -1,3 +1,7 @@
+This binary will work with x86-64 architecture under Linux. Please make sure the Metsense 
+board connects to /dev/ttyACM0. If it is a different port, please modify the port info 
+in the make file appropriately. 
+
 To flash coresense firmware with a binary file, which is in ./bin,
 DO:
 $ make program
@@ -10,5 +14,3 @@ The bin is coresense version2 (Nov 29, 2016)
 * Metsense
 * Lightsense
 * Chemsense
-
-* Transfer packet to nodecontroller every 30 sec

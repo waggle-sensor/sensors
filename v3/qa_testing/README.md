@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 # Coresense QA Tests and Scope
 
 The Coresense system is made of a set of 3 boards -

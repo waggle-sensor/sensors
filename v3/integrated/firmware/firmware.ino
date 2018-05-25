@@ -4,7 +4,7 @@
  **/
 
 #include <SPI.h> // Shall we move the version of the libraries that work for us inside lib?
-#include <Wire.h> 
+#include <Wire.h>
 #include "./libs/DueTimer/DueTimer.h"   //** TIMER3 library
 #include <OneWire.h>
 
@@ -12,10 +12,10 @@
 #include "pin_config.cpp"
 
 #include "./subpacket.h"
-#include "./setsensor.h"    //** add variables for sensors on airsense and lightsense boards 
+#include "./setsensor.h"    //** add variables for sensors on airsense and lightsense boards
 
 #include "./variable.h"     //** byte arrays, variables for all sensors and integrated.ino
-//** depening on its availability 
+//** depening on its availability
 
 
 #ifndef USBSERIAL_INTERFACE
@@ -28,20 +28,20 @@ void setup()
     //** Let us wait for the processor and the sensors to settle down
     delay(2000);
 
-    #ifdef USBSERIAL_INTERFACE 
+    #ifdef USBSERIAL_INTERFACE
     SerialUSB.begin(USBSERIAL_INTERFACE_DATARATE); // Serial data line to the host computer
     #endif
 
     //** initialize the super-packet
     //** and sub-packets
     //** sensors_setup.ino, set pinMode and put MACID of airsense
-    assemble_packet_empty();    
-    sensor_buff_initialization();    
+    assemble_packet_empty();
+    sensor_buff_initialization();
     initializeSensorBoard();
 
     #ifdef I2C_SENSORS
     //** begin communication lines
-    Wire.begin(); // Sensors are on the first I2C Bus, air and light sensor boards    
+    Wire.begin(); // Sensors are on the first I2C Bus, air and light sensor boards
     #endif
 
 
@@ -58,20 +58,33 @@ void setup()
     #ifdef I2C_INTERFACE
     I2C_READ_COMPLETE = false;
     Wire1.begin(I2C_SLAVE_ADDRESS);
-    Wire1.onRequest(requestEvent);    
+    Wire1.onRequest(requestEvent);
     #endif
 
-    #ifdef ALPHASENSE_INCLUDE    
+    #ifdef ALPHASENSE_INCLUDE
     SPI.begin(); // data from the ****************************************************** alpha sensor
-    delay(15000);
+    delay(5000);
+    alphasense_off();
+    delay(5000);
+    alphasense_read_fan_laser_power();
+    delay(5000);
     alphasense_on();    // power on laser and fan: Laser and fan must be on to get correct data
     delay(10000);
-
+    alphasense_read_fan_laser_power();
     alphasense_firmware();
     alphasense_config();
     delay(1000);
 
     flag_alpha = true;
+
+    #ifdef ALPHA_DEBUG
+    alphasense_info_string();
+    delay(1000);
+    alphasense_serial();
+    SerialUSB.println("OPC Setup Completed");
+    #endif
+
+
     #endif
 
     #ifdef VERSION_INCLUDE
@@ -83,40 +96,58 @@ void setup()
 
 void loop()
 {
-    count = 0;
 
+//     alphasense_histo();
+//     delay(10000);
+       delay(5000);
+
+//     count = 0;
+//
     #ifdef AIRSENSE_INCLUDE
     airsense_initial();
     #endif
 
-    #ifdef LIGHTSENSE_INCLUDE    
+    #ifdef I2C_SENSORS
+    #ifdef LIGHTSENSE_INCLUDE
     lightsense_initial();
     #endif
+    #endif
 
+    #ifdef CHEMSENSE_INCLUDE
     while(count < 10)
-    {    
-        #ifdef CHEMSENSE_INCLUDE        
+    {
+
         flag_CHEM_WHILE = true;
         chemsense_acquire();
-        #endif
-    }
 
-    #ifdef AIRSENSE_INCLUDE    
+    }
+    #endif
+
+
+    #ifndef CHEMSENSE_INCLUDE
+        delay(10000);
+    #endif
+
+
+    #ifdef AIRSENSE_INCLUDE
     airsense_acquire();
     #endif
 
-    #ifdef LIGHTSENSE_INCLUDE    
+    #ifdef I2C_SENSORS
+    #ifdef LIGHTSENSE_INCLUDE
     lightsense_acquire();
+    #endif
     #endif
 
     while (count < 24)       // every 24 sec
     {
-        #ifdef ALPHASENSE_INCLUDE        
+        #ifdef ALPHASENSE_INCLUDE
+
         alphasense_histo();
-        delay(100);
-        alphasense_serial();
-        delay(100);
-        
+        delay(5000);
+//         alphasense_serial();
+        delay(5000);
+
         if (count == 23)        //every 23 sec
         {
             count_conf++;
@@ -126,37 +157,38 @@ void loop()
                 delay(100);
                 alphasense_firmware();
                 delay(100);
-                
+
                 flag_alpha = true;
                 count_conf = 0;
             }
         }
         #endif
-        
+
         delay(1);
     }
-        
+
     assemble_packet_whole();        //******** packetize air/light/chem
     for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
         SerialUSB.write(packet_whole[i]);
-    
-    #ifdef ALPHASENSE_INCLUDE    
-    alpha_packet_whole();           //******** packetize histo/firmware/config(part)
-    for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
-        SerialUSB.write(packet_whole[i]);
-    
-    if (flag_alpha == true)
-    {
-        alpha_packet_config();       //******** packetize config(part)
-        
-        for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
-            SerialUSB.write(packet_whole[i]);
-    }
-    
-    flag_alpha = false;
-    #endif
-    
-    count = 0;
+
+//     #ifdef ALPHASENSE_INCLUDE
+//     alpha_packet_whole();           //******** packetize histo/firmware/config(part)
+//     for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
+//         SerialUSB.write(packet_whole[i]);
+//
+//     if (flag_alpha == true)
+//     {
+//         alpha_packet_config();       //******** packetize config(part)
+//
+//         for (byte i = 0x00; i < packet_whole[0x02] + 0x05; i++)
+//             SerialUSB.write(packet_whole[i]);
+//     }
+//
+//     flag_alpha = false;
+//     #endif
+
+//     count = 0;
+    delay(23000);
 }
 
 #ifdef I2C_INTERFACE
@@ -164,13 +196,13 @@ void requestEvent()
 {
     #ifdef I2C_INTERFACE_CONST_SIZE
     Wire1.write(packet_whole, I2C_PACKET_SIZE);
-    
+
     #else
     char bytes_to_send;
     bytes_to_send = packet_whole[0x02] + 0x05;
     Wire1.write(packet_whole, bytes_to_send );
     #endif
-    
+
     I2C_READ_COMPLETE = true;
     assemble_packet_empty();
 }

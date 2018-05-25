@@ -69,6 +69,8 @@ void sensor_buff_initialization()
 
 	three_accel_and_vib[0] = ID_THREE_ACCEL_AND_VIB;
 	three_gyro_and_orientation[0] = ID_THREE_GYRO_AND_ORIENTATION;
+
+	HDC1010[0] = ID_HDC1010;
 	#endif
 
 
@@ -133,5 +135,7 @@ void sensor_buff_initialization()
 
 	three_accel_and_vib[1] = (sensor_initial << 7) | ((LENGTH_FORMAT2 * 3) + LENGTH_FORMAT4);
 	three_gyro_and_orientation[1] = (sensor_initial << 7) | ((LENGTH_FORMAT2 * 3) + LENGTH_FORMAT4);
+	
+	HDC1010[1] = (sensor_initial << 7) | (LENGTH_FORMAT2 + LENGTH_FORMAT1);
 	#endif
 }

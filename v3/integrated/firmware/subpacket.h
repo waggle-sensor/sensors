@@ -17,7 +17,7 @@ byte TSYS01[LENGTH_FORMAT6 + 2]; // ambient temp
 #endif
 
 #ifdef ANALOG_SENSORS
-byte HIH4030[LENGTH_FORMAT1 + 2]; // humidity 
+byte HIH4030[LENGTH_FORMAT1 + 2]; // humidity
 byte PR103J2[LENGTH_FORMAT1 + 2]; // light
 byte TSL250RD_1[LENGTH_FORMAT1 + 2]; // ambient light (400-950nm)
 byte SPV1840LR5HB[LENGTH_FORMAT1 + 2]; // sound pressure
@@ -25,8 +25,8 @@ byte SPV1840LR5HB[LENGTH_FORMAT1 + 2]; // sound pressure
 #endif
 
 
-#ifdef LIGHTSENSE_INCLUDE
 #ifdef I2C_SENSORS
+#ifdef LIGHTSENSE_INCLUDE
 byte HMC5883L[(LENGTH_FORMAT8 * 3) + 2]; // magnetic field strength for traffic flow
 byte HIH6130[(LENGTH_FORMAT6 * 2) + 2]; // temp and RH inside transparent box
 

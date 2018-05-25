@@ -1,0 +1,182 @@
+sensor id,sensor name,parameter name,description,type,unit,data type (float = binary32),max,min,resolution,accuracy
+0xFF,Coresense info,Firmware HW/SW version,pre-determined,raw,n/a,int16,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Build time,pre-determined,raw,n/a,int32,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Build git,pre-determined,raw,n/a,int16,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Firmware HW version,pre-determined,raw,n/a,float,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Firmware SW version,pre-determined,hrf,n/a,float,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Build time,pre-determined,hrf,n/a,epoch,fixed_value,fixed_value,fixed_value,fixed_value
+0xFF,Coresense info,Build git,pre-determined,hrf,n/a,hex*2,fixed_value,fixed_value,fixed_value,fixed_value
+0x00,Metsense MAC,Mac address,pre-determined,raw,n/a,char*6,fixed_value,fixed_value,fixed_value,fixed_value
+0x00,Metsense MAC,Mac address,pre-determined,hrf,n/a,hex*6,fixed_value,fixed_value,fixed_value,fixed_value
+0x01,TMP112,temperature,register,raw,counts,int16,65535,0,1,1
+0x01,TMP112,temperature,converted,hrf,degree_c,float,125,-40,1,1
+0x02,HTU21D,temperature,register,raw,counts,int24,16777216,0,1,1
+0x02,HTU21D,humidity,register,raw,counts,int24,16777216,0,1,1
+0x02,HTU21D,temperature,converted,hrf,degree_c,float,125,-40,0.01,0.3
+0x02,HTU21D,humidity,converted,hrf,%RH,float,100,0,0.04,2
+0x03,HIH4030,humidity,voltage,raw,counts,int16,1023,0,1,1
+0x03,HIH4030,humidity,converted,hrf,%RH,float,100,0,0.5,3.5
+0x04,BMP180,temperature,register,raw,counts,int16,65535,0,1,1
+0x04,BMP180,pressure,register,raw,counts,int16,65535,0,1,1
+0x04,BMP180,temperature,converted,hrf,degree_c,float,85,-40,0.01,2
+0x04,BMP180,pressure,converted,hrf,hPa,float,10000,0,0.1,0.5
+0x05,PR103J2,temperature,voltage,raw,counts,int24,1023,0,1,1
+0x05,PR103J2,temperature,converted,hrf,degree_c,float,80,-55,0.01,0.05
+0x06,TSL250RD,visible light,voltage,raw,counts,int16,1023,0,1,1
+0x06,TSL250RD,visible light,converted,hrf,uw/cm2,float,210,0.2,2,7.5
+0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
+0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
+0x07,MMA8452Q,acceleration,register,raw,counts,int16,65535,0,1,1
+0x07,MMA8452Q,acceleration,converted,hrf,gx,float,8,-8,0.008,0.02
+0x07,MMA8452Q,acceleration,converted,hrf,gy,float,8,-8,0.008,0.02
+0x07,MMA8452Q,acceleration,converted,hrf,gz,float,13.9,0,0.014,0.035
+0x08,SPV1840LR5H-B,sound level,voltage,raw,counts,int16*63,1023,0,1,1
+0x08,SPV1840LR5H-B,sound level,converted,hrf,dBm,float,121,54,2,8
+0x09,TSYS01,temperature,register,raw,counts,int24,16777216,0,1,1
+0x09,TSYS01,temperature,converted,hrf,degree_c,float,125,-40,0.01,0.5
+0x0A,HMC5883L,magnetic field,register,raw,counts,int16,65535,0,1,1
+0x0A,HMC5883L,magnetic field,register,raw,counts,int16,65535,0,1,1
+0x0A,HMC5883L,magnetic field,register,raw,counts,int16,65535,0,1,1
+0x0A,HMC5883L,magnetic field,converted,hrf,Gx,float,8,-8,0.002,0.435
+0x0A,HMC5883L,magnetic field,converted,hrf,Gy,float,8,-8,0.002,0.435
+0x0A,HMC5883L,magnetic field,converted,hrf,Gz,float,8,-8,0.002,0.435
+0x0B,HIH6130,temperature,register,raw,counts,int16,65535,0,1,1
+0x0B,HIH6130,humidity,register,raw,counts,int16,65535,0,1,1
+0x0B,HIH6130,temperature,converted,hrf,degree_c,float,85,-25,0.025,1
+0x0B,HIH6130,humidity,converted,hrf,%RH,float,100,0,0.04,4
+0x0C,APDS-9006-020,ambient light,voltage,raw,counts,int24,16777216,0,1,1
+0x0C,APDS-9006-020,ambient light,converted,hrf,lux,float,1000,0,0.008,1
+0x0D,TSL260,light,voltage,raw,counts,int24,16777216,0,1,1
+0x0D,TSL260,light,converted,hrf,uw/cm2,float,61,0.2,0.1,4
+0x0E,TSL250,light,voltage,raw,counts,int24,16777216,0,1,1
+0x0E,TSL250,light,converted,hrf,uw/cm2,float,210,0.2,0.1,4
+0x0F,MLX75305,ambient light,voltage,raw,counts,int24,16777216,0,1,1
+0x0F,MLX75305,ambient light,converted,hrf,uw/cm2,float,60,0,0.86,0.86
+0x10,ML8511,uv,voltage,raw,counts,int24,16777216,0,1,1
+0x10,ML8511,uv,converted,hrf,mw/cm2,float,15,0,1,1
+0x13,TMP421,temperature,register,raw,counts,int16,65535,0,1,1
+0x13,TMP421,temperature,converted,hrf,degree_c,float,127,-55,0.25,2.5
+0x15,IRR,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x15,IRR,gas,converted,hrf,ppm,float,20,0,0.5,0.5
+0x16,Chem Config,configuration,pre-determined,raw,n/a,char*1514,fixed_value,fixed_value,fixed_value,fixed_value
+0x16,Chem Config,configuration,pre-determined,hrf,n/a,hex*1514,fixed_value,fixed_value,fixed_value,fixed_value
+0x17,NO2,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x17,NO2,gas,converted,hrf,ppm,float,20,0,0.5,0.5
+0x18,O3,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x18,O3,gas,converted,hrf,ppm,float,20,0,0.32,0.32
+0x19,H2S,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x19,H2S,gas,converted,hrf,ppm,float,50,0,2.5,2.5
+0x1A,IAQ,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x1A,IAQ,gas,converted,hrf,ppm,float,100,0,0.12,0.12
+0x1B,CO,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x1B,CO,gas,converted,hrf,ppm,float,1000,0,0.0475,0.0475
+0x1C,SO2,gas,ampare,raw,pA,int24,16777216,0,1,1
+0x1C,SO2,gas,converted,hrf,ppm,float,20,0,0.25,0.25
+0x1D,SHT25,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x1D,SHT25,humidity,pre-calculated,raw,100th of %RH,int16,65535,0,1,1
+0x1D,SHT25,temperature,scaled,hrf,degree_c,float,125,-40,0.04,0.2
+0x1D,SHT25,humidity,scaled,hrf,%RH,float,100,0,0.7,1.8
+0x1E,LPS25H,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x1E,LPS25H,pressure,pre-calculated,raw,100th of hPa,int32,4294967296,0,1,1
+0x1E,LPS25H,temperature,scaled,hrf,degree_c,float,1260,260,2,2
+0x1E,LPS25H,pressure,scaled,hrf,hPa,float,-30,105,0.5,1
+0x1F,Si1445,uv,ADC-count,raw,counts,int16,65535,0,1,1
+0x1F,Si1445,visible light,ADC-count,raw,counts,int16,65535,0,1,1
+0x1F,Si1445,proximity,ADC-count,raw,counts,int16,65535,0,1,1
+0x1F,Si1445,uv,converted,hrf,TBN,float,TBN,TBN,TBN,TBN
+0x1F,Si1445,visible light,converted,hrf,TBN,float,TBN,TBN,TBN,TBN
+0x1F,Si1445,proximity,converted,hrf,TBN,float,TBN,TBN,TBN,TBN
+0x20,Chemsense MAC,Mac address,pre-determined,raw,n/a,char*6,65535,0,1,1
+0x20,Chemsense MAC,Mac address,pre-determined,hrf,n/a,hex*6,n/a,n/a,n/a,n/a
+0x21,at0,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x21,at0,temperature,pre-calculated,hrf,degree_c,float,TBN,TBN,TBN,TBN
+0x22,at1,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x22,at1,temperature,pre-calculated,hrf,degree_c,float,TBN,TBN,TBN,TBN
+0x23,at2,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x23,at2,temperature,pre-calculated,hrf,degree_c,float,TBN,TBN,TBN,TBN
+0x24,at3,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x24,at3,temperature,pre-calculated,hrf,degree_c,float,TBN,TBN,TBN,TBN
+0x25,lt0,temperature,pre-calculated,raw,100th of degree c,int16,65535,0,1,1
+0x25,lt0,temperature,pre-calculated,hrf,degree_c,float,TBN,TBN,TBN,TBN
+0x26,BMI160,acceleration,register,raw,counts,int16,65535,0,1,1
+0x26,BMI160,acceleration,register,raw,counts,int16,65535,0,1,1
+0x26,BMI160,acceleration,register,raw,counts,int16,65535,0,1,1
+0x26,BMI160,acceleration,register,raw,counts,int24,16777216,0,1,1
+0x26,BMI160,acceleration,converted,hrf,g,float,TBN,TBN,TBN,TBN
+0x26,BMI160,acceleration,converted,hrf,g,float,TBN,TBN,TBN,TBN
+0x26,BMI160,acceleration,converted,hrf,g,float,TBN,TBN,TBN,TBN
+0x26,BMI160,acceleration,converted,hrf,g,float,TBN,TBN,TBN,TBN
+0x27,BMI160,gyro,register,raw,counts,int16,65535,0,1,1
+0x27,BMI160,gyro,register,raw,counts,int16,65535,0,1,1
+0x27,BMI160,gyro,register,raw,counts,int16,65535,0,1,1
+0x27,BMI160,gyro,register,raw,counts,int24,16777216,0,1,1
+0x27,BMI160,gyro,converted,raw,degree/sec,float,TBN,TBN,TBN,TBN
+0x27,BMI160,gyro,converted,raw,degree/sec,float,TBN,TBN,TBN,TBN
+0x27,BMI160,gyro,converted,raw,degree/sec,float,TBN,TBN,TBN,TBN
+0x27,BMI160,gyro,converted,raw,degree/sec,float,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,bin count,count,raw,counts,int16*16,65535,TBN,TBN,TBN
+0x28,Alpha sensor,average time,register,raw,counts,int8*4,256,TBN,TBN,TBN
+0x28,Alpha sensor,sample flow rate,pre-determined,raw,n/a,int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,temp/pressure (alter),register,raw,degree_c/hPa (alter),int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,sampling period,pre-determined,raw,/s,int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,checksum,pre-calculated,raw,n/a,int16,n/a,n/a,n/a,n/a
+0x28,Alpha sensor,PM 1,register,raw,counts,int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,PM 2.5,register,raw,counts,int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,PM 10,register,raw,counts,int32,4294967296,TBN,TBN,TBN
+0x28,Alpha sensor,bin count,converted,hrf,n/a,int16*16,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,average time,converted,hrf,us,int8*4,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,sample flow rate,converted,hrf,ml/s,float,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,temp/pressure (alter),converted,hrf,degree_c/hPa (alter),float,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,sampling period,converted,hrf,/s,int32,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,checksum,converted,hrf,n/a,int16,n/a,n/a,n/a,n/a
+0x28,Alpha sensor,PM 1,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,PM 2.5,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
+0x28,Alpha sensor,PM 10,converted,hrf,ug/m3,float,TBN,TBN,TBN,TBN
+0x29,Alpha sensor,Serial,pre-determined,raw,n/a,char*20,fixed_value,fixed_value,fixed_value,fixed_value
+0x29,Alpha sensor,Serial,pre-determined,hrf,n/a,hex*20,fixed_value,fixed_value,fixed_value,fixed_value
+0x2A,Chemsense,All Chemsense,pre-calculated,raw,various,various,various,various,various,various
+0x2A,Chemsense,All Chemsense,converted,hrf,various,various,various,various,various,various
+0x2B,Alpha sensor,Status,bool,raw,n/a,int8*4,1,0,1,1
+0x2B,Alpha sensor,Status,converted,hrf,n/a,int8*4,1,0,1,1
+0x30,Alpha sensor,Firmware,pre-determined,raw,n/a,int8*2,fixed_value,fixed_value,fixed_value,fixed_value
+0x30,Alpha sensor,Firmware,converted,hrf,n/a,int8*2,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin boundaries,pre-determined,raw,n/a,int16*15,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin particle volumes,pre-determined,raw,n/a,int32*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin particle dencities,pre-determined,raw,/cm3,int32*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin sample volume weightings,pre-determined,raw,n/a,int32*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,gain scaling coeifficient,pre-determined,raw,n/a,int32,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,sampling flow rate,pre-determined,raw,ml/s,int32,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,laser DAC,pre-determined,raw,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,fan DAC,pre-determined,raw,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,conversion factor,pre-determined,raw,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,spare bytes,spare,raw,n/a,int8*21,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin boundaries,pre-determined,hrf,n/a,float*15,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin particle volumes,pre-determined,hrf,n/a,float*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin particle dencities,pre-determined,hrf,n/a,float*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,bin sample volume weightings,pre-determined,hrf,n/a,float*16,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,gain scaling coeifficient,pre-determined,hrf,n/a,float,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,sampling flow rate,pre-determined,hrf,ml/s,float,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,laser DAC,pre-determined,hrf,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,fan DAC,pre-determined,hrf,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,conversion factor,pre-determined,hrf,n/a,int8,fixed_value,fixed_value,fixed_value,fixed_value
+0x31,Alpha sensor,spare bytes,spare,n/a,n/a,int8*21,fixed_value,fixed_value,fixed_value,fixed_value
+0x2C,Rain gauge,precipitation,count,raw,counts,int16,65535,0,1,1
+0x2C,Rain gauge,precipitation,converted,hrf,mm,float,16645.89,0,0.254,0.254
+0x2D,Decagon,soil moisture,register,raw,various,various,various,various,various,various
+0x2D,Decagon,volumetric water content,register,raw,n/a,int16,65535,0,1,1
+0x2D,Decagon,electric conductivity,register,raw,dS/m,int16,65535,0,1,1
+0x2D,Decagon,temperature,register,raw,degree_c,int16,65535,0,1,1
+0x2D,Decagon,volumetric water content,converted,hrf,n/a,float,1,80,0.75,1
+0x2D,Decagon,electric conductivity,converted,hrf,dS/m,float,23,0,0.05,0.7
+0x2D,Decagon,temperature,converted,hrf,degree_c,float,60,-40,0.1,1
+0x2E,Water Level (Red),water level,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x2F,Water Level (Black),water level,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x35,PMS3003,particle,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x36,PMS7003,particle,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x37,YL-69,,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x38,YHDC SCT-013-030,,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x39,CR3110-3000,,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
+0x11,Bus reading,vareis,vareis,raw,vareis,vareis,vareis,vareis,vareis,vareis
+0x11,Bus reading,vareis,vareis,hrf,vareis,vareis,vareis,vareis,vareis,vareis
+0x32,List of disabled sensors,id,pre-determined,raw,n/a,n/a,n/a,n/a,n/a,n/a
+0x32,List of disabled sensors,id,pre-determined,hrf,n/a,n/a,n/a,n/a,n/a,n/a

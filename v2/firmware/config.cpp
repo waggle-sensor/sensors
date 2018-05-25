@@ -83,6 +83,7 @@
 
 #define ID_THREE_ACCEL_AND_VIB  0x26
 #define ID_THREE_GYRO_AND_ORIENTATION   0x27
+#define ID_HDC1010  0x35
 
 // #define ID_ETHANOL  0x16
 
@@ -129,7 +130,7 @@
 
 // #define system_health_include 0x01
 // #define RANDOMIZE_VALID 0x01
-// #define SERIAL_DEBUG 0x01
+#define SERIAL_DEBUG 0x01
 
 // #define USBSERIAL_INTERFACE 0x01
 #define I2C_INTERFACE 0x01

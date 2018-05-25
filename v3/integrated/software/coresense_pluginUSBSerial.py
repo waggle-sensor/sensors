@@ -579,6 +579,12 @@ def parse_sensor (sensor_id,sensor_data):
         print "Sensor:", sensor_id,sensor_list[int(sensor_id)],'@ ',
         print  format2(sensor_data[0:2]),format2(sensor_data[2:4]),format2(sensor_data[4:6]),format4(sensor_data[6:9])
 
+#"HDC1010"
+    elif sensor_id == '53':
+        print "Sensor: 53 HDC1010 Temp & RH @ ",
+        HDC_temperature = format2(sensor_data[0:2]) / 100.00
+        HDC_humidity = format1(sensor_data[2:4]) / 100.00
+        print  HDC_temperature, HDC_humidity
 
 
 class usbSerial ( threading.Thread ):
@@ -717,9 +723,9 @@ class usbSerial ( threading.Thread ):
                                         #ideally we should be able to throw the whole packet out, but purging just a byte for avoiding corner cases.
                                         del self.data[0]
                                     else:
-                                        print self.data, ord(self.data[_postscriptLoc])
+                                        #print self.data, ord(self.data[_postscriptLoc])
                                         print '-------------'
-                                        print time.asctime(), _msg_seq_num, _postscriptLoc
+                                        #print time.asctime(), _msg_seq_num, _postscriptLoc
                                         
                                         # # SH put data into buffer to store into a file
                                         # try:
@@ -778,6 +784,7 @@ class usbSerial ( threading.Thread ):
                                             consume_ptr = consume_ptr + 2 + This_id_msg_size
                                             if (This_id_msg_valid == 1):
                                                 try:
+                                                    print int(time.time()),
                                                     parse_sensor (This_id, This_id_msg)
                                                     pass
                                                 except:

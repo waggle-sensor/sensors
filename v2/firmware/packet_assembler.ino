@@ -353,6 +353,17 @@ void assemble_packet_whole()
         chemsense_MAC_ID[1] = (chg_valid << 7) | LENGTH_FORMAT3;
     }
 
+    if ((HDC1010[1] & 0x80) == 0x80 && chem == true)
+    {
+        for (buffer_num = 0; buffer_num <  sizeof(HDC1010); buffer_num++)
+        {
+            packet_whole[packet_whole_index] = HDC1010[buffer_num];
+            packet_whole_index++;
+        }
+        HDC1010[1] = (chg_valid << 7) | (LENGTH_FORMAT2 + LENGTH_FORMAT1);
+
+    }
+
     if ((SHT25[1] & 0x80) == 0x80 && chem == true)
     {
         for (buffer_num = 0; buffer_num <  sizeof(SHT25); buffer_num++)

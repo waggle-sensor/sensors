@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 ## Testing Procedure
 *  In the coresense folder, and issue command *make test*
 _Please make sure only the Airsense-Lightsense pair under test is connected to the QA computer. No other similar Coresense devices or Arduino Due/derivatives can be connected at this time.__

@@ -1,3 +1,7 @@
+<!--
+waggle_topic=IGNORE
+-->
+
 ## Testing Procedure
 *   Setup 2:
     -  In the Wagman folder - First issue the command *make install*.

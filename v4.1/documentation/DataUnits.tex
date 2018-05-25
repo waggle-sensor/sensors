@@ -1,0 +1,133 @@
+\newpage
+\section{Sensor Data Units}\label{section:parameterUnits}
+\subsection { Raw and Processed} 
+
+
+The sensor boards output a set of raw readings which need to be calculated for proper units for each of data.
+The table below lists the various units for each sensor values.
+`Current Units' in the table means the unit after conversion through designated equations stored in database currently (Nov, 2017), and `Processed Units' means the unit which will be updated in the future.
+
+\begin{center}
+\begin{longtable}{|l|c|c|c|}
+\caption{Sensor units}
+\label{table:parameterUnits} \\
+
+\hline \rowcolor{black!8} \multicolumn{1}{|l|}{\textbf{Sensor/Parameter}} & \multicolumn{1}{c|}{\textbf{Current Units}} & \multicolumn{1}{c|}{\textbf{Processed Units}} & \multicolumn{1}{c|}{\textbf{Comments}} \\ \hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+
+\hline \rowcolor{black!8} \multicolumn{1}{|l|}{\textbf{Sensor/Parameter}} & \multicolumn{1}{c|}{\textbf{Current Units}} & \multicolumn{1}{c|}{\textbf{Processed Units}} & \multicolumn{1}{c|}{\textbf{Comments}} \\ \hline
+\endhead
+
+\rowcolor{black!8} \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+ 
+    Firmware version & No Units & No Units & \\ \hline
+
+  \rowcolor{black!5} \multicolumn{4}{|c|}{{Airsense board}} \\ \hline
+    Met/Lightsense MAC & No Units & No Units & \\  \hline
+    TMP112 & \degree C & \degree C & \\ \hline
+    HTU21D & \degree C, \%RH & \degree C, \%RH & \\ \hline
+    BMP180 & \degree C, Pa & \degree C, Pa & \\ \hline
+    PR103J2 & \degree C & \degree C & \\ \hline
+    TSL250RD & Raw reading* & $\mu$w/m$^2$ & \\  \hline
+    MMA8452Q & g, g, g & g, g, g, g & \\ \hline
+    SPV1840LR5H-B & Raw reading* & & \\ \hline
+    TSYS01 & \degree C & \degree C & \\ \hline
+    
+  \rowcolor{black!5} \multicolumn{4}{|c|}{{Lightsense board}} \\ \hline
+    HMC5883L & G, G, G & G, G, G & \\ \hline
+    HIH6130 & \degree C, \%RH & \degree C, \%RH & \\ \hline
+    APDS-9006-020 & Raw reading & lux & \\  \hline
+    TSL260RD & Raw reading* & $\mu$w/m$^2$ & \\  \hline
+    TSL250RD & Raw reading* & $\mu$w/m$^2$ & \\  \hline
+    MLX75305 & Raw reading* & $\mu$w/m$^2$ & \\  \hline
+    ML8511 & Raw reading* & UV index & \\  \hline
+    TMP421 & \degree C & \degree C & \\ \hline
+
+  \rowcolor{black!5} \multicolumn{4}{|c|}{{Chemsense board}} \\ \hline
+    Chemsense configuration & No unit & No unit & Don't need conversions \\ \hline
+    Chemsense reading & Raw reading* & See Table \ref{table:tran} & \\ \hline
+
+ \rowcolor{black!5} \multicolumn{4}{|c|}{{Alpha sensor}} \\ \hline 
+    Serial & No unit & No unit & \\ \hline
+    Firmware & No unit & No unit & \\ \hline
+ 
+ \rowcolor{black!2} \multicolumn{4}{|c|}{{Alpha sensor -- Status}} \\ \hline
+    FanON & No unit & No unit & \\ \hline
+    LaserON & No unit & No unit & \\ \hline
+    FanDACVal & No unit & No unit & \\ \hline
+    LaserDACVal & No unit & No unit & \\ \hline
+
+ \rowcolor{black!2} \multicolumn{4}{|c|}{{Alpha sensor -- Histogram}} \\ \hline
+    Bin count & No unit & No unit & \\ \hline
+    Average time & Raw reading* & $\mu$s & value 10 = 3.33 $\mu$s \\ \hline
+    Sample flow rate & Raw reading* & ml/s & \\ \hline
+    Temp/Pressure(alter) & Raw reading* & $^{\circ}$C / hPa (alter) & \\ \hline
+    Sampling period & Raw reading* & s & \\ \hline
+    Sum of the counts & No unit & No unit & \\ \hline
+    PM1 & Raw reading* & $\mu$g/m$^3$ & \\ \hline
+    PM2.5 & Raw reading* & $\mu$g/m$^3$ & \\ \hline
+    PM10 & Raw reading* & $\mu$g/m$^3$ & \\ \hline
+
+ 
+ \rowcolor{black!2} \multicolumn{4}{|c|}{{Alpha sensor -- Configuration}} \\ \hline
+    Bin boundaries & No unit & No unit & \\ \hline 
+    Bin particle volumes & Raw reading* & & \\ \hline
+    Bin particle densities & Raw reading* & & \\ \hline
+    Bin sample volume weightings & Raw reading* & & \\ \hline
+    Gain scaling coefficient & Raw reading* & & \\ \hline
+    Sample flow rate & Raw reading* & & \\ \hline
+    Laser DAC & Raw reading* & & \\ \hline
+    Fan DAC & Raw reading* & & \\ \hline
+    Conversion factor & Raw reading* & & \\ \hline
+    Spare bytes & No unit & No unit &\\ 
+\end{longtable}
+
+	\begin{minipage}{\textwidth}    % adjusting at the top
+	% do not draw the footnoterule
+	% \renewcommand{\footnoterule}{}
+	\footnotetext{\footnotesize *Raw reading means the reading has no unit currently, and conversion equation for the sensor is not implemented in database. The data stored in database for this sensor is just integer form of raw reading.}
+	\end{minipage}
+
+\end{center}
+
+
+
+
+\begin{table}[h!]
+\begin{minipage}{\textwidth}
+    \centering
+    \caption{Transmission packet structure of chemsense board reading}
+    \label{table:tran}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Source ID} & \textbf{Parameter} & \textbf{Current Units} & \textbf{Processed Units} & \textbf{Comments} \\ \hline
+        0x15 & Total reducing gases & \multirow{7}{*}{Raw reading*} & \multirow{7}{*}{ppm} & \\ \cline{1-2} \cline{5-5}
+        0x17 & Nitrogen dioxide & & & \\ \cline{1-2} \cline{5-5}
+        0x18 & Ozone & & & \\ \cline{1-2} \cline{5-5}
+        0x19 & Hydrogen sulphide & & & \\ \cline{1-2} \cline{5-5}
+        0x1A & Total oxidizing gases & & & \\ \cline{1-2} \cline{5-5}
+        0x1B & Carbon monoxide & & & \\ \cline{1-2} \cline{5-5}
+        0x1C & Sulfur dioxide &  & & \\ \hline
+        0x1D & SHT25 & 100ths of \degree C / \%RH & \degree C, \%RH & \\ \hline
+        0x1E & LPS25H & 100ths of \degree C, Pa & \degree C, Pa & \\ \hline
+        0x1F & Si1145 & Raw reading* & & Uncompleted FW\\ \hline
+        0x20 & Intel MAC address & No Units & No Units & \\  \hline
+        0x21 & CO ADC temp & \multirow{5}{*}{100ths of \degree C} & \multirow{5}{*}{\degree C} & \\ \cline{1-2} \cline{5-5}
+        0x22 & IAQ IRR ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x23 & O3 NO2 ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x24 & SO2 H2S ADC temp & & & \\ \cline{1-2} \cline{5-5}
+        0x25 & CO LMP temp & & & \\ \hline
+        0x26 & Accelerometer & Raw reading* & & Not in Chem v2 \\ \cline{1-4}
+        0x27 & Gyro & Raw reading* & & Uncompleted for v1\&2\\ \hline
+    \end{tabular}
+    \footnotetext{\footnotesize *Raw reading means the reading has no unit currently, and conversion equation for the sensor is not implemented in database. The data stored in database for this sensor is just integer form of raw reading.}
+\end{minipage}
+\end{table}

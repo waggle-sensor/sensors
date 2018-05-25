@@ -1,0 +1,133 @@
+\newpage
+\section{Sub-packets from Coresense}
+
+As shortly explained in document section \ref{ssec:sub-pack}, data sub-packets from metsense board, lightsense board, chemsense board, and alpha sensor are generated depending on its data reading from each sensor if valid. The first byte of the sub-packets from those sensor boards/sensor is sensor ID, and the first bit of second byte means validity of the packet and next 7 bits of the second byte is length of the sensor data. Data length and type of sensor reading are shown in Table \ref{table:dataChunk}. Detail of sub-packet and sensor data will be explined following sections.
+
+
+\subsection{Parameters}
+
+The sensor boards output a set of parameters which are identified by a unique ID. Each parameter
+has a set of values associated with it which are encoded in an appropriate data format. The table
+below lists the various parameters produced by the sensor boards, the unique source ID used to identify them, the values produced by them.
+
+
+\begin{center}
+\begin{longtable}{|l|c|>{\centering}p{0.3\textwidth}|c|}
+\caption{Data sub-packet structure (each row is a ``chunk'')} \label{table:dataChunk} \\
+
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Data Length}} \\ \hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{{\bfseries \tablename \thetable{} -- continued from previous page}} \\
+\hline \rowcolor{black!8} \multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Source ID}} & \multicolumn{1}{c|}{\textbf{Values}} & \multicolumn{1}{c|}{\textbf{Data Length}} \\ \hline 
+\endhead
+
+\rowcolor{black!8} \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+        \multirow{3}{*}{Firmware version} & \multirow{3}{*}{0xFF} & Version (HW/SW) & 2 bytes \\ \cline{3-4}
+        & & Build time & 4 bytes \\ \cline{3-4}
+        & & Build git & 2 bytes \\ \hline
+
+    \rowcolor{black!5} \multicolumn{4}{|c|}{{Metsense board}} \\ \hline
+        Metsense/Lightsense MAC address & 0x00 & MAC Address & 6 bytes \\ \hline
+        TMP112 & 0x01 & Temperature & 2 bytes \\ \hline
+        \multirow{2}{*}{HTU21D} & \multirow{2}{*}{0x02} & Temperature & 2 bytes \\ \cline{3-4}
+        & & Relative humidity & 2 bytes \\ \hline
+        HIH4030 & 0x03 & Relative humidity & 2 bytes \\ \hline
+        \multirow{2}{*}{BMP180} & \multirow{2}{*}{0x04} & Temperature & 2 bytes \\ \cline{3-4}
+        & & Pressure & 3 bytes  \\ \hline
+        PR103J2 & 0x05 & Temperature & 2 bytes \\ \hline
+        TSL250RD & 0x06 & Visible Light & 2 bytes \\ \hline
+        \multirow{4}{*}{MMA8452Q} & \multirow{4}{*}{0x07} & Acceleration in X & 2 bytes \\ \cline{3-4}
+        & & Acceleration in Y & 2 bytes \\ \cline{3-4}
+        & & Acceleration in Z & 2 bytes \\ \hline
+        SPV1840LR5H-B & 0x08 & RMS Sound Level & 128 bytes \\ \hline
+        TSYS01 & 0x09 & Temperature & 2 bytes \\ \hline
+        
+    \rowcolor{black!8} \multicolumn{4}{|c|}{{Lightsense board}} \\ \hline
+        \multirow{3}{*}{HMC5883L} & \multirow{3}{*}{0x0A} & Magnetic Field in Z & 2 bytes \\ \cline{3-4}
+        & & Magnetic Field in Y & 2 bytes \\ \cline{3-4}
+        & & Magnetic Field in Z & 2 bytes \\ \hline
+        \multirow{2}{*}{HIH6130} & \multirow{2}{*}{0x0B} & Temperature & 2 bytes \\ \cline{3-4}
+        & & Relative humidity & 2 bytes \\ \hline
+        APDS-9006-020 & 0x0C & Ambient light intensity & 3 bytes \\ \hline
+        TSL260RD & 0x0D & IR intensity & 3 bytes \\ \hline
+        TSL250RD & 0x0E & Visible light intensity & 3 bytes \\ \hline
+        MLX75305 & 0x0F & Light & 3 bytes \\ \hline 
+        ML8511 & 0x10 & UV intensity & 3 bytes \\ \hline
+        TMP421 & 0x13 & Temperature & 2 bytes \\ \hline
+
+    \rowcolor{black!8} \multicolumn{4}{|c|}{{Chemsense board}} \\ \hline
+        Chemsense configuration & 0x16 & Chemsense FW config & 1514 bytes \\ \hline
+        Chemsense reading & 0x2A & Raw reading & Varies \\ \hline
+
+     \rowcolor{black!8} \multicolumn{4}{|c|}{{Alpha Sensor}} \\ \hline
+        \multirow{9}{*}{Histogram} & \multirow{9}{*}{0x28} & Bin count & 32 bytes \\ \cline{3-4}
+        & & Average time & 4 bytes \\ \cline{3-4}
+        & & Sample flow rate & 4 bytes \\ \cline{3-4}
+        & & Temp/Pressure(alter) & 4 bytes\\ \cline{3-4}
+        & & Sampling period & 4 bytes \\ \cline{3-4}
+        & & Sum of the counts & 2 bytes \\ \cline{3-4}
+        & & PM 1 & 4 bytes \\ \cline{3-4}
+        & & PM 2.5 & 4 bytes \\ \cline{3-4}
+        & & PM 10 & 4 bytes \\ \hline
+        Serial & 0x29 & Serial number & 20 bytes \\ \hline
+        \multirow{4}{*}{Status} & \multirow{4}{*}{0x2B} & FanON & 1 byte \\ \cline{3-4}
+        & & LaserON & 1 byte \\ \cline{3-4}
+        & & FanDACVal & 1 byte \\ \cline{3-4}
+        & & LaserDACVal & 1 byte \\ \hline
+        Firmware & 0x30 & Firmware version & 2 bytes \\ \hline
+        \multirow{10}{*}{Configuration} & \multirow{5}{*}{0x31} & Bin Boundaries & 32 bytes \\ \cline{3-4}
+        & & Bin particle volumes & 64 bytes \\ \cline{3-4}
+        & & Bin particle densities & 64 bytes \\ \cline{3-4}
+        & & Bin sample volume weightings & 64 bytes \\ \cline{3-4}
+        & & Gain scaling coefficient & 4 bytes \\ \cline{3-4}
+        & & Sample flow rate & 4 bytes \\ \cline{3-4}
+        & & Laser DAC & 1 byte \\ \cline{3-4}
+        & & Fan DAC & 1 byte \\ \cline{3-4}
+        & & Conversion factor & 1 byte \\ \cline{3-4}
+        & & Spare bytes & 21 bytes \\ 
+
+\end{longtable}
+\end{center}
+
+
+\newpage
+\subsection{Data packets}
+The context of each parameter, its utility and the arrangement of its values is described below. In all
+the tables below, the validity bit is set to 1, which means the data is valid. The parameter described
+below are aggregated based on the sensor-board they are situated on -
+Metsense, Lightsense and Chemsense.
+
+\subsubsection{Firmware Version}
+This is a 8 bytes version information that identifies hardware version, software version, and build information of the waggle node.
+The build time and the build git are included to varify the effectiveness of the software.
+Firmware version is bit masked and encoded through format 1, and build git is encoded through format 1.
+
+\begin{table}[h!]
+    \centering
+    \caption{Sub-packet of Firmware version}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{0xFD} & \textbf{0x88} & \textbf{Firmware version} & \textbf{Build time} & \textbf{Build git} \\ \hline
+        Byte[0] & Byte[1] & Bytes[2 -- 3] & Bytes[4 -- 7] & Bytes[8 -- 9]\\ \hline
+    \end{tabular}
+\end{table}
+
+
+\newcolumntype{a}{>{\columncolor{black!8}}c}
+\begin{table}[h!]
+    \centering
+    \caption{Firmware version}
+    \begin{tabular}{|a|c|}
+        \hline
+        \textbf{3 bit major HW ver. | 3 bit minor HW ver. | 2 bit major SW ver.} & Byte[2] \\ \hline
+        \textbf{2 bit major SW ver. | minor SW ver. $\times$ 10 + sub SW ver.} & Byte[3]\\ \hline
+    \end{tabular}
+\end{table}

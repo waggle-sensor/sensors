@@ -3,6 +3,10 @@
  * Kerry D. Wong
  * http://www.kerrywong.com
  * 5/2012
+ * Modified by
+ * Seongha Park
+ * park708@purdue.edu
+ * 10/2017
  */
 
 #include "MCP342X.h"
@@ -23,33 +27,44 @@ void MCP342X::init(byte A0, byte A1)
 
 void MCP342X::selectChannel(byte channel, byte gain)
 {
-
-    //configuration register, assuming 16 bit resolution
-    // Initiate one shot conversion
-    // 16 bits, 66.6 ms later the data should be available.
-	byte reg = 1 << BIT_RDY | channel << BIT_C0 | 0 << BIT_OC | 1 << BIT_S1 | gain;
-	Wire.beginTransmission(I2C_ADDRESS);
-	Wire.write(reg);
-	Wire.endTransmission();
+  //configuration register, assuming 16 bit resolution
+  // Initiate one shot conversion
+  // 16 bits, 66.6 ms later the data should be available.
+  byte reg = 1 << BIT_RDY | channel << BIT_C0 | 0 << BIT_OC | 1 << BIT_S1 | gain;
+  Wire.beginTransmission(I2C_ADDRESS);
+  Wire.write(reg);
+  Wire.endTransmission();
 }
 
 unsigned int MCP342X::readADC()
 {
-    delay(80);
-    unsigned int t;
-  	Wire.requestFrom(I2C_ADDRESS, (byte) 3);
+  delay(80);
+  unsigned int t;
+  Wire.requestFrom(I2C_ADDRESS, (byte) 3);
 
-  	bool able = true;
-  	if (Wire.available() <= 0)
-  		able = false;
+  bool able = true;
+  if (Wire.available() <= 0)
+    able = false;
 
-	byte h = Wire.read();
-  	byte l = Wire.read();
-  	byte r = Wire.read();
-    t = (h << 8) |  l;
+  byte h = Wire.read();
+  byte l = Wire.read();
+  byte r = Wire.read();
+  t = (h << 8) |  l;
 
-    if (able == false)
-    	t = 65535;
-    
-    return t;
+  if (able == false)
+    t = 65535;
+
+  return t;
+}
+
+byte MCP342X::returnAddress()
+{
+  return I2C_ADDRESS;
+}
+
+byte MCP342X::returnRegister(byte channel)
+{
+  byte gain = GAIN_1;
+  byte reg = 1 << BIT_RDY | channel << BIT_C0 | 0 << BIT_OC | 1 << BIT_S1 | gain;
+  return reg;
 }

@@ -1,0 +1,166 @@
+\newpage
+\section{Data Transmission} \label{section:overall}
+
+The data from the sensor boards are packetized in a transmission pacekt with the form of as they had read from the sensor. A transmission packet can be composed of several data sub-packets, each of which carries information pertaining to the parameter.
+The transmission packet format and the data sub-packets are described here.
+
+\subsection{Transmission Packet}
+A transmission packet can be separated into 6 segments.
+The structure of the transmission packet relies on positions of Bytes and predefined values for those Byte segments. 
+Table 1 below illustrates how the segments are organized in a transmission packet.
+\\
+
+\begin{table}[h!]
+\begin{minipage}{\textwidth}
+    \centering
+    \caption{Transmission Packet structure}
+    \label{table:tran}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Preamble} & \textbf{a~\footnote{Packet Type | Protocol Version}} & \textbf{Data Length} & \textbf{b~\footnote{Last Packet Flag | Sequence}} & \textbf{Data} & \textbf{CRC} & \textbf{Postscript}\\
+        \hline
+        \multirow{2}{*}{1st Byte} & \multirow{2}{*}{2nd Byte} & \multirow{2}{*}{3rd Byte} & \multirow{2}{*}{4th Byte} & next Bytes & \multirow{2}{*}{Penultimate Byte} & \multirow{2}{*}{Final Byte} \\ 
+        & & & & up to 255 Bytes & & \\ \hline
+    \end{tabular}
+\end{minipage}
+\end{table}
+
+A description how the segments are organized in a transmission packet is shown in table 2 below.
+
+\begin{table}[H]
+    \centering
+    {
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Field} & \textbf{Value} & \textbf{Segment} & \textbf{Length}\\
+        \hline
+        Preamble & 0xAA & 1 & 1 Byte\\ \hline
+        \multirow{3}{*}{Packet Type} & 0x00: request & \multirow{4}{*}{2} & \multirow{3}{*}{1 Nibble} \\
+         & 0x01: sensor reading & & \\ 
+         & 0x02: bus reading & & \\ \cline{1-2} \cline{4-4}
+        Protocol version & 0x02 &  & 1 Nibble\\ \hline
+        Length of data & Variable & 3 & 1 Byte\\ \hline
+        \multirow{2}{*}{Last Packet flag} & 0x01: last packet for one request & \multirow{3}{*}{4} & \multirow{2}{*}{1 bit} \\
+         & 0x00: not last packet & & \\ \cline{1-2} \cline{4-4}
+        Packet sequence & Variable &  & 7 bits \\ \hline
+        Data & Variable & 5 & Variable \\ \hline
+        CRC of data & Variable & 6 & 1 Byte\\ \hline
+        Postscript & 0x55 & 7 & 1 Byte\\ \hline
+    \end{tabular}
+    }
+    \caption{Transmission Packet Segments}
+    \label{table:seg}
+\end{table}
+
+
+The first segment is the start byte, or the preamble. The preamble is followed by the packet type and protocol version, each of which are 4 bits long and are together packed into a single byte. Packet type is differed with regard to the purpose of the packet. When the packet sent from plugin to firmware, the type is ``requres'', and when the packet sent from firmware, type of the packet could be ``sensor reading'' or ``bus reading''. Type ``sensor reading'' means the data packetized in the packet are readings from sensors, which are sorted with sensor id given by Waggle group, and ``bus reading'' means the data packetized in the packet are readings from sensors that do not have given sensor id but connected on metsense board so that firmware can collect data from.
+Next, one byte field that reports the first 1 bit of last packet flag and 7 bit sequence number. Following byte reports length of the data which comes along until its
+immediately. The data segment is followed by a single CRC byte, and finally the packet ends with a one byte
+crc and postscript. Table \ref{table:seg} lists the packet and the static values, if any, for each of the segments.
+\\
+
+
+\subsection{Data Sub-packets} \label{ssec:sub-pack}
+
+The data segment of the transmission packet can be further separated into many sub-packets.
+Two types of sub-packets are implemented, each of sub-packets are for sending request from coresense plugin to coresense firmware and visa versa.
+
+Table \ref{table:toFW} below shows the organization of a sub-packet requesting sensor data.
+The sub-pacekt starts with 4-bits call function id and 4-bits parameter length including source identifier, which is sensor id. The next bytes are parameters starting with target sensor id. Additional parameters can be attached after the sensor id. For more detail, refer sensor description file (SDF).
+
+Table \ref{table:toPlugin} below shows the organization of a sub-packet sending sensor reading.
+The sub-packet starts with a source identifier, which is sensor id. One bit validity field and seven bits ``length of the sub-packet'' field are packed together as the next byte. The length field counts the number of bytes following it which make up the sub-packet. 
+The validity bit is set to 1 if the sensor reading is valid and set to 0 if the sensor is dead, disabled, unconnected, unresponsive or if data could not be collected
+from the sensor in the time window. The size of the sub-packet is restricted to 127 Bytes by the seven bits length field.
+\\
+
+
+
+\begin{table}[H]
+\begin{minipage}{\textwidth}
+    \centering
+    {
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Call Function ID} & \textbf{1-bit Acknowledge | Parameter Length} & \textbf{Parameters~\footnote{For sensors have sensor id, 1st Byte is SENSOR ID; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is BUS ADDRESS}} \\ \hline
+        1 byte & 1 Byte & up to 252 Bytes \\
+        \hline
+    \end{tabular}
+    }
+    \caption{Transmission Packet Segments from plugin to firmware}
+    \label{table:toFW}
+\end{minipage}
+\end{table}
+
+
+\begin{table}[H]
+\begin{minipage}{\textwidth}
+    \centering
+    {
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rowcolor{black!8}
+        \textbf{Source ID} & \textbf{1-bit Validity [0: invalid, 1: valid] | 7-bits Data Length} & \textbf{Data~\footnote{For sensors have sensor id, 1st Byte is SENSOR ID; For sensors collect data through bus functions, 1st Byte is bus type and 2nd Byte is BUS ADDRESS}} \\ \hline
+        1 Byte & 1 Byte & up to 127 Bytes \\
+        \hline
+    \end{tabular}
+    }
+    \caption{Transmission Packet Segments}
+    \label{table:toPlugin}
+\end{minipage}
+\end{table}
+
+
+
+\subsection{Data Packer CRC} \label{ssec:crc-calc}
+
+To validate the data transmitted from and to the sensor board, a CRC value for the data is
+calculated and transmitted as part of the data packet. The Maxim 1-Wire
+CRC polynomial is used for calculating the CRC.  On receiving the packet, the CRC is recalculated and compared with the value transmitted as part of
+the packet. If the two CRC values match, the transmission is error-free.
+The equivalent polynomial function of the CRC is shown in Equation \ref{eq:CRC}.
+
+\begin{equation}
+\label{eq:CRC}
+CRC = x^8 + x^5 + x^4 + 1
+\end{equation}
+
+Further description of the Maxim 1-Wire CRC is available in Maxim Application Note 27. Below are
+the Python and C implementations of the CRC calculator. The CRC implementations below take a
+data Byte and the previous CRC as inputs, and return the new CRC as return value.
+\\
+
+\textbf{Python Code:}
+\begin{mdframed}
+\begin{lstlisting}
+def calc_crc (data_Byte,CRC_Value)
+    CRC_Value = ord(data_Byte) ^ CRC_Value
+    for j in range(8):
+    if (CRC_Value  & 0x01):
+        CRC_Value  = (CRC_Value  >> 0x01) ^ 0x8C
+    else:
+        CRC_Value  =  CRC_Value  >> 0x01
+return CRC_Value
+\end{lstlisting}
+\end{mdframed}
+
+\vskip 0.1in
+\textbf{C Code:}
+\begin{mdframed}
+\begin{lstlisting}
+unsigned char  CRC_CALC (unsigned char data, unsigned char crc) 
+{ 
+        unsigned char i;
+        crc ^= data;
+        for (i=0x00; i < 0x08; i++)
+        {
+                if (crc & 0x01) { crc = (crc >> 0x01)^0x8C; }
+                else { crc =  crc >> 0x01; }
+        }
+        return(crc);
+}
+\end{lstlisting}
+\end{mdframed}
