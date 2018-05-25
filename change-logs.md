@@ -6,9 +6,9 @@ waggle_topic=IGNORE
 
 It keeps track of the changes for versions.
 
-# Firmware Version 4.14 (in v4.1) (2018-05)
+# Last updates (2018-05)
 ### New features
-* Sensor2C.ino and Sensor 2D.ino, which are OnSet rain gauge and Dacagon rain gauge, are added on. Rain gauge has tested within v4.13, but soil moisture sensor has never tested within v4.13 (2018-05).
+* Sensor2C.ino and Sensor 2D.ino, which are OnSet rain gauge and Dacagon rain gauge, are added on. Rain gauge has been tested with the latest FW, but soil moisture sensor has never tested with (2018-05).
 ### Commnets
 * Codes for enable/disable sensor and bus call functions are cleaned up.
 ### Cautions
