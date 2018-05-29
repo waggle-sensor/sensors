@@ -121,8 +121,8 @@ To compile, build the codes and get decoded data with python script, do
 ```bash
 make install
 ```
-and execute [coresense.py](./coresense_plugin/coresense.py) in [coresens_plugin](./coresense_plugin).
+and execute [coresense.py](./coresense_plugin/coresense.py) in [coresens_plugin](https://github.com/waggle-sensor/sensors/blob/master/v3/integrated/software/coresense.py).
 ```bash
 python coresense.py
 ```
-Decode process is done through [coresense_pluginUSBSerial.py](./coresense_plugin/coresense_pluginUSBSerial.py).
+Decode process is done through [coresense_pluginUSBSerial.py](https://github.com/waggle-sensor/sensors/blob/master/v3/integrated/software/coresense_pluginUSBSerial.py).
