@@ -121,7 +121,7 @@ To compile, build the codes and get decoded data with python script, do
 ```bash
 make install
 ```
-and execute [coresense.py](./coresense_plugin/coresense.py) in [coresens_plugin](https://github.com/waggle-sensor/sensors/blob/master/v3/integrated/software/coresense.py).
+and execute [coresense.py](https://github.com/waggle-sensor/sensors/blob/master/v3/integrated/software/coresense.py) in [software](https://github.com/waggle-sensor/sensors/tree/master/v3/integrated/software).
 ```bash
 python coresense.py
 ```
