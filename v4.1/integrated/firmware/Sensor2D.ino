@@ -5,10 +5,10 @@
 
 void InitSensor2D()
 {
-    Serial1.begin(DECAGON_DATARATE);
-	Serial3.setTimeout(5000);	// set timeout of serial1 as 5 sec
-    pinMode(TRIDENT_POWER, OUTPUT);    // pin for providing power to soil moisture sensor, Decagon sensor
-    delay(100);
+	Serial1.begin(DECAGON_DATARATE);	// begin serial3
+	Serial1.setTimeout(5000);	// set timeout of serial1 as 5 sec
+	pinMode(TRIDENT_POWER, OUTPUT);    // pin for providing power to soil moisture sensor, Decagon sensor
+	delay(100);
 
 	digitalWrite(TRIDENT_POWER, true); 	// power on the device --> LOW means power on
 	delay(100);
@@ -45,11 +45,23 @@ void ReadSensor2D(byte *sensorReading, int *readingLength)
 	delay(100);
 
 	byte inputbyte;
-	while (Serial3.available() > 0)   // Throw out redundant values from previous pair
-		inputbyte = Serial3.read();
+	while (Serial1.available() > 0)   // Throw out redundant values from previous pair
+		inputbyte = Serial1.read();
 
-	*readingLength = Serial3.readBytesUntil('\n', sensorReading, 256);
+	int length = 0;
+	int last = 0;
+	byte buffer[256];
+	for (int i = 0; i < 3; i++)
+	{
+		length = Serial1.readBytesUntil('\n', buffer, 256);
 
+		for (int j = 0; j < length; j++)
+			sensorReading[last + j] = buffer[j];
+
+		last += length;
+	}
+
+	*readingLength = last;
 	digitalWrite(TRIDENT_POWER, false);
 }
 
