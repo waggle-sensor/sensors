@@ -1,12 +1,12 @@
 <!--
-waggle_topic=/sensors,Firmware v4.1
+waggle_topic=/sensors,Firmware v4
 -->
 
 
-# Firmware v4.1
-This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4.1*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/master/change-logs.md) (May 2018).
+# Firmware v4
+This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/master/change-logs.md) (May 2018).
 
-Firmware version 4.1 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
+Firmware version 4 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
 
 Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, [**PyWaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5). Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
 
@@ -48,9 +48,9 @@ Basically, the [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_
 Additionally, if a new sensor is added on and user wants to get decoded and converted values through the **plugin** and **PyWaggle**, the user must update **PyWaggle** by adding information of the sensor for the post-processing in [waggleprotocol spec](https://github.com/waggle-sensor/pywaggle/blob/develop/waggle/protocol/v5/waggleprotocol_spec.py) and [convertion process code](https://github.com/waggle-sensor/pywaggle/tree/develop/waggle/protocol/v5/utils). If **PyWaggle** is not updated, the plugin just ignore the subpacket of the new sensor because it is not reported to be processed.
 
 
-## Flowchart of Coresense Firmware Version 4.1
+## Flowchart of Coresense Firmware Version 4
 
-The following [flowchart](https://github.com/waggle-sensor/sensors/blob/master/v4/Firmware_flow.png) shows how the coresense firmware version 4.1 works.
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/master/v4/Firmware_flow.png) shows how the coresense firmware version 4 works.
 
 ### Flowchart:
 <img src="./Firmware_flow.png" width=800 />
