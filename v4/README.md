@@ -4,7 +4,7 @@ waggle_topic=/sensors,Firmware v4.1
 
 
 # Firmware v4.1
-This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4.1*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/develop/change-logs.md) (May 2018).
+This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4.1*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/master/change-logs.md) (May 2018).
 
 Firmware version 4.1 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
 
@@ -23,7 +23,7 @@ If a new file (any of ```Sensor*.ino``` or ```Bus*.ino```) is added in this fold
 When you use [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py) to send request packets and receive collected data packets, the plugin refers [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf) that contains what sensor will the plugin request data, how frequently request the data, and so on. With this configuration file, we can do *sensor_init, sensor_config, sensor_enable, sensor_disable, sensor_read, sensor_write, bus_init, bus_config, bus_enable, bus_disable, bus_read,* and *bus_write*.
 For more information about the configuration file, please refer [**coresense 4 plugin README**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/README.md), [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py), and [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf).
 
-When this firmware and plugin communicates, the data must follow **Waggle Packet**. Detailed information about **Waggle Packet** are described in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf). Below tables are simple structure description of waggle transmission packet v2:
+When this firmware and plugin communicates, the data must follow **Waggle Packet**. Detailed information about **Waggle Packet** are described in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf). Below tables are simple structure description of waggle transmission packet v2:
 
 * Protocol v2 transmission packet (two ways communication):
 
@@ -50,7 +50,7 @@ Additionally, if a new sensor is added on and user wants to get decoded and conv
 
 ## Flowchart of Coresense Firmware Version 4.1
 
-The following [flowchart](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/Firmware_flow.md#flowchart) shows how the coresense firmware version 4.1 works.
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/master/v4/Firmware_flow.png) shows how the coresense firmware version 4.1 works.
 
 ### Flowchart:
 <img src="./Firmware_flow.png" width=800 />
@@ -87,7 +87,7 @@ If there is no remaining request/command, the firmware checks packet length if i
 
 6. CRC: CRC must be calculated based on the length and values in the packet except 4 pre-determined bytes (preamble, post script, protocol, and sequence.
 
-7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read,** and ***write**. The request must be with sensor id, or bus pin number. Detailed explanation about packets are given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read,** and ***write**. The request must be with sensor id, or bus pin number. Detailed explanation about packets are given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf).
 
 8. Sensor available: When the firmware initializes all sensors, it determines if the sensor is available or not by trying to get data. If the firmware fails to get data in initialization stage, it assumes that eh sensor is not physically connected, and lists the sensor as *disabled*.
 
@@ -100,7 +100,7 @@ If there is no remaining request/command, the firmware checks packet length if i
 12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
 
 ### Sensor definition file (SDF):
-[Sensor definition file](https://github.com/waggle-sensor/sensors/blob/develop/SDF_V1.csv) provides detail information of the sensor including *sensor id, sensor type, data type, unit of the data, and so on*. If a sensor is added on, the [SDF](https://github.com/waggle-sensor/sensors/blob/develop/SDF_V1.csv) file must be updated. Simple description of sensors are available in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/develop/v4.1/documentation/v4dataExchange.pdf).
+[Sensor definition file](https://github.com/waggle-sensor/sensors/blob/master/v3/documentation/SDF_V1.csv) provides detail information of the sensor including *sensor id, sensor type, data type, unit of the data, and so on*. If a sensor is added on, the [SDF](https://github.com/waggle-sensor/sensors/blob/master/v3/documentation/SDF_V1.csv) file must be updated. Simple description of sensors are available in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf).
 
 
 ### Need to be added in the firmware:
