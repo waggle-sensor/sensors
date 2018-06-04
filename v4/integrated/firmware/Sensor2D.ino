@@ -1,4 +1,4 @@
-// Rain gauge
+// Soil moisture sensor
 
 #define TRIDENT_POWER  38 // one of any ditial pins
 #define DECAGON_DATARATE  1200
@@ -58,7 +58,7 @@ void ReadSensor2D(byte *sensorReading, int *readingLength)
 	count = 0;
 
 	digitalWrite(TRIDENT_POWER, true);
-	delay(500);
+	delay(100);
 
 	while (count == 0) // Theoratically, work below will be done in 16ms
 	{
