@@ -1,0 +1,158 @@
+API -- Application Programming Interface,,,,,,,,,,,,,Not determined
+,,,,,,call functions,,,,,parameters,,
+id,item,category,type,length,type,read,write,init,enable,disable,p1 (read/enable/disable),"p2 (read, default = 0)","p3 (read, default = 0)"
+0xFF,Firmware HW/SW version,Metsense,hard coded,2,byte,readcore,N/A,N/A,N/A,N/A,sensor_id,"#repeat
+byte
+0x00 - 0xFF","time interval
+#reading/sec
+byte
+0x00 - 0xFF"
+,Build time,,,4,byte,,,,,,,,
+,Build git,,,2,byte,,,,,,,,
+0x00,Metsense MAC,,hard coded,6,byte,readcore,N/A,N/A,N/A,N/A,sensor_id,,
+0x01,TMP112,,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x02,HTU21D temperature,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,HTU21D humidity,,,3,byte,,,,,,,,
+0x03,HIH4030 humidity,,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x04,BMP180 temperature,,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,BMP180 pressure,,,3,byte,,,,,,,,
+0x05,PR103J2 temperature,,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x06,TSL250RD,,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x07,MMA8452Q AccX,,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,MMA8452Q AccY,,,2,byte,,,,,,,,
+,MMA8452Q AccZ,,,2,byte,,,,,,,,
+,MMA8452Q AccMag,,,N/A,N/A,,,,,,,,
+0x08,SPV1840LR5H-B,,analog,128,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x09,TSYS01 temperature,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x0A,HMC5883L Strength Hx,Lightsense,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,HMC5883L Strength Hy,,,2,byte,,,,,,,,
+,HMC5883L Strength Hz,,,2,byte,,,,,,,,
+,HMC5883L Change,,,N/A,N/A,,,,,,,,
+0x0B,HIH6130 temperature,,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,HIH6130 humidity,,,2,byte,,,,,,,,
+0x0C,APDS-9006-020,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x0D,TSL260,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x0E,TSL250,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x0F,MLX75305,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x10,ML8511,,i2c,3,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+0x13,TMP421,Lightsense,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,#repeat,time interval
+0x14,SPV1840LR5H-B,,i2c,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,,
+0x15,"Total reducing gases (TOR, IRR)",Chemsense,rs232 - serial3,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+"0x16
+Does not follow
+coresense 
+packet format",Chem FW Config,,,,byte,readcore,N/A,N/A,N/A,N/A,sensor_id,N/A,N/A
+0x17,Nitrogen dioxide,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x18,Ozone,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x19,Hydrogen sulphide,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1A,"Total oxidizing gases (Tox, IAQ)",,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1B,Carbon monoxide,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1C,Sulfur dioxide,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1D,SHT25 temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,SHT25 humidity,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1E,LPS25H temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,LPS25H pressure,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x1F,Si1445 UV intensity,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Si1445 visible light intensity,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Si1445 proximity,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x20,Chemsense MAC,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x21,CO ADC temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x22,IAQ IRR ADC temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x23,O3 NO2 ADC temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x24,SO2 H2S ADC temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x25,CO LMP temperature,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x26,Accelerometer X,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Accelerometer Y,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Accelerometer Z,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Accelerometer Vibration,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x27,Gyro X,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Gyro Y,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Gyro Z,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,Gyro orientation index,,,,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+0x28,Histogram bin count,Alpha sensor,spi,32,byte,readcore,N/A,"initcore
+of 0x28","enablecore
+of 0x28","disablecore
+of 0x28",sensor_id,N/A,N/A
+,Histogram average time,,,4,byte,,,,,,,,
+,Histogram sample flow rate,,,4,byte,,,,,,,,
+,Histogram temp / pressure (alter),,,4,byte,,,,,,,,
+,Histogram sampling period,,,4,byte,,,,,,,,
+,Histogram sum of the count,,,2,byte,,,,,,,,
+,Histogram PM 1,,,4,byte,,,,,,,,
+,Histogram PM 2.5,,,4,byte,,,,,,,,
+,Histogram PM 10,,,4,byte,,,,,,,,
+0x29,Serial,,,20,byte,readcore,N/A,"initcore
+of 0x28","enablecore
+of 0x28","disablecore
+of 0x28",sensor_id,N/A,N/A
+0x2A,All Chemsense,Chemsense,rs232 - serial3,256 (roughly),byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x2B,Alpha status,Alpha sensor,spi,1,byte,readcore,N/A,N/A,N/A,N/A,sensor_id,N/A,N/A
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+0x30,Firmware,Alpha sensor,spi,2,byte,readcore,N/A,"initcore
+of 0x28","enablecore
+of 0x28","disablecore
+of 0x28",sensor_id,N/A,N/A
+"0x31
+Does not follow
+coresense 
+packet format",Configuration  bin boundaries + 2 spare bytes,,,32,byte,readcore,N/A,"initcore
+of 0x28","enablecore
+of 0x28","disablecore
+of 0x28","sensor_id
+0x31
+(the 1st id 
+for config)",N/A,N/A
+,Configuration  bin particle volumes,,,64,byte,,,,,,,,
+,Configuration bin particle dencities,,,64,byte,,,,,,,,
+,Configuration bin sample volume weightings B,,,64,byte,,,,,,,,
+,Configuration gain scaling coeifficient,,,4,byte,,,,,,,,
+,Configuration sampling flow rate,,,4,byte,,,,,,,,
+,Configuration laser DAC,,,1,byte,,,,,,,,
+,Configuration fan DAC,,,1,byte,,,,,,,,
+,Configuration conversion factor,,,1,byte,,,,,,,,
+,Spare bytes,,,21,byte,,,,,,,,
+0x2C,Rain gauge,Rain,digital interrupt,1,byte,readcore,N/A,initcore,enablecore,"disablecore
+use noInterrupt()
+provided by arduino",sensor_id,N/A,N/A
+0x2D,Soil moisture volumetric Water Content,Soil,rs232,2,byte,readcore,N/A,initcore,enablecore,disablecore,sensor_id,#repeat,time interval
+,Soil moisture electric conductivity,Soil,,2,byte,,,,,,,,
+,Soil moisture temperature,Soil,,2,byte,,,,,,,,
+0x2E,Water Level (Black),Water level,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x2F,Water Level (Red),Water level,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x35,PMS3003,Particle,rs232,30,byte,readcore,N/A,initcore,enablecore,disablecore,sensor_id,N/A,N/A
+0x36,PMS7003,Particle,rs232,30,byte,readcore,N/A,inictore,enablecore,disablecore,sensor_id,N/A,N/A
+0x37,YL-69,Soil moisture,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x38,YHDC SCT-013-030,Current,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x39,CR3110-3000,Current transformer,analog,2,byte,readcore,N/A,N/A,enablecore,disablecore,sensor_id,N/A,N/A
+0x11,Bus reading,Bus reading,varies,varies,byte,,,,,,,,
+0x12,Disabled sensor,notice,n/a,2,byte,,,,,,,,
+,,,,,,,,,,,,,
+N/A,i2c,Bus,i2c,depends,byte,readi2c,writei2c,N/A,N/A,N/A,address,refer down,refer down
+N/A,spi,Bus,spi,depends,byte,readspi,writespi,initspi,N/A,N/A,pin#,refer down,refer down
+N/A,rs232,Bus,rs232,depends,byte,readrs232,N/A,initrs232,N/A,N/A,serial#,refer down,refer down
+N/A,analog,Bus,analog,2,byte,readanal,N/A,N/A,N/A,N/A,pin#,N/A,N/A
+N/A,digital,Bus,interrput,1,byte,readinterr,N/A,initinterr,N/A,N/A,pin#,refer down,refer down
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,For Bus,call function,p1,p2,p3,p4,p5,p6,example sensor,,,,
+,read,readi2c,address,out length,N/A,N/A,N/A,N/A,met/light,,,,
+,,readspi,pin#,data length,data,delay time,delay iter,N/A,alpha,,,,
+,,readrs232,serial#,N/A,N/A,N/A,N/A,N/A,"Chem, Decagon",,,,
+,,readanal,pin#,N/A,N/A,N/A,N/A,N/A,met/light,,,,
+,,readinterr,pin#,N/A,N/A,N/A,N/A,N/A,rain,,,,
+,write,writei2c,address,in length,in data,N/A,N/A,N/A,met/light,,,,
+,,writespi,pin#,data length,data,delay time,delay iter,N/A,alpha,,,,
+,init,initspi,pin#,max speed,bit order,data mode,N/A,N/A,alpha,,,,
+,,initrs232,serial#,powerPin#,datarate,timeout,N/A,N/A,"Chem, Decagon",,,,
+,,initinterr,pin#,interrupt type,"interval time
+in second",N/A,N/A,N/A,rain,,,,
+,readwrite ,rwi2c,address,in length,in data,out length,N/A,N/A,met/light,,,,
+,For Core,call function,p1,p2,p3,p4,p5,p6,sensor,,,,
+,read ,readcore,sensor_id,repeat,time interval,N/A,N/A,N/A,"all core, no p2/p3 for chem, alpha",,,,
+,init,initcore,sensor_ids,N/A,N/A,N/A,N/A,N/A,"Chem, Alpha, Rain, Soil",,,,
+,enable,enablecore,sensor_ids,N/A,N/A,N/A,N/A,N/A,all core,,,,
+,disable,diablecore,sensor_ids,N/A,N/A,N/A,N/A,N/A,all core,,,,

@@ -1,5 +1,5 @@
 <!--
-waggle_topic=Waggle/Sensors/V4.1,Data Format v4.1
+waggle_topic=/sensors/v4.1,Data Format v4.1
 -->
 
 # Sensor Format V4.1

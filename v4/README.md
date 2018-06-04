@@ -1,392 +1,108 @@
 <!--
-waggle_topic=IGNORE
+waggle_topic=/sensors,Firmware v4
 -->
 
 
 # Firmware v4
-This firmware works as a form of "get request and send data". Thus if a user wants some data, the user needs to send relevant commands. Codes related to the firmware itself to receive request, collect data, and send the values are in folder "firmare", and the other folder "talker" contains scripts related to send request command, receive data, and decode the binary information.
+This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/master/change-logs.md) (May 2018).
 
-## Firmware
-Firmware version 4 is based on version 3, which means that the sensors that had been on the coresense boards are working the same method. Libraries that have been used for version 2 and 3 are implemented on the new version, so that the type of sensor values are the same with the previous versions. Some of the data are sent as byte values as they are collected from a sensor directly, and some of the sensor values are calculated, such as to temperature in celsius.
+Firmware version 4 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
 
-Two big difference between this new firmware and the old version are: 1) ability to request specific sensor data when a user wants, and 2) expansibility to use a new sensor without flashing a new firmware if the sensor talks through serial, SPI, I2C (plug-in and play), analog read, and digital read. Serial (Serial1, Serial2, and Serial3), SPI, and I2C on metsense board are available to use with new sensors if they can communicate through one of those communication methods.
-
-When a user collects data from sensors on coreboards, the user can use customized universal I2C function or sensor specific implemented functions. To use the sensor specific functions, wire communication (I2C) is initialized when a coresense boards is powered on. But for Serial and SPI, there are no sensor specific functions but only customized universal serial and SPI function. 
-
-### Flashing firmware
-Platformio is used to complie and flash the firmware to coresense boards.
-
-To install platformio using pip:
-```
-$ pip install -U platformio
-```
-To flash new Firmware, use command below at where platformio.ini exists:
-```
-$ platformio run -t upload
-```
-Or just to compile your code, do:
-```
-$ platformio run
-```
-
-### Commands
-Below commands are primary commands. 
-```  
-ver            to request a coresense firmware version
-id             to request a node id
-
-Corewrite      to to change a coresense board mac address
-Coreread       to request sensor values from coresense boards (metsense and lightsense boards)
-
-SPIconfig      to establish connection and configuration for a SPI line
-SPIread        to read command relavent sensor values
-
-Serialconfig   to establish connection and configuration for a serial line
-Serialwrite    to write data through a serial if it is needed
-Serialread     to read a serial line
-
-I2Cwrite       to write data through I2C if it is needed 
-I2Cread        to read i2c sensor values
-
-analogRead     to read analog sensor values
-digitalRead    to read digital sensor values
-digitalWrite    to power on or off a digital pin if it is needed
-```
-All the primary commands require following parameters, except "ver" and "id". Detailed commands are shown below. All parameters in "< >" are hex string for SPI, Serial, and I2C commands.
-```
-$ ver
-$ id
-
-$ Corewrite mac <address(integer)>
-$ Coreread <sensor name>
-
-$ SPIconfig <slave pin> <max speed(3bytes)> <bit order> <SPI mode>
-$ SPIread <delay time> <the number of iteration of delay> <command>
-
-$ Serialconfig <port> <baud rate(3bytes)> <time out(3bytes)> <power pin number>
-$ Serialwrite <port> <data>
-$ Serialread <port>
-
-$ I2Cwrite <address> <data(1byte)>
-$ I2Cread <address> <byte length to read>
-
-$ analogRead <pin number>
-$ digitalRead <pin number>
-$ digitalWrite <power pin number> <power on/off>
-
-# reference values:
-<SPI bit Order>
-LSB first = 0
-MSB first = 1
-
-<SPI mode>
-SPI mode0 = 0x00
-SPI mode1 = 0x04
-SPI mode2 = 0x08
-SPI mode3 = 0x0c
-
-<Serial power sign>
-power on = 0
-power off = 1
-
-<<Chemsense configuration>>
-power pin number = 47
-serial port = 3
-baud rate = 115200
-
-<<Alpha sensor configuration>>
-slave pin number = 40
-max SPI speed = 500000
-bit order = MSB first
-SPI mode = mode1
-delay time = 10 ms
-the number of iteration of delay = 1 (always)
-
-<<analog pins>>
-There are two opened analog pins, which are 2 and 3 on 3V3AD pins.
-```
-
-Sensor names as parameters for Coreread are shown below. 
-Coreread is able to take multiple parameters, and has no limitation on the number of parameters.
-```
-mac           Mac address of coresense boards 
-tmp112        Temperature sensor
-htu21d        Temperature and relative humidity sensor
-bmp180        Temperature and barometric pressure sensor
-pr103j2       Temperature sensor
-tsl250        Light sensor (300-1100 nm, high responsivity at 640 nm) 
-mma8452q      Accelerate force sensor
-spv1840       Sound sensor
-tsys01        Temperature sensor
-hmc5883l      Magnetic field sensor
-hih6130       Temperature and relative humidity sensor
-apds9006      Light sensor (480-640 nm, high responsivity at ~500 nm)
-tsl260rd      Light sensor (820-1100 nm, high responsivity at 640 nm) 
-tsl250rd      Light sensor (300-1100 nm, high responsivity at 940 nm) 
-mlx75305      Light sensor (400-1000 nm, high responsivity at ~700 nm) 
-ml8511        UV sensor (280-420 nm)
-tmp421        Temperature sensor
-```
-
-#### Example commands (see commands above to understand details)
-1. To read temperature sensors and get mac address for the coresense boards:
-```
-$ Coreread tmp112 htu21d pr103j2 tsys01 hih6130 tmp421 mac
-```
-2. To change mac address for the coresense to 12345 and read the mac again:
-```
-$ Corewrite mac 12345
-$ Coreread mac
-```
-3. To read Serial3 which is connected to a chemsense board: chemsense board uses pin 47 as a power line, 115200 as baud rate, and I want that Serial3 waits for 4 seconds if there is no data to read.
-```
-$ Serialconfig 0x03 0x01 0xc2 0x00 0x00 0x0f 0xa0 0x2f
-$ Serialread 0x03
-```
-4. To read SPI which is connected to an alpha sensor: alpha sensor needs 10 ms delay between first command and second command (just one time). Also it sends MSB first, it uses SPI mode1, and slave select pin is connected to GPIO pin 40:
-```
-$ SPIconfig 0x28 0x07 0xa1 0x20 0x01 0x04
-$ SPIread 0x0a 0x01 0x03 0x00 (power on)
-$ SPIread 0x0a 0x01 ... (command to read version, serial number, configuration, or histogram)
-...
-$ SPIread 0x0a 0x01 0x03 0x01 (power off)
-```
-5. To read tmp112 and HIH6130 through I2C command:
-```
-/*If the wire communication is initialized. For this firmware,
-wire communication is always initialized when the board is powered on.*/`
-$ I2Cread 0x48 2
-$ I2Cread 0x27 4
-```
-6. To get node id and firmware version:
-```
-$ id
-$ ver
-```
-7. To get data reading from analog pin or digital pin:
-```
-$ analogRead 2
-$ digitalRead 33
-```
-
-8. To turn on/off a sensor that provides power through a digital pin:
-```
-$ digitalWrite 47 0  (chemsense board power on)
-$ digitalWrite 47 1  (chemsense board power off)
-```
+Moreover, all conversion equations that were implemented in v2 and v3 firmwares have moved to decoder part, [**PyWaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5). Thus, all the data sent from this firmware are raw byte readings as they were collected from sensors directly.
 
 
-#### Reference for data structure (the data comes from firmware)
-The data is a line of string: "data <SensorID(1byte)> <data(as much as sensor needs)> "
-The first string "data" is to distinguish the data line with other message in talker side (for example error or function end message)
+## How to Put a New Sensor
+If anyone wants to add a new sensor in the firmware/Metsense board, the user needs to add an ```Sensor*.ino``` or ```Bus*.ino``` file. The ```*``` in the file name must be the sensor id in hex or bus type and pin number in hex. If the sensor gets a sensor id such as **0xFA**, then the file name must be ```SensorFA.ino```, or if the sensor does not have sensor id but uses I2C and connected through arduino pin number **0x48**, then the file name must be ```BusI2C48.ino```.
 
-Example:
-```
-messeges that contains sensor data: "data sensorID data"
-e.g.) data 0xC3 BAD=0f030dh2351 SHT=2467 SHH=4555 ...  (chemsense data)
-      data 0x01 2456                                   (tmp112 data)
-      data 0x28 0x00 0x12 0x..                         (alpha sensor data)
-      
-messeges:
-e.g.) end: next command                                (when a work for a command is finished)
-      end: invalid command                             (command invalid)
-      err: invalid args                                (node ID and fiemware version are not yet determined)
-      ok: Ver 4.0.1                                    (temporal FW version that I put arbitrarily)
-```
+The file must contain functions named as **initSensor-, configSensor-, enableSensor-, disableSensor-, readSensor-,** and **writeSensor-**. For example, if the sensor id is **0xFA**, then the functions must be **initSensorFA, configSensorFA, enableSensorFA, disableSensorFA, readSensorFA,** and **writeSensorFA**. Please refer one of ```.ino``` files in this folder.
+
+If a new file (any of ```Sensor*.ino``` or ```Bus*.ino```) is added in this folder, and when the firmware is compiled by doing ```make``` (just compile) or ```make install``` (complie and install the firmware into a Metsense board), new **SensorStruct.ino, BusStruct.ino, BusParamStruct.ino,** and **EnabledStruct.ino** will be automatically created. Based on the files, the firmware automatically notices that a new sensor is added on and creates new sensor list.
 
 
-#### Reference for coresense data
-Information given below is a reference to understand data from the coresense boards.
-```
-mac           <mac address>
-tmp112        <100ths of degree C>
-htu21d        <100ths of degree C, 100ths of %RH>
-bmp180        <100ths of degree C, barometic pressure in Pa>
-pr103j2       <100ths of degree C>
-tsl250        <raw read>
-mma8452q      <100ths of g (gx, gy, gz, norm)>
-spv1840       <raw read>
-tsys01        <100ths of degree C>
-hmc5883l      <100ths of G (Gx, Gy, Gz)>
-hih6130       <100ths of degree C, 100ths of %RH>
-apds9006      <raw read>
-tsl260rd      <raw read> 
-tsl250rd      <raw read> 
-mlx75305      <raw read> 
-ml8511        <raw read>
-tmp421        <100ths of degree C>
-```
+## Request, collect, and decode data
+When you use [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py) to send request packets and receive collected data packets, the plugin refers [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf) that contains what sensor will the plugin request data, how frequently request the data, and so on. With this configuration file, we can do *sensor_init, sensor_config, sensor_enable, sensor_disable, sensor_read, sensor_write, bus_init, bus_config, bus_enable, bus_disable, bus_read,* and *bus_write*.
+For more information about the configuration file, please refer [**coresense 4 plugin README**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/README.md), [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py), and [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf).
 
-#### Reference for chemsense data
-Information given below is a reference to understand data from the chemsense board. Chemsense board sends 5 different data lines, and each data line is sent in each second. Which means that to collect all the data sent from chemsense boards, the user needs to read Serial3 for 5 continuous times. However for now (07/17/2017), only 3 data lines are valid. 
-```
-header: this header is contained each of data lines.
-       The header will be saved in dictionary with a key "ChemMac" in talker.
-       BAD=<board address>
+When this firmware and plugin communicates, the data must follow **Waggle Packet**. Detailed information about **Waggle Packet** are described in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf). Below tables are simple structure description of waggle transmission packet v2:
 
-t+0s: First data line
-       HDT=<temperature in 100ths of degree C>
-       HDH=<relative humidity in 100ths of %RH>
-       SHT=<temperature in 100ths of degree C>
-       SHH=<relative humidity in 100ths of %RH>
-       LPT=<temperature in 100ths of degree C>
-       LPP=<barometric pressure in Pascals>
-       SUV=<Raw UV register>
-       SVL=<Raw VL register>
-       SIR=<Raw IR register>
-       
-t+1s: Second data line
-       IRR=<AFE pA of respiratory irritant sensor current>
-       IAQ=<AFE pA of indoor air quality sensor current>
-       SO2=<AFE pA of SO2 sensor current>
-       H2S=<AFE pA of H2S sensor current>
-       OZO=<AFE pA of ozone sensor current>
-       NO2=<AFE pA of NO2 sensor current>
-       CMO=<AFE pA of CO sensor current>
-       
-t+2s: Third data line
-       AT0=<ADC temperature in 100ths of degree C>
-       AT1=<ADC temperature in 100ths of degree C>
-       AT2=<ADC temperature in 100ths of degree C>
-       AT3=<ADC temperature in 100ths of degree C>
-       LTM=<LMP temperature in 100ths of degree C>
+* Protocol v2 transmission packet (two ways communication):
 
-# planned to be
-t+3s: Fourth data line
-       ACX=<raw register of acceloration in x direction>
-       ACY=<raw register of acceloration in y direction>
-       ACZ=<raw register of acceloration in z direction>
-       VIX=<vibration "index" high-water>
-       GYX=<raw register of orientation in x direction>
-       GYY=<raw register of orientation in x direction>
-       GYZ=<raw register of orientation in x direction>
-       OIX=<orientation "index" high-water>
-       
-t+4s: Fifth data line
-       TBD
-```
+|preamble|data type 4 bits & protocol 4 bits|data length|End of Seq & squence number|data (subpackets)|CRC|postscript|
+| --- | --- | --- | --- | --- | --- | --- |
+|0xAA|0x00 - 0x0F << 4 & 0x02|0x00 - 0xFF|0 or 1 & 0x00 - 0x7F|varies, <= 255 bytes|crc|0x55|
 
-## Talker
+* Protocol v2 requesting subpacket (from plugin to firmware):
 
-Scripts in talker folder have been designed to talk with the new firmware. The talker can use a text file to send command sets, or it can get input. The script will convert some of command inputs to relavent values (Mostly for parameters for configuration and request values. For the details, please refer talker scripts. Some of the commands do not need to be converted..).
+|call function|acknowledge 1 bit & param length 7 bits|parameters (1st byte is sensor id)|
+| --- | --- | --- |
+|0x00 - 0xFF|0 or 1 & 0x00 - 0x7F|varies, <= 127 bytes|
 
-### To start talker.py
+* Protocol v2 data subpacket (from firmware to plugin):
 
-To start talker.py, do:
-```
-python3 talker.py -s <port name> -c <command set text file> -r
-```
-A user has to put a serial device name, which is -s <port name> option. -c option is to import command sets from a text file, from a "command set text file", and -r option is to send the command sets imported from the text file repeatedly.
+|sensor id|validity 1 bits & data length 7 bits|data|
+| --- | --- | --- |
+|varies|0 or 1 of 1st bit & 0x00 - 0x7F|varies, <= 127 bytes|	
 
-For example, to connect device at /dev/ttyACM0, to import command sets from a file "cmdset.txt", and to send the commands repeatedly:
-```
-$ python3 talker.py -s /dev/ttyACM0 -c cmdset.txt -r
-```
-If a user did not put recursive option, then after sending all command sets, talker mode will be changed to get input.
+Basically, the [**coresense 4 plugin**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/plugin.py) provides encoding and decoding services with regard to **Waggle protocol**. Therefore if you use the *plugin*, you only need to see [**sensor_table.conf**](https://github.com/waggle-sensor/plugin_manager/blob/master/plugins/coresense_4/sensor_table.conf). Moreover, the *plugin* is connected with [**PyWaggle protocol v5**](https://github.com/waggle-sensor/pywaggle/tree/master/waggle/protocol/v5) so that the *plugin* provides converted values when an option *--hrf* is given. For more information about data convertion service, please refer [**coresense 4 plugin README**](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4).
 
-Or if a user wants to type in some commands:
-```
-$ python3 talker.py -s /dev/ttyACM0
-```
+Additionally, if a new sensor is added on and user wants to get decoded and converted values through the **plugin** and **PyWaggle**, the user must update **PyWaggle** by adding information of the sensor for the post-processing in [waggleprotocol spec](https://github.com/waggle-sensor/pywaggle/blob/develop/waggle/protocol/v5/waggleprotocol_spec.py) and [convertion process code](https://github.com/waggle-sensor/pywaggle/tree/develop/waggle/protocol/v5/utils). If **PyWaggle** is not updated, the plugin just ignore the subpacket of the new sensor because it is not reported to be processed.
 
 
+## Flowchart of Coresense Firmware Version 4
 
-#### Identification numbers
+The following [flowchart](https://github.com/waggle-sensor/sensors/blob/master/v4/Firmware_flow.png) shows how the coresense firmware version 4 works.
 
-To identify data at talker side, each sensors have each of identification number. The first byte of data sent from firmware is a sensor identification number in hex string:
-```
-       <sensor name>                   <identification number>
-            mac                                 0x00
-            tmp112                              0x01
-            htu21d                              0x02
-            bmp180                              0x03
-            pr103j2                             0x04
-            tsl250                              0x05
-            mma8452q                            0x06
-            spv1840                             0x07
-            tsys01                              0x08
-            hmc5883l                            0x10
-            hih6130                             0x11
-            apds9006                            0x12
-            tsl260rd                            0x13
-            tsl250rd                            0x14
-            mlx75305                            0x15
-            ml8511                              0x16
-            tmp421                              0x17
-   
-sensor communicate through serial      0xc0|port number (0x01 - 0x03)
-sensor communicate through SPI         slave pin number (one of digital pins)
-sensor communicate through I2C         address
-analog read                            0xa0|pin number (0x02 - 0x03)
-digital read                           digital pin number (33 - 40)
-```
-If an ID is smaller than 0x10, the sensor is on a metsense boards, and if an ID is smaller than 0x20 but greater than 0x0F, the sensor is on a lightsense board. As a sensor name, mac means mac address of coresense boards.
+### Flowchart:
+<img src="./Firmware_flow.png" width=800 />
+
+### Step 1:
+First, when the firmware is turned on **(Start)**, it sets up serialUSB to communicate with plugin and I2C to grap data from I2C sensors **(Set up)**. After that, it calls all initialization functions **(Initialization)**. While sensors are initialized, SPI, I2C, and other serial lines are started and configured to collect data from sensors. 
+
+### Step 2:
+When it finishes initialization, the firmware waits a request packet sent from plugin **(Get Packet)**. If the firmware notices that the plugin is sending a packet **(incoming buffer?)**, it reads buffer until the last byte 0x55 is collected **(Store Buffers until Last Byte 0x55 is collected)**. 
+
+When the last byte has arrived, the firmware checks if the stored buffers matche waggle protocol by checking preamble, post script, protocol version, and packet length **(waggle protocol?)**. If all the reqirements are satisfied, it checks CRC of the packet **(CRC?)**. If the packet does not match with waggle protocol or CRC, the packet is discarded.
+
+### Step 3:
+If the packet passes former processes, we can say the packet contains information to config, enable, disable, read, or write on a sensor/sensors. Until length of the packet/request becomes empty **(Request = Empty)** and if the requested sensor is availble/enabled **(Sensor available?)**, the firmware performs the commands sent through the packet **(Call Function for the Request)**. 
+
+If the sensor is not available, the sensor ID is packed as *disabled sensor* **(Packetization (Current Data)**. But if the sensor is available and the request was *read sensor data*, the firmware reads sensor and saves data into buffers **(Save Data into Buffers)**. Before the firmware packes the data, it checkes if the *length of current packet + currently collected data buffer* exceeds 127 bytes **(Packet Length + Current Data Buffer) > 127)**. If it exceeds, the firmware sends one existing packet first to plugin **(Packetization (Finalize)** and **Send Packet))** and makes a new packet with the current data buffer **(Packetization (Current Data))**.
+
+### Step 4:
+If there is no remaining request/command, the firmware checks packet length if it is longer than 4 bytes **(Packet Length > 4)**. If the packet length is longer than 4 bytes, the firmware finalizes the packet **(Packetization (Finalize))** and send the packet to plugin **(Send Packet)**. But if it is less than 4 bytes, the firmware does nothing and waits new buffer comming from plugin **(Get Packet)**.
+
+### Detailed Processes:
+
+1. Start: Sensor boards are powered on. Mostly Metsense board, Lightsense board, Chemsense board, Alpha sensor, and Plantower sensor (it depends on nodes).
+
+2. Setup: Initialize **SerialUSB** to communicate firmware with plugin, and **I2C** to get data from I2C sensors.
+
+3. Initialization: Call all **initialization functions** implemented in all ```Sensor*.ino``` and ```Bus*.ino``` files. For example, by calling initialization function in Sensor2A.ino (function sets for Chemsense board), the firmware sets Serial3 and power on the Chemsense board. For another example, by calling initialization function in Sensor28.ino (function sets for Alpha sensor), the firmware sets SPI and power on the alpha sensor.
+
+* *For your information, Decagon Soil Moisture sensor uses Serial1, PMS7003 Plantower sensor uses Serial2, and Chemsense board uses Serial3. So for now, all Serial lines are occupied*
+
+4. Get packet: [The plugin](https://github.com/waggle-sensor/plugin_manager/tree/master/plugins/coresense_4) sends a packet every particular seconds that determined by users, and this firmware waits the packet. The packet must follow waggle protocol version 2.
+
+5. Waggle Protocol: Preamble of the packets must be **0xAA**, post script must be **0x55**, and protocol number must be **2**. 
+
+6. CRC: CRC must be calculated based on the length and values in the packet except 4 pre-determined bytes (preamble, post script, protocol, and sequence.
+
+7. Request = empty: 5th to last 3rd bytes are bytes for request/command. It could be **initialization, configuration, enable, disable, read,** and ***write**. The request must be with sensor id, or bus pin number. Detailed explanation about packets are given in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf).
+
+8. Sensor available: When the firmware initializes all sensors, it determines if the sensor is available or not by trying to get data. If the firmware fails to get data in initialization stage, it assumes that eh sensor is not physically connected, and lists the sensor as *disabled*.
+
+9. Saving data into buffers: If the request is **read**, the collected data are stored into buffers.
+
+10. Packet Length + Current Data Buffer > 127: With regards to the waggle protocol, length of a packet and subpacket cannot exceed 127 bytes. However when the firmware collects all sensor data (Met/Light/Chem/Alpha/Plantower), the length of total packet must exceed 127 bytes. Therefore, the firmware checks length of packets and send them separately in multiple packets.
+
+11. Packetization (Finalize): Calculate CRC, add post script at the end of a packet, and make new packet. If it if the last packet for one requesting packet, first bit of 4th byte is 1. Otherwise, first bit of 4th byte is 0.
+
+12. Packetization (Current Data): Make a subpacket and add it in the existing packet.
+
+### Sensor definition file (SDF):
+[Sensor definition file](https://github.com/waggle-sensor/sensors/blob/master/v3/documentation/SDF_V1.csv) provides detail information of the sensor including *sensor id, sensor type, data type, unit of the data, and so on*. If a sensor is added on, the [SDF](https://github.com/waggle-sensor/sensors/blob/master/v3/documentation/SDF_V1.csv) file must be updated. Simple description of sensors are available in [v4dataExchange.pdf](https://github.com/waggle-sensor/sensors/blob/master/v4/documentation/v4dataExchange.pdf).
 
 
+### Need to be added in the firmware:
+- For now, the firmware does not send any message if the request is **write, configure, enable,** or **disable**. Becuase of this, users cannot notice if other request has done. Additional messaging packets saying something about the process will be needed.
 
-To request data from an alpha sensor, you can send commands below as "command" (see Commands above). The commands will be translated into hex strings by talker:
-```
-  <command>               <data type>
-  power_on              power on the alpha sensor
-  power_off             power off the alpha sensor
-  serial                collect serial number of the alpha sensor
-  version               collect firmware version of the alpha sensor
-  config                collect configuration of the alpha sensor
-  histogram             collect particle data
-  fan_power <power>     change fan power to <power>
-  laser_power <power>   change laser power to <power>
-
-  * <power> is an integer number indicates power in range of 0 to 255
-```
-
-#### Examples 
-
-1. To read temperature sensors and get mac address for the coresense boards (when a sensor sends multiple values including temperature, temperature value comes first):
-```
-$ Coreread tmp112 htu21d pr103j2 tsys01 hih6130 tmp421 mac
-```
-2. To change mac address for the coresense to 12345 and read the mac again:
-```
-$ Corewrite mac 12345
-$ Coreread mac
-```
-3. To read Serial3 which is connected to a chemsense board: chemsense board uses pin 47 as a power line, 115200 as baud rate, and I want that Serial3 waits for 4 seconds if there is no data to read.
-```
-$ Serialconfig 3 115200 4000 47
-$ Serialread 3
-```
-4. To read SPI which is connected to a alpha sensor: alpha sensor needs 10 ms delay between first command and second command (just one time). Also it sends MSB first, uses SPI mode1, and slave select pin is connected to GPIO pin 40:
-```
-$ SPIconfig 40 500000 MSB_first mode1
-$ SPIread 10 1 power_on
-$ SPIread 10 1 ... (version, serial, config, or histogram)
-...
-$ SPIread 10 1 power_off
-```
-5. To read tmp112 and HIH6130 through I2C command:
-```
-/*If the wire communication is initialized. For this firmware,
-wire communication is always initialized when the board is powered on.*/`
-$ I2Cread 0x48 2
-$ I2Cread 0x27 4
-```
-6. To get node id and firmware version:
-```
-$ id
-$ ver
-```
-
-7. To get data reading from analog pin or digital pin:
-```
-$ analogRead 2
-$ digitalRead 33
-```
-
-8. To turn on/off a sensor that provides power through a digital pin:
-```
-$ digitalWrite 47 0  (chemsense board power on)
-$ digitalWrite 47 1  (chemsense board power off)
-```
-#### Caution
-* After you power on the alpha sensor, you'd better wait about 5 second before request data. If not, the values from alpha sensor are not correct values and some nonsenses.
-* Alphasense company recommands to do not change laser power because it is adjusted for each sensor after calibration.

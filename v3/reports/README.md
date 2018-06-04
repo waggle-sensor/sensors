@@ -1,5 +1,5 @@
 <!--
-waggle_topic=Waggle/Sensors,Plotting Beehive Data
+waggle_topic=/data_analysis,Plotting Beehive Data
 -->
 
 # Plotting Beehive Data
