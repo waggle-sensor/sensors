@@ -1,9 +1,9 @@
 <!--
-waggle_topic=/sensors,Firmware v4
+waggle_topic=/sensors/v4
 -->
 
 
-# Firmware v4
+# Firmware V4
 This firmware works as a form of **get request, perform commands,** and **send data**. Thus if a user wants some data, the user needs to send relevant commands through coresense_4 plugin. There are several versions of *two way communication firmware - v4*. The changes/differences between the firmwares are noted in [**change log**](https://github.com/waggle-sensor/sensors/blob/master/change-logs.md) (May 2018).
 
 Firmware version 4 is not based on v3, so the data collection structure is so much different then the previous firmwares. Libraries that have been used for v2 and v3 are separately implemented on various ```Sensor*.ino``` files in this version.
