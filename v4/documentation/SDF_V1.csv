@@ -162,12 +162,11 @@ sensor id,sensor name,parameter name,description,type,unit,data type (float = bi
 0x31,Alpha sensor,spare bytes,spare,n/a,n/a,int8*21,fixed_value,fixed_value,fixed_value,fixed_value
 0x2C,Rain gauge,precipitation,count,raw,counts,int16,65535,0,1,1
 0x2C,Rain gauge,precipitation,converted,hrf,mm,float,16645.89,0,0.254,0.254
-0x2D,Decagon,soil moisture,register,raw,various,various,various,various,various,various
-0x2D,Decagon,volumetric water content,register,raw,n/a,int16,65535,0,1,1
-0x2D,Decagon,electric conductivity,register,raw,dS/m,int16,65535,0,1,1
-0x2D,Decagon,temperature,register,raw,degree_c,int16,65535,0,1,1
-0x2D,Decagon,volumetric water content,converted,hrf,n/a,float,1,80,0.75,1
-0x2D,Decagon,electric conductivity,converted,hrf,dS/m,float,23,0,0.05,0.7
+0x2D,Decagon,conductivity,register,raw,n/a,int16,65535,0,1,1
+0x2D,Decagon,dielectric conductivity,register,raw,count,int16,65535,0,1,1
+0x2D,Decagon,temperature,register,raw,count,int16,65535,0,1,1
+0x2D,Decagon,conductivity,converted,hrf,n/a,float,1,80,0.75,1
+0x2D,Decagon,dielectric conductivity,converted,hrf,dS/m,float,23,0,0.05,0.7
 0x2D,Decagon,temperature,converted,hrf,degree_c,float,60,-40,0.1,1
 0x2E,Water Level (Red),water level,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN
 0x2F,Water Level (Black),water level,TBN,TBN,TBN,TBN,TBN,TBN,TBN,TBN

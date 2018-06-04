@@ -10,6 +10,8 @@ int bufferIndex = 0;
 byte inputarray[maxInputLength];  // Length of this byte array has to be the same with MaxInputLength
 byte input = '\0';
 
+int count = 0;
+
 // Heart beat
 #define HBT_PIN 8  // HBEAT PIN (ON/OFF)
 bool UP_DOWN;
@@ -89,4 +91,6 @@ void handler()
 {
     UP_DOWN =! UP_DOWN;
     digitalWrite(HBT_PIN, UP_DOWN);
+
+    count++;
 }
