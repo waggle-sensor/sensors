@@ -20,12 +20,12 @@ Top pin in each group is 1
 ## Northwestern U. Sensor integrations:
 
 ### Rain gauge
-Uses two-conductor barrel connector
+Uses two-conductor barrel connector on board side (female)
 * Data: White-stripe lead -> JP2 2
 * GND: Solid black lead -> 3V3AD 4
 
 ### Soil moisture
-Uses three-conductor stereo connector
+Uses three-conductor stereo connector on board side (female)
 * Power: Red lead -> JP2 3
 * GND: Black lead -> 3V3RS 1
 * Data: White lead -> 3V3RS 2
