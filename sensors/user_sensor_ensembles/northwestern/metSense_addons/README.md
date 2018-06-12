@@ -5,7 +5,7 @@ Revised layout for additional sensor integrations, based on and incorporating wo
 * Plantower PMS7003 PM2.5 particle sensor
 * Alphasense OPC-N2 particle sensor
 
-![Full Layout](sensor_3.jpg)
+![Full Layout](sensor_nowires.jpg)
 
 ## Board geography
 Board orientation: Ethernet ports "down"
@@ -64,9 +64,12 @@ Dupont Connector, looking down the end that the wires enter:
 Left - 1 | 2 | Right - 3
 ------------ | -------------  | ------------- 
 Red | Green | Black  
-Brown | Blue | Orange
+Brown | Blue | Orange  
+
+
 ![Dupont layout](Alphasense_Dupont.jpg)
 
 Connecting to the MetSense board, the orange wire goes in the corner with the cut-off pin. That slot in the connector has an additional orange wire connecting across the board to JP2 1
 
+![Hooked up layout](sensor_3.jpg)
 
