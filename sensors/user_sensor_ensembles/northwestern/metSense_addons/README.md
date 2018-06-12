@@ -5,6 +5,8 @@ Revised layout for additional sensor integrations, based on and incorporating wo
 * Plantower PMS7003 PM2.5 particle sensor
 * Alphasense OPC-N2 particle sensor
 
+![Full Layout](sensor_3.jpg)
+
 ## Board geography
 Board orientation: Ethernet ports "down"
 
@@ -44,6 +46,8 @@ Connections from switch board to MetSense:
 * TX -> 5V3RS 2
 * VCC, SET, RST -> 5V3RS 4
 
+![Plantower_layout](G7_connector.jpg)
+
 ### AlphaSense Particulate sensor
 Interfaces by a bundle of cables with a 2x3 rectangular dupont-style connector on one end and one-row 6-pin micro JST connector on the other.
 
@@ -53,12 +57,15 @@ Left - 1| 2 | 3 | 4 | 5 | Right - 6
 ------------ | -------------  | -------------  | -------------  | -------------  | -------------  
 Black | Orange | Green | Brown | Blue | Red
 
+![JST layout](Alphasense_JST.jpg)
+
 Dupont Connector, looking down the end that the wires enter:
 
 Left - 1 | 2 | Right - 3
 ------------ | -------------  | ------------- 
 Red | Green | Black  
 Brown | Blue | Orange
+![Dupont layout](Alphasense_Dupont.jpg)
 
 Connecting to the MetSense board, the orange wire goes in the corner with the cut-off pin. That slot in the connector has an additional orange wire connecting across the board to JP2 1
 
