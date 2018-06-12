@@ -39,9 +39,9 @@ Interfaces with the board via a G7 switch board and 8-conductor JST connector (o
 On G7 swtich board, pins are oriented so that pin 1 is in the upper right-hand corner of the sensor with the "PLANTOWER" engraved text on the opposite side of the sensor and the open vent facing to the right.
 
 Connections from switch board to MetSense:
-* RX -> 5V3RS 1
+* GND -> 5V3RS 1
+* RX -> 5V3RS 3
 * TX -> 5V3RS 2
-* GND -> 5V3RS 3
 * VCC, SET, RST -> 5V3RS 4
 
 ### AlphaSense Particulate sensor
