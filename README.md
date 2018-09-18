@@ -59,7 +59,7 @@ waggle_topic=/sensors/introduction,Waggle Sensor Ensemble
 | ------------- |------------- | ------------- |------------- |------------- |
 | SHT25 | Temperature <br> Relative Humidity | -40 to +125 °C <br> 0 to 100 %RH | ±0.04 °C <br> ±0.04 %RH | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/sht25.pdf) |
 | LPS25H | Temperature <br> Atmospheric Pressure | -30 to +105°C <br> 260 to 1260  hPa | ±2 °C <br> ±0.1 hPa | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/lps25h.pdf) |
-| Si1145 | Light Intensity (UV) <br> Light Intensity, λp = 760 nm <br> Light Intensity, λp = 560 nm |   |   | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/si1145.pdf) |
+| Si1145 | Light Intensity (UV) <br> Light Intensity, λp = 760 nm <br> Light Intensity, λp = 560 nm |   |   | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/si1145uv.pdf) |
 | Sulfur Dioxide | SO2 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/so2.pdf) |
 | Hydrogen Sulfide | H2S Concentration | 0 to 50 ppm | ±3% of reading | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/h2s.pdf) |
 | Ozone | O3 Concentration | 0 to 20 ppm | ±3% of reading | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/o3.pdf) |
