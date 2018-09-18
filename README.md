@@ -15,15 +15,15 @@ waggle_topic=/sensors/introduction,Waggle Sensor Ensemble
 ### Parts list
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
-| TMP112 | Temperature |-40 to +125 °C |	±1 °C | [Datasheet](./sensors/airsense/tmp112.pdf)|
-|HTU21D | Temperature <br> Relative Humidity | -40 to +125 °C <br> 0 to 100 %RH | ±1 °C <br> ±2 %RH | [Datasheet](./sensors/airsense/htu21d.pdf)|
-| HIH4030 | Humidity | 0 to 100 %RH | ±3.5 %RH | [Datasheet](./sensors/airsense/hih4030.pdf)|
-| BMP180 | Temperature <br> Atmospheric Pressure | -40 to +85 °C <br> 300 to 1100 hPa | ±1.0°C <br> ±0.02 hPa | [Datasheet](./sensors/airsense/bmp180.pdf)|
-| PR103J2 | Temperature | -55 to +80 °C | ±0.05 °C | [Datasheet](./sensors/airsense/pr103j2.pdf)|
-| TSL250RD | Light Intensity, λp = 640nm | 0 to 124 μW/cm2 | 16 μW/cm2 | [Datasheet](./sensors/airsense/tsl250rd.pdf) |
-| MMA8452Q | 3 axis acceleration | ±8 g | ±20 mg | [Datasheet](./sensors/airsense/mma8452q.pdf) |
-| SPV1840LR5H-B | Instantaneous Sound Sample | Acoustic Overload Point <br> to 121 dB SPL | -38 dBV/Pa | [Datasheet](./sensors/airsense/spv1840lr5h-b.pdf) |
-| TSYS01 | Temperature | -40°C to +125 °C | 0.5 °C | [Datasheet](./sensors/airsense/tsys01.pdf) |
+| TMP112 | Temperature |-40 to +125 °C |	±1 °C | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/tmp112.pdf)|
+|HTU21D | Temperature <br> Relative Humidity | -40 to +125 °C <br> 0 to 100 %RH | ±1 °C <br> ±2 %RH | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/htu21d.pdf)|
+| HIH4030 | Humidity | 0 to 100 %RH | ±3.5 %RH | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/hih4030.pdf)|
+| BMP180 | Temperature <br> Atmospheric Pressure | -40 to +85 °C <br> 300 to 1100 hPa | ±1.0°C <br> ±0.02 hPa | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/bmp180.pdf)|
+| PR103J2 | Temperature | -55 to +80 °C | ±0.05 °C | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/prj103j2.pdf)|
+| TSL250RD | Light Intensity, λp = 640nm | 0 to 124 μW/cm2 | 16 μW/cm2 | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/tsl250rd.pdf) |
+| MMA8452Q | 3 axis acceleration | ±8 g | ±20 mg | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/mma8452q.pdf) |
+| SPV1840LR5H-B | Instantaneous Sound Sample | Acoustic Overload Point <br> to 121 dB SPL | -38 dBV/Pa | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/spv1840lr5h-b.pdf) |
+| TSYS01 | Temperature | -40°C to +125 °C | 0.5 °C | [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/tsys01.pdf) |
 
 ## Lightsense, HW Ver: 3.1
 
