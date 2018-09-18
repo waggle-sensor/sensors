@@ -17,7 +17,7 @@ waggle_topic=/sensors/introduction,Waggle Sensor Ensemble
 | ------------- |------------- | ------------- |------------- |------------- |
 | TMP112 | Temperature |-40 to +125 °C |	±1 °C | [Datasheet](./sensors/airsense/tmp112.pdf)|
 |HTU21D | Temperature <br> Relative Humidity | -40 to +125 °C <br> 0 to 100 %RH | ±1 °C <br> ±2 %RH | [Datasheet](./sensors/airsense/htu21d.pdf)|
-| HIH4030 | Humidity | 0 to 100 %RH | ±3.5 %RH | [Datasheet](./sensors/airsense/htu4030.pdf)|
+| HIH4030 | Humidity | 0 to 100 %RH | ±3.5 %RH | [Datasheet](./sensors/airsense/hih4030.pdf)|
 | BMP180 | Temperature <br> Atmospheric Pressure | -40 to +85 °C <br> 300 to 1100 hPa | ±1.0°C <br> ±0.02 hPa | [Datasheet](./sensors/airsense/bmp180.pdf)|
 | PR103J2 | Temperature | -55 to +80 °C | ±0.05 °C | [Datasheet](./sensors/airsense/pr103j2.pdf)|
 | TSL250RD | Light Intensity, λp = 640nm | 0 to 124 μW/cm2 | 16 μW/cm2 | [Datasheet](./sensors/airsense/tsl250rd.pdf) |
