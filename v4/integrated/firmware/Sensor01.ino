@@ -4,10 +4,10 @@
 
 void InitSensor01()
 {
-	const byte TMP112_CONFIG_REG = 0x01;
-	// const byte TMP112_TEMP_REG = 0x00;
+	const byte TMP112_CONFIG_REG = 0x01;   // Pointer Register Byte: Configuration Register (Read/Write)
+	// const byte TMP112_TEMP_REG = 0x00;    // Pointer Register Byte: Temperature Register (Read Only)
 
-	byte writearray[3] = {TMP112_CONFIG_REG, 0x60, 0xB0};
+	byte writearray[3] = {TMP112_CONFIG_REG, 0x60, 0xB0};   // 0x60, 0xA0 --> Default 12 bit register reading, 0xB0 --> 13 bit register reading
 	WriteI2C(TMP112_ADDRESS, 3, writearray);
 	delay(100);
 
@@ -36,7 +36,7 @@ void DisableSensor01()
 
 void ReadSensor01(byte *sensorReading, int *readingLength)
 {
-	const byte TMP112_TEMP_REG = 0x00;
+	const byte TMP112_TEMP_REG = 0x00;    // Pointer Register Byte: Temperature Register (Read Only)
 
 	byte writebyte[1] = {TMP112_TEMP_REG};
 	byte readarray[2];
