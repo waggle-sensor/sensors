@@ -1,4 +1,5 @@
 # for mma8452q
+import argparse
 import sys
 import time
 from serial import Serial
@@ -26,7 +27,12 @@ def get_frame(reader):
     return bytes(data)
 
 
-with Serial(sys.argv[1], baudrate=115200, timeout=180) as ser:
+parser = argparse.ArgumentParser()
+parser.add_argument('device')
+parser.add_argument('seconds', type=float)
+args = parser.parse_args()
+
+with Serial(args.device, baudrate=115200, timeout=180) as ser:
     # sync to incoming frames
     get_frame(ser)
 
@@ -35,7 +41,8 @@ with Serial(sys.argv[1], baudrate=115200, timeout=180) as ser:
 
     print('# start', start, flush=True)
 
-    while True:
+    # sample 15min of data
+    while time.time() - start < args.seconds:
         data = get_frame(ser)
         total += 1
         rate = total / (time.time() - start)
