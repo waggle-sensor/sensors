@@ -33,11 +33,13 @@ parser.add_argument('seconds', type=float)
 args = parser.parse_args()
 
 with Serial(args.device, baudrate=115200, timeout=180) as ser:
-    # sync to incoming frames
-    get_frame(ser)
-
     total = 0
     start = time.time()
+
+    # sync to incoming frames and burn in rate
+    for _ in range(5000):
+        get_frame(ser)
+        total += 1
 
     print('# start', start, flush=True)
 
@@ -45,6 +47,7 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
     while time.time() - start < args.seconds:
         data = get_frame(ser)
         total += 1
+
         rate = total / (time.time() - start)
 
         # show status every 10000 frames
@@ -53,7 +56,7 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
             print('# time', time.time() - start)
             print('# rate', rate, flush=True)
 
-        if total > 100 and abs(rate - 800) > 50:
+        if total > 1000 and abs(rate - 800) > 50:
             print('# error rate', rate, flush=True)
             sys.exit(1)
 
