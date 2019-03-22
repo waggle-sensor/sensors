@@ -19,11 +19,11 @@ def get_frame(reader):
             break
         if b[0] == MSG_ESC:
             b = reader.read(1)
-            data.append(bytes([b[0] ^ 0x20]))
+            data.append(b[0] ^ 0x20)
         else:
-            data.append(bytes([b[0]]))
+            data.append(b[0])
     
-    return b''.join(data)
+    return bytes(data)
 
 
 with Serial(sys.argv[1], baudrate=115200, timeout=180) as ser:
