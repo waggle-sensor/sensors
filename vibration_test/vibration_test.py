@@ -51,4 +51,4 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
             print('# time', time.time() - start)
             print('# rate', rate, flush=True)
 
-        print(data.hex())
+        print(time.time(), data.hex())
