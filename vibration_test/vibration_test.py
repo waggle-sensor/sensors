@@ -33,8 +33,8 @@ parser.add_argument('seconds', type=float)
 args = parser.parse_args()
 
 with Serial(args.device, baudrate=115200, timeout=180) as ser:
-    total = 0
     start = time.time()
+    total = 0
     sample_time_total = 0
     print('# start', start, flush=True)
 
@@ -50,9 +50,5 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
             print('# total', total)
             print('# time', time.time() - start)
             print('# rate', rate, flush=True)
-
-        if total > 10000 and abs(rate - 800) > 50:
-            print('# error rate', rate, flush=True)
-            sys.exit(1)
 
         print(data.hex())
