@@ -49,7 +49,8 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
 
         # show status every 10000 frames
         if total % 10000 == 0:
-            print('# time', time.time() - start, flush=True)
+            print('# total', total)
+            print('# time', time.time() - start)
             print('# rate', rate, flush=True)
 
         if total > 100 and abs(rate - 800) > 50:
