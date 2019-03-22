@@ -1,37 +1,43 @@
 # for mma8452q
 import sys
-import argparse
-from serial import Serial, SerialException
-
+from serial import Serial
+from io import BytesIO
 import time
 
 
-def read(file):
-    if serial.inWaiting() > 0:
-        reading = serial.read(serial.inWaiting())
-        file.write(reading)
-        # print(reading)
-        # print(serial.read(serial.inWaiting()))
-    else:
-        time.sleep(0.05)
+MSG_FRAME = 0x7e
+MSG_ESC = 0x7d
 
 
-if __name__ == '__main__':
-    # with Serial('/dev/ttyACM0', baudrate=115200, timeout=180) as serial:
-    with Serial('/dev/waggle_coresense', baudrate=115200, timeout=180) as serial:
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        with open(timestr + '_vib_data.txt', 'wb') as file:
-            end_byte = bytearray()
-            end_byte.append(0x55)
-            end_byte.append(0x55)
-            try:
-                st = time.time()
-                while True:
-                    read(file)
-                    et = time.time()
-                    if (et - st) >= 1:
-                        file.write(end_byte)
-                        st = time.time()
-                        # beark
-            except:
-                pass
+def decode_frame(reader, writer):
+    while True:
+        b = reader.read(1)
+        if len(b) == 0:
+            break
+        if b[0] == MSG_FRAME:
+            break
+        if b[0] == MSG_ESC:
+            b = reader.read(1)
+            writer.write(bytes([b[0] ^ 0x20]))
+        else:
+            writer.write(bytes([b[0]]))
+
+
+def get_frame_data(reader):
+    writer = BytesIO()
+    decode_frame(reader, writer)
+    return writer.getvalue()
+
+
+with Serial(sys.argv[1], baudrate=115200, timeout=180) as ser:
+    # sync to incoming frames
+    get_frame_data(ser)
+
+    total = 0
+    start = time.time()
+
+    while True:
+        data = get_frame_data(ser)
+        total += 1
+        rate = total / (time.time() - start)
+        print(data.hex(), round(rate))
