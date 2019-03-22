@@ -4,9 +4,33 @@
 #define MMA8452_ADDRESS 0x1C
 #define maxInputLength 6
 
+const byte MSG_FRAME = 0x7e;
+const byte MSG_ESC = 0x7d;
+
+int writeFrame(byte *b, int n) {
+  for (int i = 0; i < n; i++) {
+    if ((b[i] == MSG_FRAME) || (b[i]) == MSG_ESC) {
+      SerialUSB.write(MSG_ESC);
+      SerialUSB.write(b[i] ^ 0x20);
+    } else {
+      SerialUSB.write(b[i]);
+    }
+  }
+
+  SerialUSB.write(MSG_FRAME);
+
+  return n;
+}
+
+unsigned long lastSampleTime;
+const unsigned long samplesPerSecond = 800;
+const unsigned long sampleInterval = (1000 * 1000) / samplesPerSecond;
+
 byte sensorReading[maxInputLength];
 
 void setup() {
+  lastSampleTime = micros();
+
   Wire.begin();
   delay(100);
   SerialUSB.begin(115200);
@@ -56,31 +80,37 @@ void setup() {
   WriteI2C(MMA8452_ADDRESS, 2, writearray);
 }
 
-
 void loop() {
-  SerialUSB.write("AA");
   // put your main code here, to run repeatedly:
   const byte OUT_X_MSB = 0x01;
   // const byte XYZ_DATA_CFG = 0x0E;
   // const byte CTRL_REG1 = 0x2A;
 
-  Wire.requestFrom((uint8_t) MMA8452_ADDRESS, (uint8_t) 6, (uint32_t) OUT_X_MSB, (uint8_t) 1, true);
-  for (int i = 0; i < 6; i++)
-    sensorReading[i] = Wire.read();
-  SerialUSB.write(sensorReading, 6);
-  delay(0.5); // 0.5 milisecond
-//  for (int i = 0; i < 6; i++)
-//  {
-//    sensorReading[i] = Wire.read();
-//    SerialUSB.write(sensorReading[i]);
-//  }
+  unsigned long now = micros();
+
+  if (now - lastSampleTime > sampleInterval) { // sample 800/s
+    Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
+  
+    while (Wire.available() < 6) {
+    }
+    
+    for (int i = 0; i < 6; i++) {
+      sensorReading[i] = Wire.read();
+    }
+  
+    writeFrame(sensorReading, 6);
+    lastSampleTime = now;
+  }
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
 {
   Wire.beginTransmission(address);
-  for (int i = 0; i < inlength; i++)
+
+  for (int i = 0; i < inlength; i++) {
     Wire.write(in[i]);
+  }
+
   Wire.endTransmission();
   delay(time);
 
