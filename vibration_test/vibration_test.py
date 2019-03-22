@@ -33,8 +33,15 @@ with Serial(sys.argv[1], baudrate=115200, timeout=180) as ser:
     total = 0
     start = time.time()
 
+    print('# start', start)
+
     while True:
         data = get_frame(ser)
         total += 1
         rate = total / (time.time() - start)
-        print(data.hex(), round(rate))
+
+        if total > 100 and abs(rate - 800) > 20:
+            print('# error rate drift')
+            sys.exit(1)
+
+        print(data.hex())
