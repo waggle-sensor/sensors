@@ -35,20 +35,15 @@ args = parser.parse_args()
 with Serial(args.device, baudrate=115200, timeout=180) as ser:
     total = 0
     start = time.time()
-
-    # sync to incoming frames and burn in rate
-    for _ in range(5000):
-        get_frame(ser)
-        total += 1
-
+    sample_time_total = 0
     print('# start', start, flush=True)
 
-    # sample 15min of data
     while time.time() - start < args.seconds:
+        start_sample = time.time()
         data = get_frame(ser)
+        sample_time_total += time.time() - start_sample
         total += 1
-
-        rate = total / (time.time() - start)
+        rate = total / sample_time_total
 
         # show status every 10000 frames
         if total % 10000 == 0:
@@ -56,7 +51,7 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
             print('# time', time.time() - start)
             print('# rate', rate, flush=True)
 
-        if total > 1000 and abs(rate - 800) > 50:
+        if total > 10000 and abs(rate - 800) > 50:
             print('# error rate', rate, flush=True)
             sys.exit(1)
 

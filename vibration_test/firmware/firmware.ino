@@ -86,7 +86,9 @@ void loop() {
   // const byte XYZ_DATA_CFG = 0x0E;
   // const byte CTRL_REG1 = 0x2A;
 
-  if (micros() - lastSampleTime > sampleInterval) { // sample 800/s
+  unsigned long now = micros();
+
+  if (now - lastSampleTime > sampleInterval) { // sample 800/s
     Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
   
     while (Wire.available() < 6) {
@@ -95,10 +97,9 @@ void loop() {
     for (int i = 0; i < 6; i++) {
       sensorReading[i] = Wire.read();
     }
-
-    lastSampleTime = micros();
-
+  
     writeFrame(sensorReading, 6);
+    lastSampleTime = now;
   }
 }
 
