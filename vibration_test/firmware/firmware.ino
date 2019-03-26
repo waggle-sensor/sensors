@@ -87,8 +87,8 @@ void loop() {
 //    delayMicroseconds(1);
 //  }
 
-  //delayMicroseconds(117); // ~ 975 Hz, which works
-  delayMicroseconds(320); // ~ 800 Hz, which works
+  delayMicroseconds(117); // ~ 975 Hz, which works
+  // delayMicroseconds(320); // ~ 800 Hz, which works
 
   Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
   lastSampleTime = micros();
