@@ -16,9 +16,9 @@ with Serial(args.device, baudrate=115200, timeout=180) as ser:
 
     while True:
         sample_time = time.perf_counter()
-        ser.read(1)
+        data = ser.read(1024)
         sample_time_total += time.perf_counter() - sample_time
-        total += 1
+        total += len(data)
 
         if sample_time - log_time > 5:
             log_time = sample_time
