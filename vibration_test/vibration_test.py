@@ -33,6 +33,9 @@ parser.add_argument('seconds', type=float)
 args = parser.parse_args()
 
 with Serial(args.device, baudrate=115200, timeout=180) as ser:
+    # sync to serial stream
+    get_frame(ser)
+
     start = time.time()
     total = 0
     sample_time_total = 0
