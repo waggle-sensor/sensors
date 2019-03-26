@@ -24,7 +24,7 @@ int writeFrame(byte *b, int n) {
 
 unsigned long lastSampleTime;
 const unsigned long samplesPerSecond = 800;
-const unsigned long sampleInterval = (1000 * 1000) / samplesPerSecond;
+const unsigned long sampleInterval = (1000 * 1000) / (samplesPerSecond); 
 
 byte sensorReading[maxInputLength];
 
@@ -83,9 +83,12 @@ void setup() {
 const byte OUT_X_MSB = 0x01;
 
 void loop() {
-  while (micros() - lastSampleTime < sampleInterval) {
-    delayMicroseconds(1);
-  }
+//  while (micros() - lastSampleTime < sampleInterval) {
+//    delayMicroseconds(1);
+//  }
+
+  //delayMicroseconds(117); // ~ 975 Hz, which works
+  delayMicroseconds(320); // ~ 800 Hz, which works
 
   Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
   lastSampleTime = micros();
