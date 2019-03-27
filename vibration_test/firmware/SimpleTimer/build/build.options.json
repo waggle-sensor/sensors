@@ -1,0 +1,10 @@
+{
+  "builtInLibrariesFolders": "/home/rajesh/repos/packages/arduino-1.6.7/libraries",
+  "customBuildProperties": "build.path=./build,build.warn_data_percentage=75",
+  "fqbn": "arduino:sam:arduino_due_x",
+  "hardwareFolders": "/home/rajesh/repos/packages/arduino-1.6.7/hardware,/home/rajesh/.arduino15/packages",
+  "otherLibrariesFolders": "/home/rajesh/Arduino/libraries",
+  "runtime.ide.version": "10607",
+  "sketchLocation": "/home/rajesh/repos/working/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino",
+  "toolsFolders": "/home/rajesh/repos/packages/arduino-1.6.7/tools-builder,/home/rajesh/repos/packages/arduino-1.6.7/hardware/tools/avr,/home/rajesh/.arduino15/packages"
+}
