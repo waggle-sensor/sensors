@@ -1,3 +1,5 @@
+#line 1 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+#line 1 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
 #include <Arduino.h>
 #include <Wire.h>
 #include "DueTimer.h"
@@ -9,6 +11,19 @@ const byte OUT_X_MSB = 0x01;
 const byte MSG_FRAME = 0x7e;
 const byte MSG_ESC = 0x7d;
 
+#line 12 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+int writeFrame(byte *b, int n);
+#line 33 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void myHandler();
+#line 45 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void setup();
+#line 105 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void loop();
+#line 119 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time);
+#line 140 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void WriteI2C(byte address, int length, byte *in);
+#line 12 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
 int writeFrame(byte *b, int n) {
     for (int i = 0; i < n; i++) {
         if ((b[i] == MSG_FRAME) || (b[i]) == MSG_ESC) {
@@ -31,16 +46,12 @@ const unsigned long sampleInterval = (1000 * 1000) / (samplesPerSecond);
 byte sensorReading[maxInputLength];
 
 void myHandler(){
-    Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
-    lastSampleTime = micros();
-    
-    while (Wire.available() < 6) {
-        delayMicroseconds(1);
-    }
-    
-    for (int i = 0; i < 6; i++) {
-        sensorReading[i] = Wire.read();
-    }
+    sensorReading[0] = 0x53;
+    sensorReading[1] = 0x45;
+    sensorReading[2] = 0x43;
+    sensorReading[3] = 0x4F;
+    sensorReading[4] = 0x4E;
+    sensorReading[5] = 0x44;
     
     writeFrame(sensorReading, 6);
 }
@@ -60,7 +71,7 @@ void setup() {
     const byte GSCALE = 2;
     // Sets full-scale range to +/-2, 4, or 8g
     
-        
+    
     // //** check if the sensor is correct
     // byte writebyte[1] = {WHO_AM_I};
     // byte id[1];
@@ -101,13 +112,23 @@ void setup() {
     // Set Due timer
     Timer3.attachInterrupt(myHandler);
     // Timer3.start(1250); // Calls every 1250us
+    Timer3.start(1000000); // Calls every second
 }
 
 
 
 void loop() {
+    Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
+    lastSampleTime = micros();
+
+    while (Wire.available() < 6)
+        delayMicroseconds(1);
     
-    while(1);
+
+    for (int i = 0; i < 6; i++)
+        sensorReading[i] = Wire.read();
+    
+    writeFrame(sensorReading, 6);
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
@@ -140,3 +161,4 @@ void WriteI2C(byte address, int length, byte *in)
     
     Wire.endTransmission();
 }
+

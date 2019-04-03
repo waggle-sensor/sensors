@@ -1,0 +1,11 @@
+{
+  "additionalFiles": "/DueTimer.cpp,/DueTimer.h",
+  "builtInLibrariesFolders": "/home/waggle/Downloads/arduino-1.8.9/libraries",
+  "customBuildProperties": "build.path=./build,build.warn_data_percentage=75,runtime.tools.bossac.path=/home/waggle/.arduino15/packages/arduino/tools/bossac/1.6.1-arduino,runtime.tools.bossac-1.6.1-arduino.path=/home/waggle/.arduino15/packages/arduino/tools/bossac/1.6.1-arduino,runtime.tools.arm-none-eabi-gcc.path=/home/waggle/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1,runtime.tools.arm-none-eabi-gcc-4.8.3-2014q1.path=/home/waggle/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1",
+  "fqbn": "arduino:sam:arduino_due_x",
+  "hardwareFolders": "/home/waggle/Downloads/arduino-1.8.9/hardware,/home/waggle/.arduino15/packages",
+  "otherLibrariesFolders": "/home/waggle/Arduino/libraries",
+  "runtime.ide.version": "10809",
+  "sketchLocation": "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino",
+  "toolsFolders": "/home/waggle/Downloads/arduino-1.8.9/tools-builder,/home/waggle/Downloads/arduino-1.8.9/hardware/tools/avr,/home/waggle/.arduino15/packages"
+}

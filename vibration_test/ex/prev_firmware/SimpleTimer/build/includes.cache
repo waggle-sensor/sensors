@@ -1,0 +1,32 @@
+[
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "/home/waggle/.arduino15/packages/arduino/hardware/sam/1.6.12/cores/arduino"
+  },
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "/home/waggle/.arduino15/packages/arduino/hardware/sam/1.6.12/variants/arduino_due_x"
+  },
+  {
+    "Sourcefile": "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/build/sketch/SimpleTimer.ino.cpp",
+    "Include": "Wire.h",
+    "Includepath": "/home/waggle/.arduino15/packages/arduino/hardware/sam/1.6.12/libraries/Wire/src"
+  },
+  {
+    "Sourcefile": "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/build/sketch/SimpleTimer.ino.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/build/sketch/DueTimer.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/waggle/.arduino15/packages/arduino/hardware/sam/1.6.12/libraries/Wire/src/Wire.cpp",
+    "Include": "",
+    "Includepath": ""
+  }
+]

@@ -31,16 +31,12 @@ const unsigned long sampleInterval = (1000 * 1000) / (samplesPerSecond);
 byte sensorReading[maxInputLength];
 
 void myHandler(){
-    Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
-    lastSampleTime = micros();
-    
-    while (Wire.available() < 6) {
-        delayMicroseconds(1);
-    }
-    
-    for (int i = 0; i < 6; i++) {
-        sensorReading[i] = Wire.read();
-    }
+    sensorReading[0] = 0x53;
+    sensorReading[1] = 0x45;
+    sensorReading[2] = 0x43;
+    sensorReading[3] = 0x4F;
+    sensorReading[4] = 0x4E;
+    sensorReading[5] = 0x44;
     
     writeFrame(sensorReading, 6);
 }
@@ -101,13 +97,23 @@ void setup() {
     // Set Due timer
     Timer3.attachInterrupt(myHandler);
     // Timer3.start(1250); // Calls every 1250us
+    Timer3.start(1000000); // Calls every second
 }
 
 
 
 void loop() {
+    Wire.requestFrom((uint8_t)MMA8452_ADDRESS, (uint8_t)6, (uint32_t)OUT_X_MSB, (uint8_t)1, true);
+    lastSampleTime = micros();
+
+    while (Wire.available() < 6)
+        delayMicroseconds(1);
     
-    while(1);
+
+    for (int i = 0; i < 6; i++)
+        sensorReading[i] = Wire.read();
+    
+    writeFrame(sensorReading, 6);
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)

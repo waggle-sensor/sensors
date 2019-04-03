@@ -1,3 +1,5 @@
+#line 1 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+#line 1 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
 #include <Arduino.h>
 #include <Wire.h>
 #include "DueTimer.h"
@@ -9,6 +11,19 @@ const byte OUT_X_MSB = 0x01;
 const byte MSG_FRAME = 0x7e;
 const byte MSG_ESC = 0x7d;
 
+#line 12 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+int writeFrame(byte *b, int n);
+#line 33 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void myHandler();
+#line 49 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void setup();
+#line 109 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void loop();
+#line 115 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time);
+#line 136 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
+void WriteI2C(byte address, int length, byte *in);
+#line 12 "/home/waggle/repo/sensors/vibration_test/firmware/SimpleTimer/SimpleTimer.ino"
 int writeFrame(byte *b, int n) {
     for (int i = 0; i < n; i++) {
         if ((b[i] == MSG_FRAME) || (b[i]) == MSG_ESC) {
@@ -60,7 +75,7 @@ void setup() {
     const byte GSCALE = 2;
     // Sets full-scale range to +/-2, 4, or 8g
     
-        
+    
     // //** check if the sensor is correct
     // byte writebyte[1] = {WHO_AM_I};
     // byte id[1];
@@ -101,6 +116,7 @@ void setup() {
     // Set Due timer
     Timer3.attachInterrupt(myHandler);
     // Timer3.start(1250); // Calls every 1250us
+    Timer3.start(1230);
 }
 
 
@@ -108,6 +124,7 @@ void setup() {
 void loop() {
     
     while(1);
+    
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
@@ -140,3 +157,4 @@ void WriteI2C(byte address, int length, byte *in)
     
     Wire.endTransmission();
 }
+

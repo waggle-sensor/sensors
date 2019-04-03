@@ -60,7 +60,7 @@ void setup() {
     const byte GSCALE = 2;
     // Sets full-scale range to +/-2, 4, or 8g
     
-        
+    
     // //** check if the sensor is correct
     // byte writebyte[1] = {WHO_AM_I};
     // byte id[1];
@@ -101,6 +101,7 @@ void setup() {
     // Set Due timer
     Timer3.attachInterrupt(myHandler);
     // Timer3.start(1250); // Calls every 1250us
+    Timer3.start(1230);
 }
 
 
@@ -108,6 +109,7 @@ void setup() {
 void loop() {
     
     while(1);
+    
 }
 
 void WriteReadI2C(byte address, int inlength, byte *in, int outlength, byte *out, int time)
