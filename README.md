@@ -91,3 +91,7 @@ waggle_topic=/sensors/introduction,Waggle Sensor Ensemble
 | Part Name | Measurement | Range | Accuracy | Datasheet |
 | ------------- |------------- | ------------- |------------- |------------- |
 | PMS7003 | PM1 in μg/m3 <br> PM2.5 in μg/m3 <br> PM10 in μg/m3 |  |  |  [Datasheet](https://github.com/waggle-sensor/sensors/raw/master/sensors/datasheets/pms7003.pdf) |
+
+## Firmware
+
+The latest release of the v4 Coresense firmware can be found [here](https://github.com/waggle-sensor/sensors/tree/94c30e90568c6cd7f0c8b42423df03ca29488834/v4/integrated/firmware).
