@@ -100,7 +100,7 @@ void setup() {
 
     // Set Due timer
     Timer3.attachInterrupt(myHandler);
-    // Timer3.start(1250); // Calls every 1250us
+    Timer3.start(1250); // Calls every 1250us
 }
 
 
